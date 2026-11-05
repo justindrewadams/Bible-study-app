@@ -3469,3 +3469,62 @@ body {
 .person-card .pc-type {
   text-transform: none;
 }
+
+/* chapter place squares with their name labels */
+.place-dot {
+  overflow: visible;
+}
+
+.place-dot span {
+  position: absolute;
+  left: 15px;
+  top: -2px;
+  white-space: nowrap;
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 11px;
+  line-height: 16px;
+  color: #111;
+  pointer-events: none;
+  text-shadow:
+    0 0 2px #fff,
+    0 0 3px #fff,
+    0 0 5px #fff,
+    0 0 8px rgba(255, 255, 255, 0.9);
+}
+
+.place-dot:hover span {
+  text-decoration: underline;
+}
+
+.place-dot.cluster div {
+  width: 18px;
+  height: 18px;
+  display: grid;
+  place-items: center;
+  background: #111;
+  color: #fff;
+  border-color: #111;
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 800;
+  box-shadow: 2px 2px 0 var(--sun);
+}
+
+.place-dot.cluster span {
+  left: 22px;
+  top: 1px;
+}
+
+.place-dot.cluster:hover div {
+  background: #111;
+}
+
+.place-dot span.left {
+  left: auto;
+  right: 15px;
+}
+
+.place-dot.cluster span.left {
+  right: 22px;
+}

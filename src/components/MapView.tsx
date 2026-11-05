@@ -134,17 +134,24 @@ const focusIcon = (inferred: boolean) =>
     html: `<svg width="28" height="40" viewBox="0 0 28 40"><path d="M14 1.5C7.2 1.5 2 6.7 2 13.5 2 22.5 14 38.5 14 38.5S26 22.5 26 13.5C26 6.7 20.8 1.5 14 1.5Z"/><rect x="9.5" y="9" width="9" height="9" fill="#fff" stroke="#111" stroke-width="2"/></svg>`,
   });
 
-/** Small outlined square for every place named in the chapter. */
-const placeDotIcon = L.divIcon({
-  className: 'place-dot',
-  iconSize: [12, 12],
-  iconAnchor: [6, 6],
-  html: '<div></div>',
-});
-
 /** Moves the camera when the verse focus or the journey stop changes. */
-function CameraController({ focus, journey, stopIndex }: Pick<Props, 'focus' | 'journey' | 'stopIndex'>) {
+function CameraController({
+  focus,
+  journey,
+  stopIndex,
+  chapterPlaces,
+}: Pick<Props, 'focus' | 'journey' | 'stopIndex' | 'chapterPlaces'>) {
   const map = useMap();
+
+  // a new chapter: frame its places (unless a journey or a selected verse is steering)
+  const chapterKey = chapterPlaces.map((p) => p.index).join(',');
+  useEffect(() => {
+    if (journey || focus || !chapterPlaces.length) return;
+    const b = L.latLngBounds(chapterPlaces.map((p) => [p.lat, p.lon]));
+    if (chapterPlaces.length === 1) map.flyTo(b.getCenter(), 8, { duration: 0.8 });
+    else map.flyToBounds(b, { padding: [50, 50], maxZoom: 10, duration: 0.8 });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chapterKey]);
   const lastJourney = useRef<string | null>(null);
 
   useEffect(() => {
@@ -174,13 +181,104 @@ function CameraController({ focus, journey, stopIndex }: Pick<Props, 'focus' | '
   return null;
 }
 
-function RegionLabels({ testament }: { testament: 'OT' | 'NT' }) {
+interface Box {
+  x1: number;
+  y1: number;
+  x2: number;
+  y2: number;
+}
+const overlaps = (a: Box, b: Box) => a.x1 < b.x2 && a.x2 > b.x1 && a.y1 < b.y2 && a.y2 > b.y1;
+const escapeHtml = (t: string) => t.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
+
+/** Rough label widths in pixels (bold 11px sans for places, 12px spaced caps for regions). */
+const placeLabelWidth = (t: string) => t.length * 6.6 + 6;
+const regionLabelWidth = (t: string) => t.length * 10.5;
+
+const dotIcon = (label: string | null, count = 1) =>
+  L.divIcon({
+    className: `place-dot${count > 1 ? ' cluster' : ''}`,
+    iconSize: count > 1 ? [18, 18] : [12, 12],
+    iconAnchor: count > 1 ? [9, 9] : [6, 6],
+    // a leading "<" means the label sits on the left of the square
+    html: `<div>${count > 1 ? count : ''}</div>${
+      label ? `<span class="${label.startsWith('<') ? 'left' : ''}">${escapeHtml(label.replace(/^</, ''))}</span>` : ''
+    }`,
+  });
+
+/**
+ * Chapter places (outlined squares with name labels) and ancient region names, laid out
+ * so labels never overlap: a label that would collide is left off (its square stays),
+ * and a region name is dropped when it would sit on a place or repeats a place's name.
+ */
+function PlaceAndRegionLabels({
+  places,
+  showRegions,
+  testament,
+  avoid,
+  onPlaceInfo,
+}: {
+  places: Place[];
+  showRegions: boolean;
+  testament: 'OT' | 'NT';
+  /** points that already have their own marker/label (verse pins, journey stops) */
+  avoid: { lat: number; lon: number; pin?: boolean }[];
+  onPlaceInfo: (p: Place) => void;
+}) {
   const map = useMap();
   const [zoom, setZoom] = useState(map.getZoom());
   useMapEvents({ zoomend: () => setZoom(map.getZoom()) });
+
+  const layout = useMemo(() => {
+    const px = (lat: number, lon: number) => map.project([lat, lon], zoom);
+    // group squares that would overlap at this zoom into one numbered square
+    const groups: { at: L.Point; members: Place[] }[] = [];
+    for (const p of places) {
+      const pt = px(p.lat, p.lon);
+      const g = groups.find((c) => Math.abs(c.at.x - pt.x) < 24 && Math.abs(c.at.y - pt.y) < 22);
+      if (g) g.members.push(p);
+      else groups.push({ at: pt, members: [p] });
+    }
+    const taken: Box[] = avoid.map((a) => {
+      const p = px(a.lat, a.lon);
+      return a.pin
+        ? { x1: p.x - 60, y1: p.y - 44, x2: p.x + 60, y2: p.y + 8 } // pin + its name label
+        : { x1: p.x - 16, y1: p.y - 16, x2: p.x + 16, y2: p.y + 16 }; // journey stop
+    });
+    // every square is an obstacle first, so labels don't cover other squares
+    const squares = groups.map((g) => ({ x1: g.at.x - 9, y1: g.at.y - 9, x2: g.at.x + 9, y2: g.at.y + 9 }));
+    taken.push(...squares);
+    const labels = new Map<number, string>(); // group index -> label text
+    groups.forEach((g, i) => {
+      const text = g.members.length > 1 ? `${g.members[0].name} +${g.members.length - 1}` : g.members[0].name;
+      const w = placeLabelWidth(text);
+      const right = { x1: g.at.x + 11, y1: g.at.y - 8, x2: g.at.x + 11 + w, y2: g.at.y + 8 };
+      const left = { x1: g.at.x - 11 - w, y1: g.at.y - 8, x2: g.at.x - 11, y2: g.at.y + 8 };
+      const fits = (box: Box) => !taken.some((b) => b !== squares[i] && overlaps(box, b));
+      const box = fits(right) ? right : fits(left) ? left : null;
+      if (!box) return;
+      taken.push(box);
+      labels.set(i, (box === left ? '<' : '') + text);
+    });
+    const names = new Set(places.map((p) => p.name.toLowerCase()));
+    const regions = !showRegions
+      ? []
+      : REGIONS.filter((r) => {
+          if (r.era && r.era !== testament) return false;
+          if (zoom < r.minZoom || zoom > r.minZoom + 5) return false;
+          if (names.has(r.name.toLowerCase())) return false;
+          const pt = px(r.lat, r.lon);
+          const w = regionLabelWidth(r.name);
+          const box = { x1: pt.x - w / 2, y1: pt.y - 9, x2: pt.x + w / 2, y2: pt.y + 9 };
+          if (taken.some((b) => overlaps(box, b))) return false;
+          taken.push(box);
+          return true;
+        });
+    return { groups, labels, regions };
+  }, [map, zoom, places, showRegions, testament, avoid]);
+
   return (
     <>
-      {REGIONS.filter((r) => (!r.era || r.era === testament) && zoom >= r.minZoom && zoom <= r.minZoom + 5).map((r) => (
+      {layout.regions.map((r) => (
         <Marker
           key={r.name}
           position={[r.lat, r.lon]}
@@ -189,6 +287,35 @@ function RegionLabels({ testament }: { testament: 'OT' | 'NT' }) {
           icon={L.divIcon({ className: 'region-label', html: `<span>${r.name}</span>`, iconSize: [0, 0] })}
         />
       ))}
+      {layout.groups.map((g, i) => {
+        const first = g.members[0];
+        const many = g.members.length > 1;
+        const label = layout.labels.get(i) ?? null;
+        return (
+          <Marker
+            key={g.members.map((m) => m.index).join('-')}
+            position={many ? map.unproject(g.at, zoom) : [first.lat, first.lon]}
+            icon={dotIcon(label, g.members.length)}
+            title={many ? g.members.map((m) => m.name).join(', ') : `About ${first.name}`}
+            eventHandlers={{
+              click: () =>
+                many
+                  ? map.flyToBounds(L.latLngBounds(g.members.map((m) => [m.lat, m.lon])), {
+                      padding: [60, 60],
+                      maxZoom: Math.max(zoom + 2, 9),
+                      duration: 0.8,
+                    })
+                  : onPlaceInfo(first),
+            }}
+          >
+            {(!label || many) && (
+              <Tooltip direction="top" offset={[0, -8]} className="place-tip">
+                {many ? `${g.members.map((m) => m.name).join(', ')} (tap to zoom in)` : first.name}
+              </Tooltip>
+            )}
+          </Marker>
+        );
+      })}
     </>
   );
 }
@@ -319,7 +446,19 @@ export default function MapView({
 }: Props) {
   const base = BASE_LAYERS[settings.base];
   const modern = settings.modern !== 'off' ? MODERN_LAYERS[settings.modern] : null;
-  const focusIds = new Set(focus?.places.map((p) => p.index));
+  const focusKey = focus?.places.map((p) => p.index).join(',') ?? '';
+  const shownPlaces = useMemo(() => {
+    const ids = new Set(focusKey.split(',').filter(Boolean).map(Number));
+    return chapterPlaces.filter((p) => !ids.has(p.index));
+  }, [chapterPlaces, focusKey]);
+  // spots that already carry their own marker and label
+  const avoid = useMemo(
+    () => [
+      ...(focus?.places ?? []).map((p) => ({ lat: p.lat, lon: p.lon, pin: true })),
+      ...(journey?.stops ?? []).map((st) => ({ lat: st.lat, lon: st.lon })),
+    ],
+    [focus, journey],
+  );
 
   return (
     <MapContainer center={[31.78, 35.23]} zoom={7} minZoom={3} maxZoom={16} className="map" worldCopyJump>
@@ -342,24 +481,13 @@ export default function MapView({
           zIndex={5}
         />
       )}
-      {settings.regions && <RegionLabels testament={testament} />}
-
-      {settings.chapterPlaces &&
-        chapterPlaces
-          .filter((p) => !focusIds.has(p.index))
-          .map((p) => (
-            <Marker
-              key={p.index}
-              position={[p.lat, p.lon]}
-              icon={placeDotIcon}
-              title={`About ${p.name}`}
-              eventHandlers={{ click: () => onPlaceInfo(p) }}
-            >
-              <Tooltip direction="top" offset={[0, -6]} className="place-tip">
-                {p.name}
-              </Tooltip>
-            </Marker>
-          ))}
+      <PlaceAndRegionLabels
+        places={settings.chapterPlaces ? shownPlaces : []}
+        showRegions={settings.regions}
+        testament={testament}
+        avoid={avoid}
+        onPlaceInfo={onPlaceInfo}
+      />
 
       {journey && <JourneyLayer journey={journey} stopIndex={stopIndex} onStopClick={onStopClick} />}
 
@@ -372,7 +500,7 @@ export default function MapView({
         />
       ))}
 
-      <CameraController focus={focus} journey={journey} stopIndex={stopIndex} />
+      <CameraController focus={focus} journey={journey} stopIndex={stopIndex} chapterPlaces={chapterPlaces} />
     </MapContainer>
   );
 }
