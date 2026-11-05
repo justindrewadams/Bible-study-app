@@ -3528,3 +3528,11 @@ body {
 .place-dot.cluster span.left {
   right: 22px;
 }
+
+/* the name label is tappable too (it's part of the marker, so taps reach the same handler) */
+.place-dot span {
+  pointer-events: auto;
+  cursor: pointer;
+  padding: 4px 2px;
+  margin: -4px -2px;
+}
