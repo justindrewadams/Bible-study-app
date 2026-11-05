@@ -1,8 +1,8 @@
 import { BOOKS, getBook } from './books';
 
 /**
- * The 13 periods of Bible history, following the outline Bob and Sandra Waldron
- * use in their Bible overview studies. Chapter boundaries for books that span
+ * The periods of Bible history: Bob and Sandra Waldron's 13-period outline, plus
+ * the 400 "silent years" between the Testaments as a period of its own. Chapter boundaries for books that span
  * periods (and the placement of the prophets and poetry) follow common
  * conservative datings; a few placements (Job, Joel, Obadiah) are debated.
  */
@@ -25,14 +25,15 @@ export interface Period {
   passages: PassageRange[];
   journeys: string[];
   note?: string;
+  /** a period with no scripture of its own (the 400 silent years) */
+  between?: boolean;
 }
 
 const all = (book: string): PassageRange => ({ book, from: 1, to: getBook(book).chapters });
 const ch = (book: string, from: number, to: number): PassageRange => ({ book, from, to });
 
-export const PERIODS: Period[] = [
+const RAW: Omit<Period, 'n'>[] = [
   {
-    n: 1,
     id: 'beginnings',
     name: 'Beginnings',
     dates: 'Creation – c. 2100 BC',
@@ -52,7 +53,6 @@ export const PERIODS: Period[] = [
     journeys: [],
   },
   {
-    n: 2,
     id: 'patriarchs',
     name: 'Patriarchs',
     dates: 'c. 2100 – 1876 BC',
@@ -73,7 +73,6 @@ export const PERIODS: Period[] = [
     note: 'Job is usually placed in the patriarchal era.',
   },
   {
-    n: 3,
     id: 'bondage',
     name: 'Bondage in Egypt',
     dates: 'c. 1876 – 1446 BC',
@@ -92,7 +91,6 @@ export const PERIODS: Period[] = [
     journeys: [],
   },
   {
-    n: 4,
     id: 'wilderness',
     name: 'Wilderness Wandering',
     dates: '1446 – 1406 BC',
@@ -112,7 +110,6 @@ export const PERIODS: Period[] = [
     journeys: ['exodus'],
   },
   {
-    n: 5,
     id: 'conquest',
     name: 'Conquest of Canaan',
     dates: '1406 – c. 1380 BC',
@@ -131,7 +128,6 @@ export const PERIODS: Period[] = [
     journeys: ['conquest'],
   },
   {
-    n: 6,
     id: 'judges',
     name: 'Judges',
     dates: 'c. 1380 – 1050 BC',
@@ -151,7 +147,6 @@ export const PERIODS: Period[] = [
     journeys: [],
   },
   {
-    n: 7,
     id: 'united-kingdom',
     name: 'United Kingdom',
     dates: '1050 – 931 BC',
@@ -182,7 +177,6 @@ export const PERIODS: Period[] = [
     note: '1 Chronicles 1–9 are genealogies leading up to David. Most psalms come from this era, though some are earlier or later.',
   },
   {
-    n: 8,
     id: 'divided-kingdom',
     name: 'Divided Kingdom',
     dates: '931 – 722 BC',
@@ -213,7 +207,6 @@ export const PERIODS: Period[] = [
     note: "Joel's date is debated; an early date places him here. Isaiah and Micah prophesy into the next period.",
   },
   {
-    n: 9,
     id: 'judah-alone',
     name: 'Judah Alone',
     dates: '722 – 586 BC',
@@ -243,7 +236,6 @@ export const PERIODS: Period[] = [
     note: 'Isaiah 40–66 looks ahead to the exile and return. Obadiah is often dated just after Edom gloated over Jerusalem\'s fall.',
   },
   {
-    n: 10,
     id: 'captivity',
     name: 'Captivity',
     dates: '605 / 586 – 536 BC',
@@ -263,7 +255,6 @@ export const PERIODS: Period[] = [
     journeys: ['exile'],
   },
   {
-    n: 11,
     id: 'return',
     name: 'Return',
     dates: '536 – c. 430 BC',
@@ -283,7 +274,27 @@ export const PERIODS: Period[] = [
     journeys: ['exile'],
   },
   {
-    n: 12,
+    id: 'silent-years',
+    name: '400 Silent Years',
+    dates: 'c. 430 – 5 BC',
+    color: '#7f7f7f',
+    between: true,
+    summary:
+      'After Malachi no new prophet speaks for about four hundred years, yet God is preparing the world for Christ, much as Daniel foretold. Persia gives way to Alexander the Great, and Greek becomes the common language. Antiochus IV desecrates the temple, the Maccabees revolt, and Rome takes Judea in 63 BC. Synagogues, the Pharisees and Sadducees, and the Greek Old Testament (the Septuagint) all take shape. "When the fullness of time had come, God sent forth His Son."',
+    people: ['Alexander the Great', 'the Ptolemies & Seleucids', 'Antiochus IV Epiphanes', 'Judas Maccabeus', 'Pompey', 'Herod the Great'],
+    events: [
+      { t: 'Foretold: four kingdoms, then God\'s kingdom', ref: 'Dan.2.44' },
+      { t: 'Foretold: the Greek "goat" overthrows Persia', ref: 'Dan.8.21' },
+      { t: 'Foretold: a mighty king whose empire is divided', ref: 'Dan.11.3' },
+      { t: 'Foretold: the temple profaned', ref: 'Dan.11.31' },
+      { t: 'Malachi: "I will send you Elijah"', ref: 'Mal.4.5' },
+      { t: '"When the fullness of time had come"', ref: 'Gal.4.4' },
+    ],
+    passages: [],
+    journeys: [],
+    note: 'No book of the Bible was written in this period. The key events link to the prophecies about it and to the New Testament looking back on it.',
+  },
+  {
     id: 'life-of-christ',
     name: 'Life of Christ',
     dates: 'c. 5 BC – AD 30',
@@ -304,7 +315,6 @@ export const PERIODS: Period[] = [
     journeys: ['jesus'],
   },
   {
-    n: 13,
     id: 'early-church',
     name: 'Early Church',
     dates: 'AD 30 – c. 96',
@@ -325,6 +335,8 @@ export const PERIODS: Period[] = [
     journeys: ['saul', 'paul1', 'paul2', 'paul3', 'rome'],
   },
 ];
+
+export const PERIODS: Period[] = RAW.map((p, i) => ({ ...p, n: i + 1 }));
 
 /** The period a chapter belongs to. */
 export function periodFor(book: string, chapter: number): Period | undefined {

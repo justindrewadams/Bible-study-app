@@ -175,9 +175,10 @@ export default function App() {
   return (
     <div className={`app${mapVisible ? '' : ' map-hidden'}${journey ? ' journey-active' : ''}`}>
       <header className="topbar">
-        <div className="brand" title="Bible Atlas Study">
-          <span className="brand-mark">✦</span> <span className="brand-name">Bible Atlas</span>
-        </div>
+        <button className="brand" title="Bible Atlas: back to reading" onClick={() => periodsOpen && closePeriods()}>
+          <span>BIBLE</span>
+          <span>ATLAS</span>
+        </button>
         <div className="nav">
           <button className="icon-btn" onClick={prevChapter} aria-label="Previous chapter">
             ‹
@@ -265,8 +266,7 @@ export default function App() {
             onClick={() => (periodsOpen ? closePeriods() : openPeriods(currentPeriod?.id))}
             aria-pressed={periodsOpen}
           >
-            📜 <span className="wide-only">13 Periods</span>
-            <span className="narrow-only">Periods</span>
+            Periods
           </button>
           <button className="btn" onClick={() => setMapVisible(!mapVisible)} aria-pressed={mapVisible}>
             <span className="wide-only">{mapVisible ? 'Hide map' : 'Show map'}</span>

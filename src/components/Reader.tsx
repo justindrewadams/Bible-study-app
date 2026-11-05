@@ -2,7 +2,7 @@ import { Fragment, useEffect, useRef } from 'react';
 import type { Verse } from '../lib/bible';
 import type { ChapterGeo, Place } from '../lib/geo';
 import { journeysAtVerse, type Journey } from '../lib/journeys';
-import type { Period } from '../data/periods';
+import { PERIODS, type Period } from '../data/periods';
 
 interface Props {
   book: string;
@@ -81,7 +81,7 @@ export default function Reader({
           title="See this period of Bible history"
         >
           <span className="pb-num">{period.n}</span>
-          Period {period.n} of 13: <strong>{period.name}</strong>
+          Period {period.n} of {PERIODS.length}: <strong>{period.name}</strong>
           <span className="muted"> · {period.dates}</span>
         </button>
       )}
