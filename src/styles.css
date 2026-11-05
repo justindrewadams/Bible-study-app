@@ -2878,3 +2878,43 @@ body {
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/* name label above the selected-verse pin (replaces the old popup) */
+.leaflet-tooltip.pin-label {
+  background: var(--paper);
+  color: var(--ink);
+  border: 2px solid var(--line);
+  border-radius: 0;
+  box-shadow: none;
+  padding: 3px 8px;
+  font-family: var(--sans);
+  font-weight: 800;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.leaflet-tooltip.pin-label::before {
+  border-top-color: var(--line);
+}
+
+.leaflet-tooltip.pin-label.inferred {
+  border-style: dashed;
+}
+
+.pin-label-sub {
+  font-weight: 500;
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+.focus-pin {
+  cursor: pointer;
+}
+
+@media (max-width: 860px) {
+  .leaflet-tooltip.pin-label {
+    font-size: 0.78rem;
+    padding: 2px 6px;
+    border-width: 1.5px;
+  }
+}

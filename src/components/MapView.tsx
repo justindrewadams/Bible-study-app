@@ -6,7 +6,6 @@ import {
   CircleMarker,
   Marker,
   Polyline,
-  Popup,
   Tooltip,
   useMap,
   useMapEvents,
@@ -284,12 +283,6 @@ function JourneyLayer({ journey, stopIndex, onStopClick }: { journey: Journey; s
   );
 }
 
-function confidenceText(c: number) {
-  if (c >= 90) return 'Location: well established';
-  if (c >= 30) return 'Location: likely';
-  return 'Location: uncertain';
-}
-
 export default function MapView({
   settings,
   chapterPlaces,
@@ -346,12 +339,11 @@ export default function MapView({
 
       {journey && <JourneyLayer journey={journey} stopIndex={stopIndex} onStopClick={onStopClick} />}
 
-      {focus?.places.map((p, i) => (
+      {focus?.places.map((p) => (
         <FocusMarker
-          key={`${p.index}-${focus.label}`}
+          key={`${p.index}-${p.lat}-${focus.label}`}
           place={p}
           focus={focus}
-          openPopup={i === 0}
           onPlaceInfo={onPlaceInfo}
         />
       ))}
@@ -364,39 +356,34 @@ export default function MapView({
 function FocusMarker({
   place,
   focus,
-  openPopup,
   onPlaceInfo,
 }: {
   place: Place;
   focus: MapFocus;
-  openPopup: boolean;
   onPlaceInfo: (p: Place) => void;
 }) {
-  const ref = useRef<L.Marker>(null);
-  useEffect(() => {
-    if (openPopup) {
-      const t = setTimeout(() => ref.current?.openPopup(), 950);
-      return () => clearTimeout(t);
-    }
-  }, [openPopup, focus]);
+  // Tapping the pin opens the full place card directly; a small label names the place.
+  const hasCard = place.index >= 0;
   return (
-    <Marker ref={ref} position={[place.lat, place.lon]} icon={focusIcon(focus.inferred)} zIndexOffset={3000}>
-      <Popup>
-        <div className="popup">
-          <div className="popup-title">{place.name}</div>
-          <div className="popup-sub">
-            {focus.inferred ? `Last place mentioned before ${focus.label}` : `Mentioned in ${focus.label}`}
-          </div>
-          <div className="popup-meta">
-            {place.type} · {confidenceText(place.confidence)}
-          </div>
-          {place.index >= 0 && (
-            <button className="popup-more" onClick={() => onPlaceInfo(place)}>
-              About {place.name} →
-            </button>
-          )}
-        </div>
-      </Popup>
+    <Marker
+      position={[place.lat, place.lon]}
+      icon={focusIcon(focus.inferred)}
+      zIndexOffset={3000}
+      interactive={hasCard}
+      title={hasCard ? `About ${place.name}` : place.name}
+      eventHandlers={hasCard ? { click: () => onPlaceInfo(place) } : undefined}
+    >
+      <Tooltip
+        permanent
+        interactive={hasCard}
+        eventHandlers={hasCard ? { click: () => onPlaceInfo(place) } : undefined}
+        direction="top"
+        offset={[0, -38]}
+        className={`pin-label${focus.inferred ? ' inferred' : ''}`}
+      >
+        {place.name}
+        {focus.inferred && <span className="pin-label-sub"> · last mentioned</span>}
+      </Tooltip>
     </Marker>
   );
 }
