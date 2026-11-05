@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { BOOKS, getBook } from '../data/books';
 import { PERIODS, periodFor } from '../data/periods';
 import { formatOsis } from '../lib/placeInfo';
+import FamilyTree from './FamilyTree';
 import {
   bioParts,
   formatYear,
@@ -29,6 +30,7 @@ export default function PersonCard({ slug, onClose, onOpenPerson, onGoToRef, onO
   const [people, setPeople] = useState<Map<string, PersonEntry>>(new Map());
   const [showAllRefs, setShowAllRefs] = useState(false);
   const [showFullBio, setShowFullBio] = useState(false);
+  const [familyView, setFamilyView] = useState<'tree' | 'list'>('tree');
 
   useEffect(() => {
     let cancelled = false;
@@ -183,7 +185,26 @@ export default function PersonCard({ slug, onClose, onOpenPerson, onGoToRef, onO
 
         {hasFamily && (
           <section className="pc-section">
-            <h3>Family</h3>
+            <div className="pc-section-head">
+              <h3>Family</h3>
+              <div className="seg" role="tablist" aria-label="Family view">
+                {(['tree', 'list'] as const).map((v) => (
+                  <button
+                    key={v}
+                    role="tab"
+                    aria-selected={familyView === v}
+                    className={familyView === v ? 'on' : ''}
+                    onClick={() => setFamilyView(v)}
+                  >
+                    {v === 'tree' ? 'Tree' : 'List'}
+                  </button>
+                ))}
+              </div>
+            </div>
+            {familyView === 'tree' && details && (
+              <FamilyTree slug={slug} details={details} people={people} onOpenPerson={onOpenPerson} />
+            )}
+            {familyView === 'list' && (
             <dl className="pc-family">
               {family
                 .filter(([, list]) => list?.length)
@@ -194,6 +215,7 @@ export default function PersonCard({ slug, onClose, onOpenPerson, onGoToRef, onO
                   </div>
                 ))}
             </dl>
+            )}
           </section>
         )}
 

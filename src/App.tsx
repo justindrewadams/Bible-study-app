@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { BOOKS, getBook } from './data/books';
 import {
   BIBLE_API_TRANSLATIONS,
+  DEFAULT_TRANSLATION,
   ESV_TRANSLATION,
   fetchChapter,
   findTranslation,
@@ -35,7 +36,8 @@ const formatRef = (bookName: string, chapter: number, verse: number) => `${bookN
 
 export default function App() {
   const [loc, setLoc] = usePersistentState<Location>('loc', { book: 'Acts', chapter: 13 });
-  const [translationId, setTranslationId] = usePersistentState('translation', 'bibleapi:kjv');
+  // ESV by default (served by bolls.life, no key needed). A new storage key so everyone starts on ESV once.
+  const [translationId, setTranslationId] = usePersistentState('translation-v2', DEFAULT_TRANSLATION);
   const [esvKey, setEsvKey] = usePersistentState('esvKey', '');
   const [mapSettings, setMapSettings] = usePersistentState<MapSettings>('map', DEFAULT_MAP_SETTINGS);
   const [mapVisible, setMapVisible] = usePersistentState('mapVisible', true);

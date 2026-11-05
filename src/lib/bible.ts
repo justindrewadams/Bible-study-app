@@ -26,8 +26,8 @@ export const BIBLE_API_TRANSLATIONS: Translation[] = [
 
 /** Fallback list for bolls.life if its catalog can't be loaded. */
 const BOLLS_FALLBACK: [string, string][] = [
-  ['NIV', 'New International Version'],
   ['ESV', 'English Standard Version'],
+  ['NIV', 'New International Version'],
   ['NKJV', 'New King James Version'],
   ['NLT', 'New Living Translation'],
   ['NASB', 'New American Standard Bible'],
@@ -35,6 +35,9 @@ const BOLLS_FALLBACK: [string, string][] = [
   ['AMP', 'Amplified Bible'],
   ['MSG', 'The Message'],
 ];
+
+/** What a new visitor reads: the ESV, via bolls.life. */
+export const DEFAULT_TRANSLATION = 'bolls:ESV';
 
 export const ESV_TRANSLATION: Translation = {
   id: 'esv:ESV',

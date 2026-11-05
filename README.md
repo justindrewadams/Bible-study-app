@@ -2,7 +2,7 @@
 
 A Bible study app that puts the text and the map side by side.
 
-- **Read in your translation.** KJV, WEB, ASV and other public-domain versions load with no setup. Modern versions (NIV, NKJV, NLT, NASB, ESV, CSB…) come from [bolls.life](https://bolls.life), and the official ESV API works with a free personal key.
+- **Read in your translation.** Opens in the **ESV** by default (via bolls.life, no key needed). KJV, WEB, ASV and other public-domain versions load with no setup. Modern versions (NIV, NKJV, NLT, NASB, ESV, CSB…) come from [bolls.life](https://bolls.life), and the official ESV API works with a free personal key.
 - **Tap a verse to see where it happens.** Every place the verse names is pinned on the map with a popup. Place names in the text are highlighted, and you can tap one to jump to it. If a verse names no place, the map shows the **last place mentioned** (e.g. Acts 13:9 → Paphos, v. 6), which is usually where the story is.
 - **Place info cards.** Tap a place name in the text, or any pin or dot on the map, to open a card with: today's site and how certain it is, other biblical names and spellings, when it was established, a short history with a photo (from Wikipedia), key stories (hand-picked for about 75 major places), the journeys that stop there, and every verse that names it. Tap any reference to go to that verse.
 - **Study lists.** Step through a list the way you follow a journey, with Prev, Next or Play. The Bible text jumps to each item's verse, and the map pins its place when it has one. The 24 lists:
@@ -16,7 +16,7 @@ A Bible study app that puts the text and the map side by side.
   - other names, tribe or group, and approximate dates
   - where they were born and died (tap to see the place)
   - the Bible period they belong to
-  - family: parents, spouse, brothers and sisters, children (each tappable)
+  - a **family tree**: grandparents, parents, spouses, brothers and sisters, children and grandchildren. Tap anyone to move the tree to them. A list view is also available.
   - a biography from Easton's Bible Dictionary, with tappable verse references
   - every verse that names them
 
