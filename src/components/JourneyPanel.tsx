@@ -52,17 +52,18 @@ export default function JourneyPanel({ journey, stopIndex, playing, onGo, onTogg
         </div>
       </div>
       <div className="jp-controls">
-        <button className="btn" onClick={() => onGo(0)} disabled={stopIndex === 0} aria-label="First stop">
+        <button className="btn jp-first" onClick={() => onGo(0)} disabled={stopIndex === 0} aria-label="First stop">
           ⏮
         </button>
-        <button className="btn" onClick={() => onGo(stopIndex - 1)} disabled={stopIndex === 0}>
-          ‹ Prev
+        <button className="btn" onClick={() => onGo(stopIndex - 1)} disabled={stopIndex === 0} aria-label="Previous stop">
+          ‹<span className="jp-label"> Prev</span>
         </button>
         <button className="btn primary" onClick={onTogglePlay}>
-          {playing ? '❚❚ Pause' : '▶ Play'}
+          {playing ? '❚❚' : '▶'}
+          <span className="jp-label">{playing ? ' Pause' : ' Play'}</span>
         </button>
-        <button className="btn" onClick={() => onGo(stopIndex + 1)} disabled={stopIndex === last}>
-          Next ›
+        <button className="btn" onClick={() => onGo(stopIndex + 1)} disabled={stopIndex === last} aria-label="Next stop">
+          <span className="jp-label">Next </span>›
         </button>
         <span className="jp-count">
           {stopIndex + 1}/{last + 1}

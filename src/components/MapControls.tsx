@@ -19,7 +19,7 @@ export default function MapControls({ settings, onChange }: Props) {
         title="Overlay today's borders, cities and roads"
         aria-pressed={modernOn}
       >
-        {modernOn ? '◉' : '○'} Modern map
+        {modernOn ? '◉' : '○'} Modern<span className="wide-only"> map</span>
       </button>
       <button className="icon-btn layers-btn" onClick={() => setOpen(!open)} aria-expanded={open} aria-label="Map layers">
         ☰

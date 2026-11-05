@@ -47,6 +47,7 @@ export default function App() {
   const [playing, setPlaying] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [cardPlace, setCardPlace] = useState<Place | null>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
   const [hash, setHash] = useState(() => window.location.hash);
 
   useEffect(() => {
@@ -214,10 +215,26 @@ export default function App() {
             ›
           </button>
         </div>
+        <button
+          className={`menu-btn${menuOpen ? ' open' : ''}`}
+          onClick={() => setMenuOpen(!menuOpen)}
+          aria-expanded={menuOpen}
+          aria-label="Menu"
+        >
+          <span className="menu-btn-code">{translation.code.toUpperCase()}</span>
+          <span aria-hidden>{menuOpen ? '✕' : '☰'}</span>
+        </button>
+        {/* On wide screens these sit in the header; on phones they fold into the ☰ menu. */}
+        <div className={`topbar-extra${menuOpen ? ' open' : ''}`}>
+        <label className="menu-field">
+          <span className="menu-label">Translation</span>
         <select
           className="translation"
           value={translation.id}
-          onChange={(e) => setTranslationId(e.target.value)}
+          onChange={(e) => {
+            setTranslationId(e.target.value);
+            setMenuOpen(false);
+          }}
           aria-label="Translation"
         >
           <optgroup label="Public domain (bible-api.com)">
@@ -238,14 +255,20 @@ export default function App() {
             <option value={ESV_TRANSLATION.id}>ESV — {ESV_TRANSLATION.name}</option>
           </optgroup>
         </select>
+        </label>
+        <label className="menu-field">
+          <span className="menu-label">Follow a journey</span>
         <select
           className="journey-select"
           value={journeyId ?? ''}
           onChange={(e) => {
             const j = JOURNEYS.find((x) => x.id === e.target.value);
             setPlaying(false);
-            if (j) goToStop(j, 0);
-            else setJourneyId(null);
+            setMenuOpen(false);
+            if (j) {
+              goToStop(j, 0);
+              setMapVisible(true);
+            } else setJourneyId(null);
           }}
           aria-label="Follow a journey"
         >
@@ -260,25 +283,43 @@ export default function App() {
             </optgroup>
           ))}
         </select>
+        </label>
         <div className="topbar-actions">
           <button
             className={`btn${periodsOpen ? ' active' : ''}`}
-            onClick={() => (periodsOpen ? closePeriods() : openPeriods(currentPeriod?.id))}
+            onClick={() => {
+              setMenuOpen(false);
+              if (periodsOpen) closePeriods();
+              else openPeriods(currentPeriod?.id);
+            }}
             aria-pressed={periodsOpen}
           >
             Periods
           </button>
-          <button className="btn" onClick={() => setMapVisible(!mapVisible)} aria-pressed={mapVisible}>
-            <span className="wide-only">{mapVisible ? 'Hide map' : 'Show map'}</span>
-            <span className="narrow-only" aria-hidden>
-              {mapVisible ? '▤ Text' : '🗺 Map'}
-            </span>
+          <button
+            className="btn"
+            onClick={() => {
+              setMapVisible(!mapVisible);
+              setMenuOpen(false);
+            }}
+            aria-pressed={mapVisible}
+          >
+            {mapVisible ? 'Hide map' : 'Show map'}
           </button>
-          <button className="icon-btn" onClick={() => setSettingsOpen(true)} aria-label="Settings">
-            ⚙
+          <button
+            className="icon-btn"
+            onClick={() => {
+              setSettingsOpen(true);
+              setMenuOpen(false);
+            }}
+            aria-label="Settings"
+          >
+            ⚙<span className="narrow-only"> Settings</span>
           </button>
         </div>
+        </div>
       </header>
+      {menuOpen && <div className="menu-scrim" onClick={() => setMenuOpen(false)} />}
 
       {periodsOpen && (
         <PeriodsPage

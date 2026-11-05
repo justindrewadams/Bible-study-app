@@ -2088,3 +2088,494 @@ body {
     min-height: 170px;
   }
 }
+
+/* =====================================================================
+   Header menu (wide screens: inline; phones: folds into ☰)
+   ===================================================================== */
+
+.topbar-extra,
+.menu-field {
+  display: contents;
+}
+
+.menu-label,
+.menu-btn,
+.menu-scrim {
+  display: none;
+}
+
+/* =====================================================================
+   Phone: calmer layout
+   ===================================================================== */
+
+@media (max-width: 860px) {
+  :root {
+    --border: 1.5px solid var(--line);
+  }
+
+  /* one-row header */
+  .topbar {
+    position: relative;
+    z-index: 2500;
+    flex-wrap: nowrap;
+    align-items: center;
+    min-height: 52px;
+    padding: 0 0 0 8px;
+    padding-top: env(safe-area-inset-top);
+  }
+
+  .brand {
+    display: none;
+  }
+
+  .topbar .nav {
+    flex: 1;
+    min-width: 0;
+    border-bottom: 0;
+    padding: 6px 6px 6px 0;
+    gap: 4px;
+  }
+
+  .topbar .nav select {
+    padding: 6px 24px 6px 8px;
+    background-position: right 7px center;
+    font-size: 0.95rem;
+  }
+
+  .topbar .nav select:last-of-type {
+    flex: none;
+  }
+
+  .topbar .nav .icon-btn {
+    border: 0;
+    padding: 4px 6px;
+    font-size: 1.35rem;
+  }
+
+  .menu-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    align-self: stretch;
+    padding: 0 14px;
+    border: 0;
+    border-left: var(--border);
+    background: var(--paper);
+    color: var(--ink);
+    font-weight: 700;
+    font-size: 1.1rem;
+    cursor: pointer;
+  }
+
+  .menu-btn.open {
+    background: var(--sky);
+    color: #111;
+  }
+
+  .menu-btn-code {
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+    border: 1.5px solid currentColor;
+    padding: 1px 4px;
+  }
+
+  /* the menu sheet */
+  .topbar-extra {
+    display: none;
+  }
+
+  .topbar-extra.open {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--paper);
+    border-bottom: var(--border);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+    animation: menu-in 0.15s ease-out;
+  }
+
+  @keyframes menu-in {
+    from {
+      transform: translateY(-6px);
+      opacity: 0;
+    }
+  }
+
+  .menu-scrim {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 2400;
+    background: rgba(0, 0, 0, 0.25);
+  }
+
+  .menu-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--hair);
+  }
+
+  .menu-label {
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+  }
+
+  .topbar .menu-field select,
+  .topbar .translation,
+  .topbar .journey-select {
+    order: 0;
+    width: 100%;
+    margin: 0;
+    flex: none;
+    padding: 10px 30px 10px 10px;
+  }
+
+  .topbar .topbar-actions {
+    order: 0;
+    width: 100%;
+    flex-direction: column;
+    border: 0;
+  }
+
+  .topbar .topbar-actions .btn,
+  .topbar .topbar-actions .icon-btn {
+    flex: none;
+    width: 100%;
+    text-align: left;
+    padding: 14px 16px;
+    border: 0;
+    border-bottom: 1px solid var(--hair);
+    font-size: 0.9rem;
+  }
+
+  .topbar .topbar-actions .icon-btn {
+    border-bottom: 0;
+  }
+
+  .topbar .topbar-actions .btn.active {
+    background: var(--sky);
+  }
+
+  /* map: fewer floating controls */
+  .layout {
+    grid-template-rows: 36vh 1fr;
+  }
+
+  .journey-active .layout {
+    grid-template-rows: 46vh 1fr;
+  }
+
+  .leaflet-control-zoom {
+    display: none;
+  }
+
+  .leaflet-control-attribution {
+    font-size: 9px;
+    opacity: 0.7;
+  }
+
+  .map-controls {
+    top: 8px;
+    right: 8px;
+  }
+
+  .overlay-toggle,
+  .layers-btn {
+    padding: 5px 9px;
+    font-size: 0.8rem;
+  }
+
+  .region-label span {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+  }
+
+  /* reader: less chrome around the text */
+  .verse-info {
+    padding: 6px 14px;
+    font-size: 0.85rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .verse-info-ref {
+    display: inline;
+    margin-right: 8px;
+  }
+
+  .verse-info > div:not(.verse-info-ref) {
+    display: inline;
+  }
+
+  .reader {
+    padding-top: 12px;
+  }
+
+  .chapter-title {
+    font-size: 1.6rem;
+    margin: 0 0 6px;
+  }
+
+  .period-badge {
+    margin: 0 0 10px;
+    padding: 2px 8px 2px 2px;
+    font-size: 0.78rem;
+    border-width: 1px;
+  }
+
+  .period-badge .muted {
+    display: none;
+  }
+
+  .pb-num {
+    width: 18px;
+    height: 18px;
+    font-size: 0.65rem;
+    border-width: 1px;
+  }
+
+  .pin {
+    display: none;
+  }
+
+  .chapter-nav {
+    padding: 6px 12px max(6px, env(safe-area-inset-bottom));
+  }
+
+  .chapter-nav .btn {
+    border: 0;
+    padding: 6px 4px;
+    font-size: 0.9rem;
+  }
+
+  /* journey panel: one compact card */
+  .journey-panel {
+    left: 6px;
+    right: 6px;
+    bottom: 6px;
+    width: auto;
+    padding: 8px 10px;
+    border-top-width: 5px;
+  }
+
+  .jp-head {
+    align-items: center;
+  }
+
+  .jp-title {
+    font-size: 0.95rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .jp-head .icon-btn {
+    border: 0;
+  }
+
+  .jp-stop {
+    margin: 4px 0;
+    gap: 8px;
+  }
+
+  .jp-num {
+    width: 24px;
+    height: 24px;
+    font-size: 0.8rem;
+  }
+
+  .jp-note {
+    -webkit-line-clamp: 2;
+    font-size: 0.82rem;
+  }
+
+  .jp-stop .link {
+    display: none;
+  }
+
+  .jp-first,
+  .jp-label,
+  .jp-progress {
+    display: none;
+  }
+
+  .jp-controls {
+    gap: 4px;
+  }
+
+  .jp-controls .btn {
+    min-width: 40px;
+    padding: 4px 10px;
+    font-size: 1rem;
+  }
+
+  /* periods page: lighter */
+  .hero-text {
+    padding: 22px 16px;
+  }
+
+  .hero-text p {
+    font-size: 0.92rem;
+  }
+
+  .hero-back {
+    margin-bottom: 12px;
+  }
+
+  .hero-art {
+    display: none;
+  }
+
+  .periods-inner {
+    padding-top: 18px;
+  }
+
+  .filter-bar {
+    padding: 10px;
+    gap: 8px;
+    border: 0;
+    padding: 0;
+  }
+
+  .filter-label {
+    display: none;
+  }
+
+  .search-box {
+    flex-basis: 100%;
+    min-height: 42px;
+  }
+
+  .timeline {
+    margin-top: 14px;
+  }
+
+  .tl-item {
+    flex: 0 0 64px;
+    padding: 6px 2px 8px;
+  }
+
+  .tl-name {
+    font-size: 0.62rem;
+  }
+
+  .period-head {
+    padding: 10px 12px;
+  }
+
+  .period-num {
+    width: 34px;
+    height: 34px;
+    font-size: 0.95rem;
+  }
+
+  .period-body {
+    padding: 12px;
+  }
+}
+
+@media (max-width: 860px) {
+  .text-pane {
+    border-right: 0;
+  }
+
+  /* softer verse bar */
+  .verse-info {
+    background: color-mix(in srgb, var(--sky) 28%, var(--paper));
+    color: var(--ink);
+    border-bottom: 1px solid var(--hair);
+  }
+
+  .verse-info .link,
+  .verse-info .muted {
+    color: var(--ink);
+  }
+
+  /* period label as a quiet line of text */
+  .period-badge {
+    border: 0;
+    background: none;
+    padding: 0;
+    color: var(--muted);
+  }
+
+  .period-badge strong {
+    color: var(--ink);
+    text-decoration: underline;
+    text-decoration-color: var(--c);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 3px;
+  }
+
+  .pb-num {
+    border: 0;
+  }
+
+  /* journey links under a verse: plain text, not boxes */
+  .verse-journeys {
+    flex-direction: column;
+    gap: 2px;
+    margin: 2px 8px 8px;
+  }
+
+  .verse-journeys .chip {
+    border: 0;
+    background: none;
+    padding: 3px 0;
+    text-align: left;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--ink);
+    box-shadow: inset 3px 0 0 var(--c);
+    padding-left: 10px;
+  }
+
+  /* smaller map popup */
+  .leaflet-popup-content {
+    margin: 10px 12px;
+    font-size: 0.8rem;
+  }
+
+  .popup-title {
+    font-size: 1rem;
+  }
+
+  .popup-more {
+    margin-top: 6px;
+    padding: 5px 8px;
+  }
+
+  .overlay-toggle,
+  .layers-btn {
+    border-width: 1.5px;
+    font-size: 0.75rem;
+    padding: 4px 8px;
+  }
+}
+
+@media (max-width: 860px) {
+  .hero-more {
+    display: none;
+  }
+
+  .hero-text h1 {
+    font-size: 1.7rem;
+    margin-bottom: 10px;
+  }
+
+  .hero-back {
+    border-width: 1.5px;
+    padding: 4px 10px;
+    font-size: 0.72rem;
+  }
+}
