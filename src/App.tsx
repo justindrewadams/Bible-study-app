@@ -19,6 +19,9 @@ import JourneyPanel from './components/JourneyPanel';
 import PlaceCard from './components/PlaceCard';
 import { loadPlaces } from './lib/geo';
 import PeriodsPage from './components/PeriodsPage';
+import PeoplePage from './components/PeoplePage';
+import PersonCard from './components/PersonCard';
+import { loadChapterPeople, type PersonEntry } from './lib/people';
 import ListPanel from './components/ListPanel';
 import { LISTS, LIST_GROUPS, type StudyList } from './lib/lists';
 import { periodFor } from './data/periods';
@@ -50,6 +53,16 @@ export default function App() {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [cardPlace, setCardPlace] = useState<Place | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [personSlug, setPersonSlug] = useState<string | null>(null);
+  const [chapterPeople, setChapterPeople] = useState<Map<number, PersonEntry[]>>(new Map());
+
+  // only one info card at a time
+  useEffect(() => {
+    if (cardPlace) setPersonSlug(null);
+  }, [cardPlace]);
+  useEffect(() => {
+    if (personSlug) setCardPlace(null);
+  }, [personSlug]);
   const [listId, setListId] = useState<string | null>(null);
   const [listIndex, setListIndex] = useState(0);
   const [listPlaying, setListPlaying] = useState(false);
@@ -64,6 +77,11 @@ export default function App() {
 
   // "#periods" or "#periods/<id>" shows the periods page (so the back button works)
   const periodsOpen = hash.startsWith('#periods');
+  const peopleOpen = hash.startsWith('#people');
+  const pageOpen = periodsOpen || peopleOpen;
+  const openPeople = () => {
+    window.location.hash = 'people';
+  };
   const periodFocus = periodsOpen ? (hash.split('/')[1] ?? null) : null;
   const openPeriods = (id?: string) => {
     window.location.hash = id ? `periods/${id}` : 'periods';
@@ -95,6 +113,16 @@ export default function App() {
       cancelled = true;
     };
   }, [translation.id, loc.book, loc.chapter, esvKey]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // People named in each verse of the chapter
+  useEffect(() => {
+    let cancelled = false;
+    setChapterPeople(new Map());
+    loadChapterPeople(loc.book, loc.chapter).then((m) => !cancelled && setChapterPeople(m));
+    return () => {
+      cancelled = true;
+    };
+  }, [loc.book, loc.chapter]);
 
   // Load chapter geography
   useEffect(() => {
@@ -182,6 +210,8 @@ export default function App() {
   }, [playing, journey, stopIndex, goToStop]);
 
   const focus: MapFocus | null = useMemo(() => {
+    // a place opened from a person card can be pinned without a verse selected
+    if (selectedVerse == null && placeOverride) return { places: [placeOverride], inferred: false, label: placeOverride.name };
     if (selectedVerse == null || !geo) return null;
     const label = formatRef(book.name, loc.chapter, selectedVerse);
     if (placeOverride) return { places: [placeOverride], inferred: false, label };
@@ -217,7 +247,7 @@ export default function App() {
   return (
     <div className={`app${mapVisible ? '' : ' map-hidden'}${journey ? ' journey-active' : ''}`}>
       <header className="topbar">
-        <button className="brand" title="Bible Atlas: back to reading" onClick={() => periodsOpen && closePeriods()}>
+        <button className="brand" title="Bible Atlas: back to reading" onClick={() => pageOpen && closePeriods()}>
           <span>BIBLE</span>
           <span>ATLAS</span>
         </button>
@@ -361,6 +391,17 @@ export default function App() {
             Periods
           </button>
           <button
+            className={`btn${peopleOpen ? ' active' : ''}`}
+            onClick={() => {
+              setMenuOpen(false);
+              if (peopleOpen) closePeriods();
+              else openPeople();
+            }}
+            aria-pressed={peopleOpen}
+          >
+            People
+          </button>
+          <button
             className="btn"
             onClick={() => {
               setMapVisible(!mapVisible);
@@ -409,7 +450,9 @@ export default function App() {
         />
       )}
 
-      <main className="layout" hidden={periodsOpen}>
+      {peopleOpen && <PeoplePage onClose={closePeriods} onOpenPerson={setPersonSlug} />}
+
+      <main className="layout" hidden={pageOpen}>
         <section className="text-pane">
           {selectedInfo && selectedVerse != null && (
             <div className="verse-info" aria-live="polite">
@@ -441,6 +484,17 @@ export default function App() {
               ) : (
                 <div className="muted">No places are mentioned in this chapter up to this verse.</div>
               )}
+              {(chapterPeople.get(selectedVerse) ?? []).length > 0 && (
+                <div className="verse-info-people">
+                  People:{' '}
+                  {chapterPeople.get(selectedVerse)!.map((p, i, arr) => (
+                    <button key={p.slug} className="link" onClick={() => setPersonSlug(p.slug)}>
+                      {p.name}
+                      {i < arr.length - 1 ? ',' : ''}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
           )}
           <Reader
@@ -455,6 +509,11 @@ export default function App() {
             onSelectVerse={(v) => {
               setSelectedVerse(v);
               setPlaceOverride(null);
+            }}
+            people={chapterPeople}
+            onSelectPerson={(v, slug) => {
+              setSelectedVerse(v);
+              setPersonSlug(slug);
             }}
             onSelectPlace={(v, p) => {
               setSelectedVerse(v);
@@ -538,9 +597,37 @@ export default function App() {
         )}
       </main>
 
+      {personSlug && (
+        <PersonCard
+          slug={personSlug}
+          onClose={() => setPersonSlug(null)}
+          onOpenPerson={setPersonSlug}
+          onGoToRef={(ref) => {
+            const r = parseRef(ref);
+            if (pageOpen) closePeriods();
+            goTo(r.book, r.chapter, r.verse);
+            if (isNarrow()) setPersonSlug(null);
+          }}
+          onOpenPlace={(at) => {
+            if (pageOpen) closePeriods();
+            if (at.place != null) {
+              loadPlaces().then((ps) => {
+                setPlaceOverride(ps[at.place!]);
+                setCardPlace(ps[at.place!]);
+              });
+            } else if (at.lat != null && at.lon != null) {
+              setMapVisible(true);
+              setPlaceOverride({ index: -1, name: at.name, lat: at.lat, lon: at.lon, type: 'place', confidence: 50 });
+              if (isNarrow()) setPersonSlug(null);
+            }
+          }}
+        />
+      )}
+
       {cardPlace && (
         <PlaceCard
           place={cardPlace}
+          onOpenPerson={setPersonSlug}
           onClose={() => setCardPlace(null)}
           onGoToRef={(ref) => goToRefForPlace(ref, cardPlace)}
           onFollowJourney={(j, i) => {

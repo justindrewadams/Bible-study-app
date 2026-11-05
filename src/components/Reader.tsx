@@ -4,6 +4,7 @@ import type { ChapterGeo, Place } from '../lib/geo';
 import { journeysAtVerse, type Journey } from '../lib/journeys';
 import { listsAtVerse, type StudyList } from '../lib/lists';
 import { PERIODS, type Period } from '../data/periods';
+import { NO_INLINE, NO_INLINE_NAMES, type PersonEntry } from '../lib/people';
 
 interface Props {
   book: string;
@@ -16,6 +17,9 @@ interface Props {
   selectedVerse: number | null;
   onSelectVerse: (v: number | null) => void;
   onSelectPlace: (verse: number, place: Place) => void;
+  /** people named in each verse */
+  people: Map<number, PersonEntry[]>;
+  onSelectPerson: (verse: number, slug: string) => void;
   onFollowJourney: (journey: Journey, stopIndex: number) => void;
   activeJourneyId: string | null;
   activeList: { id: string; index: number } | null;
@@ -26,17 +30,26 @@ interface Props {
 
 const escapeRe = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
-/** Splits verse text so place names can be highlighted and tapped. */
-function highlightPlaces(text: string, places: Place[]) {
-  if (!places.length) return [text];
-  const names = [...new Set(places.map((p) => p.name))].sort((a, b) => b.length - a.length);
+type Part = string | { name: string; place: Place } | { name: string; person: PersonEntry };
+
+/** Splits verse text so place and people names can be highlighted and tapped. */
+function highlightNames(text: string, places: Place[], people: PersonEntry[]): Part[] {
+  const byName = new Map<string, { place?: Place; person?: PersonEntry }>();
+  for (const p of places) byName.set(p.name.toLowerCase(), { place: p });
+  for (const p of people) {
+    if (NO_INLINE.has(p.slug) || NO_INLINE_NAMES.has(p.name)) continue;
+    const k = p.name.toLowerCase();
+    if (!byName.has(k)) byName.set(k, { person: p }); // a place with the same name wins
+  }
+  if (!byName.size) return [text];
+  const names = [...byName.keys()].sort((a, b) => b.length - a.length);
   const re = new RegExp(`\\b(${names.map(escapeRe).join('|')})\\b`, 'gi');
-  const out: (string | { name: string; place: Place })[] = [];
+  const out: Part[] = [];
   let last = 0;
   for (const m of text.matchAll(re)) {
-    const place = places.find((p) => p.name.toLowerCase() === m[0].toLowerCase())!;
+    const hit = byName.get(m[0].toLowerCase())!;
     if (m.index! > last) out.push(text.slice(last, m.index));
-    out.push({ name: m[0], place });
+    out.push(hit.place ? { name: m[0], place: hit.place } : { name: m[0], person: hit.person! });
     last = m.index! + m[0].length;
   }
   if (last < text.length) out.push(text.slice(last));
@@ -54,6 +67,8 @@ export default function Reader({
   selectedVerse,
   onSelectVerse,
   onSelectPlace,
+  people: chapterPeople,
+  onSelectPerson,
   onFollowJourney,
   activeJourneyId,
   activeList,
@@ -120,9 +135,21 @@ export default function Reader({
                   }}
                 >
                   <sup className="vnum">{v.verse}</sup>
-                  {highlightPlaces(v.text, places).map((part, i) =>
+                  {highlightNames(v.text, places, chapterPeople.get(v.verse) ?? []).map((part, i) =>
                     typeof part === 'string' ? (
                       <Fragment key={i}>{part}</Fragment>
+                    ) : 'person' in part ? (
+                      <button
+                        key={i}
+                        className="person-name"
+                        title={`About ${part.person.title}`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onSelectPerson(v.verse, part.person.slug);
+                        }}
+                      >
+                        {part.name}
+                      </button>
                     ) : (
                       <button
                         key={i}

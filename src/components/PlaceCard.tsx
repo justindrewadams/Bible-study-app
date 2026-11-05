@@ -3,12 +3,14 @@ import { BOOKS, getBook } from '../data/books';
 import type { Place } from '../lib/geo';
 import { JOURNEYS, type Journey } from '../lib/journeys';
 import { formatOsis, loadPlaceDetails, loadWikiInfo, type PlaceDetails, type WikiInfo } from '../lib/placeInfo';
+import { loadPeople, loadPlacePeople, type PersonEntry } from '../lib/people';
 
 interface Props {
   place: Place;
   onClose: () => void;
   onGoToRef: (ref: string) => void;
   onFollowJourney: (journey: Journey, stopIndex: number) => void;
+  onOpenPerson: (slug: string) => void;
 }
 
 function likelihood(score: number) {
@@ -21,7 +23,21 @@ function likelihood(score: number) {
 
 const PREVIEW_BOOKS = 4;
 
-export default function PlaceCard({ place, onClose, onGoToRef, onFollowJourney }: Props) {
+export default function PlaceCard({ place, onClose, onGoToRef, onFollowJourney, onOpenPerson }: Props) {
+  const [natives, setNatives] = useState<{ born: PersonEntry[]; died: PersonEntry[] }>({ born: [], died: [] });
+  useEffect(() => {
+    let cancelled = false;
+    setNatives({ born: [], died: [] });
+    Promise.all([loadPlacePeople(), loadPeople()]).then(([pp, { bySlug }]) => {
+      if (cancelled) return;
+      const at = pp[place.index] ?? {};
+      const get = (l?: string[]) => (l ?? []).map((s) => bySlug.get(s)!).filter(Boolean);
+      setNatives({ born: get(at.born), died: get(at.died) });
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [place.index]);
   const [details, setDetails] = useState<PlaceDetails | null>(null);
   const [wiki, setWiki] = useState<WikiInfo | null>(null);
   const [wikiLoading, setWikiLoading] = useState(false);
@@ -196,6 +212,37 @@ export default function PlaceCard({ place, onClose, onGoToRef, onFollowJourney }
                 </li>
               ))}
             </ul>
+          </section>
+        )}
+
+        {(natives.born.length > 0 || natives.died.length > 0) && (
+          <section className="pc-section">
+            <h3>People</h3>
+            <dl className="pc-family">
+              {(
+                [
+                  ['Born here', natives.born],
+                  ['Died here', natives.died],
+                ] as const
+              )
+                .filter(([, l]) => l.length)
+                .map(([label, l]) => (
+                  <div key={label}>
+                    <dt>{label}</dt>
+                    <dd>
+                      {l.map((p) => (
+                        <button
+                          key={p.slug}
+                          className={`person-chip${p.gender === 'F' ? ' f' : ''}`}
+                          onClick={() => onOpenPerson(p.slug)}
+                        >
+                          {p.title}
+                        </button>
+                      ))}
+                    </dd>
+                  </div>
+                ))}
+            </dl>
           </section>
         )}
 

@@ -3062,3 +3062,195 @@ body {
   background: var(--c);
   color: #fff;
 }
+
+/* =====================================================================
+   Bible people
+   ===================================================================== */
+
+/* names of people in the text: quieter than places */
+.person-name {
+  font: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  color: inherit;
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, #c2185b 55%, transparent);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
+}
+
+.person-name:hover {
+  color: #c2185b;
+}
+
+.verse-info-people {
+  margin-top: 1px;
+}
+
+/* person card */
+.person-card .pc-head {
+  background: var(--blush);
+}
+
+.pc-kicker {
+  display: inline-block;
+  background: #111;
+  color: #fff;
+  font-size: 0.66rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 1px 6px;
+  margin-bottom: 4px;
+}
+
+.pc-family {
+  margin: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.pc-family dt {
+  font-weight: 600;
+  color: var(--muted);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 3px;
+}
+
+.pc-family dd {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.person-chip {
+  border: 1.5px solid var(--line);
+  background: var(--paper);
+  padding: 2px 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: inset 3px 0 0 var(--sky);
+}
+
+.person-chip.f {
+  box-shadow: inset 3px 0 0 #c2185b;
+}
+
+.person-chip:hover {
+  background: var(--select);
+}
+
+.bio-ref {
+  font-weight: 500;
+  text-decoration-thickness: 1px;
+  color: var(--place);
+}
+
+/* people page */
+.people-hero {
+  grid-template-columns: 1fr;
+}
+
+.people-hero .hero-text {
+  background: var(--blush);
+  border-right: 0;
+  padding-top: clamp(22px, 4vw, 48px);
+  padding-bottom: clamp(22px, 4vw, 48px);
+}
+
+.people-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.person-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  text-align: left;
+  padding: 10px 12px;
+  border: var(--border);
+  background: var(--paper);
+  cursor: pointer;
+  box-shadow: inset 5px 0 0 var(--sky);
+  padding-left: 16px;
+}
+
+.person-tile.f {
+  box-shadow: inset 5px 0 0 #c2185b;
+}
+
+.person-tile:hover {
+  background: var(--select);
+}
+
+.pt-name {
+  font-weight: 800;
+}
+
+.pt-meta {
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.show-more {
+  display: block;
+  margin: 16px auto 0;
+}
+
+@media (max-width: 860px) {
+  .verse-info-people {
+    display: inline;
+    margin-left: 8px;
+  }
+
+  .people-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+
+  .person-tile {
+    padding: 8px 10px 8px 13px;
+  }
+
+  .pt-name {
+    font-size: 0.9rem;
+  }
+
+  .pt-meta {
+    font-size: 0.72rem;
+  }
+
+  .filter-bar select {
+    flex: 1 1 30%;
+  }
+}
+
+@media (max-width: 1240px) and (min-width: 861px) {
+  .topbar-actions .btn {
+    padding: 0 9px;
+    font-size: 0.78rem;
+  }
+
+  .topbar .translation,
+  .topbar .journey-select,
+  .topbar .list-select {
+    width: 120px;
+  }
+}
+
+@media (max-width: 860px) {
+  .people-page .filter-bar select {
+    padding-right: 24px;
+    background-position: right 7px center;
+  }
+}
