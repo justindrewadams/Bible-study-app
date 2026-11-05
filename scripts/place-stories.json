@@ -1,0 +1,291 @@
+{
+  "Jerusalem": [
+    ["Melchizedek, king of Salem, blesses Abram", "Gen.14.18"],
+    ["David captures the stronghold of Zion", "2Sam.5.6"],
+    ["Solomon builds the temple", "1Kgs.6.1"],
+    ["Hezekiah's prayer and the city delivered from Assyria", "2Kgs.19.14"],
+    ["Babylon destroys the city and temple", "2Kgs.25.8"],
+    ["Nehemiah rebuilds the walls", "Neh.2.11"],
+    ["Jesus weeps over the city", "Luke.19.41"],
+    ["Crucifixion and resurrection", "Luke.23.33"],
+    ["The Holy Spirit comes at Pentecost", "Acts.2.1"],
+    ["The Jerusalem Council", "Acts.15.6"]
+  ],
+  "Bethlehem 1": [
+    ["Rachel dies and is buried on the way to Bethlehem", "Gen.35.19"],
+    ["Ruth gleans in the fields of Boaz", "Ruth.2.4"],
+    ["Samuel anoints David", "1Sam.16.4"],
+    ["Micah foretells the ruler from Bethlehem", "Mic.5.2"],
+    ["The birth of Jesus", "Luke.2.4"],
+    ["The magi worship the child", "Matt.2.1"]
+  ],
+  "Nazareth": [
+    ["Gabriel announces Jesus' birth to Mary", "Luke.1.26"],
+    ["Jesus grows up here", "Luke.2.51"],
+    ["Rejected in the synagogue", "Luke.4.16"],
+    ["\"Can anything good come out of Nazareth?\"", "John.1.46"]
+  ],
+  "Capernaum": [
+    ["Jesus makes Capernaum his home", "Matt.4.13"],
+    ["Teaching with authority; a demon cast out", "Mark.1.21"],
+    ["The paralytic lowered through the roof", "Mark.2.1"],
+    ["The centurion's servant healed", "Luke.7.1"],
+    ["The Bread of Life discourse", "John.6.59"]
+  ],
+  "Jericho 1": [
+    ["Rahab hides the spies", "Josh.2.1"],
+    ["The walls fall", "Josh.6.20"],
+    ["Elisha heals the spring", "2Kgs.2.19"]
+  ],
+  "Jericho 2": [
+    ["Blind Bartimaeus healed", "Mark.10.46"],
+    ["Zacchaeus climbs a sycamore tree", "Luke.19.1"],
+    ["Setting of the parable of the Good Samaritan", "Luke.10.30"]
+  ],
+  "Bethel 1": [
+    ["Abram builds an altar", "Gen.12.8"],
+    ["Jacob's ladder", "Gen.28.10"],
+    ["Jacob returns and is renamed Israel", "Gen.35.1"],
+    ["Jeroboam sets up a golden calf", "1Kgs.12.28"],
+    ["Amos prophesies against the altar", "Amos.7.10"]
+  ],
+  "Hebron": [
+    ["Abram settles by the oaks of Mamre", "Gen.13.18"],
+    ["Abraham buys the cave of Machpelah", "Gen.23.17"],
+    ["Caleb receives Hebron", "Josh.14.13"],
+    ["David is anointed king over Judah", "2Sam.2.1"],
+    ["Absalom begins his revolt", "2Sam.15.10"]
+  ],
+  "Shechem": [
+    ["God promises the land to Abram", "Gen.12.6"],
+    ["Joshua renews the covenant: \"As for me and my house\"", "Josh.24.1"],
+    ["Joseph's bones are buried", "Josh.24.32"],
+    ["The kingdom divides under Rehoboam", "1Kgs.12.1"]
+  ],
+  "Egypt": [
+    ["Abram goes down during famine", "Gen.12.10"],
+    ["Joseph rises to power", "Gen.41.41"],
+    ["Israel enslaved", "Exod.1.8"],
+    ["The plagues and the Passover", "Exod.12.29"],
+    ["The holy family flees from Herod", "Matt.2.13"]
+  ],
+  "Babylon 1": [
+    ["Nebuchadnezzar carries Judah into exile", "2Kgs.24.10"],
+    ["Daniel and his friends in the king's court", "Dan.1.1"],
+    ["The fiery furnace", "Dan.3.19"],
+    ["The writing on the wall", "Dan.5.5"],
+    ["\"By the waters of Babylon\"", "Ps.137.1"]
+  ],
+  "Nineveh": [
+    ["Jonah sent to preach", "Jonah.1.2"],
+    ["The city repents", "Jonah.3.5"],
+    ["Nahum foretells its fall", "Nah.1.1"]
+  ],
+  "Damascus": [
+    ["Naaman the Syrian army commander", "2Kgs.5.1"],
+    ["Saul is converted on the road", "Acts.9.3"],
+    ["Ananias restores Saul's sight", "Acts.9.17"],
+    ["Paul escapes in a basket", "Acts.9.25"]
+  ],
+  "Samaria 1": [
+    ["Omri builds Samaria as Israel's capital", "1Kgs.16.24"],
+    ["Ahab and Jezebel's temple of Baal", "1Kgs.16.32"],
+    ["Siege and the four lepers", "2Kgs.7.3"],
+    ["Falls to Assyria", "2Kgs.17.5"],
+    ["Philip preaches; Simon the sorcerer", "Acts.8.5"]
+  ],
+  "Shiloh": [
+    ["The tabernacle is set up", "Josh.18.1"],
+    ["Hannah prays for a son", "1Sam.1.9"],
+    ["The LORD calls Samuel", "1Sam.3.10"]
+  ],
+  "Beersheba 2": [
+    ["Abraham's covenant at the well", "Gen.21.31"],
+    ["God appears to Isaac", "Gen.26.23"],
+    ["Elijah flees from Jezebel", "1Kgs.19.3"]
+  ],
+  "Beersheba 1": [
+    ["\"From Dan to Beersheba\"", "Judg.20.1"],
+    ["Samuel's sons judge here", "1Sam.8.2"],
+    ["Elijah flees from Jezebel", "1Kgs.19.3"]
+  ],
+  "Mount Sinai": [
+    ["Israel camps before the mountain", "Exod.19.1"],
+    ["The Ten Commandments", "Exod.20.1"],
+    ["The golden calf", "Exod.32.1"],
+    ["Moses sees God's glory", "Exod.34.5"]
+  ],
+  "Mount Horeb": [
+    ["The burning bush", "Exod.3.1"],
+    ["Water from the rock", "Exod.17.6"],
+    ["Elijah hears the still small voice", "1Kgs.19.8"]
+  ],
+  "Mount Carmel": [
+    ["Elijah and the prophets of Baal", "1Kgs.18.19"],
+    ["Elijah prays for rain", "1Kgs.18.42"]
+  ],
+  "Jordan": [
+    ["Israel crosses on dry ground", "Josh.3.14"],
+    ["Elijah taken up; Elisha parts the river", "2Kgs.2.8"],
+    ["Naaman washes seven times", "2Kgs.5.14"],
+    ["Jesus is baptized", "Matt.3.13"]
+  ],
+  "Sea of Galilee": [
+    ["Jesus calls the fishermen", "Matt.4.18"],
+    ["Jesus calms the storm", "Mark.4.35"],
+    ["Jesus walks on the water", "Matt.14.25"],
+    ["Breakfast on the shore with the risen Jesus", "John.21.1"]
+  ],
+  "Cana": [
+    ["Water turned into wine", "John.2.1"],
+    ["The official's son healed", "John.4.46"]
+  ],
+  "Bethany 1": [
+    ["Mary and Martha host Jesus", "Luke.10.38"],
+    ["Lazarus raised from the dead", "John.11.38"],
+    ["Mary anoints Jesus", "John.12.1"],
+    ["The ascension", "Luke.24.50"]
+  ],
+  "Mount of Olives": [
+    ["David flees Absalom, weeping", "2Sam.15.30"],
+    ["Zechariah's vision of the LORD's feet", "Zech.14.4"],
+    ["The Olivet Discourse", "Matt.24.3"],
+    ["The ascension", "Acts.1.12"]
+  ],
+  "Gethsemane": [
+    ["Jesus prays: \"Not my will, but yours\"", "Matt.26.36"],
+    ["Jesus is betrayed and arrested", "Mark.14.43"]
+  ],
+  "Golgotha": [
+    ["The crucifixion", "John.19.17"],
+    ["\"It is finished\"", "John.19.30"]
+  ],
+  "Emmaus": [["The risen Jesus revealed in the breaking of bread", "Luke.24.30"]],
+  "Caesarea": [
+    ["Peter preaches to Cornelius; Gentiles receive the Spirit", "Acts.10.24"],
+    ["Herod Agrippa struck down", "Acts.12.21"],
+    ["Paul before Felix, Festus and Agrippa", "Acts.24.1"]
+  ],
+  "Caesarea Philippi": [["Peter's confession: \"You are the Christ\"", "Matt.16.13"]],
+  "Ur 1": [["Abram's family sets out for Canaan", "Gen.11.31"]],
+  "Haran": [
+    ["God calls Abram: \"Go from your country\"", "Gen.12.1"],
+    ["Jacob works for Laban and marries Rachel", "Gen.29.4"]
+  ],
+  "Moriah": [["Abraham offers Isaac", "Gen.22.2"]],
+  "Mount Moriah": [["Solomon builds the temple on Mount Moriah", "2Chr.3.1"]],
+  "Penuel": [["Jacob wrestles with God", "Gen.32.30"]],
+  "Mount Gilboa": [["Saul and Jonathan die in battle", "1Sam.31.1"]],
+  "Bethsaida 2": [
+    ["Feeding of the five thousand", "Luke.9.10"],
+    ["A blind man healed in stages", "Mark.8.22"]
+  ],
+  "Bethsaida 1": [["Home of Philip, Andrew and Peter", "John.1.44"]],
+  "Nain": [["Jesus raises a widow's son", "Luke.7.11"]],
+  "Sychar": [["The woman at the well", "John.4.5"]],
+  "Kadesh-barnea": [
+    ["The spies report; Israel refuses to enter", "Num.13.26"],
+    ["Miriam dies; Moses strikes the rock", "Num.20.1"]
+  ],
+  "Mount Nebo": [["Moses views the Promised Land and dies", "Deut.34.1"]],
+  "Mount Zion": [["\"Beautiful in elevation… Mount Zion\"", "Ps.48.2"]],
+  "Goshen 1": [["Jacob's family settles in Egypt", "Gen.47.27"]],
+  "Ai 1": [
+    ["Defeat because of Achan's sin", "Josh.7.4"],
+    ["Ai is taken by ambush", "Josh.8.18"]
+  ],
+  "Gibeon": [
+    ["The Gibeonites deceive Joshua", "Josh.9.3"],
+    ["The sun stands still", "Josh.10.12"],
+    ["Solomon asks for wisdom", "1Kgs.3.5"]
+  ],
+  "Gilgal 1": [
+    ["Twelve memorial stones from the Jordan", "Josh.4.20"],
+    ["Circumcision and the first Passover in the land", "Josh.5.9"],
+    ["Saul is made king", "1Sam.11.15"]
+  ],
+  "Megiddo": [
+    ["King Josiah killed in battle", "2Kgs.23.29"],
+    ["Armageddon (\"hill of Megiddo\")", "Rev.16.16"]
+  ],
+  "Sodom": [
+    ["Lot chooses the Jordan valley", "Gen.13.12"],
+    ["Abraham intercedes", "Gen.18.22"],
+    ["Fire from heaven; Lot's wife", "Gen.19.24"]
+  ],
+  "Gaza": [
+    ["Samson carries off the city gates", "Judg.16.3"],
+    ["Samson's death in the temple of Dagon", "Judg.16.21"],
+    ["Philip and the Ethiopian on the Gaza road", "Acts.8.26"]
+  ],
+  "Joppa": [
+    ["Jonah flees to Tarshish", "Jonah.1.3"],
+    ["Peter raises Tabitha", "Acts.9.36"],
+    ["Peter's rooftop vision", "Acts.10.9"]
+  ],
+  "Tarsus": [["Paul's hometown", "Acts.22.3"]],
+  "Patmos": [["John receives the Revelation", "Rev.1.9"]],
+  "Jezreel 2": [
+    ["Naboth's vineyard", "1Kgs.21.1"],
+    ["Jezebel's death", "2Kgs.9.30"]
+  ],
+  "Gath 1": [
+    ["Home of Goliath", "1Sam.17.4"],
+    ["David feigns madness before Achish", "1Sam.21.10"]
+  ],
+  "Zarephath": [["Elijah and the widow's flour and oil", "1Kgs.17.9"]],
+  "Susa": [
+    ["Nehemiah serves as cupbearer", "Neh.1.1"],
+    ["Esther becomes queen", "Esth.2.8"]
+  ],
+  "Dan": [
+    ["The tribe of Dan seizes Laish", "Judg.18.27"],
+    ["Jeroboam's second golden calf", "1Kgs.12.29"]
+  ],
+  "Tyre": [
+    ["Hiram supplies cedar for the temple", "1Kgs.5.1"],
+    ["Ezekiel's lament over Tyre", "Ezek.27.1"],
+    ["Paul prays on the beach with the disciples", "Acts.21.5"]
+  ],
+  "Sidon": [["Jesus withdraws to the region of Tyre and Sidon", "Matt.15.21"]],
+  "Antioch 1": [
+    ["Disciples first called Christians", "Acts.11.26"],
+    ["Paul and Barnabas sent out", "Acts.13.1"],
+    ["Paul confronts Peter", "Gal.2.11"]
+  ],
+  "Antioch 2": [["Paul's synagogue sermon; turning to the Gentiles", "Acts.13.14"]],
+  "Ephesus": [
+    ["Twelve disciples receive the Spirit", "Acts.19.1"],
+    ["Books of magic burned", "Acts.19.19"],
+    ["Riot of the silversmiths: \"Great is Artemis\"", "Acts.19.23"],
+    ["The church that left its first love", "Rev.2.1"]
+  ],
+  "Corinth": [
+    ["Paul makes tents with Aquila and Priscilla", "Acts.18.1"],
+    ["\"I have many people in this city\"", "Acts.18.9"]
+  ],
+  "Athens": [["Paul at the Areopagus: \"the unknown god\"", "Acts.17.22"]],
+  "Philippi": [
+    ["Lydia, the first convert in Europe", "Acts.16.14"],
+    ["Midnight hymns, earthquake, and the jailer saved", "Acts.16.25"]
+  ],
+  "Thessalonica": [["A church born amid a riot", "Acts.17.1"]],
+  "Lystra": [
+    ["Paul and Barnabas mistaken for gods", "Acts.14.11"],
+    ["Paul stoned and left for dead", "Acts.14.19"],
+    ["Timothy joins Paul", "Acts.16.1"]
+  ],
+  "Rome": [
+    ["Paul's letter to the church in Rome", "Rom.1.7"],
+    ["Paul preaches under house arrest", "Acts.28.30"]
+  ],
+  "Mount Hermon": [["\"Like the dew of Hermon\"", "Ps.133.3"]],
+  "Ararat": [["Noah's ark comes to rest", "Gen.8.4"]],
+  "Lachish": [["Sennacherib besieges Lachish", "2Kgs.18.14"]],
+  "Hazor 1": [["Joshua burns Hazor", "Josh.11.10"]],
+  "Ziklag": [["David strengthens himself in the LORD", "1Sam.30.6"]],
+  "Mahanaim": [
+    ["Jacob meets the angels of God", "Gen.32.2"],
+    ["David takes refuge from Absalom", "2Sam.17.24"]
+  ]
+}

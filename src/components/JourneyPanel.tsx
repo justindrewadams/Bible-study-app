@@ -8,6 +8,7 @@ interface Props {
   onGo: (i: number) => void;
   onTogglePlay: () => void;
   onClose: () => void;
+  onPlaceInfo: (placeIndex: number) => void;
 }
 
 const fmt = (ref: string) => {
@@ -15,7 +16,7 @@ const fmt = (ref: string) => {
   return `${b.replace(/^(\d)/, '$1 ')} ${c}:${v}`;
 };
 
-export default function JourneyPanel({ journey, stopIndex, playing, onGo, onTogglePlay, onClose }: Props) {
+export default function JourneyPanel({ journey, stopIndex, playing, onGo, onTogglePlay, onClose, onPlaceInfo }: Props) {
   const [expanded, setExpanded] = useState(false);
   const listRef = useRef<HTMLOListElement>(null);
   const stop = journey.stops[stopIndex];
@@ -43,6 +44,11 @@ export default function JourneyPanel({ journey, stopIndex, playing, onGo, onTogg
             {stop.place} <span className="muted">· {fmt(stop.ref)}</span>
           </div>
           <div className="jp-note">{stop.note}</div>
+          {stop.placeIndex != null && (
+            <button className="link small" onClick={() => onPlaceInfo(stop.placeIndex!)}>
+              About {stop.place} →
+            </button>
+          )}
         </div>
       </div>
       <div className="jp-controls">

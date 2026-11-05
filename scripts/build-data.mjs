@@ -4,6 +4,7 @@
 // Outputs:
 //   public/data/places.json        – every geocoded place: [name, lat, lon, type, confidence]
 //   public/data/verses/<Book>.json – { "chapter": { "verse": [placeIndex, ...] } }
+//   public/data/place-details.json – per-place info card data (aligned with places.json)
 //   src/data/journeys.json         – curated journeys with resolved coordinates
 //
 // Run: npm run build:data
@@ -33,11 +34,17 @@ function parseLonLat(s) {
   return { lat: +lat.toFixed(4), lon: +lon.toFixed(4) };
 }
 
-/** Confidence 0–100 from OpenBible's score (vote_average is 0–1000-ish). */
-function confidence(ident) {
-  const v = ident?.score?.vote_average ?? 0;
-  return Math.max(0, Math.min(100, Math.round(v / 5)));
+/**
+ * Confidence 0–100. OpenBible scores each modern site association 0–1000;
+ * fall back to the identification's vote average when there's no modern site.
+ */
+function confidence(row, ident) {
+  const scores = Object.values(row.modern_associations ?? {}).map((m) => m.score ?? 0);
+  const v = scores.length ? Math.max(...scores) / 10 : (ident?.score?.vote_average ?? 0) / 5;
+  return Math.max(0, Math.min(100, Math.round(v)));
 }
+
+const stripTags = (s) => (s ?? '').replace(/<[^>]+>/g, '').trim();
 
 await ensureSource();
 const rows = fs
@@ -58,9 +65,9 @@ for (const r of rows) {
   // "Bethel 1" -> display "Bethel"
   const display = r.friendly_id.replace(/ \d+$/, '');
   const idx = places.length;
-  places.push([display, ll.lat, ll.lon, r.types?.[0] ?? 'place', confidence(ident)]);
+  places.push([display, ll.lat, ll.lon, r.types?.[0] ?? 'place', confidence(r, ident)]);
   placeIndexById.set(r.id, idx);
-  const verses = (r.verses ?? []).map((v) => v.osis);
+  const verses = [...(r.verses ?? [])].sort((a, b) => a.sort.localeCompare(b.sort)).map((v) => v.osis);
   const entry = { row: r, idx, ll, verses: new Set(verses) };
   if (!rowsByName.has(display)) rowsByName.set(display, []);
   rowsByName.get(display).push(entry);
@@ -72,12 +79,75 @@ for (const r of rows) {
   }
 }
 
+// --- per-place details for info cards
+const stories = JSON.parse(fs.readFileSync(path.join(root, 'scripts', 'place-stories.json'), 'utf8'));
+const aliasesOf = new Map(); // ancient id -> other dataset names that are "another name for" it
+for (const r of rows) {
+  // only trust the alias when it's this row's best identification
+  const m = /another name for <ancient id="([^"]+)">/.exec(r.identifications?.[0]?.description ?? '');
+  if (m) {
+    if (!aliasesOf.has(m[1])) aliasesOf.set(m[1], new Set());
+    aliasesOf.get(m[1]).add(r.friendly_id.replace(/ \d+$/, ''));
+  }
+}
+const allBaseNames = new Set(rows.map((r) => r.friendly_id.replace(/ \d+$/, '')));
+const storyErrors = [];
+const storyByFriendly = new Map(Object.entries(stories));
+const details = [];
+for (const list of rowsByName.values()) {
+  for (const { row: r, idx, verses } of list) {
+    const display = places[idx][0];
+    const seen = new Set([display.toLowerCase()]);
+    const aliases = [...(aliasesOf.get(r.id) ?? [])].filter((n) => n !== display);
+    aliases.forEach((n) => seen.add(n.toLowerCase()));
+    // spelling variants across translations (skip demonyms, epithets and other places' names)
+    const alt = [];
+    for (const [n] of Object.entries(r.translation_name_counts ?? {}).sort((a, b) => b[1] - a[1])) {
+      const k = n.toLowerCase();
+      if (seen.has(k) || /^[a-z]/.test(n) || /('s|ites?|ians?|Jews)$/i.test(n) || allBaseNames.has(n) || /^(Judah|Israel|Daughter .*)$/i.test(n)) continue;
+      seen.add(k);
+      alt.push(n);
+    }
+    const modern = Object.values(r.modern_associations ?? {})
+      .filter((m) => (m.score ?? 0) > 0)
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 4)
+      .map((m) => [m.name, Math.round(m.score / 10)]);
+    const ident = r.identifications?.[0];
+    const linked = Object.values(r.linked_data ?? {});
+    const wd = linked.map((l) => l.id).find((id) => /^Q\d+$/.test(id ?? ''));
+    const factbook = linked.find((l) => /biblia\.com\/factbook/.test(l.url ?? ''))?.url;
+    const pleiades = linked.find((l) => /pleiades\.stoa\.org/.test(l.url ?? ''))?.url;
+    const st = storyByFriendly.get(r.friendly_id);
+    if (st) storyByFriendly.delete(r.friendly_id);
+    details[idx] = {
+      types: r.types ?? [],
+      ...(alt.length && { alt }),
+      ...(aliases.length && { aka: aliases }),
+      ...(modern.length && { modern }),
+      ...(!modern.length && ident?.description && { site: stripTags(ident.description) }),
+      refs: [...verses],
+      ...(wd && { wd }),
+      ...(factbook && { factbook }),
+      ...(pleiades && { pleiades }),
+      ...(st && { stories: st.map(([t, ref]) => ({ t, ref })) }),
+    };
+    if (st) for (const [, ref] of st) if (!/^\w+\.\d+\.\d+$/.test(ref)) storyErrors.push(`${r.friendly_id}: bad ref ${ref}`);
+  }
+}
+for (const k of storyByFriendly.keys()) storyErrors.push(`place-stories.json: no place named "${k}"`);
+if (storyErrors.length) {
+  console.error(storyErrors.join('\n'));
+  process.exit(1);
+}
+
 // --- write places + per-book verse indexes
 const outData = path.join(root, 'public', 'data');
 const outVerses = path.join(outData, 'verses');
 fs.rmSync(outVerses, { recursive: true, force: true });
 fs.mkdirSync(outVerses, { recursive: true });
 fs.writeFileSync(path.join(outData, 'places.json'), JSON.stringify(places));
+fs.writeFileSync(path.join(outData, 'place-details.json'), JSON.stringify(details));
 let mentions = 0;
 for (const [book, chapters] of Object.entries(byBook)) {
   const out = {};

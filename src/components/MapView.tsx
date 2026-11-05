@@ -96,6 +96,7 @@ interface Props {
   onStopClick: (i: number) => void;
   /** which era's region names to show */
   testament: 'OT' | 'NT';
+  onPlaceInfo: (p: Place) => void;
 }
 
 function arrowIcon(angle: number, color: string) {
@@ -286,7 +287,16 @@ function confidenceText(c: number) {
   return 'Location: uncertain';
 }
 
-export default function MapView({ settings, chapterPlaces, focus, journey, stopIndex, onStopClick, testament }: Props) {
+export default function MapView({
+  settings,
+  chapterPlaces,
+  focus,
+  journey,
+  stopIndex,
+  onStopClick,
+  testament,
+  onPlaceInfo,
+}: Props) {
   const base = BASE_LAYERS[settings.base];
   const modern = settings.modern !== 'off' ? MODERN_LAYERS[settings.modern] : null;
   const focusIds = new Set(focus?.places.map((p) => p.index));
@@ -323,6 +333,7 @@ export default function MapView({ settings, chapterPlaces, focus, journey, stopI
               center={[p.lat, p.lon]}
               radius={5}
               pathOptions={{ color: '#5b3a1a', weight: 1.5, fillColor: '#f4e4c1', fillOpacity: 0.9 }}
+              eventHandlers={{ click: () => onPlaceInfo(p) }}
             >
               <Tooltip direction="top" offset={[0, -4]}>
                 {p.name}
@@ -333,7 +344,13 @@ export default function MapView({ settings, chapterPlaces, focus, journey, stopI
       {journey && <JourneyLayer journey={journey} stopIndex={stopIndex} onStopClick={onStopClick} />}
 
       {focus?.places.map((p, i) => (
-        <FocusMarker key={`${p.index}-${focus.label}`} place={p} focus={focus} openPopup={i === 0} />
+        <FocusMarker
+          key={`${p.index}-${focus.label}`}
+          place={p}
+          focus={focus}
+          openPopup={i === 0}
+          onPlaceInfo={onPlaceInfo}
+        />
       ))}
 
       <CameraController focus={focus} journey={journey} stopIndex={stopIndex} />
@@ -341,7 +358,17 @@ export default function MapView({ settings, chapterPlaces, focus, journey, stopI
   );
 }
 
-function FocusMarker({ place, focus, openPopup }: { place: Place; focus: MapFocus; openPopup: boolean }) {
+function FocusMarker({
+  place,
+  focus,
+  openPopup,
+  onPlaceInfo,
+}: {
+  place: Place;
+  focus: MapFocus;
+  openPopup: boolean;
+  onPlaceInfo: (p: Place) => void;
+}) {
   const ref = useRef<L.Marker>(null);
   useEffect(() => {
     if (openPopup) {
@@ -360,6 +387,9 @@ function FocusMarker({ place, focus, openPopup }: { place: Place; focus: MapFocu
           <div className="popup-meta">
             {place.type} · {confidenceText(place.confidence)}
           </div>
+          <button className="popup-more" onClick={() => onPlaceInfo(place)}>
+            About {place.name} →
+          </button>
         </div>
       </Popup>
     </Marker>

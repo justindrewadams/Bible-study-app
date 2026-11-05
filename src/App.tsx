@@ -16,6 +16,8 @@ import MapView, { DEFAULT_MAP_SETTINGS, type MapFocus, type MapSettings } from '
 import MapControls from './components/MapControls';
 import Reader from './components/Reader';
 import JourneyPanel from './components/JourneyPanel';
+import PlaceCard from './components/PlaceCard';
+import { loadPlaces } from './lib/geo';
 
 interface Location {
   book: string;
@@ -42,6 +44,7 @@ export default function App() {
   const [stopIndex, setStopIndex] = useState(0);
   const [playing, setPlaying] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [cardPlace, setCardPlace] = useState<Place | null>(null);
 
   const book = getBook(loc.book);
   const translation = findTranslation(translationId, bolls);
@@ -93,6 +96,18 @@ export default function App() {
     },
     [goTo],
   );
+
+  const isNarrow = () => window.matchMedia('(max-width: 860px)').matches;
+
+  /** Jump to a verse from the place card, keeping that place pinned on the map. */
+  const goToRefForPlace = (ref: string, place: Place) => {
+    const r = parseRef(ref);
+    goTo(r.book, r.chapter, r.verse);
+    setPlaceOverride(place);
+    if (isNarrow()) setCardPlace(null);
+  };
+
+  const openPlaceIndex = (index: number) => loadPlaces().then((ps) => setCardPlace(ps[index]));
 
   // Journey autoplay
   useEffect(() => {
@@ -246,7 +261,7 @@ export default function App() {
                       className="link"
                       onClick={() => {
                         setPlaceOverride(p);
-                        setMapVisible(true);
+                        setCardPlace(p);
                       }}
                     >
                       {p.name}
@@ -282,7 +297,7 @@ export default function App() {
             onSelectPlace={(v, p) => {
               setSelectedVerse(v);
               setPlaceOverride(p);
-              setMapVisible(true);
+              setCardPlace(p);
             }}
             onFollowJourney={(j, i) => {
               setPlaying(false);
@@ -310,6 +325,7 @@ export default function App() {
               journey={journey}
               stopIndex={stopIndex}
               testament={book.testament}
+              onPlaceInfo={setCardPlace}
               onStopClick={(i) => journey && (setPlaying(false), goToStop(journey, i))}
             />
             <MapControls settings={mapSettings} onChange={setMapSettings} />
@@ -318,6 +334,7 @@ export default function App() {
                 journey={journey}
                 stopIndex={stopIndex}
                 playing={playing}
+                onPlaceInfo={openPlaceIndex}
                 onGo={(i) => {
                   setPlaying(false);
                   goToStop(journey, i);
@@ -335,6 +352,19 @@ export default function App() {
           </section>
         )}
       </main>
+
+      {cardPlace && (
+        <PlaceCard
+          place={cardPlace}
+          onClose={() => setCardPlace(null)}
+          onGoToRef={(ref) => goToRefForPlace(ref, cardPlace)}
+          onFollowJourney={(j, i) => {
+            setPlaying(false);
+            goToStop(j, i);
+            if (isNarrow()) setCardPlace(null);
+          }}
+        />
+      )}
 
       {settingsOpen && (
         <div className="modal-backdrop" onClick={() => setSettingsOpen(false)}>
