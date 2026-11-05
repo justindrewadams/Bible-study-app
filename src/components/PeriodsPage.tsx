@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { PERIODS, formatRange, type Period } from '../data/periods';
 import { getBook } from '../data/books';
 import { JOURNEYS } from '../lib/journeys';
+import { LISTS } from '../lib/lists';
 import { formatOsis } from '../lib/placeInfo';
 
 interface Props {
@@ -11,6 +12,7 @@ interface Props {
   currentId: string | null;
   onRead: (book: string, chapter: number, verse?: number) => void;
   onFollowJourney: (journeyId: string) => void;
+  onOpenList: (listId: string) => void;
   onClose: () => void;
 }
 
@@ -37,7 +39,7 @@ function matches(p: Period, q: string) {
     .every((w) => hay.includes(w));
 }
 
-export default function PeriodsPage({ focusId, currentId, onRead, onFollowJourney, onClose }: Props) {
+export default function PeriodsPage({ focusId, currentId, onRead, onFollowJourney, onOpenList, onClose }: Props) {
   const ref = useRef<HTMLDivElement>(null);
   const [query, setQuery] = useState('');
   const [era, setEra] = useState<Era>('all');
@@ -71,11 +73,15 @@ export default function PeriodsPage({ focusId, currentId, onRead, onFollowJourne
 
   return (
     <div className="periods-page" ref={ref}>
+      {/* stays pinned to the top while scrolling */}
+      <div className="periods-bar">
+        <button className="bar-back" onClick={onClose}>
+          ‹ Back to reading
+        </button>
+        <span className="bar-title">Periods of Bible History</span>
+      </div>
       <section className="hero">
         <div className="hero-text">
-          <button className="hero-back" onClick={onClose}>
-            ‹ Back to reading
-          </button>
           <h1>Periods of Bible History</h1>
           <p>
             From Creation to the early church, the Bible's story unfolds in {PERIODS.length} periods: Bob Waldron's
@@ -157,6 +163,7 @@ export default function PeriodsPage({ focusId, currentId, onRead, onFollowJourne
               onRead={onRead}
               onEvent={goRef}
               onFollowJourney={onFollowJourney}
+              onOpenList={onOpenList}
             />
           ))}
           {shown.length === 0 && <p className="muted">No periods match your search.</p>}
@@ -177,14 +184,17 @@ function PeriodSection({
   onRead,
   onEvent,
   onFollowJourney,
+  onOpenList,
 }: {
   period: Period;
   current: boolean;
   onRead: Props['onRead'];
   onEvent: (osis: string) => void;
   onFollowJourney: (id: string) => void;
+  onOpenList: (id: string) => void;
 }) {
   const journeys = p.journeys.map((id) => JOURNEYS.find((j) => j.id === id)!).filter(Boolean);
+  const lists = (p.lists ?? []).map((id) => LISTS.find((l) => l.id === id)!).filter(Boolean);
   const first = p.passages[0];
 
   return (
@@ -233,6 +243,24 @@ function PeriodSection({
             </ul>
           </div>
         </div>
+
+        {lists.length > 0 && (
+          <div className="period-lists">
+            <h3>Lists to study</h3>
+            <div className="period-chips">
+              {lists.map((l) => (
+                <button
+                  key={l.id}
+                  className="pchip list-pchip"
+                  style={{ '--lc': l.color } as React.CSSProperties}
+                  onClick={() => onOpenList(l.id)}
+                >
+                  ☰ {l.title} <span className="muted">({l.items.length})</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
 
         {(first || journeys.length > 0) && (
           <div className="period-actions">

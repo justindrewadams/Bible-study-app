@@ -2,6 +2,7 @@ import { Fragment, useEffect, useRef } from 'react';
 import type { Verse } from '../lib/bible';
 import type { ChapterGeo, Place } from '../lib/geo';
 import { journeysAtVerse, type Journey } from '../lib/journeys';
+import { listsAtVerse, type StudyList } from '../lib/lists';
 import { PERIODS, type Period } from '../data/periods';
 
 interface Props {
@@ -17,6 +18,8 @@ interface Props {
   onSelectPlace: (verse: number, place: Place) => void;
   onFollowJourney: (journey: Journey, stopIndex: number) => void;
   activeJourneyId: string | null;
+  activeList: { id: string; index: number } | null;
+  onOpenListItem: (list: StudyList, index: number) => void;
   period: Period | null;
   onOpenPeriod: (id: string) => void;
 }
@@ -53,6 +56,8 @@ export default function Reader({
   onSelectPlace,
   onFollowJourney,
   activeJourneyId,
+  activeList,
+  onOpenListItem,
   period,
   onOpenPeriod,
 }: Props) {
@@ -98,6 +103,7 @@ export default function Reader({
             const places = geo?.byVerse.get(v.verse) ?? [];
             const selected = selectedVerse === v.verse;
             const journeys = selected ? journeysAtVerse(book, chapter, v.verse) : [];
+            const lists = selected ? listsAtVerse(book, chapter, v.verse) : [];
             return (
               <Fragment key={v.verse}>
                 <p
@@ -137,6 +143,24 @@ export default function Reader({
                     </span>
                   )}
                 </p>
+                {selected && lists.length > 0 && (
+                  <div className="verse-journeys">
+                    {lists.map(({ list, index }) => {
+                      const on = activeList?.id === list.id && activeList.index === index;
+                      return (
+                        <button
+                          key={list.id}
+                          className="chip list-chip"
+                          style={{ '--c': list.color } as React.CSSProperties}
+                          onClick={() => onOpenListItem(list, index)}
+                        >
+                          {on ? '● ' : '☰ '}
+                          {list.title}: {index + 1} of {list.items.length}
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
                 {selected && journeys.length > 0 && (
                   <div className="verse-journeys">
                     {journeys.map(({ journey, stopIndex }) => (

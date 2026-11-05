@@ -1,0 +1,1496 @@
+[
+ {
+  "id": "creation",
+  "title": "The Days of Creation",
+  "group": "Old Testament",
+  "color": "#6b8e23",
+  "summary": "What God made on each day of Creation week (Genesis 1–2).",
+  "items": [
+   {
+    "t": "Day 1: Light",
+    "ref": "Gen.1.3",
+    "note": "\"Let there be light\"; day and night divided."
+   },
+   {
+    "t": "Day 2: The expanse (sky)",
+    "ref": "Gen.1.6",
+    "note": "Waters above separated from waters below."
+   },
+   {
+    "t": "Day 3: Land, seas and plants",
+    "ref": "Gen.1.9",
+    "note": "Dry land appears; vegetation and fruit trees."
+   },
+   {
+    "t": "Day 4: Sun, moon and stars",
+    "ref": "Gen.1.14",
+    "note": "Lights in the heavens for signs, seasons, days and years."
+   },
+   {
+    "t": "Day 5: Sea creatures and birds",
+    "ref": "Gen.1.20",
+    "note": "The waters swarm and birds fly across the sky."
+   },
+   {
+    "t": "Day 6: Land animals and mankind",
+    "ref": "Gen.1.26",
+    "note": "\"Let us make man in our image\"; male and female."
+   },
+   {
+    "t": "Day 7: God rests",
+    "ref": "Gen.2.2",
+    "note": "God blesses the seventh day and makes it holy."
+   }
+  ]
+ },
+ {
+  "id": "plagues",
+  "title": "The Ten Plagues of Egypt",
+  "group": "Old Testament",
+  "color": "#b5651d",
+  "summary": "God's judgments on Egypt and its gods before the Exodus (Exodus 7–12).",
+  "items": [
+   {
+    "t": "1. Water turned to blood",
+    "ref": "Exod.7.20",
+    "note": "The Nile turns to blood; the fish die.",
+    "place": "Egypt"
+   },
+   {
+    "t": "2. Frogs",
+    "ref": "Exod.8.6",
+    "note": "Frogs cover the land."
+   },
+   {
+    "t": "3. Gnats (lice)",
+    "ref": "Exod.8.17",
+    "note": "The magicians: \"This is the finger of God.\""
+   },
+   {
+    "t": "4. Flies",
+    "ref": "Exod.8.24",
+    "note": "Swarms of flies, but none in Goshen."
+   },
+   {
+    "t": "5. Livestock die",
+    "ref": "Exod.9.6",
+    "note": "Egypt's livestock die; Israel's are spared."
+   },
+   {
+    "t": "6. Boils",
+    "ref": "Exod.9.10",
+    "note": "Boils break out on people and animals."
+   },
+   {
+    "t": "7. Hail",
+    "ref": "Exod.9.23",
+    "note": "Thunder, hail and fire, the worst in Egypt's history."
+   },
+   {
+    "t": "8. Locusts",
+    "ref": "Exod.10.13",
+    "note": "Locusts eat everything the hail left."
+   },
+   {
+    "t": "9. Darkness",
+    "ref": "Exod.10.22",
+    "note": "Three days of darkness, but light where Israel lived."
+   },
+   {
+    "t": "10. Death of the firstborn",
+    "ref": "Exod.12.29",
+    "note": "At midnight; the Passover lamb's blood protects Israel."
+   }
+  ]
+ },
+ {
+  "id": "commandments",
+  "title": "The Ten Commandments",
+  "group": "Old Testament",
+  "color": "#c2873b",
+  "summary": "The words God spoke from Mount Sinai (Exodus 20; repeated in Deuteronomy 5).",
+  "items": [
+   {
+    "t": "1. No other gods",
+    "ref": "Exod.20.3",
+    "note": "\"You shall have no other gods before me.\"",
+    "place": "Mount Sinai",
+    "lookup": "Exod.19.20"
+   },
+   {
+    "t": "2. No idols",
+    "ref": "Exod.20.4",
+    "note": "No carved image to bow down to or serve."
+   },
+   {
+    "t": "3. Do not misuse God's name",
+    "ref": "Exod.20.7",
+    "note": "\"You shall not take the name of the LORD your God in vain.\""
+   },
+   {
+    "t": "4. Keep the Sabbath holy",
+    "ref": "Exod.20.8",
+    "note": "Six days of work, the seventh a Sabbath to the LORD."
+   },
+   {
+    "t": "5. Honor your father and mother",
+    "ref": "Exod.20.12",
+    "note": "The first commandment with a promise (Eph 6:2)."
+   },
+   {
+    "t": "6. Do not murder",
+    "ref": "Exod.20.13"
+   },
+   {
+    "t": "7. Do not commit adultery",
+    "ref": "Exod.20.14"
+   },
+   {
+    "t": "8. Do not steal",
+    "ref": "Exod.20.15"
+   },
+   {
+    "t": "9. Do not bear false witness",
+    "ref": "Exod.20.16",
+    "note": "Do not lie about your neighbor."
+   },
+   {
+    "t": "10. Do not covet",
+    "ref": "Exod.20.17",
+    "note": "Do not desire what belongs to your neighbor."
+   }
+  ]
+ },
+ {
+  "id": "judges",
+  "title": "The Judges of Israel",
+  "group": "Old Testament",
+  "color": "#8d6e63",
+  "summary": "The deliverers God raised up between Joshua and the kings (Judges; 1 Samuel 1–7).",
+  "items": [
+   {
+    "t": "Othniel",
+    "ref": "Judg.3.9",
+    "note": "Caleb's nephew; delivers Israel from Mesopotamia. 40 years of rest.",
+    "meta": "Judah"
+   },
+   {
+    "t": "Ehud",
+    "ref": "Judg.3.15",
+    "note": "The left-handed judge who kills Eglon of Moab. 80 years of rest.",
+    "meta": "Benjamin"
+   },
+   {
+    "t": "Shamgar",
+    "ref": "Judg.3.31",
+    "note": "Strikes down 600 Philistines with an oxgoad."
+   },
+   {
+    "t": "Deborah (with Barak)",
+    "ref": "Judg.4.4",
+    "note": "Prophetess who judges under her palm tree; Sisera defeated.",
+    "place": "Ramah",
+    "lookup": "Judg.4.5",
+    "meta": "Ephraim"
+   },
+   {
+    "t": "Gideon",
+    "ref": "Judg.6.11",
+    "note": "Called while threshing wheat; 300 men rout Midian.",
+    "place": "Ophrah",
+    "meta": "Manasseh"
+   },
+   {
+    "t": "Tola",
+    "ref": "Judg.10.1",
+    "note": "Judges Israel 23 years.",
+    "place": "Shamir",
+    "meta": "Issachar"
+   },
+   {
+    "t": "Jair",
+    "ref": "Judg.10.3",
+    "note": "Thirty sons on thirty donkeys; judges 22 years.",
+    "place": "Gilead",
+    "meta": "Gilead"
+   },
+   {
+    "t": "Jephthah",
+    "ref": "Judg.11.1",
+    "note": "Defeats Ammon; his rash vow.",
+    "place": "Gilead",
+    "meta": "Gilead"
+   },
+   {
+    "t": "Ibzan",
+    "ref": "Judg.12.8",
+    "note": "Judges 7 years.",
+    "place": "Bethlehem",
+    "meta": "Bethlehem"
+   },
+   {
+    "t": "Elon",
+    "ref": "Judg.12.11",
+    "note": "Judges 10 years; buried at Aijalon.",
+    "place": "Aijalon",
+    "lookup": "Judg.12.12",
+    "meta": "Zebulun"
+   },
+   {
+    "t": "Abdon",
+    "ref": "Judg.12.13",
+    "note": "Forty sons and thirty grandsons; judges 8 years.",
+    "place": "Pirathon",
+    "meta": "Ephraim"
+   },
+   {
+    "t": "Samson",
+    "ref": "Judg.13.24",
+    "note": "A Nazirite of great strength; judges 20 years against the Philistines.",
+    "place": "Zorah",
+    "lookup": "Judg.13.2",
+    "meta": "Dan"
+   },
+   {
+    "t": "Eli",
+    "ref": "1Sam.4.18",
+    "note": "Priest at Shiloh; judges 40 years.",
+    "place": "Shiloh",
+    "lookup": "1Sam.1.9"
+   },
+   {
+    "t": "Samuel",
+    "ref": "1Sam.7.15",
+    "note": "Prophet and last judge; anoints Saul and David.",
+    "place": "Ramah",
+    "lookup": "1Sam.7.17"
+   }
+  ]
+ },
+ {
+  "id": "kings-united",
+  "title": "Kings of the United Kingdom",
+  "group": "Old Testament",
+  "color": "#6a4c93",
+  "summary": "The three kings who ruled all twelve tribes before the kingdom divided.",
+  "items": [
+   {
+    "t": "Saul",
+    "ref": "1Sam.10.1",
+    "note": "Anointed by Samuel; rejected for disobedience. Reigns from Gibeah.",
+    "place": "Gibeah",
+    "lookup": "1Sam.10.26",
+    "meta": "c. 1050–1010 BC",
+    "tag": "evil"
+   },
+   {
+    "t": "David",
+    "ref": "2Sam.5.3",
+    "note": "A man after God's own heart. Seven years at Hebron, then 33 in Jerusalem.",
+    "place": "Jerusalem",
+    "meta": "1010–970 BC",
+    "tag": "good"
+   },
+   {
+    "t": "Solomon",
+    "ref": "1Kgs.1.39",
+    "note": "Builds the temple; famous for wisdom, but his heart turns to idols.",
+    "place": "Jerusalem",
+    "meta": "970–931 BC",
+    "tag": "good"
+   }
+  ],
+  "note": "Solomon began well but turned away late in life (1 Kgs 11:4)."
+ },
+ {
+  "id": "kings-israel",
+  "title": "Kings of Israel (Northern Kingdom)",
+  "group": "Old Testament",
+  "color": "#d1495b",
+  "summary": "The nineteen kings of the ten northern tribes, from the split in 931 BC to Assyria's conquest in 722 BC. Every one is judged to have done evil.",
+  "items": [
+   {
+    "t": "1. Jeroboam I",
+    "ref": "1Kgs.12.20",
+    "note": "Sets up golden calves at Bethel and Dan.",
+    "place": "Shechem",
+    "lookup": "1Kgs.12.25",
+    "meta": "931–910 BC",
+    "tag": "evil"
+   },
+   {
+    "t": "2. Nadab",
+    "ref": "1Kgs.15.25",
+    "note": "Killed by Baasha.",
+    "place": "Tirzah",
+    "lookup": "1Kgs.15.33",
+    "meta": "910–909 BC",
+    "tag": "evil"
+   },
+   {
+    "t": "3. Baasha",
+    "ref": "1Kgs.15.33",
+    "note": "Wipes out Jeroboam's house; reigns from Tirzah.",
+    "place": "Tirzah",
+    "meta": "909–886 BC",
+    "tag": "evil"
+   },
+   {
+    "t": "4. Elah",
+    "ref": "1Kgs.16.8",
+    "note": "Murdered while drunk.",
+    "place": "Tirzah",
+    "meta": "886–885 BC",
+    "tag": "evil"
+   },
+   {
+    "t": "5. Zimri",
+    "ref": "1Kgs.16.15",
+    "note": "Reigns seven days; burns the palace over himself.",
+    "place": "Tirzah",
+    "meta": "885 BC",
+    "tag": "evil"
+   },
+   {
+    "t": "6. Omri",
+    "ref": "1Kgs.16.23",
+    "note": "Buys the hill of Samaria and builds the new capital.",
+    "place": "Samaria",
+    "lookup": "1Kgs.16.24",
+    "meta": "885–874 BC",
+    "tag": "evil"
+   },
+   {
+    "t": "7. Ahab",
+    "ref": "1Kgs.16.29",
+    "note": "With Jezebel promotes Baal; opposed by Elijah.",
+    "place": "Samaria",
+    "lookup": "1Kgs.16.24",
+    "meta": "874–853 BC",
+    "tag": "evil"
+   },
+   {
+    "t": "8. Ahaziah",
+    "ref": "1Kgs.22.51",
+    "note": "Falls through a lattice; inquires of Baal-zebub.",
+    "place": "Samaria",
+    "lookup": "1Kgs.16.24",
+    "meta": "853–852 BC",
+    "tag": "evil"
+   },
+   {
+    "t": "9. Joram (Jehoram)",
+    "ref": "2Kgs.3.1",
+    "note": "Killed by Jehu.",
+    "place": "Samaria",
+    "lookup": "1Kgs.16.24",
+    "meta": "852–841 BC",
+    "tag": "evil"
+   },
+   {
+    "t": "10. Jehu",
+    "ref": "2Kgs.10.36",
+    "note": "Destroys Baal worship but keeps the golden calves.",
+    "place": "Samaria",
+    "lookup": "1Kgs.16.24",
+    "meta": "841–814 BC",
+    "tag": "evil"
+   },
+   {
+    "t": "11. Jehoahaz",
+    "ref": "2Kgs.13.1",
+    "note": "Oppressed by Syria.",
+    "place": "Samaria",
+    "lookup": "1Kgs.16.24",
+    "meta": "814–798 BC",
+    "tag": "evil"
+   },
+   {
+    "t": "12. Jehoash (Joash)",
+    "ref": "2Kgs.13.10",
+    "note": "Visits the dying Elisha.",
+    "place": "Samaria",
+    "lookup": "1Kgs.16.24",
+    "meta": "798–782 BC",
+    "tag": "evil"
+   },
+   {
+    "t": "13. Jeroboam II",
+    "ref": "2Kgs.14.23",
+    "note": "Restores Israel's borders; the era of Amos and Hosea.",
+    "place": "Samaria",
+    "lookup": "1Kgs.16.24",
+    "meta": "793–753 BC",
+    "tag": "evil"
+   },
+   {
+    "t": "14. Zechariah",
+    "ref": "2Kgs.15.8",
+    "note": "Reigns six months; the end of Jehu's line.",
+    "place": "Samaria",
+    "lookup": "1Kgs.16.24",
+    "meta": "753 BC",
+    "tag": "evil"
+   },
+   {
+    "t": "15. Shallum",
+    "ref": "2Kgs.15.13",
+    "note": "Reigns one month.",
+    "place": "Samaria",
+    "lookup": "1Kgs.16.24",
+    "meta": "752 BC",
+    "tag": "evil"
+   },
+   {
+    "t": "16. Menahem",
+    "ref": "2Kgs.15.17",
+    "note": "Pays tribute to Assyria.",
+    "place": "Samaria",
+    "lookup": "1Kgs.16.24",
+    "meta": "752–742 BC",
+    "tag": "evil"
+   },
+   {
+    "t": "17. Pekahiah",
+    "ref": "2Kgs.15.23",
+    "note": "Assassinated by Pekah.",
+    "place": "Samaria",
+    "lookup": "1Kgs.16.24",
+    "meta": "742–740 BC",
+    "tag": "evil"
+   },
+   {
+    "t": "18. Pekah",
+    "ref": "2Kgs.15.27",
+    "note": "Assyria takes much of the north.",
+    "place": "Samaria",
+    "lookup": "1Kgs.16.24",
+    "meta": "752–732 BC",
+    "tag": "evil"
+   },
+   {
+    "t": "19. Hoshea",
+    "ref": "2Kgs.17.1",
+    "note": "Last king; Samaria falls to Assyria.",
+    "place": "Samaria",
+    "lookup": "1Kgs.16.24",
+    "meta": "732–722 BC",
+    "tag": "evil"
+   }
+  ],
+  "note": "Dates follow Edwin Thiele's chronology; several reigns overlap as co-regencies."
+ },
+ {
+  "id": "kings-judah",
+  "title": "Kings of Judah (Southern Kingdom)",
+  "group": "Old Testament",
+  "color": "#b8860b",
+  "summary": "The rulers of Judah from David's line, from the split in 931 BC to Babylon's destruction of Jerusalem in 586 BC.",
+  "items": [
+   {
+    "t": "1. Rehoboam",
+    "ref": "1Kgs.14.21",
+    "note": "His harsh answer splits the kingdom.",
+    "place": "Jerusalem",
+    "meta": "931–913 BC",
+    "tag": "evil"
+   },
+   {
+    "t": "2. Abijah (Abijam)",
+    "ref": "1Kgs.15.1",
+    "place": "Jerusalem",
+    "meta": "913–911 BC",
+    "tag": "evil"
+   },
+   {
+    "t": "3. Asa",
+    "ref": "1Kgs.15.9",
+    "note": "Removes idols and even his grandmother's Asherah.",
+    "place": "Jerusalem",
+    "meta": "911–870 BC",
+    "tag": "good"
+   },
+   {
+    "t": "4. Jehoshaphat",
+    "ref": "1Kgs.22.41",
+    "note": "Sends teachers of the Law; allies with Ahab.",
+    "place": "Jerusalem",
+    "meta": "872–848 BC",
+    "tag": "good"
+   },
+   {
+    "t": "5. Jehoram",
+    "ref": "2Kgs.8.16",
+    "note": "Marries Ahab's daughter Athaliah.",
+    "place": "Jerusalem",
+    "meta": "848–841 BC",
+    "tag": "evil"
+   },
+   {
+    "t": "6. Ahaziah",
+    "ref": "2Kgs.8.25",
+    "note": "Killed by Jehu.",
+    "place": "Jerusalem",
+    "meta": "841 BC",
+    "tag": "evil"
+   },
+   {
+    "t": "7. Athaliah (queen)",
+    "ref": "2Kgs.11.3",
+    "note": "Seizes the throne and kills the royal heirs, except Joash.",
+    "place": "Jerusalem",
+    "meta": "841–835 BC",
+    "tag": "evil"
+   },
+   {
+    "t": "8. Joash",
+    "ref": "2Kgs.12.1",
+    "note": "Crowned at seven; repairs the temple.",
+    "place": "Jerusalem",
+    "meta": "835–796 BC",
+    "tag": "good"
+   },
+   {
+    "t": "9. Amaziah",
+    "ref": "2Kgs.14.1",
+    "note": "Defeats Edom, then picks a fight with Israel.",
+    "place": "Jerusalem",
+    "meta": "796–767 BC",
+    "tag": "good"
+   },
+   {
+    "t": "10. Uzziah (Azariah)",
+    "ref": "2Kgs.15.1",
+    "note": "Strong king, struck with leprosy for pride (2 Chr 26:16-21).",
+    "place": "Jerusalem",
+    "meta": "792–740 BC",
+    "tag": "good"
+   },
+   {
+    "t": "11. Jotham",
+    "ref": "2Kgs.15.32",
+    "place": "Jerusalem",
+    "meta": "750–732 BC",
+    "tag": "good"
+   },
+   {
+    "t": "12. Ahaz",
+    "ref": "2Kgs.16.1",
+    "note": "Sacrifices his son; appeals to Assyria.",
+    "place": "Jerusalem",
+    "meta": "735–715 BC",
+    "tag": "evil"
+   },
+   {
+    "t": "13. Hezekiah",
+    "ref": "2Kgs.18.1",
+    "note": "Trusts the LORD; Jerusalem delivered from Sennacherib.",
+    "place": "Jerusalem",
+    "meta": "715–686 BC",
+    "tag": "good"
+   },
+   {
+    "t": "14. Manasseh",
+    "ref": "2Kgs.21.1",
+    "note": "The most wicked king; later repents (2 Chr 33:12-13).",
+    "place": "Jerusalem",
+    "meta": "697–642 BC",
+    "tag": "evil"
+   },
+   {
+    "t": "15. Amon",
+    "ref": "2Kgs.21.19",
+    "place": "Jerusalem",
+    "meta": "642–640 BC",
+    "tag": "evil"
+   },
+   {
+    "t": "16. Josiah",
+    "ref": "2Kgs.22.1",
+    "note": "Finds the Book of the Law and leads reform.",
+    "place": "Jerusalem",
+    "meta": "640–609 BC",
+    "tag": "good"
+   },
+   {
+    "t": "17. Jehoahaz",
+    "ref": "2Kgs.23.31",
+    "note": "Taken to Egypt after three months.",
+    "place": "Jerusalem",
+    "meta": "609 BC",
+    "tag": "evil"
+   },
+   {
+    "t": "18. Jehoiakim",
+    "ref": "2Kgs.23.36",
+    "note": "Burns Jeremiah's scroll (Jer 36:23).",
+    "place": "Jerusalem",
+    "meta": "609–598 BC",
+    "tag": "evil"
+   },
+   {
+    "t": "19. Jehoiachin",
+    "ref": "2Kgs.24.8",
+    "note": "Taken to Babylon after three months.",
+    "place": "Jerusalem",
+    "meta": "598–597 BC",
+    "tag": "evil"
+   },
+   {
+    "t": "20. Zedekiah",
+    "ref": "2Kgs.24.18",
+    "note": "Last king; Jerusalem destroyed.",
+    "place": "Jerusalem",
+    "meta": "597–586 BC",
+    "tag": "evil"
+   }
+  ],
+  "note": "Dates follow Edwin Thiele's chronology; several reigns overlap as co-regencies. Athaliah was not of David's line."
+ },
+ {
+  "id": "prophets",
+  "title": "The Writing Prophets",
+  "group": "Old Testament",
+  "color": "#3d405b",
+  "summary": "The sixteen prophets whose books bear their names: the four major and the twelve minor prophets.",
+  "items": [
+   {
+    "t": "Isaiah",
+    "ref": "Isa.1.1",
+    "note": "Prophesies to Judah through four kings; the suffering Servant.",
+    "place": "Jerusalem",
+    "meta": "c. 740–680 BC · Judah"
+   },
+   {
+    "t": "Jeremiah",
+    "ref": "Jer.1.1",
+    "note": "The weeping prophet warns Judah for forty years.",
+    "place": "Anathoth",
+    "meta": "c. 627–580 BC · Judah"
+   },
+   {
+    "t": "Ezekiel",
+    "ref": "Ezek.1.3",
+    "note": "Priest and prophet among the exiles.",
+    "place": "Chebar",
+    "meta": "c. 593–571 BC · Exile"
+   },
+   {
+    "t": "Daniel",
+    "ref": "Dan.1.6",
+    "note": "Faithful in Babylon's court; visions of the kingdoms.",
+    "place": "Babylon",
+    "lookup": "Dan.1.1",
+    "meta": "c. 605–536 BC · Exile"
+   },
+   {
+    "t": "Hosea",
+    "ref": "Hos.1.1",
+    "note": "His marriage pictures God's love for unfaithful Israel.",
+    "meta": "c. 755–715 BC · Israel"
+   },
+   {
+    "t": "Joel",
+    "ref": "Joel.1.1",
+    "note": "A locust plague and the day of the LORD; the Spirit poured out.",
+    "meta": "Date debated · Judah"
+   },
+   {
+    "t": "Amos",
+    "ref": "Amos.1.1",
+    "note": "A shepherd from Tekoa: \"Let justice roll down like waters.\"",
+    "place": "Tekoa",
+    "meta": "c. 760 BC · Israel"
+   },
+   {
+    "t": "Obadiah",
+    "ref": "Obad.1.1",
+    "note": "Judgment on Edom.",
+    "place": "Edom",
+    "meta": "c. 586 BC? · Edom"
+   },
+   {
+    "t": "Jonah",
+    "ref": "Jonah.1.1",
+    "note": "Sent to Nineveh; swallowed by a great fish.",
+    "place": "Nineveh",
+    "lookup": "Jonah.1.2",
+    "meta": "c. 780 BC · Nineveh"
+   },
+   {
+    "t": "Micah",
+    "ref": "Mic.1.1",
+    "note": "Foretells the ruler from Bethlehem.",
+    "place": "Moresheth-gath",
+    "meta": "c. 735–700 BC · Judah"
+   },
+   {
+    "t": "Nahum",
+    "ref": "Nah.1.1",
+    "note": "The fall of Nineveh.",
+    "place": "Nineveh",
+    "meta": "c. 650 BC · Nineveh"
+   },
+   {
+    "t": "Habakkuk",
+    "ref": "Hab.1.1",
+    "note": "\"The righteous shall live by his faith.\"",
+    "meta": "c. 607 BC · Judah"
+   },
+   {
+    "t": "Zephaniah",
+    "ref": "Zeph.1.1",
+    "note": "The great day of the LORD.",
+    "meta": "c. 630 BC · Judah"
+   },
+   {
+    "t": "Haggai",
+    "ref": "Hag.1.1",
+    "note": "\"Consider your ways\": rebuild the temple.",
+    "meta": "520 BC · Return"
+   },
+   {
+    "t": "Zechariah",
+    "ref": "Zech.1.1",
+    "note": "Visions of restoration; the coming King on a donkey.",
+    "meta": "c. 520–480 BC · Return"
+   },
+   {
+    "t": "Malachi",
+    "ref": "Mal.1.1",
+    "note": "The last Old Testament prophet; the messenger to come.",
+    "meta": "c. 430 BC · Return"
+   }
+  ]
+ },
+ {
+  "id": "apostles",
+  "title": "The Twelve Apostles",
+  "group": "New Testament",
+  "color": "#1d4e89",
+  "summary": "The twelve Jesus chose to be with him and to send out (Matthew 10:2-4), plus Matthias and Paul.",
+  "items": [
+   {
+    "t": "Simon Peter",
+    "ref": "Matt.10.2",
+    "note": "Fisherman; confesses Jesus as the Christ; preaches at Pentecost; writes 1–2 Peter.",
+    "place": "Bethsaida",
+    "lookup": "John.1.44"
+   },
+   {
+    "t": "Andrew",
+    "ref": "Matt.10.2",
+    "note": "Peter's brother; first a disciple of John the Baptist (John 1:40).",
+    "place": "Bethsaida",
+    "lookup": "John.1.44"
+   },
+   {
+    "t": "James, son of Zebedee",
+    "ref": "Matt.10.2",
+    "note": "A \"son of thunder\"; first apostle martyred (Acts 12:2)."
+   },
+   {
+    "t": "John, son of Zebedee",
+    "ref": "Matt.10.2",
+    "note": "The disciple Jesus loved; writes the Gospel, three letters and Revelation."
+   },
+   {
+    "t": "Philip",
+    "ref": "Matt.10.3",
+    "note": "From Bethsaida; brings Nathanael to Jesus.",
+    "place": "Bethsaida",
+    "lookup": "John.1.44"
+   },
+   {
+    "t": "Bartholomew (Nathanael)",
+    "ref": "Matt.10.3",
+    "note": "\"An Israelite in whom there is no deceit\" (John 1:47); from Cana.",
+    "place": "Cana",
+    "lookup": "John.21.2"
+   },
+   {
+    "t": "Thomas",
+    "ref": "Matt.10.3",
+    "note": "Doubts, then confesses: \"My Lord and my God!\" (John 20:28)."
+   },
+   {
+    "t": "Matthew (Levi)",
+    "ref": "Matt.10.3",
+    "note": "Tax collector at Capernaum; writes the first Gospel.",
+    "place": "Capernaum",
+    "lookup": "Mark.2.1"
+   },
+   {
+    "t": "James, son of Alphaeus",
+    "ref": "Matt.10.3",
+    "note": "Sometimes called James the Less."
+   },
+   {
+    "t": "Thaddaeus (Judas son of James)",
+    "ref": "Matt.10.3",
+    "note": "Asks Jesus a question at the Last Supper (John 14:22)."
+   },
+   {
+    "t": "Simon the Zealot",
+    "ref": "Matt.10.4",
+    "note": "Once a member (or in the spirit) of the Zealots."
+   },
+   {
+    "t": "Judas Iscariot",
+    "ref": "Matt.10.4",
+    "note": "Betrays Jesus for thirty pieces of silver."
+   },
+   {
+    "t": "Matthias",
+    "ref": "Acts.1.26",
+    "note": "Chosen by lot to replace Judas."
+   },
+   {
+    "t": "Paul",
+    "ref": "Rom.11.13",
+    "note": "Apostle to the Gentiles, called by the risen Christ.",
+    "place": "Tarsus",
+    "lookup": "Acts.22.3"
+   }
+  ]
+ },
+ {
+  "id": "miracles",
+  "title": "Miracles of Jesus",
+  "group": "New Testament",
+  "color": "#2a9d8f",
+  "summary": "Signs Jesus performed, in an approximate harmony of the Gospels (John 20:30-31).",
+  "items": [
+   {
+    "t": "Water turned into wine",
+    "ref": "John.2.9",
+    "note": "His first sign, at a wedding.",
+    "place": "Cana"
+   },
+   {
+    "t": "Official's son healed",
+    "ref": "John.4.50",
+    "note": "Healed from a distance.",
+    "place": "Cana"
+   },
+   {
+    "t": "Great catch of fish",
+    "ref": "Luke.5.6",
+    "note": "Peter, James and John leave all to follow him.",
+    "place": "Gennesaret",
+    "lookup": "Luke.5.1"
+   },
+   {
+    "t": "Demon cast out in the synagogue",
+    "ref": "Mark.1.25",
+    "note": "\"Be silent, and come out of him!\"",
+    "place": "Capernaum",
+    "lookup": "Mark.1.21"
+   },
+   {
+    "t": "Peter's mother-in-law healed",
+    "ref": "Mark.1.31",
+    "note": "She gets up and serves them.",
+    "place": "Capernaum",
+    "lookup": "Mark.1.21"
+   },
+   {
+    "t": "A leper cleansed",
+    "ref": "Mark.1.41",
+    "note": "\"I will; be clean.\""
+   },
+   {
+    "t": "Paralytic lowered through the roof",
+    "ref": "Mark.2.5",
+    "note": "\"Your sins are forgiven.\"",
+    "place": "Capernaum",
+    "lookup": "Mark.2.1"
+   },
+   {
+    "t": "Man healed at the pool of Bethesda",
+    "ref": "John.5.8",
+    "note": "Lame 38 years: \"Get up, take up your bed.\"",
+    "place": "Bethesda",
+    "lookup": "John.5.2"
+   },
+   {
+    "t": "Withered hand restored",
+    "ref": "Mark.3.5",
+    "note": "On the Sabbath, in the synagogue."
+   },
+   {
+    "t": "Centurion's servant healed",
+    "ref": "Luke.7.10",
+    "note": "\"Not even in Israel have I found such faith.\"",
+    "place": "Capernaum",
+    "lookup": "Luke.7.1"
+   },
+   {
+    "t": "Widow's son raised",
+    "ref": "Luke.7.15",
+    "note": "Stops the funeral procession.",
+    "place": "Nain",
+    "lookup": "Luke.7.11"
+   },
+   {
+    "t": "The storm calmed",
+    "ref": "Mark.4.39",
+    "note": "\"Peace! Be still!\"",
+    "place": "Sea of Galilee",
+    "lookup": "Matt.4.18"
+   },
+   {
+    "t": "Legion cast into the pigs",
+    "ref": "Mark.5.13",
+    "note": "The man is found clothed and in his right mind.",
+    "place": "Region of the Gerasenes",
+    "lat": 32.826,
+    "lon": 35.65
+   },
+   {
+    "t": "Woman with the issue of blood",
+    "ref": "Mark.5.29",
+    "note": "Healed by touching his garment."
+   },
+   {
+    "t": "Jairus' daughter raised",
+    "ref": "Mark.5.42",
+    "note": "\"Talitha cumi\": \"Little girl, arise.\""
+   },
+   {
+    "t": "Two blind men healed",
+    "ref": "Matt.9.29",
+    "note": "\"According to your faith be it done to you.\""
+   },
+   {
+    "t": "Mute demoniac healed",
+    "ref": "Matt.9.33",
+    "note": "The crowds marvel."
+   },
+   {
+    "t": "Five thousand fed",
+    "ref": "Mark.6.42",
+    "note": "Five loaves and two fish; twelve baskets left over.",
+    "place": "Bethsaida",
+    "lookup": "Luke.9.10"
+   },
+   {
+    "t": "Walking on the water",
+    "ref": "Matt.14.25",
+    "note": "Peter walks too, then sinks.",
+    "place": "Sea of Galilee",
+    "lookup": "Matt.4.18"
+   },
+   {
+    "t": "Syrophoenician woman's daughter",
+    "ref": "Mark.7.29",
+    "note": "\"Even the dogs eat the children's crumbs.\"",
+    "place": "Tyre",
+    "lookup": "Mark.7.24"
+   },
+   {
+    "t": "Deaf and mute man healed",
+    "ref": "Mark.7.35",
+    "note": "\"Ephphatha\": \"Be opened.\"",
+    "place": "Decapolis",
+    "lookup": "Mark.7.31"
+   },
+   {
+    "t": "Four thousand fed",
+    "ref": "Mark.8.8",
+    "note": "Seven loaves; seven baskets left over."
+   },
+   {
+    "t": "Blind man healed in stages",
+    "ref": "Mark.8.25",
+    "note": "He sees everything clearly.",
+    "place": "Bethsaida",
+    "lookup": "Mark.8.22"
+   },
+   {
+    "t": "Boy with an unclean spirit",
+    "ref": "Mark.9.25",
+    "note": "\"I believe; help my unbelief!\""
+   },
+   {
+    "t": "Coin in the fish's mouth",
+    "ref": "Matt.17.27",
+    "note": "Pays the temple tax.",
+    "place": "Capernaum",
+    "lookup": "Matt.17.24"
+   },
+   {
+    "t": "Man born blind healed",
+    "ref": "John.9.7",
+    "note": "\"Go, wash in the pool of Siloam.\"",
+    "place": "Siloam",
+    "lookup": "John.9.7"
+   },
+   {
+    "t": "Crippled woman healed on the Sabbath",
+    "ref": "Luke.13.13",
+    "note": "Bent over eighteen years."
+   },
+   {
+    "t": "Man with dropsy healed",
+    "ref": "Luke.14.4",
+    "note": "At a Pharisee's house on the Sabbath."
+   },
+   {
+    "t": "Lazarus raised",
+    "ref": "John.11.44",
+    "note": "\"Lazarus, come out.\"",
+    "place": "Bethany",
+    "lookup": "John.11.1"
+   },
+   {
+    "t": "Ten lepers cleansed",
+    "ref": "Luke.17.14",
+    "note": "Only the Samaritan returns to give thanks."
+   },
+   {
+    "t": "Blind Bartimaeus",
+    "ref": "Mark.10.52",
+    "note": "\"Your faith has made you well.\"",
+    "place": "Jericho",
+    "lookup": "Mark.10.46"
+   },
+   {
+    "t": "Fig tree withered",
+    "ref": "Mark.11.21",
+    "note": "\"Have faith in God.\""
+   },
+   {
+    "t": "Malchus' ear healed",
+    "ref": "Luke.22.51",
+    "note": "At his arrest."
+   },
+   {
+    "t": "Second great catch of fish",
+    "ref": "John.21.6",
+    "note": "After the resurrection: 153 fish.",
+    "place": "Tiberias",
+    "lookup": "John.21.1"
+   }
+  ]
+ },
+ {
+  "id": "parables",
+  "title": "Parables of Jesus",
+  "group": "New Testament",
+  "color": "#e76f51",
+  "summary": "Stories Jesus told to teach about the kingdom of God (Matthew 13:34-35).",
+  "items": [
+   {
+    "t": "Wise and foolish builders",
+    "ref": "Matt.7.24",
+    "note": "House on the rock, house on the sand."
+   },
+   {
+    "t": "New cloth and new wine",
+    "ref": "Mark.2.21",
+    "note": "New wine needs new wineskins."
+   },
+   {
+    "t": "Two debtors",
+    "ref": "Luke.7.41",
+    "note": "The one forgiven more loves more."
+   },
+   {
+    "t": "The sower (soils)",
+    "ref": "Matt.13.3",
+    "note": "The seed is the word of God (Luke 8:11)."
+   },
+   {
+    "t": "Lamp under a basket",
+    "ref": "Mark.4.21"
+   },
+   {
+    "t": "Seed growing secretly",
+    "ref": "Mark.4.26"
+   },
+   {
+    "t": "Weeds among the wheat",
+    "ref": "Matt.13.24",
+    "note": "Separated at the harvest."
+   },
+   {
+    "t": "Mustard seed",
+    "ref": "Matt.13.31",
+    "note": "The smallest seed becomes a tree."
+   },
+   {
+    "t": "Leaven",
+    "ref": "Matt.13.33",
+    "note": "A little leaven leavens the whole lump."
+   },
+   {
+    "t": "Hidden treasure",
+    "ref": "Matt.13.44",
+    "note": "Sells all he has to buy the field."
+   },
+   {
+    "t": "Pearl of great price",
+    "ref": "Matt.13.45"
+   },
+   {
+    "t": "The net",
+    "ref": "Matt.13.47",
+    "note": "Good and bad fish sorted at the end."
+   },
+   {
+    "t": "Unforgiving servant",
+    "ref": "Matt.18.23",
+    "note": "Forgiven much, he refuses to forgive little."
+   },
+   {
+    "t": "Good Samaritan",
+    "ref": "Luke.10.30",
+    "note": "\"Who is my neighbor?\""
+   },
+   {
+    "t": "Friend at midnight",
+    "ref": "Luke.11.5",
+    "note": "Persistence in prayer."
+   },
+   {
+    "t": "Rich fool",
+    "ref": "Luke.12.16",
+    "note": "\"This night your soul is required of you.\""
+   },
+   {
+    "t": "Watchful servants",
+    "ref": "Luke.12.35",
+    "note": "Ready for the master's return."
+   },
+   {
+    "t": "Barren fig tree",
+    "ref": "Luke.13.6",
+    "note": "One more year to bear fruit."
+   },
+   {
+    "t": "Great banquet",
+    "ref": "Luke.14.16",
+    "note": "The invited make excuses."
+   },
+   {
+    "t": "Counting the cost",
+    "ref": "Luke.14.28",
+    "note": "The tower builder and the king at war."
+   },
+   {
+    "t": "Lost sheep",
+    "ref": "Luke.15.4",
+    "note": "Joy in heaven over one sinner who repents."
+   },
+   {
+    "t": "Lost coin",
+    "ref": "Luke.15.8"
+   },
+   {
+    "t": "Prodigal son",
+    "ref": "Luke.15.11",
+    "note": "\"This my son was dead, and is alive again.\""
+   },
+   {
+    "t": "Shrewd manager",
+    "ref": "Luke.16.1",
+    "note": "\"You cannot serve God and money.\""
+   },
+   {
+    "t": "Rich man and Lazarus",
+    "ref": "Luke.16.19",
+    "note": "A great chasm fixed."
+   },
+   {
+    "t": "Unworthy servants",
+    "ref": "Luke.17.7",
+    "note": "\"We have only done our duty.\""
+   },
+   {
+    "t": "Persistent widow",
+    "ref": "Luke.18.2",
+    "note": "Always pray and do not lose heart."
+   },
+   {
+    "t": "Pharisee and tax collector",
+    "ref": "Luke.18.10",
+    "note": "\"God, be merciful to me, a sinner!\""
+   },
+   {
+    "t": "Laborers in the vineyard",
+    "ref": "Matt.20.1",
+    "note": "The last will be first."
+   },
+   {
+    "t": "Ten minas",
+    "ref": "Luke.19.12",
+    "note": "Faithful with a little."
+   },
+   {
+    "t": "Two sons",
+    "ref": "Matt.21.28",
+    "note": "Who did the father's will?"
+   },
+   {
+    "t": "Wicked tenants",
+    "ref": "Matt.21.33",
+    "note": "The stone the builders rejected."
+   },
+   {
+    "t": "Wedding feast",
+    "ref": "Matt.22.2",
+    "note": "Many are called, few are chosen."
+   },
+   {
+    "t": "Fig tree's leaves",
+    "ref": "Matt.24.32",
+    "note": "Know the signs of the times."
+   },
+   {
+    "t": "Ten virgins",
+    "ref": "Matt.25.1",
+    "note": "Keep your lamps ready."
+   },
+   {
+    "t": "Talents",
+    "ref": "Matt.25.14",
+    "note": "\"Well done, good and faithful servant.\""
+   },
+   {
+    "t": "Sheep and goats",
+    "ref": "Matt.25.31",
+    "note": "\"As you did it to one of the least of these…\""
+   }
+  ],
+  "note": "Rich man and Lazarus, and the sheep and goats, are not called parables in the text; many lists include them."
+ },
+ {
+  "id": "i-am",
+  "title": "The \"I Am\" Statements of Jesus",
+  "group": "New Testament",
+  "color": "#118ab2",
+  "summary": "Jesus' sayings in John's Gospel that echo God's name, \"I AM\" (Exodus 3:14).",
+  "items": [
+   {
+    "t": "\"I am the bread of life\"",
+    "ref": "John.6.35",
+    "note": "After feeding the five thousand.",
+    "place": "Capernaum",
+    "lookup": "John.6.59"
+   },
+   {
+    "t": "\"I am the light of the world\"",
+    "ref": "John.8.12",
+    "note": "Repeated before healing the man born blind (9:5).",
+    "place": "Jerusalem"
+   },
+   {
+    "t": "\"Before Abraham was, I am\"",
+    "ref": "John.8.58",
+    "note": "They pick up stones to throw at him.",
+    "place": "Jerusalem"
+   },
+   {
+    "t": "\"I am the door of the sheep\"",
+    "ref": "John.10.7",
+    "note": "\"If anyone enters by me, he will be saved.\"",
+    "place": "Jerusalem"
+   },
+   {
+    "t": "\"I am the good shepherd\"",
+    "ref": "John.10.11",
+    "note": "He lays down his life for the sheep.",
+    "place": "Jerusalem"
+   },
+   {
+    "t": "\"I am the resurrection and the life\"",
+    "ref": "John.11.25",
+    "note": "To Martha, before raising Lazarus.",
+    "place": "Bethany",
+    "lookup": "John.11.1"
+   },
+   {
+    "t": "\"I am the way, and the truth, and the life\"",
+    "ref": "John.14.6",
+    "note": "\"No one comes to the Father except through me.\"",
+    "place": "Jerusalem"
+   },
+   {
+    "t": "\"I am the true vine\"",
+    "ref": "John.15.1",
+    "note": "\"Apart from me you can do nothing.\"",
+    "place": "Jerusalem"
+   }
+  ]
+ },
+ {
+  "id": "beatitudes",
+  "title": "The Beatitudes",
+  "group": "New Testament",
+  "color": "#264653",
+  "summary": "The blessings that open the Sermon on the Mount (Matthew 5:3-10).",
+  "items": [
+   {
+    "t": "The poor in spirit",
+    "ref": "Matt.5.3",
+    "note": "…for theirs is the kingdom of heaven."
+   },
+   {
+    "t": "Those who mourn",
+    "ref": "Matt.5.4",
+    "note": "…for they shall be comforted."
+   },
+   {
+    "t": "The meek",
+    "ref": "Matt.5.5",
+    "note": "…for they shall inherit the earth."
+   },
+   {
+    "t": "Those who hunger and thirst for righteousness",
+    "ref": "Matt.5.6",
+    "note": "…for they shall be satisfied."
+   },
+   {
+    "t": "The merciful",
+    "ref": "Matt.5.7",
+    "note": "…for they shall receive mercy."
+   },
+   {
+    "t": "The pure in heart",
+    "ref": "Matt.5.8",
+    "note": "…for they shall see God."
+   },
+   {
+    "t": "The peacemakers",
+    "ref": "Matt.5.9",
+    "note": "…for they shall be called sons of God."
+   },
+   {
+    "t": "Those persecuted for righteousness' sake",
+    "ref": "Matt.5.10",
+    "note": "…for theirs is the kingdom of heaven."
+   }
+  ]
+ },
+ {
+  "id": "cross",
+  "title": "The Seven Sayings from the Cross",
+  "group": "New Testament",
+  "color": "#7b2d26",
+  "summary": "Jesus' last words as he was crucified, in their likely order.",
+  "items": [
+   {
+    "t": "\"Father, forgive them, for they know not what they do.\"",
+    "ref": "Luke.23.34",
+    "place": "Golgotha",
+    "lookup": "John.19.17"
+   },
+   {
+    "t": "\"Today you will be with me in Paradise.\"",
+    "ref": "Luke.23.43",
+    "note": "To the repentant thief."
+   },
+   {
+    "t": "\"Woman, behold, your son!\"",
+    "ref": "John.19.26",
+    "note": "Entrusts Mary to John."
+   },
+   {
+    "t": "\"My God, my God, why have you forsaken me?\"",
+    "ref": "Matt.27.46",
+    "note": "Quoting Psalm 22:1."
+   },
+   {
+    "t": "\"I thirst.\"",
+    "ref": "John.19.28",
+    "note": "To fulfill the Scripture."
+   },
+   {
+    "t": "\"It is finished.\"",
+    "ref": "John.19.30"
+   },
+   {
+    "t": "\"Father, into your hands I commit my spirit!\"",
+    "ref": "Luke.23.46",
+    "note": "Quoting Psalm 31:5."
+   }
+  ]
+ },
+ {
+  "id": "conversions",
+  "title": "Conversions in Acts",
+  "group": "New Testament",
+  "color": "#e9a03b",
+  "summary": "How people became Christians in the book of Acts: what they heard, believed and did.",
+  "items": [
+   {
+    "t": "Pentecost: about 3,000",
+    "ref": "Acts.2.41",
+    "note": "Heard Peter preach; cut to the heart; repented and were baptized (2:37-38).",
+    "place": "Jerusalem"
+   },
+   {
+    "t": "The Samaritans",
+    "ref": "Acts.8.12",
+    "note": "Believed Philip's preaching and were baptized, men and women.",
+    "place": "Samaria",
+    "lookup": "Acts.8.5"
+   },
+   {
+    "t": "Simon the sorcerer",
+    "ref": "Acts.8.13",
+    "note": "Believed and was baptized."
+   },
+   {
+    "t": "The Ethiopian eunuch",
+    "ref": "Acts.8.38",
+    "note": "Heard Jesus preached from Isaiah 53; baptized on the road.",
+    "place": "Gaza",
+    "lookup": "Acts.8.26"
+   },
+   {
+    "t": "Saul of Tarsus",
+    "ref": "Acts.9.18",
+    "note": "Saw the Lord; prayed three days; baptized to wash away his sins (22:16).",
+    "place": "Damascus",
+    "lookup": "Acts.9.3"
+   },
+   {
+    "t": "Cornelius and his household",
+    "ref": "Acts.10.48",
+    "note": "The first Gentiles; the Spirit falls, then they are baptized.",
+    "place": "Caesarea",
+    "lookup": "Acts.10.24"
+   },
+   {
+    "t": "Lydia and her household",
+    "ref": "Acts.16.15",
+    "note": "The Lord opened her heart; baptized.",
+    "place": "Philippi",
+    "lookup": "Acts.16.12"
+   },
+   {
+    "t": "The Philippian jailer",
+    "ref": "Acts.16.33",
+    "note": "\"What must I do to be saved?\" Baptized the same hour of the night.",
+    "place": "Philippi",
+    "lookup": "Acts.16.12"
+   },
+   {
+    "t": "The Corinthians",
+    "ref": "Acts.18.8",
+    "note": "Hearing, believed and were baptized.",
+    "place": "Corinth",
+    "lookup": "Acts.18.1"
+   },
+   {
+    "t": "The disciples at Ephesus",
+    "ref": "Acts.19.5",
+    "note": "Knew only John's baptism; baptized in the name of the Lord Jesus.",
+    "place": "Ephesus",
+    "lookup": "Acts.19.1"
+   }
+  ]
+ }
+]

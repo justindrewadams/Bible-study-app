@@ -6,6 +6,7 @@
 //   public/data/verses/<Book>.json – { "chapter": { "verse": [placeIndex, ...] } }
 //   public/data/place-details.json – per-place info card data (aligned with places.json)
 //   src/data/journeys.json         – curated journeys with resolved coordinates
+//   src/data/lists.json            – curated study lists (kings, miracles, parables…)
 //
 // Run: npm run build:data
 import fs from 'node:fs';
@@ -162,36 +163,48 @@ for (const [book, chapters] of Object.entries(byBook)) {
 }
 console.log(`places: ${places.length}, verse mentions: ${mentions}, books: ${Object.keys(byBook).length}`);
 
-// --- resolve journeys
-const journeys = JSON.parse(fs.readFileSync(path.join(root, 'scripts', 'journeys.source.json'), 'utf8'));
+// --- resolve journey stops and list items to places
 const errors = [];
-for (const j of journeys) {
-  for (const stop of j.stops) {
-    if (stop.lat != null && stop.lon != null) {
-      stop.placeIndex = null;
-      continue;
-    }
-    const cands = rowsByName.get(stop.place) ?? [];
-    // `lookup` lets a stop use a different verse to identify which same-named place is meant
-    const key = stop.lookup ?? stop.ref;
-    const chapter = key.split('.').slice(0, 2).join('.') + '.';
-    const pick =
-      cands.find((c) => c.verses.has(key)) ??
-      cands.find((c) => [...c.verses].some((v) => v.startsWith(chapter))) ??
-      (cands.length === 1 ? cands[0] : null);
-    if (!pick) {
-      errors.push(`${j.id}: could not resolve "${stop.place}" for ${stop.ref} (${cands.length} candidates)`);
-      continue;
-    }
-    stop.lat = pick.ll.lat;
-    stop.lon = pick.ll.lon;
-    stop.placeIndex = pick.idx;
-    delete stop.lookup;
+/** Fills lat/lon/placeIndex on anything with a `place` name and a `ref`. */
+function resolvePlace(item, label) {
+  if (item.lat != null && item.lon != null) {
+    item.placeIndex = null;
+    return;
+  }
+  const cands = rowsByName.get(item.place) ?? [];
+  // `lookup` lets an item use a different verse to identify which same-named place is meant
+  const key = item.lookup ?? item.ref;
+  const chapter = key.split('.').slice(0, 2).join('.') + '.';
+  const pick =
+    cands.find((c) => c.verses.has(key)) ??
+    cands.find((c) => [...c.verses].some((v) => v.startsWith(chapter))) ??
+    (cands.length === 1 ? cands[0] : null);
+  if (!pick) {
+    errors.push(`${label}: could not resolve "${item.place}" for ${key} (${cands.length} candidates)`);
+    return;
+  }
+  item.lat = pick.ll.lat;
+  item.lon = pick.ll.lon;
+  item.placeIndex = pick.idx;
+  delete item.lookup;
+}
+
+const journeys = JSON.parse(fs.readFileSync(path.join(root, 'scripts', 'journeys.source.json'), 'utf8'));
+for (const j of journeys) for (const stop of j.stops) resolvePlace(stop, j.id);
+
+const lists = JSON.parse(fs.readFileSync(path.join(root, 'scripts', 'lists.source.json'), 'utf8'));
+for (const l of lists) {
+  for (const item of l.items) {
+    if (!/^\w+\.\d+\.\d+$/.test(item.ref)) errors.push(`${l.id}: bad ref ${item.ref}`);
+    if (item.place) resolvePlace(item, `${l.id} / ${item.t}`);
   }
 }
+
 if (errors.length) {
   console.error(errors.join('\n'));
   process.exit(1);
 }
 fs.writeFileSync(path.join(root, 'src', 'data', 'journeys.json'), JSON.stringify(journeys, null, 1));
+fs.writeFileSync(path.join(root, 'src', 'data', 'lists.json'), JSON.stringify(lists, null, 1));
 console.log(`journeys: ${journeys.length}, stops: ${journeys.reduce((n, j) => n + j.stops.length, 0)}`);
+console.log(`lists: ${lists.length}, items: ${lists.reduce((n, l) => n + l.items.length, 0)}`);

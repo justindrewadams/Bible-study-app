@@ -390,9 +390,11 @@ function FocusMarker({
           <div className="popup-meta">
             {place.type} · {confidenceText(place.confidence)}
           </div>
-          <button className="popup-more" onClick={() => onPlaceInfo(place)}>
-            About {place.name} →
-          </button>
+          {place.index >= 0 && (
+            <button className="popup-more" onClick={() => onPlaceInfo(place)}>
+              About {place.name} →
+            </button>
+          )}
         </div>
       </Popup>
     </Marker>

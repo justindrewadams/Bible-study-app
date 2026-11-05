@@ -24,6 +24,8 @@ export interface Period {
   events: { t: string; ref: string }[];
   passages: PassageRange[];
   journeys: string[];
+  /** study lists (see lists.json) that belong to this period */
+  lists?: string[];
   note?: string;
   /** a period with no scripture of its own (the 400 silent years) */
   between?: boolean;
@@ -35,6 +37,7 @@ const ch = (book: string, from: number, to: number): PassageRange => ({ book, fr
 const RAW: Omit<Period, 'n'>[] = [
   {
     id: 'beginnings',
+    lists: ['creation'],
     name: 'Beginnings',
     dates: 'Creation – c. 2100 BC',
     color: '#6b8e23',
@@ -74,6 +77,7 @@ const RAW: Omit<Period, 'n'>[] = [
   },
   {
     id: 'bondage',
+    lists: ['plagues'],
     name: 'Bondage in Egypt',
     dates: 'c. 1876 – 1446 BC',
     color: '#b5651d',
@@ -92,6 +96,7 @@ const RAW: Omit<Period, 'n'>[] = [
   },
   {
     id: 'wilderness',
+    lists: ['commandments'],
     name: 'Wilderness Wandering',
     dates: '1446 – 1406 BC',
     color: '#c2873b',
@@ -129,6 +134,7 @@ const RAW: Omit<Period, 'n'>[] = [
   },
   {
     id: 'judges',
+    lists: ['judges'],
     name: 'Judges',
     dates: 'c. 1380 – 1050 BC',
     color: '#8d6e63',
@@ -148,6 +154,7 @@ const RAW: Omit<Period, 'n'>[] = [
   },
   {
     id: 'united-kingdom',
+    lists: ['kings-united'],
     name: 'United Kingdom',
     dates: '1050 – 931 BC',
     color: '#6a4c93',
@@ -178,6 +185,7 @@ const RAW: Omit<Period, 'n'>[] = [
   },
   {
     id: 'divided-kingdom',
+    lists: ['kings-israel', 'kings-judah', 'prophets'],
     name: 'Divided Kingdom',
     dates: '931 – 722 BC',
     color: '#d1495b',
@@ -208,6 +216,7 @@ const RAW: Omit<Period, 'n'>[] = [
   },
   {
     id: 'judah-alone',
+    lists: ['kings-judah', 'prophets'],
     name: 'Judah Alone',
     dates: '722 – 586 BC',
     color: '#b8860b',
@@ -237,6 +246,7 @@ const RAW: Omit<Period, 'n'>[] = [
   },
   {
     id: 'captivity',
+    lists: ['prophets'],
     name: 'Captivity',
     dates: '605 / 586 – 536 BC',
     color: '#3d405b',
@@ -256,6 +266,7 @@ const RAW: Omit<Period, 'n'>[] = [
   },
   {
     id: 'return',
+    lists: ['prophets'],
     name: 'Return',
     dates: '536 – c. 430 BC',
     color: '#2a9d8f',
@@ -296,6 +307,7 @@ const RAW: Omit<Period, 'n'>[] = [
   },
   {
     id: 'life-of-christ',
+    lists: ['apostles', 'miracles', 'parables', 'i-am', 'beatitudes', 'cross'],
     name: 'Life of Christ',
     dates: 'c. 5 BC – AD 30',
     color: '#1d4e89',
@@ -316,6 +328,7 @@ const RAW: Omit<Period, 'n'>[] = [
   },
   {
     id: 'early-church',
+    lists: ['conversions', 'apostles'],
     name: 'Early Church',
     dates: 'AD 30 – c. 96',
     color: '#e76f51',

@@ -19,6 +19,8 @@ import JourneyPanel from './components/JourneyPanel';
 import PlaceCard from './components/PlaceCard';
 import { loadPlaces } from './lib/geo';
 import PeriodsPage from './components/PeriodsPage';
+import ListPanel from './components/ListPanel';
+import { LISTS, type StudyList } from './lib/lists';
 import { periodFor } from './data/periods';
 
 interface Location {
@@ -48,6 +50,10 @@ export default function App() {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [cardPlace, setCardPlace] = useState<Place | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [listId, setListId] = useState<string | null>(null);
+  const [listIndex, setListIndex] = useState(0);
+  const [listPlaying, setListPlaying] = useState(false);
+  const studyList = LISTS.find((l) => l.id === listId) ?? null;
   const [hash, setHash] = useState(() => window.location.hash);
 
   useEffect(() => {
@@ -131,6 +137,39 @@ export default function App() {
 
   const openPlaceIndex = (index: number) => loadPlaces().then((ps) => setCardPlace(ps[index]));
 
+  /** Jump to a list item's verse and pin its place (if it has one) on the map. */
+  const goToListItem = useCallback(
+    (l: StudyList, i: number) => {
+      const item = l.items[i];
+      const r = parseRef(item.ref);
+      setListId(l.id);
+      setListIndex(i);
+      goTo(r.book, r.chapter, r.verse);
+      if (item.placeIndex != null) loadPlaces().then((ps) => setPlaceOverride(ps[item.placeIndex!]));
+      else if (item.lat != null && item.lon != null)
+        setPlaceOverride({ index: -1, name: item.place ?? item.t, lat: item.lat, lon: item.lon!, type: 'region', confidence: 50 });
+    },
+    [goTo],
+  );
+
+  // List autoplay
+  useEffect(() => {
+    if (!listPlaying || !studyList) return;
+    if (listIndex >= studyList.items.length - 1) {
+      setListPlaying(false);
+      return;
+    }
+    const t = setTimeout(() => goToListItem(studyList, listIndex + 1), 4000);
+    return () => clearTimeout(t);
+  }, [listPlaying, studyList, listIndex, goToListItem]);
+
+  const openList = (id: string, i = 0) => {
+    const l = LISTS.find((x) => x.id === id);
+    setListPlaying(false);
+    if (l) goToListItem(l, i);
+    else setListId(null);
+  };
+
   // Journey autoplay
   useEffect(() => {
     if (!playing || !journey) return;
@@ -155,8 +194,10 @@ export default function App() {
 
   const selectedInfo = useMemo(() => {
     if (selectedVerse == null || !geo) return null;
+    // a place chosen explicitly (tapped name, list item) is what the map shows, so show it here too
+    if (placeOverride) return { places: [placeOverride], inferred: false as const };
     return placesForVerse(geo, loc.chapter, selectedVerse);
-  }, [selectedVerse, geo, loc.chapter]);
+  }, [selectedVerse, geo, loc.chapter, placeOverride]);
 
   const prevChapter = () => {
     if (loc.chapter > 1) goTo(loc.book, loc.chapter - 1);
@@ -284,6 +325,29 @@ export default function App() {
           ))}
         </select>
         </label>
+        <label className="menu-field">
+          <span className="menu-label">Study a list</span>
+          <select
+            className="list-select"
+            value={listId ?? ''}
+            onChange={(e) => {
+              setMenuOpen(false);
+              openList(e.target.value);
+            }}
+            aria-label="Study a list"
+          >
+            <option value="">Study a list…</option>
+            {(['Old Testament', 'New Testament'] as const).map((g) => (
+              <optgroup key={g} label={g}>
+                {LISTS.filter((l) => l.group === g).map((l) => (
+                  <option key={l.id} value={l.id}>
+                    {l.title}
+                  </option>
+                ))}
+              </optgroup>
+            ))}
+          </select>
+        </label>
         <div className="topbar-actions">
           <button
             className={`btn${periodsOpen ? ' active' : ''}`}
@@ -330,6 +394,10 @@ export default function App() {
             goTo(b, c, v ?? null);
             closePeriods();
           }}
+          onOpenList={(id) => {
+            openList(id);
+            closePeriods();
+          }}
           onFollowJourney={(id) => {
             const j = JOURNEYS.find((x) => x.id === id);
             if (!j) return;
@@ -355,7 +423,7 @@ export default function App() {
                       className="link"
                       onClick={() => {
                         setPlaceOverride(p);
-                        setCardPlace(p);
+                        if (p.index >= 0) setCardPlace(p);
                       }}
                     >
                       {p.name}
@@ -399,9 +467,30 @@ export default function App() {
               setMapVisible(true);
             }}
             activeJourneyId={journeyId}
+            activeList={studyList ? { id: studyList.id, index: listIndex } : null}
+            onOpenListItem={(l, i) => openList(l.id, i)}
             period={currentPeriod ?? null}
             onOpenPeriod={openPeriods}
           />
+          {studyList && (
+            <ListPanel
+              list={studyList}
+              index={listIndex}
+              playing={listPlaying}
+              onGo={(i) => {
+                setListPlaying(false);
+                goToListItem(studyList, i);
+              }}
+              onTogglePlay={() => {
+                if (!listPlaying && listIndex >= studyList.items.length - 1) goToListItem(studyList, 0);
+                setListPlaying(!listPlaying);
+              }}
+              onClose={() => {
+                setListPlaying(false);
+                setListId(null);
+              }}
+            />
+          )}
           <div className="chapter-nav">
             <button className="btn" onClick={prevChapter}>
               ‹ Previous chapter
