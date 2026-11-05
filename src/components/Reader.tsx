@@ -2,6 +2,7 @@ import { Fragment, useEffect, useRef } from 'react';
 import type { Verse } from '../lib/bible';
 import type { ChapterGeo, Place } from '../lib/geo';
 import { journeysAtVerse, type Journey } from '../lib/journeys';
+import type { Period } from '../data/periods';
 
 interface Props {
   book: string;
@@ -16,6 +17,8 @@ interface Props {
   onSelectPlace: (verse: number, place: Place) => void;
   onFollowJourney: (journey: Journey, stopIndex: number) => void;
   activeJourneyId: string | null;
+  period: Period | null;
+  onOpenPeriod: (id: string) => void;
 }
 
 const escapeRe = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -50,6 +53,8 @@ export default function Reader({
   onSelectPlace,
   onFollowJourney,
   activeJourneyId,
+  period,
+  onOpenPeriod,
 }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -68,6 +73,18 @@ export default function Reader({
       <h1 className="chapter-title">
         {bookName} {chapter}
       </h1>
+      {period && (
+        <button
+          className="period-badge"
+          style={{ '--c': period.color } as React.CSSProperties}
+          onClick={() => onOpenPeriod(period.id)}
+          title="See this period of Bible history"
+        >
+          <span className="pb-num">{period.n}</span>
+          Period {period.n} of 13: <strong>{period.name}</strong>
+          <span className="muted"> · {period.dates}</span>
+        </button>
+      )}
       {loading && <p className="muted">Loading…</p>}
       {error && (
         <div className="error">

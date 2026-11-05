@@ -18,6 +18,8 @@ import Reader from './components/Reader';
 import JourneyPanel from './components/JourneyPanel';
 import PlaceCard from './components/PlaceCard';
 import { loadPlaces } from './lib/geo';
+import PeriodsPage from './components/PeriodsPage';
+import { periodFor } from './data/periods';
 
 interface Location {
   book: string;
@@ -45,8 +47,27 @@ export default function App() {
   const [playing, setPlaying] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [cardPlace, setCardPlace] = useState<Place | null>(null);
+  const [hash, setHash] = useState(() => window.location.hash);
+
+  useEffect(() => {
+    const onHash = () => setHash(window.location.hash);
+    window.addEventListener('hashchange', onHash);
+    return () => window.removeEventListener('hashchange', onHash);
+  }, []);
+
+  // "#periods" or "#periods/<id>" shows the periods page (so the back button works)
+  const periodsOpen = hash.startsWith('#periods');
+  const periodFocus = periodsOpen ? (hash.split('/')[1] ?? null) : null;
+  const openPeriods = (id?: string) => {
+    window.location.hash = id ? `periods/${id}` : 'periods';
+  };
+  const closePeriods = () => {
+    history.pushState(null, '', window.location.pathname + window.location.search);
+    setHash('');
+  };
 
   const book = getBook(loc.book);
+  const currentPeriod = periodFor(loc.book, loc.chapter);
   const translation = findTranslation(translationId, bolls);
   const journey = JOURNEYS.find((j) => j.id === journeyId) ?? null;
 
@@ -239,6 +260,14 @@ export default function App() {
           ))}
         </select>
         <div className="topbar-actions">
+          <button
+            className={`btn${periodsOpen ? ' active' : ''}`}
+            onClick={() => (periodsOpen ? closePeriods() : openPeriods(currentPeriod?.id))}
+            aria-pressed={periodsOpen}
+          >
+            📜 <span className="wide-only">13 Periods</span>
+            <span className="narrow-only">Periods</span>
+          </button>
           <button className="btn" onClick={() => setMapVisible(!mapVisible)} aria-pressed={mapVisible}>
             <span className="wide-only">{mapVisible ? 'Hide map' : 'Show map'}</span>
             <span className="narrow-only" aria-hidden>
@@ -251,7 +280,27 @@ export default function App() {
         </div>
       </header>
 
-      <main className="layout">
+      {periodsOpen && (
+        <PeriodsPage
+          focusId={periodFocus}
+          currentId={currentPeriod?.id ?? null}
+          onClose={closePeriods}
+          onRead={(b, c, v) => {
+            goTo(b, c, v ?? null);
+            closePeriods();
+          }}
+          onFollowJourney={(id) => {
+            const j = JOURNEYS.find((x) => x.id === id);
+            if (!j) return;
+            setPlaying(false);
+            goToStop(j, 0);
+            setMapVisible(true);
+            closePeriods();
+          }}
+        />
+      )}
+
+      <main className="layout" hidden={periodsOpen}>
         <section className="text-pane">
           {selectedInfo && selectedVerse != null && (
             <div className="verse-info" aria-live="polite">
@@ -309,6 +358,8 @@ export default function App() {
               setMapVisible(true);
             }}
             activeJourneyId={journeyId}
+            period={currentPeriod ?? null}
+            onOpenPeriod={openPeriods}
           />
           <div className="chapter-nav">
             <button className="btn" onClick={prevChapter}>
