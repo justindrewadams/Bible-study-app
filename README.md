@@ -7,12 +7,9 @@ A Bible study app that puts the text and the map side by side.
 - **Place info cards.** Tap a place name, a map pin's "About" button, or any dot on the map to open a card with: today's site and how certain it is, other biblical names and spellings, when it was established, a short history with a photo (from Wikipedia), key stories (hand-picked for about 75 major places), the journeys that stop there, and every verse that names it. Tap any reference to go to that verse.
 - **Modern map overlay.** One toggle lays today's borders and city names over the ancient-style terrain, with an opacity slider. You can also switch to a full street map, satellite, or a Roman Empire map with ancient roads.
 - **Follow a story with arrows.** Pick a journey and step through it stop by stop, or press **Play**. Arrows show the direction of travel, a marker animates along each leg, and the Bible text jumps to the verse for each stop. Tapping a numbered stop on the map works too.
-  - Abraham's journey of faith
-  - The Exodus & wilderness wanderings
-  - The conquest of Canaan (Joshua)
-  - The life & ministry of Jesus
-  - Paul's 1st, 2nd and 3rd missionary journeys
-  - Paul's voyage to Rome
+  - **Old Testament:** Abraham · Jacob · Joseph · the Exodus & wilderness · the conquest of Canaan · the travels of the Ark of the Covenant · David fleeing Saul · Elijah · the Exile to Babylon & the return
+  - **New Testament:** the life & ministry of Jesus · Saul's conversion & early years · Paul's 1st, 2nd and 3rd missionary journeys · Paul's voyage to Rome
+  - Long overland legs (to and from Haran and Babylon) follow the Fertile Crescent trade route rather than a straight line.
 
 Works on desktop (side by side) and phone (map on top, text below). Your book, chapter, translation and map settings are remembered.
 
@@ -47,7 +44,7 @@ Edit `scripts/journeys.source.json`. Each stop needs a `place` (the place name a
 npm run build:data
 ```
 
-The script looks up coordinates from the dataset, using the verse to tell apart places with the same name (Antioch in Syria vs. Pisidian Antioch, for example). It stops with an error if a stop can't be matched. For a spot the dataset doesn't have, set `lat`/`lon` on the stop yourself.
+The script looks up coordinates from the dataset, using the verse to tell apart places with the same name (Antioch in Syria vs. Pisidian Antioch, for example). It stops with an error if a stop can't be matched. For a spot the dataset doesn't have, set `lat`/`lon` on the stop yourself. Optional extras: `lookup` (a different verse to identify the place, when the stop's verse doesn't name it) and `via` (a list of `[lat, lon]` waypoints so the leg into that stop follows a route).
 
 ## Data & credits
 

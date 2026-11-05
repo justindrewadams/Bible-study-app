@@ -12,7 +12,7 @@ import {
   useMapEvents,
 } from 'react-leaflet';
 import type { Place } from '../lib/geo';
-import { type Journey, mercatorAngle } from '../lib/journeys';
+import { type Journey, legPath, pointAlong } from '../lib/journeys';
 import { REGIONS } from '../data/regions';
 
 export type BaseLayerId = 'terrain' | 'physical' | 'satellite' | 'roman';
@@ -152,8 +152,7 @@ function CameraController({ focus, journey, stopIndex }: Pick<Props, 'focus' | '
       return;
     }
     const cur = journey.stops[stopIndex];
-    const prev = journey.stops[stopIndex - 1];
-    const pts: L.LatLngExpression[] = prev ? [[prev.lat, prev.lon], [cur.lat, cur.lon]] : [[cur.lat, cur.lon]];
+    const pts: L.LatLngExpression[] = stopIndex > 0 ? legPath(journey, stopIndex) : [[cur.lat, cur.lon]];
     const b = L.latLngBounds(pts);
     const zoom = Math.min(map.getBoundsZoom(b.pad(0.6)), 9);
     map.flyTo(b.getCenter(), Math.max(zoom, 5), { duration: 1.1 });
@@ -196,16 +195,24 @@ function Traveler({ journey, stopIndex }: { journey: Journey; stopIndex: number 
     const m = ref.current;
     const to = journey.stops[stopIndex];
     const from = prev.current.id === journey.id ? journey.stops[prev.current.index] ?? to : to;
+    // stepping forward one stop follows the leg's route; any other jump goes straight
+    const path: [number, number][] =
+      prev.current.id === journey.id && prev.current.index === stopIndex - 1
+        ? legPath(journey, stopIndex)
+        : [
+            [from.lat, from.lon],
+            [to.lat, to.lon],
+          ];
     prev.current = { id: journey.id, index: stopIndex };
     if (!m) return;
-    m.setLatLng([from.lat, from.lon]);
+    m.setLatLng(path[0]);
     const start = performance.now();
-    const dur = 1100;
+    const dur = path.length > 2 ? 1800 : 1100;
     let raf = 0;
     const tick = (t: number) => {
       const k = Math.min(1, (t - start) / dur);
       const e = k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
-      m.setLatLng([from.lat + (to.lat - from.lat) * e, from.lon + (to.lon - from.lon) * e]);
+      m.setLatLng(pointAlong(path, e).point);
       if (k < 1) raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
@@ -220,14 +227,10 @@ function JourneyLayer({ journey, stopIndex, onStopClick }: { journey: Journey; s
     () =>
       journey.stops.slice(1).map((b, i) => {
         const a = journey.stops[i];
-        const same = a.lat === b.lat && a.lon === b.lon;
-        return {
-          i: i + 1,
-          same,
-          positions: [[a.lat, a.lon], [b.lat, b.lon]] as L.LatLngTuple[],
-          mid: [a.lat + (b.lat - a.lat) * 0.55, a.lon + (b.lon - a.lon) * 0.55] as L.LatLngTuple,
-          angle: mercatorAngle(a, b),
-        };
+        const same = a.lat === b.lat && a.lon === b.lon && !b.via;
+        const positions = legPath(journey, i + 1);
+        const { point, angle } = pointAlong(positions, 0.55);
+        return { i: i + 1, same, positions: positions as L.LatLngTuple[], mid: point as L.LatLngTuple, angle };
       }),
     [journey],
   );

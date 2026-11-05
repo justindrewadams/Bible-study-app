@@ -172,9 +172,11 @@ for (const j of journeys) {
       continue;
     }
     const cands = rowsByName.get(stop.place) ?? [];
-    const chapter = stop.ref.split('.').slice(0, 2).join('.') + '.';
+    // `lookup` lets a stop use a different verse to identify which same-named place is meant
+    const key = stop.lookup ?? stop.ref;
+    const chapter = key.split('.').slice(0, 2).join('.') + '.';
     const pick =
-      cands.find((c) => c.verses.has(stop.ref)) ??
+      cands.find((c) => c.verses.has(key)) ??
       cands.find((c) => [...c.verses].some((v) => v.startsWith(chapter))) ??
       (cands.length === 1 ? cands[0] : null);
     if (!pick) {
@@ -184,6 +186,7 @@ for (const j of journeys) {
     stop.lat = pick.ll.lat;
     stop.lon = pick.ll.lon;
     stop.placeIndex = pick.idx;
+    delete stop.lookup;
   }
 }
 if (errors.length) {

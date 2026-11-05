@@ -18,6 +18,24 @@
     "place": "Haran",
     "ref": "Gen.11.31",
     "note": "The family settles in Haran, where Terah dies.",
+    "via": [
+     [
+      32.54,
+      44.42
+     ],
+     [
+      33.64,
+      42.83
+     ],
+     [
+      34.45,
+      40.92
+     ],
+     [
+      35.95,
+      38.3
+     ]
+    ],
     "lat": 36.8644,
     "lon": 39.0328,
     "placeIndex": 554
@@ -26,6 +44,20 @@
     "place": "Shechem",
     "ref": "Gen.12.6",
     "note": "God appears: \"To your offspring I will give this land.\" Abram builds an altar.",
+    "via": [
+     [
+      36.2,
+      37.15
+     ],
+     [
+      34.46,
+      36.57
+     ],
+     [
+      33.51,
+      36.31
+     ]
+    ],
     "lat": 32.2136,
     "lon": 35.2819,
     "placeIndex": 1089
@@ -93,6 +125,212 @@
     "lat": 31.5251,
     "lon": 35.1022,
     "placeIndex": 581
+   }
+  ]
+ },
+ {
+  "id": "jacob",
+  "title": "Jacob's Journeys",
+  "era": "c. 1900–1870 BC",
+  "color": "#a0522d",
+  "summary": "Jacob flees Esau to Haran, builds a family, wrestles with God, and finally goes down to Egypt (Genesis 28–46).",
+  "stops": [
+   {
+    "place": "Beersheba",
+    "ref": "Gen.28.10",
+    "note": "Jacob leaves Beersheba, fleeing Esau's anger.",
+    "lat": 31.2447,
+    "lon": 34.8408,
+    "placeIndex": 179
+   },
+   {
+    "place": "Bethel",
+    "ref": "Gen.28.19",
+    "note": "A ladder to heaven: God renews Abraham's promise. Jacob names the place Bethel.",
+    "lat": 31.9228,
+    "lon": 35.2414,
+    "placeIndex": 209
+   },
+   {
+    "place": "Haran",
+    "ref": "Gen.29.4",
+    "note": "Jacob meets Rachel, serves Laban twenty years, and has eleven sons.",
+    "via": [
+     [
+      33.51,
+      36.31
+     ],
+     [
+      34.46,
+      36.57
+     ],
+     [
+      36.2,
+      37.15
+     ]
+    ],
+    "lat": 36.8644,
+    "lon": 39.0328,
+    "placeIndex": 554
+   },
+   {
+    "place": "Mizpah",
+    "ref": "Gen.31.49",
+    "note": "Laban catches up; they make a covenant at Mizpah in Gilead.",
+    "via": [
+     [
+      36.2,
+      37.15
+     ],
+     [
+      34.46,
+      36.57
+     ],
+     [
+      33.51,
+      36.31
+     ]
+    ],
+    "lat": 32.1185,
+    "lon": 35.777,
+    "placeIndex": 839
+   },
+   {
+    "place": "Mahanaim",
+    "ref": "Gen.32.2",
+    "note": "The angels of God meet him.",
+    "lat": 32.1857,
+    "lon": 35.6867,
+    "placeIndex": 781
+   },
+   {
+    "place": "Penuel",
+    "ref": "Gen.32.30",
+    "note": "Jacob wrestles with God and is renamed Israel.",
+    "lat": 32.187,
+    "lon": 35.6921,
+    "placeIndex": 949
+   },
+   {
+    "place": "Succoth",
+    "ref": "Gen.33.17",
+    "note": "After making peace with Esau, he builds booths at Succoth.",
+    "lat": 32.1966,
+    "lon": 35.6212,
+    "placeIndex": 1134
+   },
+   {
+    "place": "Shechem",
+    "ref": "Gen.33.18",
+    "note": "Settles near Shechem; the tragedy of Dinah.",
+    "lat": 32.2136,
+    "lon": 35.2819,
+    "placeIndex": 1089
+   },
+   {
+    "place": "Bethel",
+    "ref": "Gen.35.6",
+    "note": "Returns to Bethel and builds an altar to El-Bethel.",
+    "lat": 31.9228,
+    "lon": 35.2414,
+    "placeIndex": 209
+   },
+   {
+    "place": "Bethlehem",
+    "ref": "Gen.35.19",
+    "note": "Rachel dies giving birth to Benjamin, on the way to Bethlehem.",
+    "lat": 31.7043,
+    "lon": 35.2076,
+    "placeIndex": 227
+   },
+   {
+    "place": "Mamre",
+    "ref": "Gen.35.27",
+    "note": "Comes home to his father Isaac at Mamre, near Hebron.",
+    "lat": 31.5565,
+    "lon": 35.1053,
+    "placeIndex": 788
+   },
+   {
+    "place": "Beersheba",
+    "ref": "Gen.46.1",
+    "note": "On the way to Egypt, God says: \"Do not be afraid to go down.\"",
+    "lat": 31.2447,
+    "lon": 34.8408,
+    "placeIndex": 179
+   },
+   {
+    "place": "Goshen",
+    "ref": "Gen.46.28",
+    "note": "Reunited with Joseph; the family settles in Goshen.",
+    "lat": 30.7994,
+    "lon": 31.8342,
+    "placeIndex": 516
+   }
+  ]
+ },
+ {
+  "id": "joseph",
+  "title": "Joseph: From the Pit to the Palace",
+  "era": "c. 1900–1800 BC",
+  "color": "#c08a1e",
+  "summary": "Joseph is sent to find his brothers, sold into Egypt, and raised up to save his family (Genesis 37–50).",
+  "stops": [
+   {
+    "place": "Hebron",
+    "ref": "Gen.37.14",
+    "note": "Jacob sends Joseph from the Valley of Hebron to check on his brothers.",
+    "lat": 31.5251,
+    "lon": 35.1022,
+    "placeIndex": 581
+   },
+   {
+    "place": "Shechem",
+    "ref": "Gen.37.14",
+    "note": "He looks for them at Shechem...",
+    "lat": 32.2136,
+    "lon": 35.2819,
+    "placeIndex": 1089
+   },
+   {
+    "place": "Dothan",
+    "ref": "Gen.37.17",
+    "note": "...and finds them at Dothan. They throw him in a pit and sell him.",
+    "lat": 32.4135,
+    "lon": 35.2399,
+    "placeIndex": 352
+   },
+   {
+    "place": "Egypt",
+    "ref": "Gen.39.1",
+    "note": "Sold to Potiphar; later imprisoned, then made ruler over Egypt (Gen 41:41).",
+    "lat": 30.1294,
+    "lon": 31.3075,
+    "placeIndex": 375
+   },
+   {
+    "place": "Goshen",
+    "ref": "Gen.46.29",
+    "note": "Joseph meets his father Jacob in Goshen.",
+    "lat": 30.7994,
+    "lon": 31.8342,
+    "placeIndex": 516
+   },
+   {
+    "place": "Machpelah",
+    "ref": "Gen.50.13",
+    "note": "Joseph buries Jacob in the cave of Machpelah in Canaan.",
+    "lat": 31.5247,
+    "lon": 35.1108,
+    "placeIndex": 768
+   },
+   {
+    "place": "Egypt",
+    "ref": "Gen.50.22",
+    "note": "Joseph lives out his days in Egypt, making Israel promise to carry his bones home.",
+    "lat": 30.1294,
+    "lon": 31.3075,
+    "placeIndex": 375
    }
   ]
  },
@@ -351,6 +589,670 @@
     "lat": 32.0557,
     "lon": 35.2895,
     "placeIndex": 1102
+   }
+  ]
+ },
+ {
+  "id": "ark",
+  "title": "The Travels of the Ark of the Covenant",
+  "era": "c. 1406–960 BC",
+  "color": "#b8860b",
+  "summary": "The ark crosses the Jordan, rests at Shiloh, is captured by the Philistines, and is finally brought to Jerusalem and Solomon's temple.",
+  "stops": [
+   {
+    "place": "Jordan",
+    "ref": "Josh.3.15",
+    "note": "The priests carrying the ark step into the Jordan and the waters stop.",
+    "lat": 31.7614,
+    "lon": 35.5583,
+    "placeIndex": 676
+   },
+   {
+    "place": "Gilgal",
+    "ref": "Josh.4.19",
+    "note": "The ark rests at Gilgal, Israel's first camp in the land.",
+    "lat": 31.8819,
+    "lon": 35.46,
+    "placeIndex": 501
+   },
+   {
+    "place": "Jericho",
+    "ref": "Josh.6.11",
+    "note": "Carried around Jericho for seven days.",
+    "lat": 31.8717,
+    "lon": 35.4446,
+    "placeIndex": 659
+   },
+   {
+    "place": "Shiloh",
+    "ref": "Josh.18.1",
+    "note": "The tabernacle and ark stand at Shiloh for generations.",
+    "lat": 32.0557,
+    "lon": 35.2895,
+    "placeIndex": 1102
+   },
+   {
+    "place": "Ebenezer",
+    "ref": "1Sam.4.1",
+    "note": "Brought to battle at Ebenezer and captured by the Philistines (1 Sam 4:11).",
+    "lat": 32.1046,
+    "lon": 34.9645,
+    "placeIndex": 361
+   },
+   {
+    "place": "Ashdod",
+    "ref": "1Sam.5.1",
+    "note": "Placed in the temple of Dagon; the idol falls on its face.",
+    "lat": 31.7572,
+    "lon": 34.6578,
+    "placeIndex": 110
+   },
+   {
+    "place": "Gath",
+    "ref": "1Sam.5.8",
+    "note": "Moved to Gath; the city is struck with tumors.",
+    "lat": 31.6997,
+    "lon": 34.8469,
+    "placeIndex": 452
+   },
+   {
+    "place": "Ekron",
+    "ref": "1Sam.5.10",
+    "note": "Sent on to Ekron, which cries out in panic.",
+    "lat": 31.7775,
+    "lon": 34.8519,
+    "placeIndex": 376
+   },
+   {
+    "place": "Beth-shemesh",
+    "ref": "1Sam.6.12",
+    "note": "Cows pull the cart straight back to Israel at Beth-shemesh.",
+    "lat": 31.7506,
+    "lon": 34.9747,
+    "placeIndex": 242
+   },
+   {
+    "place": "Kiriath-jearim",
+    "ref": "1Sam.7.1",
+    "note": "Kept in the house of Abinadab for twenty years.",
+    "lat": 31.809,
+    "lon": 35.1038,
+    "placeIndex": 722
+   },
+   {
+    "place": "Jerusalem",
+    "ref": "2Sam.6.12",
+    "note": "David brings it up to the City of David with dancing.",
+    "lat": 31.7767,
+    "lon": 35.2342,
+    "placeIndex": 662
+   },
+   {
+    "place": "Jerusalem",
+    "ref": "1Kgs.8.6",
+    "note": "Solomon places the ark in the Most Holy Place of the temple.",
+    "lat": 31.7767,
+    "lon": 35.2342,
+    "placeIndex": 662
+   }
+  ]
+ },
+ {
+  "id": "david",
+  "title": "David Flees from Saul",
+  "era": "c. 1015–1010 BC",
+  "color": "#7b2d26",
+  "summary": "Anointed but not yet king, David runs for his life from Saul through Judah's hills and deserts (1 Samuel 19–2 Samuel 2).",
+  "stops": [
+   {
+    "place": "Gibeah",
+    "ref": "1Sam.19.10",
+    "note": "Saul throws a spear at David, who escapes from Saul's house in Gibeah (Michal lets him down through a window).",
+    "lat": 31.8231,
+    "lon": 35.2307,
+    "placeIndex": 489
+   },
+   {
+    "place": "Naioth",
+    "ref": "1Sam.19.18",
+    "note": "David flees to Samuel at Naioth in Ramah.",
+    "lat": 31.8543,
+    "lon": 35.2316,
+    "placeIndex": 899
+   },
+   {
+    "place": "Nob",
+    "ref": "1Sam.21.1",
+    "note": "Ahimelech the priest gives him holy bread and Goliath's sword.",
+    "lat": 31.7925,
+    "lon": 35.2442,
+    "placeIndex": 921
+   },
+   {
+    "place": "Gath",
+    "ref": "1Sam.21.10",
+    "note": "At Achish's court in Gath, David pretends to be insane.",
+    "lat": 31.6997,
+    "lon": 34.8469,
+    "placeIndex": 452
+   },
+   {
+    "place": "Adullam",
+    "ref": "1Sam.22.1",
+    "note": "The cave of Adullam: 400 men in distress gather to him.",
+    "lat": 31.6517,
+    "lon": 35.0017,
+    "placeIndex": 32
+   },
+   {
+    "place": "Mizpeh",
+    "ref": "1Sam.22.3",
+    "note": "He leaves his parents in safety with the king of Moab.",
+    "lat": 31.1806,
+    "lon": 35.7014,
+    "placeIndex": 842
+   },
+   {
+    "place": "Hereth",
+    "ref": "1Sam.22.5",
+    "note": "The prophet Gad sends him back into Judah, to the forest of Hereth.",
+    "lat": 31.6141,
+    "lon": 35.0431,
+    "placeIndex": 594
+   },
+   {
+    "place": "Keilah",
+    "ref": "1Sam.23.5",
+    "note": "David rescues Keilah from the Philistines, then must flee again.",
+    "lat": 31.6137,
+    "lon": 35.0036,
+    "placeIndex": 706
+   },
+   {
+    "place": "Ziph",
+    "ref": "1Sam.23.14",
+    "note": "Hiding in the wilderness of Ziph; Jonathan strengthens his hand in God.",
+    "lat": 31.4748,
+    "lon": 35.1351,
+    "placeIndex": 1299
+   },
+   {
+    "place": "Maon",
+    "ref": "1Sam.23.24",
+    "note": "Saul closes in at Maon, but is called away by a Philistine raid.",
+    "lat": 31.4094,
+    "lon": 35.1338,
+    "placeIndex": 790
+   },
+   {
+    "place": "Engedi",
+    "ref": "1Sam.24.1",
+    "note": "In a cave at En-gedi, David spares Saul's life.",
+    "lat": 31.45,
+    "lon": 35.3833,
+    "placeIndex": 399
+   },
+   {
+    "place": "Carmel",
+    "ref": "1Sam.25.2",
+    "note": "Nabal insults David; Abigail's wisdom turns him from bloodshed.",
+    "lat": 31.4229,
+    "lon": 35.133,
+    "placeIndex": 285
+   },
+   {
+    "place": "Hachilah",
+    "ref": "1Sam.26.1",
+    "note": "David takes Saul's spear and water jar while he sleeps, sparing him again.",
+    "lat": 31.4703,
+    "lon": 35.2228,
+    "placeIndex": 527
+   },
+   {
+    "place": "Gath",
+    "ref": "1Sam.27.2",
+    "note": "David takes refuge with Achish of Gath.",
+    "lat": 31.6997,
+    "lon": 34.8469,
+    "placeIndex": 452
+   },
+   {
+    "place": "Ziklag",
+    "ref": "1Sam.27.6",
+    "note": "Achish gives him Ziklag, his base for sixteen months.",
+    "lat": 31.3912,
+    "lon": 34.6816,
+    "placeIndex": 1293
+   },
+   {
+    "place": "Hebron",
+    "ref": "2Sam.2.1",
+    "note": "After Saul's death, David is anointed king over Judah at Hebron.",
+    "lat": 31.5251,
+    "lon": 35.1022,
+    "placeIndex": 581
+   }
+  ]
+ },
+ {
+  "id": "elijah",
+  "title": "The Ministry of Elijah",
+  "era": "c. 870–850 BC",
+  "color": "#d1495b",
+  "summary": "Elijah confronts Ahab and Baal worship, runs from Jezebel to Horeb, calls Elisha, and is taken up in a whirlwind (1 Kings 17–2 Kings 2).",
+  "stops": [
+   {
+    "place": "Cherith",
+    "ref": "1Kgs.17.3",
+    "note": "After announcing a drought, Elijah hides by the brook Cherith; ravens feed him.",
+    "lat": 32.3947,
+    "lon": 35.5914,
+    "placeIndex": 296
+   },
+   {
+    "place": "Zarephath",
+    "ref": "1Kgs.17.9",
+    "note": "The widow's flour and oil never run out; her son is raised.",
+    "lat": 33.4642,
+    "lon": 35.2951,
+    "placeIndex": 1277
+   },
+   {
+    "place": "Mount Carmel",
+    "ref": "1Kgs.18.19",
+    "note": "Fire from heaven against the prophets of Baal; the drought ends.",
+    "lat": 32.6725,
+    "lon": 35.0233,
+    "placeIndex": 856
+   },
+   {
+    "place": "Jezreel",
+    "ref": "1Kgs.18.45",
+    "note": "Elijah outruns Ahab's chariot to Jezreel.",
+    "lat": 32.5579,
+    "lon": 35.328,
+    "placeIndex": 667
+   },
+   {
+    "place": "Beersheba",
+    "ref": "1Kgs.19.3",
+    "note": "Fleeing Jezebel, he leaves his servant at Beersheba.",
+    "lat": 31.2447,
+    "lon": 34.8408,
+    "placeIndex": 178
+   },
+   {
+    "place": "Mount Horeb",
+    "ref": "1Kgs.19.8",
+    "note": "Forty days to Horeb; the LORD speaks in a low whisper.",
+    "lat": 28.5397,
+    "lon": 33.9733,
+    "placeIndex": 869
+   },
+   {
+    "place": "Abel-meholah",
+    "ref": "1Kgs.19.16",
+    "note": "Elijah calls Elisha, plowing with oxen (1 Kgs 19:19).",
+    "lat": 32.3743,
+    "lon": 35.5609,
+    "placeIndex": 5
+   },
+   {
+    "place": "Jezreel",
+    "ref": "1Kgs.21.1",
+    "note": "Naboth's vineyard: Elijah pronounces judgment on Ahab.",
+    "lat": 32.5579,
+    "lon": 35.328,
+    "placeIndex": 667
+   },
+   {
+    "place": "Gilgal",
+    "ref": "2Kgs.2.1",
+    "note": "Elijah's last journey begins at Gilgal...",
+    "lat": 32.0306,
+    "lon": 35.225,
+    "placeIndex": 502
+   },
+   {
+    "place": "Bethel",
+    "ref": "2Kgs.2.2",
+    "note": "...to Bethel, where Elisha refuses to leave him...",
+    "lat": 31.9228,
+    "lon": 35.2414,
+    "placeIndex": 209
+   },
+   {
+    "place": "Jericho",
+    "ref": "2Kgs.2.4",
+    "note": "...to Jericho...",
+    "lat": 31.8717,
+    "lon": 35.4446,
+    "placeIndex": 659
+   },
+   {
+    "place": "Jordan",
+    "ref": "2Kgs.2.7",
+    "note": "...and across the parted Jordan, where a chariot of fire takes him up.",
+    "lat": 31.7614,
+    "lon": 35.5583,
+    "placeIndex": 676
+   }
+  ]
+ },
+ {
+  "id": "exile",
+  "title": "The Exile to Babylon & the Return",
+  "era": "597–444 BC",
+  "color": "#3d405b",
+  "summary": "Judah is carried into captivity in Babylon, Jerusalem falls, and decades later the exiles return to rebuild the temple and walls.",
+  "stops": [
+   {
+    "place": "Jerusalem",
+    "ref": "2Kgs.24.10",
+    "note": "Nebuchadnezzar besieges Jerusalem; King Jehoiachin surrenders (597 BC).",
+    "lat": 31.7767,
+    "lon": 35.2342,
+    "placeIndex": 662
+   },
+   {
+    "place": "Babylon",
+    "ref": "2Kgs.24.15",
+    "note": "Jehoiachin, the nobles and craftsmen are deported to Babylon.",
+    "via": [
+     [
+      33.51,
+      36.31
+     ],
+     [
+      34.46,
+      36.57
+     ],
+     [
+      35.95,
+      38.3
+     ],
+     [
+      34.45,
+      40.92
+     ],
+     [
+      33.64,
+      42.83
+     ]
+    ],
+    "lat": 32.5433,
+    "lon": 44.4222,
+    "placeIndex": 158
+   },
+   {
+    "place": "Chebar",
+    "ref": "Ezek.1.1",
+    "note": "Among the exiles by the Chebar canal, Ezekiel sees visions of God.",
+    "lat": 32.1269,
+    "lon": 45.2308,
+    "placeIndex": 293
+   },
+   {
+    "place": "Jerusalem",
+    "ref": "2Kgs.25.1",
+    "note": "Zedekiah rebels; Babylon lays siege again.",
+    "via": [
+     [
+      33.64,
+      42.83
+     ],
+     [
+      34.45,
+      40.92
+     ],
+     [
+      35.95,
+      38.3
+     ],
+     [
+      34.46,
+      36.57
+     ],
+     [
+      33.51,
+      36.31
+     ]
+    ],
+    "lat": 31.7767,
+    "lon": 35.2342,
+    "placeIndex": 662
+   },
+   {
+    "place": "Jericho",
+    "ref": "2Kgs.25.5",
+    "note": "Zedekiah flees and is captured in the plains of Jericho.",
+    "lat": 31.8717,
+    "lon": 35.4446,
+    "placeIndex": 659
+   },
+   {
+    "place": "Riblah",
+    "ref": "2Kgs.25.6",
+    "note": "Judged at Riblah: his sons killed and his eyes put out.",
+    "lat": 34.4595,
+    "lon": 36.5726,
+    "placeIndex": 1021
+   },
+   {
+    "place": "Jerusalem",
+    "ref": "2Kgs.25.9",
+    "note": "The temple and city are burned (586 BC).",
+    "lat": 31.7767,
+    "lon": 35.2342,
+    "placeIndex": 662
+   },
+   {
+    "place": "Mizpah",
+    "ref": "Jer.40.6",
+    "note": "Jeremiah stays with Gedaliah, the governor, at Mizpah.",
+    "lat": 31.8851,
+    "lon": 35.2164,
+    "placeIndex": 838
+   },
+   {
+    "place": "Tahpanhes",
+    "ref": "Jer.43.7",
+    "note": "After Gedaliah's murder, the remnant flees to Egypt, taking Jeremiah.",
+    "lat": 30.8606,
+    "lon": 32.1714,
+    "placeIndex": 1156
+   },
+   {
+    "place": "Babylon",
+    "ref": "Dan.5.7",
+    "note": "Daniel reads the writing on the wall; that night Babylon falls to the Persians (539 BC).",
+    "via": [
+     [
+      31.5,
+      34.47
+     ],
+     [
+      33.51,
+      36.31
+     ],
+     [
+      34.46,
+      36.57
+     ],
+     [
+      35.95,
+      38.3
+     ],
+     [
+      34.45,
+      40.92
+     ],
+     [
+      33.64,
+      42.83
+     ]
+    ],
+    "lat": 32.5433,
+    "lon": 44.4222,
+    "placeIndex": 158
+   },
+   {
+    "place": "Jerusalem",
+    "ref": "Ezra.3.8",
+    "note": "Returning exiles under Zerubbabel lay the foundation of the temple.",
+    "via": [
+     [
+      33.64,
+      42.83
+     ],
+     [
+      34.45,
+      40.92
+     ],
+     [
+      35.95,
+      38.3
+     ],
+     [
+      34.46,
+      36.57
+     ],
+     [
+      33.51,
+      36.31
+     ]
+    ],
+    "lat": 31.7767,
+    "lon": 35.2342,
+    "placeIndex": 662
+   },
+   {
+    "place": "Ahava",
+    "ref": "Ezra.8.15",
+    "note": "Ezra gathers a second group at the Ahava canal.",
+    "via": [
+     [
+      33.51,
+      36.31
+     ],
+     [
+      34.46,
+      36.57
+     ],
+     [
+      35.95,
+      38.3
+     ],
+     [
+      34.45,
+      40.92
+     ],
+     [
+      33.64,
+      42.83
+     ]
+    ],
+    "lat": 32.5433,
+    "lon": 44.4222,
+    "placeIndex": 35
+   },
+   {
+    "place": "Jerusalem",
+    "ref": "Ezra.8.32",
+    "note": "Ezra arrives in Jerusalem to teach the Law.",
+    "via": [
+     [
+      33.64,
+      42.83
+     ],
+     [
+      34.45,
+      40.92
+     ],
+     [
+      35.95,
+      38.3
+     ],
+     [
+      34.46,
+      36.57
+     ],
+     [
+      33.51,
+      36.31
+     ]
+    ],
+    "lat": 31.7767,
+    "lon": 35.2342,
+    "placeIndex": 662
+   },
+   {
+    "place": "Susa",
+    "ref": "Neh.1.1",
+    "note": "In the citadel of Susa, Nehemiah hears that Jerusalem's walls lie in ruins.",
+    "via": [
+     [
+      33.51,
+      36.31
+     ],
+     [
+      34.46,
+      36.57
+     ],
+     [
+      35.95,
+      38.3
+     ],
+     [
+      34.45,
+      40.92
+     ],
+     [
+      33.64,
+      42.83
+     ],
+     [
+      32.54,
+      44.42
+     ]
+    ],
+    "lat": 32.1892,
+    "lon": 48.2578,
+    "placeIndex": 1139
+   },
+   {
+    "place": "Jerusalem",
+    "ref": "Neh.2.11",
+    "note": "Nehemiah rebuilds the walls in fifty-two days (Neh 6:15).",
+    "via": [
+     [
+      32.54,
+      44.42
+     ],
+     [
+      33.64,
+      42.83
+     ],
+     [
+      34.45,
+      40.92
+     ],
+     [
+      35.95,
+      38.3
+     ],
+     [
+      34.46,
+      36.57
+     ],
+     [
+      33.51,
+      36.31
+     ]
+    ],
+    "lat": 31.7767,
+    "lon": 35.2342,
+    "placeIndex": 662
    }
   ]
  },
@@ -624,6 +1526,95 @@
     "lat": 31.7717,
     "lon": 35.2559,
     "placeIndex": 194
+   }
+  ]
+ },
+ {
+  "id": "saul",
+  "title": "Saul's Conversion & Early Years",
+  "era": "c. AD 34–46",
+  "color": "#118ab2",
+  "summary": "From persecutor to apostle: Saul meets the risen Christ and spends his early years preparing before his missionary journeys (Acts 9–12; Galatians 1).",
+  "stops": [
+   {
+    "place": "Jerusalem",
+    "ref": "Acts.8.1",
+    "note": "Saul approves of Stephen's death and ravages the church.",
+    "lat": 31.7767,
+    "lon": 35.2342,
+    "placeIndex": 662
+   },
+   {
+    "place": "Damascus",
+    "ref": "Acts.9.3",
+    "note": "On the road to Damascus, a light from heaven: \"Saul, why are you persecuting me?\"",
+    "lat": 33.5111,
+    "lon": 36.3064,
+    "placeIndex": 332
+   },
+   {
+    "place": "Arabia",
+    "ref": "Gal.1.17",
+    "note": "Saul goes away into Arabia...",
+    "lat": 30.07,
+    "lon": 35.35,
+    "placeIndex": 87
+   },
+   {
+    "place": "Damascus",
+    "ref": "Gal.1.17",
+    "note": "...returns to Damascus, and escapes over the wall in a basket (Acts 9:25).",
+    "lat": 33.5111,
+    "lon": 36.3064,
+    "placeIndex": 332
+   },
+   {
+    "place": "Jerusalem",
+    "ref": "Acts.9.26",
+    "note": "Barnabas vouches for him to the apostles; he stays fifteen days with Peter.",
+    "lat": 31.7767,
+    "lon": 35.2342,
+    "placeIndex": 662
+   },
+   {
+    "place": "Caesarea",
+    "ref": "Acts.9.30",
+    "note": "The believers take him down to Caesarea...",
+    "lat": 32.5,
+    "lon": 34.8917,
+    "placeIndex": 273
+   },
+   {
+    "place": "Tarsus",
+    "ref": "Acts.9.30",
+    "note": "...and send him home to Tarsus.",
+    "lat": 36.913,
+    "lon": 34.8921,
+    "placeIndex": 1163
+   },
+   {
+    "place": "Antioch",
+    "ref": "Acts.11.26",
+    "note": "Barnabas brings him to Antioch, where disciples are first called Christians.",
+    "lat": 36.2267,
+    "lon": 36.1717,
+    "placeIndex": 74
+   },
+   {
+    "place": "Jerusalem",
+    "ref": "Acts.11.30",
+    "note": "Paul and Barnabas carry famine relief to Jerusalem.",
+    "lat": 31.7767,
+    "lon": 35.2342,
+    "placeIndex": 662
+   },
+   {
+    "place": "Antioch",
+    "ref": "Acts.13.1",
+    "note": "Back in Antioch, the Spirit sets them apart for the work ahead.",
+    "lat": 36.2267,
+    "lon": 36.1717,
+    "placeIndex": 74
    }
   ]
  },

@@ -228,10 +228,14 @@ export default function App() {
           aria-label="Follow a journey"
         >
           <option value="">Follow a journey…</option>
-          {JOURNEYS.map((j) => (
-            <option key={j.id} value={j.id}>
-              {j.title}
-            </option>
+          {(['OT', 'NT'] as const).map((t) => (
+            <optgroup key={t} label={t === 'OT' ? 'Old Testament' : 'New Testament'}>
+              {JOURNEYS.filter((j) => getBook(parseRef(j.stops[0].ref).book).testament === t).map((j) => (
+                <option key={j.id} value={j.id}>
+                  {j.title}
+                </option>
+              ))}
+            </optgroup>
           ))}
         </select>
         <div className="topbar-actions">
