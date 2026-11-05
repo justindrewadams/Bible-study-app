@@ -1,0 +1,1178 @@
+[
+ {
+  "id": "abraham",
+  "title": "Abraham's Journey of Faith",
+  "era": "c. 2000 BC",
+  "color": "#8b5e34",
+  "summary": "From Ur of the Chaldeans to the land God promised, following Abraham's travels in Genesis.",
+  "stops": [
+   {
+    "place": "Ur",
+    "ref": "Gen.11.31",
+    "note": "Terah takes Abram, Sarai and Lot out of Ur of the Chaldeans.",
+    "lat": 30.9622,
+    "lon": 46.1044,
+    "placeIndex": 1218
+   },
+   {
+    "place": "Haran",
+    "ref": "Gen.11.31",
+    "note": "The family settles in Haran, where Terah dies.",
+    "lat": 36.8644,
+    "lon": 39.0328,
+    "placeIndex": 554
+   },
+   {
+    "place": "Shechem",
+    "ref": "Gen.12.6",
+    "note": "God appears: \"To your offspring I will give this land.\" Abram builds an altar.",
+    "lat": 32.2136,
+    "lon": 35.2819,
+    "placeIndex": 1089
+   },
+   {
+    "place": "Bethel",
+    "ref": "Gen.12.8",
+    "note": "Abram pitches his tent between Bethel and Ai and calls on the LORD.",
+    "lat": 31.9228,
+    "lon": 35.2414,
+    "placeIndex": 209
+   },
+   {
+    "place": "Egypt",
+    "ref": "Gen.12.10",
+    "note": "Famine drives Abram down to Egypt.",
+    "lat": 30.1294,
+    "lon": 31.3075,
+    "placeIndex": 375
+   },
+   {
+    "place": "Bethel",
+    "ref": "Gen.13.3",
+    "note": "Abram returns to the altar at Bethel; he and Lot separate.",
+    "lat": 31.9228,
+    "lon": 35.2414,
+    "placeIndex": 209
+   },
+   {
+    "place": "Hebron",
+    "ref": "Gen.13.18",
+    "note": "Abram settles by the oaks of Mamre at Hebron.",
+    "lat": 31.5251,
+    "lon": 35.1022,
+    "placeIndex": 581
+   },
+   {
+    "place": "Gerar",
+    "ref": "Gen.20.1",
+    "note": "Abraham sojourns in Gerar with King Abimelech.",
+    "lat": 31.3821,
+    "lon": 34.6065,
+    "placeIndex": 480
+   },
+   {
+    "place": "Beersheba",
+    "ref": "Gen.21.31",
+    "note": "Covenant with Abimelech at Beersheba.",
+    "lat": 31.2447,
+    "lon": 34.8408,
+    "placeIndex": 179
+   },
+   {
+    "place": "Moriah",
+    "ref": "Gen.22.2",
+    "note": "God tests Abraham: the offering of Isaac on Mount Moriah.",
+    "lat": 31.7778,
+    "lon": 35.2356,
+    "placeIndex": 849
+   },
+   {
+    "place": "Hebron",
+    "ref": "Gen.23.2",
+    "note": "Sarah dies at Hebron and is buried in the cave of Machpelah.",
+    "lat": 31.5251,
+    "lon": 35.1022,
+    "placeIndex": 581
+   }
+  ]
+ },
+ {
+  "id": "exodus",
+  "title": "The Exodus & Wilderness Wanderings",
+  "era": "c. 1446–1406 BC",
+  "color": "#b5651d",
+  "summary": "Israel leaves Egypt, meets God at Sinai, and wanders until reaching the plains of Moab. Many wilderness sites are uncertain; locations follow OpenBible.info's best identifications.",
+  "stops": [
+   {
+    "place": "Rameses",
+    "ref": "Exod.12.37",
+    "note": "The people of Israel set out from Rameses.",
+    "lat": 30.7994,
+    "lon": 31.8342,
+    "placeIndex": 999
+   },
+   {
+    "place": "Succoth",
+    "ref": "Exod.12.37",
+    "note": "First camp at Succoth.",
+    "lat": 30.5527,
+    "lon": 32.099,
+    "placeIndex": 1135
+   },
+   {
+    "place": "Etham",
+    "ref": "Exod.13.20",
+    "note": "Camp at Etham, on the edge of the wilderness; the pillar of cloud and fire leads them.",
+    "lat": 30.5475,
+    "lon": 31.9636,
+    "placeIndex": 427
+   },
+   {
+    "place": "Pi-hahiroth",
+    "ref": "Exod.14.2",
+    "note": "Camp by the sea at Pi-hahiroth; God parts the sea (Exod 14:21-22).",
+    "lat": 30.8606,
+    "lon": 32.1714,
+    "placeIndex": 965
+   },
+   {
+    "place": "Marah",
+    "ref": "Exod.15.23",
+    "note": "Bitter water made sweet.",
+    "lat": 29.346,
+    "lon": 32.9428,
+    "placeIndex": 791
+   },
+   {
+    "place": "Elim",
+    "ref": "Exod.15.27",
+    "note": "Twelve springs and seventy palm trees.",
+    "lat": 29.2547,
+    "lon": 32.9158,
+    "placeIndex": 381
+   },
+   {
+    "place": "Sin",
+    "ref": "Exod.16.1",
+    "note": "Wilderness of Sin: God sends manna and quail.",
+    "lat": 29.1478,
+    "lon": 33.5367,
+    "placeIndex": 1117
+   },
+   {
+    "place": "Rephidim",
+    "ref": "Exod.17.1",
+    "note": "Water from the rock; victory over Amalek.",
+    "lat": 28.6231,
+    "lon": 33.8803,
+    "placeIndex": 1016
+   },
+   {
+    "place": "Mount Sinai",
+    "ref": "Exod.19.1",
+    "note": "Israel camps before the mountain; the Law is given.",
+    "lat": 28.5397,
+    "lon": 33.9733,
+    "placeIndex": 881
+   },
+   {
+    "place": "Kadesh-barnea",
+    "ref": "Num.13.26",
+    "note": "The twelve spies report back; Israel refuses to enter and is sentenced to 40 years of wandering.",
+    "lat": 30.6483,
+    "lon": 34.4222,
+    "placeIndex": 686
+   },
+   {
+    "place": "Mount Hor",
+    "ref": "Num.20.22",
+    "note": "Aaron dies on Mount Hor.",
+    "lat": 30.8321,
+    "lon": 35.0569,
+    "placeIndex": 867
+   },
+   {
+    "place": "Jericho",
+    "ref": "Num.22.1",
+    "note": "Israel camps in the plains of Moab beyond the Jordan at Jericho.",
+    "lat": 31.8717,
+    "lon": 35.4446,
+    "placeIndex": 659
+   },
+   {
+    "place": "Mount Nebo",
+    "ref": "Deut.34.1",
+    "note": "Moses views the Promised Land from Mount Nebo and dies.",
+    "lat": 31.7667,
+    "lon": 35.75,
+    "placeIndex": 874
+   }
+  ]
+ },
+ {
+  "id": "conquest",
+  "title": "The Conquest of Canaan",
+  "era": "c. 1406–1400 BC",
+  "color": "#9b2226",
+  "summary": "Under Joshua, Israel crosses the Jordan and takes the land in a central, southern and northern campaign.",
+  "stops": [
+   {
+    "place": "Shittim",
+    "ref": "Josh.2.1",
+    "note": "Joshua sends two spies from Shittim to Jericho.",
+    "lat": 31.8402,
+    "lon": 35.6737,
+    "placeIndex": 1107
+   },
+   {
+    "place": "Gilgal",
+    "ref": "Josh.4.19",
+    "note": "Israel crosses the Jordan on dry ground and camps at Gilgal.",
+    "lat": 31.8819,
+    "lon": 35.46,
+    "placeIndex": 501
+   },
+   {
+    "place": "Jericho",
+    "ref": "Josh.6.20",
+    "note": "The walls fall down flat; Jericho is taken.",
+    "lat": 31.8717,
+    "lon": 35.4446,
+    "placeIndex": 659
+   },
+   {
+    "place": "Ai",
+    "ref": "Josh.8.1",
+    "note": "After Achan's sin is dealt with, Ai is taken.",
+    "lat": 31.9169,
+    "lon": 35.2611,
+    "placeIndex": 37
+   },
+   {
+    "place": "Mount Ebal",
+    "ref": "Josh.8.30",
+    "note": "Joshua builds an altar and reads the Law.",
+    "lat": 32.234,
+    "lon": 35.2733,
+    "placeIndex": 857
+   },
+   {
+    "place": "Gibeon",
+    "ref": "Josh.10.10",
+    "note": "Joshua defends Gibeon; the sun stands still.",
+    "lat": 31.8475,
+    "lon": 35.1834,
+    "placeIndex": 495
+   },
+   {
+    "place": "Beth-horon",
+    "ref": "Josh.10.11",
+    "note": "The enemy flees down the pass of Beth-horon under a storm of hailstones.",
+    "lat": 31.895,
+    "lon": 35.0836,
+    "placeIndex": 223
+   },
+   {
+    "place": "Makkedah",
+    "ref": "Josh.10.28",
+    "note": "Southern campaign: Makkedah taken.",
+    "lat": 31.5347,
+    "lon": 34.9666,
+    "placeIndex": 786
+   },
+   {
+    "place": "Libnah",
+    "ref": "Josh.10.29",
+    "note": "Libnah taken.",
+    "lat": 31.6299,
+    "lon": 34.8735,
+    "placeIndex": 746
+   },
+   {
+    "place": "Lachish",
+    "ref": "Josh.10.31",
+    "note": "Lachish taken on the second day.",
+    "lat": 31.5653,
+    "lon": 34.8492,
+    "placeIndex": 732
+   },
+   {
+    "place": "Eglon",
+    "ref": "Josh.10.34",
+    "note": "Eglon taken.",
+    "lat": 31.4918,
+    "lon": 34.9281,
+    "placeIndex": 374
+   },
+   {
+    "place": "Hebron",
+    "ref": "Josh.10.36",
+    "note": "Hebron taken.",
+    "lat": 31.5251,
+    "lon": 35.1022,
+    "placeIndex": 581
+   },
+   {
+    "place": "Debir",
+    "ref": "Josh.10.38",
+    "note": "Debir taken.",
+    "lat": 31.4321,
+    "lon": 35.0149,
+    "placeIndex": 335
+   },
+   {
+    "place": "Gilgal",
+    "ref": "Josh.10.43",
+    "note": "Joshua returns to camp at Gilgal.",
+    "lat": 31.8819,
+    "lon": 35.46,
+    "placeIndex": 501
+   },
+   {
+    "place": "Merom",
+    "ref": "Josh.11.5",
+    "note": "Northern campaign: the kings gather at the waters of Merom and are defeated.",
+    "lat": 33.0768,
+    "lon": 35.4324,
+    "placeIndex": 809
+   },
+   {
+    "place": "Hazor",
+    "ref": "Josh.11.10",
+    "note": "Hazor, head of the northern kingdoms, is burned.",
+    "lat": 33.0183,
+    "lon": 35.5692,
+    "placeIndex": 575
+   },
+   {
+    "place": "Shiloh",
+    "ref": "Josh.18.1",
+    "note": "The tabernacle is set up at Shiloh; the land is divided among the tribes.",
+    "lat": 32.0557,
+    "lon": 35.2895,
+    "placeIndex": 1102
+   }
+  ]
+ },
+ {
+  "id": "jesus",
+  "title": "The Life & Ministry of Jesus",
+  "era": "c. 5 BC – AD 30",
+  "color": "#1d4e89",
+  "summary": "Key places in the life of Jesus, in an approximate harmony of the four Gospels. Exact order of some Galilean events is debated.",
+  "stops": [
+   {
+    "place": "Bethlehem",
+    "ref": "Luke.2.4",
+    "note": "Jesus is born in Bethlehem, the city of David.",
+    "lat": 31.7043,
+    "lon": 35.2076,
+    "placeIndex": 227
+   },
+   {
+    "place": "Egypt",
+    "ref": "Matt.2.14",
+    "note": "Joseph flees with Mary and the child to Egypt.",
+    "lat": 30.1294,
+    "lon": 31.3075,
+    "placeIndex": 375
+   },
+   {
+    "place": "Nazareth",
+    "ref": "Matt.2.23",
+    "note": "The family settles in Nazareth.",
+    "lat": 32.7021,
+    "lon": 35.2977,
+    "placeIndex": 901
+   },
+   {
+    "place": "Jerusalem",
+    "ref": "Luke.2.42",
+    "note": "At twelve, Jesus stays behind in the temple.",
+    "lat": 31.7767,
+    "lon": 35.2342,
+    "placeIndex": 662
+   },
+   {
+    "place": "Bethany",
+    "ref": "John.1.28",
+    "note": "Baptized by John at Bethany beyond the Jordan.",
+    "lat": 31.8371,
+    "lon": 35.5503,
+    "placeIndex": 195
+   },
+   {
+    "place": "Cana",
+    "ref": "John.2.1",
+    "note": "First sign: water turned to wine at a wedding.",
+    "lat": 32.8222,
+    "lon": 35.3027,
+    "placeIndex": 278
+   },
+   {
+    "place": "Capernaum",
+    "ref": "John.2.12",
+    "note": "A short stay in Capernaum.",
+    "lat": 32.8811,
+    "lon": 35.575,
+    "placeIndex": 281
+   },
+   {
+    "place": "Jerusalem",
+    "ref": "John.2.13",
+    "note": "Passover: Jesus cleanses the temple; meets Nicodemus.",
+    "lat": 31.7767,
+    "lon": 35.2342,
+    "placeIndex": 662
+   },
+   {
+    "place": "Sychar",
+    "ref": "John.4.5",
+    "note": "The Samaritan woman at Jacob's well.",
+    "lat": 32.2178,
+    "lon": 35.289,
+    "placeIndex": 1141
+   },
+   {
+    "place": "Cana",
+    "ref": "John.4.46",
+    "note": "Heals the official's son from a distance.",
+    "lat": 32.8222,
+    "lon": 35.3027,
+    "placeIndex": 278
+   },
+   {
+    "place": "Nazareth",
+    "ref": "Luke.4.16",
+    "note": "Reads Isaiah in the synagogue and is rejected.",
+    "lat": 32.7021,
+    "lon": 35.2977,
+    "placeIndex": 901
+   },
+   {
+    "place": "Capernaum",
+    "ref": "Matt.4.13",
+    "note": "Makes Capernaum his home base; calls the fishermen.",
+    "lat": 32.8811,
+    "lon": 35.575,
+    "placeIndex": 281
+   },
+   {
+    "place": "Nain",
+    "ref": "Luke.7.11",
+    "note": "Raises a widow's son.",
+    "lat": 32.6307,
+    "lon": 35.3501,
+    "placeIndex": 898
+   },
+   {
+    "place": "Region of the Gerasenes",
+    "lat": 32.826,
+    "lon": 35.65,
+    "ref": "Mark.5.1",
+    "note": "Across the lake, frees a man from a legion of demons (traditional site at Kursi).",
+    "placeIndex": null
+   },
+   {
+    "place": "Bethsaida",
+    "ref": "Luke.9.10",
+    "note": "Feeds the five thousand near Bethsaida.",
+    "lat": 32.9104,
+    "lon": 35.631,
+    "placeIndex": 240
+   },
+   {
+    "place": "Gennesaret",
+    "ref": "Matt.14.34",
+    "note": "After walking on the water, lands at Gennesaret.",
+    "lat": 32.8606,
+    "lon": 35.5072,
+    "placeIndex": 479
+   },
+   {
+    "place": "Tyre",
+    "ref": "Mark.7.24",
+    "note": "The Syrophoenician woman's faith.",
+    "lat": 33.2708,
+    "lon": 35.1961,
+    "placeIndex": 1208
+   },
+   {
+    "place": "Sidon",
+    "ref": "Mark.7.31",
+    "note": "Returns by way of Sidon...",
+    "lat": 33.561,
+    "lon": 35.3719,
+    "placeIndex": 1114
+   },
+   {
+    "place": "Decapolis",
+    "ref": "Mark.7.31",
+    "note": "...to the Sea of Galilee through the Decapolis.",
+    "lat": 32.7167,
+    "lon": 35.8,
+    "placeIndex": 338
+   },
+   {
+    "place": "Bethsaida",
+    "ref": "Mark.8.22",
+    "note": "Heals a blind man at Bethsaida.",
+    "lat": 32.9104,
+    "lon": 35.631,
+    "placeIndex": 240
+   },
+   {
+    "place": "Caesarea Philippi",
+    "ref": "Matt.16.13",
+    "note": "\"Who do you say that I am?\" Peter's confession.",
+    "lat": 33.2461,
+    "lon": 35.6933,
+    "placeIndex": 274
+   },
+   {
+    "place": "Capernaum",
+    "ref": "Matt.17.24",
+    "note": "The temple tax and the coin in the fish's mouth.",
+    "lat": 32.8811,
+    "lon": 35.575,
+    "placeIndex": 281
+   },
+   {
+    "place": "Jerusalem",
+    "ref": "John.7.10",
+    "note": "Feast of Booths; teaches in the temple.",
+    "lat": 31.7767,
+    "lon": 35.2342,
+    "placeIndex": 662
+   },
+   {
+    "place": "Bethany",
+    "ref": "John.11.1",
+    "note": "Raises Lazarus at Bethany near Jerusalem.",
+    "lat": 31.7717,
+    "lon": 35.2559,
+    "placeIndex": 194
+   },
+   {
+    "place": "Ephraim",
+    "ref": "John.11.54",
+    "note": "Withdraws to Ephraim, near the wilderness.",
+    "lat": 31.9544,
+    "lon": 35.3003,
+    "placeIndex": 411
+   },
+   {
+    "place": "Jericho",
+    "ref": "Luke.19.1",
+    "note": "Zacchaeus; blind Bartimaeus healed.",
+    "lat": 31.8519,
+    "lon": 35.4362,
+    "placeIndex": 660
+   },
+   {
+    "place": "Bethany",
+    "ref": "John.12.1",
+    "note": "Anointed by Mary six days before Passover.",
+    "lat": 31.7717,
+    "lon": 35.2559,
+    "placeIndex": 194
+   },
+   {
+    "place": "Jerusalem",
+    "ref": "Matt.21.10",
+    "note": "Triumphal entry into Jerusalem.",
+    "lat": 31.7767,
+    "lon": 35.2342,
+    "placeIndex": 662
+   },
+   {
+    "place": "Gethsemane",
+    "ref": "Matt.26.36",
+    "note": "Prays in Gethsemane and is arrested.",
+    "lat": 31.7794,
+    "lon": 35.2394,
+    "placeIndex": 485
+   },
+   {
+    "place": "Golgotha",
+    "ref": "John.19.17",
+    "note": "Crucified at Golgotha; buried nearby and raised on the third day.",
+    "lat": 31.7784,
+    "lon": 35.2298,
+    "placeIndex": 513
+   },
+   {
+    "place": "Emmaus",
+    "ref": "Luke.24.13",
+    "note": "The risen Jesus walks with two disciples to Emmaus.",
+    "lat": 31.7929,
+    "lon": 35.1642,
+    "placeIndex": 392
+   },
+   {
+    "place": "Tiberias",
+    "ref": "John.21.1",
+    "note": "Appears by the Sea of Tiberias and restores Peter.",
+    "lat": 32.7736,
+    "lon": 35.5442,
+    "placeIndex": 1185
+   },
+   {
+    "place": "Bethany",
+    "ref": "Luke.24.50",
+    "note": "Ascends to heaven near Bethany, on the Mount of Olives.",
+    "lat": 31.7717,
+    "lon": 35.2559,
+    "placeIndex": 194
+   }
+  ]
+ },
+ {
+  "id": "paul1",
+  "title": "Paul's First Missionary Journey",
+  "era": "c. AD 46–48",
+  "color": "#2a9d8f",
+  "summary": "Paul and Barnabas are sent out from Antioch to Cyprus and southern Galatia (Acts 13–14).",
+  "stops": [
+   {
+    "place": "Antioch",
+    "ref": "Acts.13.1",
+    "note": "The Holy Spirit sets apart Barnabas and Saul.",
+    "lat": 36.2267,
+    "lon": 36.1717,
+    "placeIndex": 74
+   },
+   {
+    "place": "Seleucia",
+    "ref": "Acts.13.4",
+    "note": "They go down to the port of Seleucia.",
+    "lat": 36.124,
+    "lon": 35.922,
+    "placeIndex": 1064
+   },
+   {
+    "place": "Salamis",
+    "ref": "Acts.13.5",
+    "note": "Preach in the synagogues of Salamis on Cyprus.",
+    "lat": 35.1849,
+    "lon": 33.9019,
+    "placeIndex": 1037
+   },
+   {
+    "place": "Paphos",
+    "ref": "Acts.13.6",
+    "note": "Elymas the sorcerer is blinded; the proconsul believes.",
+    "lat": 34.7557,
+    "lon": 32.4042,
+    "placeIndex": 938
+   },
+   {
+    "place": "Perga",
+    "ref": "Acts.13.13",
+    "note": "John Mark leaves them and returns to Jerusalem.",
+    "lat": 36.9604,
+    "lon": 30.8537,
+    "placeIndex": 953
+   },
+   {
+    "place": "Antioch",
+    "ref": "Acts.13.14",
+    "note": "Pisidian Antioch: Paul's synagogue sermon; turns to the Gentiles.",
+    "lat": 38.3061,
+    "lon": 31.1892,
+    "placeIndex": 75
+   },
+   {
+    "place": "Iconium",
+    "ref": "Acts.13.51",
+    "note": "Many believe, but a plot forces them out.",
+    "lat": 37.8722,
+    "lon": 32.4923,
+    "placeIndex": 620
+   },
+   {
+    "place": "Lystra",
+    "ref": "Acts.14.8",
+    "note": "A lame man healed; Paul is stoned and left for dead.",
+    "lat": 37.6017,
+    "lon": 32.3384,
+    "placeIndex": 762
+   },
+   {
+    "place": "Derbe",
+    "ref": "Acts.14.20",
+    "note": "Preach the gospel and make many disciples.",
+    "lat": 37.3486,
+    "lon": 33.3615,
+    "placeIndex": 340
+   },
+   {
+    "place": "Lystra",
+    "ref": "Acts.14.21",
+    "note": "Return, strengthening the disciples...",
+    "lat": 37.6017,
+    "lon": 32.3384,
+    "placeIndex": 762
+   },
+   {
+    "place": "Iconium",
+    "ref": "Acts.14.21",
+    "note": "...appointing elders in every church...",
+    "lat": 37.8722,
+    "lon": 32.4923,
+    "placeIndex": 620
+   },
+   {
+    "place": "Antioch",
+    "ref": "Acts.14.21",
+    "note": "...back through Pisidian Antioch.",
+    "lat": 38.3061,
+    "lon": 31.1892,
+    "placeIndex": 75
+   },
+   {
+    "place": "Perga",
+    "ref": "Acts.14.25",
+    "note": "Speak the word in Perga.",
+    "lat": 36.9604,
+    "lon": 30.8537,
+    "placeIndex": 953
+   },
+   {
+    "place": "Attalia",
+    "ref": "Acts.14.25",
+    "note": "Sail from Attalia.",
+    "lat": 36.8813,
+    "lon": 30.7036,
+    "placeIndex": 131
+   },
+   {
+    "place": "Antioch",
+    "ref": "Acts.14.26",
+    "note": "Report to the church at Syrian Antioch all God had done.",
+    "lat": 36.2267,
+    "lon": 36.1717,
+    "placeIndex": 74
+   }
+  ]
+ },
+ {
+  "id": "paul2",
+  "title": "Paul's Second Missionary Journey",
+  "era": "c. AD 49–52",
+  "color": "#e76f51",
+  "summary": "Paul and Silas revisit the churches, then cross into Europe (Acts 15:36–18:22).",
+  "stops": [
+   {
+    "place": "Antioch",
+    "ref": "Acts.15.35",
+    "note": "Paul and Silas set out from Syrian Antioch.",
+    "lat": 36.2267,
+    "lon": 36.1717,
+    "placeIndex": 74
+   },
+   {
+    "place": "Derbe",
+    "ref": "Acts.16.1",
+    "note": "Revisit Derbe...",
+    "lat": 37.3486,
+    "lon": 33.3615,
+    "placeIndex": 340
+   },
+   {
+    "place": "Lystra",
+    "ref": "Acts.16.1",
+    "note": "...and Lystra, where Timothy joins them.",
+    "lat": 37.6017,
+    "lon": 32.3384,
+    "placeIndex": 762
+   },
+   {
+    "place": "Troas",
+    "ref": "Acts.16.8",
+    "note": "The vision of the man of Macedonia.",
+    "lat": 39.7519,
+    "lon": 26.1586,
+    "placeIndex": 1205
+   },
+   {
+    "place": "Samothrace",
+    "ref": "Acts.16.11",
+    "note": "Sail straight to Samothrace.",
+    "lat": 40.45,
+    "lon": 25.5833,
+    "placeIndex": 1047
+   },
+   {
+    "place": "Neapolis",
+    "ref": "Acts.16.11",
+    "note": "Land at Neapolis.",
+    "lat": 40.935,
+    "lon": 24.415,
+    "placeIndex": 903
+   },
+   {
+    "place": "Philippi",
+    "ref": "Acts.16.12",
+    "note": "Lydia converted; Paul and Silas jailed; the jailer believes.",
+    "lat": 41.0121,
+    "lon": 24.2846,
+    "placeIndex": 959
+   },
+   {
+    "place": "Amphipolis",
+    "ref": "Acts.17.1",
+    "note": "Pass through Amphipolis...",
+    "lat": 40.8202,
+    "lon": 23.8472,
+    "placeIndex": 65
+   },
+   {
+    "place": "Apollonia",
+    "ref": "Acts.17.1",
+    "note": "...and Apollonia.",
+    "lat": 40.6237,
+    "lon": 23.4697,
+    "placeIndex": 82
+   },
+   {
+    "place": "Thessalonica",
+    "ref": "Acts.17.1",
+    "note": "Three Sabbaths in the synagogue; a riot.",
+    "lat": 40.6378,
+    "lon": 22.9458,
+    "placeIndex": 1181
+   },
+   {
+    "place": "Berea",
+    "ref": "Acts.17.10",
+    "note": "The Bereans examine the Scriptures daily.",
+    "lat": 40.5183,
+    "lon": 22.2,
+    "placeIndex": 186
+   },
+   {
+    "place": "Athens",
+    "ref": "Acts.17.15",
+    "note": "Sermon at the Areopagus: \"the unknown god\".",
+    "lat": 37.9719,
+    "lon": 23.7267,
+    "placeIndex": 128
+   },
+   {
+    "place": "Corinth",
+    "ref": "Acts.18.1",
+    "note": "Eighteen months with Aquila and Priscilla.",
+    "lat": 37.9058,
+    "lon": 22.8787,
+    "placeIndex": 316
+   },
+   {
+    "place": "Cenchreae",
+    "ref": "Acts.18.18",
+    "note": "Paul cuts his hair because of a vow.",
+    "lat": 37.8843,
+    "lon": 22.9968,
+    "placeIndex": 289
+   },
+   {
+    "place": "Ephesus",
+    "ref": "Acts.18.19",
+    "note": "Brief visit; reasons in the synagogue.",
+    "lat": 37.9391,
+    "lon": 27.3407,
+    "placeIndex": 409
+   },
+   {
+    "place": "Caesarea",
+    "ref": "Acts.18.22",
+    "note": "Lands at Caesarea...",
+    "lat": 32.5,
+    "lon": 34.8917,
+    "placeIndex": 273
+   },
+   {
+    "place": "Jerusalem",
+    "ref": "Acts.18.22",
+    "note": "...goes up and greets the church...",
+    "lat": 31.7767,
+    "lon": 35.2342,
+    "placeIndex": 662
+   },
+   {
+    "place": "Antioch",
+    "ref": "Acts.18.22",
+    "note": "...and returns to Antioch.",
+    "lat": 36.2267,
+    "lon": 36.1717,
+    "placeIndex": 74
+   }
+  ]
+ },
+ {
+  "id": "paul3",
+  "title": "Paul's Third Missionary Journey",
+  "era": "c. AD 53–57",
+  "color": "#6a4c93",
+  "summary": "A long ministry in Ephesus, a return through Macedonia and Greece, and the voyage to Jerusalem (Acts 18:23–21:17).",
+  "stops": [
+   {
+    "place": "Antioch",
+    "ref": "Acts.18.23",
+    "note": "Departs Antioch, going through Galatia and Phrygia.",
+    "lat": 36.2267,
+    "lon": 36.1717,
+    "placeIndex": 74
+   },
+   {
+    "place": "Galatia",
+    "ref": "Acts.18.23",
+    "note": "Strengthening all the disciples.",
+    "lat": 39.2667,
+    "lon": 32.9833,
+    "placeIndex": 443
+   },
+   {
+    "place": "Ephesus",
+    "ref": "Acts.19.1",
+    "note": "Two to three years; the riot of the silversmiths.",
+    "lat": 37.9391,
+    "lon": 27.3407,
+    "placeIndex": 409
+   },
+   {
+    "place": "Philippi",
+    "ref": "Acts.20.1",
+    "note": "Travels through Macedonia.",
+    "lat": 41.0121,
+    "lon": 24.2846,
+    "placeIndex": 959
+   },
+   {
+    "place": "Corinth",
+    "ref": "Acts.20.2",
+    "note": "Three months in Greece (likely where Romans was written).",
+    "lat": 37.9058,
+    "lon": 22.8787,
+    "placeIndex": 316
+   },
+   {
+    "place": "Philippi",
+    "ref": "Acts.20.6",
+    "note": "Sails from Philippi after Passover.",
+    "lat": 41.0121,
+    "lon": 24.2846,
+    "placeIndex": 959
+   },
+   {
+    "place": "Troas",
+    "ref": "Acts.20.6",
+    "note": "Eutychus falls from the window and is raised.",
+    "lat": 39.7519,
+    "lon": 26.1586,
+    "placeIndex": 1205
+   },
+   {
+    "place": "Assos",
+    "ref": "Acts.20.13",
+    "note": "Paul walks to Assos and rejoins the ship.",
+    "lat": 39.4906,
+    "lon": 26.3367,
+    "placeIndex": 119
+   },
+   {
+    "place": "Mitylene",
+    "ref": "Acts.20.14",
+    "note": "Arrive at Mitylene.",
+    "lat": 39.1105,
+    "lon": 26.547,
+    "placeIndex": 835
+   },
+   {
+    "place": "Chios",
+    "ref": "Acts.20.15",
+    "note": "Opposite Chios.",
+    "lat": 38.3725,
+    "lon": 26.1375,
+    "placeIndex": 304
+   },
+   {
+    "place": "Samos",
+    "ref": "Acts.20.15",
+    "note": "Touch at Samos.",
+    "lat": 37.75,
+    "lon": 26.8333,
+    "placeIndex": 1046
+   },
+   {
+    "place": "Miletus",
+    "ref": "Acts.20.15",
+    "note": "Farewell to the Ephesian elders.",
+    "lat": 37.5311,
+    "lon": 27.2756,
+    "placeIndex": 828
+   },
+   {
+    "place": "Cos",
+    "ref": "Acts.21.1",
+    "note": "Straight course to Cos...",
+    "lat": 36.8153,
+    "lon": 27.1103,
+    "placeIndex": 318
+   },
+   {
+    "place": "Rhodes",
+    "ref": "Acts.21.1",
+    "note": "...then Rhodes...",
+    "lat": 36.4402,
+    "lon": 28.2109,
+    "placeIndex": 1019
+   },
+   {
+    "place": "Patara",
+    "ref": "Acts.21.1",
+    "note": "...and Patara, where they change ships.",
+    "lat": 36.2603,
+    "lon": 29.3142,
+    "placeIndex": 943
+   },
+   {
+    "place": "Tyre",
+    "ref": "Acts.21.3",
+    "note": "Seven days with the disciples at Tyre.",
+    "lat": 33.2708,
+    "lon": 35.1961,
+    "placeIndex": 1208
+   },
+   {
+    "place": "Ptolemais",
+    "ref": "Acts.21.7",
+    "note": "Greet the brothers at Ptolemais.",
+    "lat": 32.9214,
+    "lon": 35.0692,
+    "placeIndex": 974
+   },
+   {
+    "place": "Caesarea",
+    "ref": "Acts.21.8",
+    "note": "Stay with Philip the evangelist; Agabus' prophecy.",
+    "lat": 32.5,
+    "lon": 34.8917,
+    "placeIndex": 273
+   },
+   {
+    "place": "Jerusalem",
+    "ref": "Acts.21.17",
+    "note": "Arrives in Jerusalem, where he will be arrested.",
+    "lat": 31.7767,
+    "lon": 35.2342,
+    "placeIndex": 662
+   }
+  ]
+ },
+ {
+  "id": "rome",
+  "title": "Paul's Voyage to Rome",
+  "era": "c. AD 59–60",
+  "color": "#264653",
+  "summary": "As a prisoner, Paul sails for Rome, survives a shipwreck on Malta, and arrives in the capital (Acts 27–28).",
+  "stops": [
+   {
+    "place": "Caesarea",
+    "ref": "Acts.25.4",
+    "note": "Held prisoner at Caesarea; appeals to Caesar.",
+    "lat": 32.5,
+    "lon": 34.8917,
+    "placeIndex": 273
+   },
+   {
+    "place": "Sidon",
+    "ref": "Acts.27.3",
+    "note": "Julius lets Paul visit friends at Sidon.",
+    "lat": 33.561,
+    "lon": 35.3719,
+    "placeIndex": 1114
+   },
+   {
+    "place": "Myra",
+    "ref": "Acts.27.5",
+    "note": "Transfer to an Alexandrian grain ship at Myra.",
+    "lat": 36.2592,
+    "lon": 29.9853,
+    "placeIndex": 888
+   },
+   {
+    "place": "Cnidus",
+    "ref": "Acts.27.7",
+    "note": "Slow going against the wind off Cnidus.",
+    "lat": 36.6858,
+    "lon": 27.375,
+    "placeIndex": 314
+   },
+   {
+    "place": "Fair Havens",
+    "ref": "Acts.27.8",
+    "note": "Paul warns against sailing on.",
+    "lat": 34.9297,
+    "lon": 24.8003,
+    "placeIndex": 436
+   },
+   {
+    "place": "Malta",
+    "ref": "Acts.28.1",
+    "note": "After fourteen days in the storm, shipwrecked on Malta.",
+    "lat": 35.9335,
+    "lon": 14.4117,
+    "placeIndex": 787
+   },
+   {
+    "place": "Syracuse",
+    "ref": "Acts.28.12",
+    "note": "Three days at Syracuse.",
+    "lat": 37.0639,
+    "lon": 15.2931,
+    "placeIndex": 1143
+   },
+   {
+    "place": "Rhegium",
+    "ref": "Acts.28.13",
+    "note": "Arrive at Rhegium.",
+    "lat": 38.1088,
+    "lon": 15.6441,
+    "placeIndex": 1018
+   },
+   {
+    "place": "Puteoli",
+    "ref": "Acts.28.13",
+    "note": "Land at Puteoli; a week with believers.",
+    "lat": 40.8261,
+    "lon": 14.1206,
+    "placeIndex": 978
+   },
+   {
+    "place": "Forum of Appius",
+    "ref": "Acts.28.15",
+    "note": "Brothers from Rome come to meet him...",
+    "lat": 41.4664,
+    "lon": 12.9975,
+    "placeIndex": 438
+   },
+   {
+    "place": "Three Taverns",
+    "ref": "Acts.28.15",
+    "note": "...and Paul thanks God and takes courage.",
+    "lat": 41.5619,
+    "lon": 12.8739,
+    "placeIndex": 1183
+   },
+   {
+    "place": "Rome",
+    "ref": "Acts.28.16",
+    "note": "Two years under house arrest, proclaiming the kingdom of God.",
+    "lat": 41.8922,
+    "lon": 12.4852,
+    "placeIndex": 1034
+   }
+  ]
+ }
+]

@@ -1,0 +1,37 @@
+{
+  "name": "bible-atlas",
+  "version": "0.1.0",
+  "description": "Read the Bible with an interactive map of the places in every verse, and follow journeys stop by stop.",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "build:data": "node scripts/build-data.mjs",
+    "typecheck": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/justindrewadams/Bible-study-app.git"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/justindrewadams/Bible-study-app/issues"
+  },
+  "homepage": "https://github.com/justindrewadams/Bible-study-app#readme",
+  "dependencies": {
+    "leaflet": "^1.9.4",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-leaflet": "^4.2.1"
+  },
+  "devDependencies": {
+    "@types/leaflet": "^1.9.14",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.3",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.10"
+  },
+  "private": true,
+  "type": "module"
+}
