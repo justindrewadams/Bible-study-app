@@ -20,7 +20,7 @@ import PlaceCard from './components/PlaceCard';
 import { loadPlaces } from './lib/geo';
 import PeriodsPage from './components/PeriodsPage';
 import ListPanel from './components/ListPanel';
-import { LISTS, type StudyList } from './lib/lists';
+import { LISTS, LIST_GROUPS, type StudyList } from './lib/lists';
 import { periodFor } from './data/periods';
 
 interface Location {
@@ -337,7 +337,7 @@ export default function App() {
             aria-label="Study a list"
           >
             <option value="">Study a list…</option>
-            {(['Old Testament', 'New Testament'] as const).map((g) => (
+            {LIST_GROUPS.map((g) => (
               <optgroup key={g} label={g}>
                 {LISTS.filter((l) => l.group === g).map((l) => (
                   <option key={l.id} value={l.id}>

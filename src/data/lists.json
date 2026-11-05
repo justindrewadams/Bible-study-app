@@ -931,6 +931,451 @@
   ]
  },
  {
+  "id": "sons-of-jacob",
+  "title": "The Twelve Sons of Jacob",
+  "group": "Old Testament",
+  "color": "#a0522d",
+  "summary": "The sons of Jacob (Israel), in birth order, who became the twelve tribes (Genesis 29–35; blessed in Genesis 49).",
+  "items": [
+   {
+    "t": "Reuben",
+    "ref": "Gen.29.32",
+    "note": "Firstborn; loses the birthright (Gen 49:4).",
+    "meta": "Mother: Leah"
+   },
+   {
+    "t": "Simeon",
+    "ref": "Gen.29.33",
+    "note": "Held hostage in Egypt (Gen 42:24).",
+    "meta": "Mother: Leah"
+   },
+   {
+    "t": "Levi",
+    "ref": "Gen.29.34",
+    "note": "Father of the priestly tribe; given no territory.",
+    "meta": "Mother: Leah"
+   },
+   {
+    "t": "Judah",
+    "ref": "Gen.29.35",
+    "note": "\"The scepter shall not depart from Judah\" (Gen 49:10): the line of David and Jesus.",
+    "meta": "Mother: Leah"
+   },
+   {
+    "t": "Dan",
+    "ref": "Gen.30.6",
+    "note": "\"Dan shall judge his people\" (Gen 49:16).",
+    "meta": "Mother: Bilhah (Rachel's servant)"
+   },
+   {
+    "t": "Naphtali",
+    "ref": "Gen.30.8",
+    "meta": "Mother: Bilhah"
+   },
+   {
+    "t": "Gad",
+    "ref": "Gen.30.11",
+    "meta": "Mother: Zilpah (Leah's servant)"
+   },
+   {
+    "t": "Asher",
+    "ref": "Gen.30.13",
+    "meta": "Mother: Zilpah"
+   },
+   {
+    "t": "Issachar",
+    "ref": "Gen.30.18",
+    "meta": "Mother: Leah"
+   },
+   {
+    "t": "Zebulun",
+    "ref": "Gen.30.20",
+    "meta": "Mother: Leah"
+   },
+   {
+    "t": "Joseph",
+    "ref": "Gen.30.24",
+    "note": "Saves his family in Egypt; his sons Ephraim and Manasseh each become a tribe.",
+    "meta": "Mother: Rachel"
+   },
+   {
+    "t": "Benjamin",
+    "ref": "Gen.35.18",
+    "note": "Rachel dies giving birth to him; the tribe of Saul and of Paul.",
+    "place": "Bethlehem",
+    "meta": "Mother: Rachel",
+    "lat": 31.7043,
+    "lon": 35.2076,
+    "placeIndex": 227
+   }
+  ]
+ },
+ {
+  "id": "feasts",
+  "title": "The Feasts of Israel",
+  "group": "Old Testament",
+  "color": "#6a994e",
+  "summary": "The LORD's appointed times (Leviticus 23), plus two later feasts. Many point ahead to Christ.",
+  "items": [
+   {
+    "t": "The Sabbath",
+    "ref": "Lev.23.3",
+    "note": "A weekly day of rest; Christ is our rest (Heb 4:9-10)."
+   },
+   {
+    "t": "Passover",
+    "ref": "Lev.23.5",
+    "note": "Remembers the exodus; \"Christ, our Passover lamb, has been sacrificed\" (1 Cor 5:7)."
+   },
+   {
+    "t": "Unleavened Bread",
+    "ref": "Lev.23.6",
+    "note": "Seven days without leaven; put away the old leaven (1 Cor 5:8)."
+   },
+   {
+    "t": "Firstfruits",
+    "ref": "Lev.23.10",
+    "note": "The first sheaf offered; Christ the firstfruits of the resurrection (1 Cor 15:20)."
+   },
+   {
+    "t": "Weeks (Pentecost)",
+    "ref": "Lev.23.16",
+    "note": "Fifty days later; the Spirit poured out (Acts 2:1)."
+   },
+   {
+    "t": "Trumpets",
+    "ref": "Lev.23.24",
+    "note": "A day of trumpet blasts."
+   },
+   {
+    "t": "Day of Atonement",
+    "ref": "Lev.23.27",
+    "note": "The high priest enters the Most Holy Place (Lev 16; Heb 9:11-12)."
+   },
+   {
+    "t": "Booths (Tabernacles)",
+    "ref": "Lev.23.34",
+    "note": "Living in booths to remember the wilderness (John 7:2)."
+   },
+   {
+    "t": "Purim",
+    "ref": "Esth.9.26",
+    "note": "Celebrates deliverance in Esther's day."
+   },
+   {
+    "t": "Dedication (Hanukkah)",
+    "ref": "John.10.22",
+    "note": "Remembers the temple rededicated in the silent years.",
+    "place": "Jerusalem",
+    "lat": 31.7767,
+    "lon": 35.2342,
+    "placeIndex": 662
+   }
+  ]
+ },
+ {
+  "id": "women",
+  "title": "Women of the Bible",
+  "group": "Whole Bible",
+  "color": "#c2185b",
+  "summary": "Women whose faith, courage and choices shaped the story, from Eve to the early church.",
+  "items": [
+   {
+    "t": "Eve",
+    "ref": "Gen.3.20",
+    "note": "The mother of all living; the first promise is given to her offspring (3:15)."
+   },
+   {
+    "t": "Sarah",
+    "ref": "Gen.17.15",
+    "note": "Abraham's wife; bears Isaac in old age. Buried at Hebron.",
+    "place": "Hebron",
+    "lat": 31.5251,
+    "lon": 35.1022,
+    "placeIndex": 581
+   },
+   {
+    "t": "Hagar",
+    "ref": "Gen.16.7",
+    "note": "Sarah's servant; the God who sees her by the spring on the way to Shur.",
+    "place": "Shur",
+    "lat": 30.4933,
+    "lon": 32.9567,
+    "placeIndex": 1111
+   },
+   {
+    "t": "Rebekah",
+    "ref": "Gen.24.15",
+    "note": "Waters Eliezer's camels and becomes Isaac's wife."
+   },
+   {
+    "t": "Leah",
+    "ref": "Gen.29.16",
+    "note": "Jacob's first wife; mother of Levi and Judah.",
+    "place": "Haran",
+    "lat": 36.8644,
+    "lon": 39.0328,
+    "placeIndex": 554
+   },
+   {
+    "t": "Rachel",
+    "ref": "Gen.29.9",
+    "note": "Jacob's beloved; mother of Joseph and Benjamin.",
+    "place": "Haran",
+    "lat": 36.8644,
+    "lon": 39.0328,
+    "placeIndex": 554
+   },
+   {
+    "t": "Tamar",
+    "ref": "Gen.38.6",
+    "note": "Judah's daughter-in-law; in the line of David and of Jesus (Matt 1:3)."
+   },
+   {
+    "t": "Jochebed",
+    "ref": "Exod.6.20",
+    "note": "Moses' mother; hides him in a basket on the Nile (Exod 2:3)."
+   },
+   {
+    "t": "Zipporah",
+    "ref": "Exod.2.21",
+    "note": "Moses' wife, daughter of the priest of Midian.",
+    "place": "Midian",
+    "lat": 28.4947,
+    "lon": 35.0122,
+    "placeIndex": 820
+   },
+   {
+    "t": "Miriam",
+    "ref": "Exod.15.20",
+    "note": "Prophetess; leads the women in song after the Red Sea."
+   },
+   {
+    "t": "Rahab",
+    "ref": "Josh.2.1",
+    "note": "Hides the spies; saved at Jericho; in Jesus' line (Matt 1:5).",
+    "place": "Jericho",
+    "lat": 31.8717,
+    "lon": 35.4446,
+    "placeIndex": 659
+   },
+   {
+    "t": "Deborah",
+    "ref": "Judg.4.4",
+    "note": "Prophetess and judge of Israel.",
+    "place": "Ramah",
+    "lat": 31.8543,
+    "lon": 35.2316,
+    "placeIndex": 987
+   },
+   {
+    "t": "Jael",
+    "ref": "Judg.4.21",
+    "note": "Kills Sisera with a tent peg."
+   },
+   {
+    "t": "Delilah",
+    "ref": "Judg.16.4",
+    "note": "Betrays Samson to the Philistines."
+   },
+   {
+    "t": "Naomi",
+    "ref": "Ruth.1.3",
+    "note": "Widowed in Moab, returns home to Bethlehem.",
+    "place": "Moab",
+    "lat": 31.1806,
+    "lon": 35.7014,
+    "placeIndex": 843
+   },
+   {
+    "t": "Ruth",
+    "ref": "Ruth.1.16",
+    "note": "\"Your people shall be my people\"; great-grandmother of David.",
+    "place": "Bethlehem",
+    "lat": 31.7043,
+    "lon": 35.2076,
+    "placeIndex": 227
+   },
+   {
+    "t": "Hannah",
+    "ref": "1Sam.1.10",
+    "note": "Prays for a son at Shiloh and gives Samuel to the LORD.",
+    "place": "Shiloh",
+    "lat": 32.0557,
+    "lon": 35.2895,
+    "placeIndex": 1102
+   },
+   {
+    "t": "Abigail",
+    "ref": "1Sam.25.3",
+    "note": "Her wisdom keeps David from bloodshed.",
+    "place": "Carmel",
+    "lat": 31.4229,
+    "lon": 35.133,
+    "placeIndex": 285
+   },
+   {
+    "t": "Bathsheba",
+    "ref": "2Sam.11.3",
+    "note": "Wife of Uriah, then David; mother of Solomon.",
+    "place": "Jerusalem",
+    "lat": 31.7767,
+    "lon": 35.2342,
+    "placeIndex": 662
+   },
+   {
+    "t": "The Queen of Sheba",
+    "ref": "1Kgs.10.1",
+    "note": "Comes to test Solomon's wisdom.",
+    "place": "Sheba",
+    "lat": 15.3483,
+    "lon": 44.2064,
+    "placeIndex": 1086
+   },
+   {
+    "t": "Jezebel",
+    "ref": "1Kgs.16.31",
+    "note": "Ahab's queen; promotes Baal and persecutes the prophets.",
+    "place": "Jezreel",
+    "lat": 32.5579,
+    "lon": 35.328,
+    "placeIndex": 667
+   },
+   {
+    "t": "The widow of Zarephath",
+    "ref": "1Kgs.17.9",
+    "note": "Feeds Elijah; her flour and oil never run out.",
+    "place": "Zarephath",
+    "lat": 33.4642,
+    "lon": 35.2951,
+    "placeIndex": 1277
+   },
+   {
+    "t": "The Shunammite woman",
+    "ref": "2Kgs.4.8",
+    "note": "Builds a room for Elisha; her son is raised.",
+    "place": "Shunem",
+    "lat": 32.6056,
+    "lon": 35.3343,
+    "placeIndex": 1110
+   },
+   {
+    "t": "Huldah",
+    "ref": "2Kgs.22.14",
+    "note": "Prophetess consulted when the Book of the Law is found.",
+    "place": "Jerusalem",
+    "lat": 31.7767,
+    "lon": 35.2342,
+    "placeIndex": 662
+   },
+   {
+    "t": "Esther",
+    "ref": "Esth.2.17",
+    "note": "Becomes queen and risks her life to save her people.",
+    "place": "Susa",
+    "lat": 32.1892,
+    "lon": 48.2578,
+    "placeIndex": 1139
+   },
+   {
+    "t": "Elizabeth",
+    "ref": "Luke.1.5",
+    "note": "Mother of John the Baptist."
+   },
+   {
+    "t": "Mary, mother of Jesus",
+    "ref": "Luke.1.38",
+    "note": "\"Let it be to me according to your word.\"",
+    "place": "Nazareth",
+    "lat": 32.7021,
+    "lon": 35.2977,
+    "placeIndex": 901
+   },
+   {
+    "t": "Anna",
+    "ref": "Luke.2.36",
+    "note": "Aged prophetess who speaks of the child Jesus in the temple.",
+    "place": "Jerusalem",
+    "lat": 31.7767,
+    "lon": 35.2342,
+    "placeIndex": 662
+   },
+   {
+    "t": "The Samaritan woman",
+    "ref": "John.4.7",
+    "note": "Meets Jesus at Jacob's well and tells her town.",
+    "place": "Sychar",
+    "lat": 32.2178,
+    "lon": 35.289,
+    "placeIndex": 1141
+   },
+   {
+    "t": "Mary Magdalene",
+    "ref": "Luke.8.2",
+    "note": "Freed from seven demons; first to see the risen Lord (John 20:16)."
+   },
+   {
+    "t": "Martha",
+    "ref": "Luke.10.38",
+    "note": "Serves Jesus; confesses him as the Christ (John 11:27).",
+    "place": "Bethany",
+    "lat": 31.7717,
+    "lon": 35.2559,
+    "placeIndex": 194
+   },
+   {
+    "t": "Mary of Bethany",
+    "ref": "Luke.10.39",
+    "note": "Sits at Jesus' feet; anoints him (John 12:3).",
+    "place": "Bethany",
+    "lat": 31.7717,
+    "lon": 35.2559,
+    "placeIndex": 194
+   },
+   {
+    "t": "Tabitha (Dorcas)",
+    "ref": "Acts.9.36",
+    "note": "Full of good works; raised by Peter.",
+    "place": "Joppa",
+    "lat": 32.0545,
+    "lon": 34.753,
+    "placeIndex": 675
+   },
+   {
+    "t": "Lydia",
+    "ref": "Acts.16.14",
+    "note": "Seller of purple; the Lord opens her heart.",
+    "place": "Philippi",
+    "lat": 41.0121,
+    "lon": 24.2846,
+    "placeIndex": 959
+   },
+   {
+    "t": "Priscilla",
+    "ref": "Acts.18.2",
+    "note": "With Aquila, a tentmaker and teacher of Apollos (18:26).",
+    "place": "Corinth",
+    "lat": 37.9058,
+    "lon": 22.8787,
+    "placeIndex": 316
+   },
+   {
+    "t": "Phoebe",
+    "ref": "Rom.16.1",
+    "note": "Servant of the church at Cenchreae who carries Romans.",
+    "place": "Cenchreae",
+    "lat": 37.8843,
+    "lon": 22.9968,
+    "placeIndex": 289
+   },
+   {
+    "t": "Lois and Eunice",
+    "ref": "2Tim.1.5",
+    "note": "Timothy's grandmother and mother, of sincere faith."
+   }
+  ]
+ },
+ {
   "id": "apostles",
   "title": "The Twelve Apostles",
   "group": "New Testament",
@@ -1755,6 +2200,462 @@
     "lat": 37.9391,
     "lon": 27.3407,
     "placeIndex": 409
+   }
+  ]
+ },
+ {
+  "id": "hall-of-faith",
+  "title": "The Hall of Faith (Hebrews 11)",
+  "group": "New Testament",
+  "color": "#264653",
+  "summary": "\"Without faith it is impossible to please him\": the faithful the writer of Hebrews remembers.",
+  "items": [
+   {
+    "t": "Abel",
+    "ref": "Heb.11.4",
+    "note": "Offered a better sacrifice than Cain (Gen 4:4)."
+   },
+   {
+    "t": "Enoch",
+    "ref": "Heb.11.5",
+    "note": "Taken up so that he did not see death (Gen 5:24)."
+   },
+   {
+    "t": "Noah",
+    "ref": "Heb.11.7",
+    "note": "Built the ark in reverent fear (Gen 6:22)."
+   },
+   {
+    "t": "Abraham",
+    "ref": "Heb.11.8",
+    "note": "Went out, not knowing where he was going (Gen 12:4)."
+   },
+   {
+    "t": "Sarah",
+    "ref": "Heb.11.11",
+    "note": "Received power to conceive (Gen 21:2)."
+   },
+   {
+    "t": "Isaac",
+    "ref": "Heb.11.20",
+    "note": "Blessed Jacob and Esau (Gen 27)."
+   },
+   {
+    "t": "Jacob",
+    "ref": "Heb.11.21",
+    "note": "Blessed Joseph's sons (Gen 48)."
+   },
+   {
+    "t": "Joseph",
+    "ref": "Heb.11.22",
+    "note": "Gave directions about his bones (Gen 50:25)."
+   },
+   {
+    "t": "Moses' parents",
+    "ref": "Heb.11.23",
+    "note": "Hid him three months, not afraid of the king's edict (Exod 2:2)."
+   },
+   {
+    "t": "Moses",
+    "ref": "Heb.11.24",
+    "note": "Chose mistreatment with God's people over Egypt's treasures."
+   },
+   {
+    "t": "Israel at the Red Sea",
+    "ref": "Heb.11.29",
+    "note": "Crossed as on dry land (Exod 14:22)."
+   },
+   {
+    "t": "The walls of Jericho",
+    "ref": "Heb.11.30",
+    "note": "Fell after being encircled seven days (Josh 6:20)."
+   },
+   {
+    "t": "Rahab",
+    "ref": "Heb.11.31",
+    "note": "Welcomed the spies in peace (Josh 2)."
+   },
+   {
+    "t": "Gideon, Barak, Samson, Jephthah, David, Samuel and the prophets",
+    "ref": "Heb.11.32",
+    "note": "\"Time would fail me to tell…\""
+   }
+  ]
+ },
+ {
+  "id": "seven-churches",
+  "title": "The Seven Churches of Revelation",
+  "group": "New Testament",
+  "color": "#118ab2",
+  "summary": "Jesus' letters to seven churches in the province of Asia (Revelation 2–3), in the order a messenger would travel.",
+  "items": [
+   {
+    "t": "Ephesus",
+    "ref": "Rev.2.1",
+    "note": "Hard-working and sound, but has abandoned its first love.",
+    "place": "Ephesus",
+    "meta": "Praised & warned",
+    "lat": 37.9391,
+    "lon": 27.3407,
+    "placeIndex": 409
+   },
+   {
+    "t": "Smyrna",
+    "ref": "Rev.2.8",
+    "note": "\"Be faithful unto death, and I will give you the crown of life.\"",
+    "place": "Smyrna",
+    "meta": "Praised only",
+    "lat": 38.4189,
+    "lon": 27.1378,
+    "placeIndex": 1121
+   },
+   {
+    "t": "Pergamum",
+    "ref": "Rev.2.12",
+    "note": "Where Satan's throne is; tolerates the teaching of Balaam.",
+    "place": "Pergamum",
+    "meta": "Praised & warned",
+    "lat": 39.1322,
+    "lon": 27.1842,
+    "placeIndex": 954
+   },
+   {
+    "t": "Thyatira",
+    "ref": "Rev.2.18",
+    "note": "Growing in love and service, but tolerates \"Jezebel.\"",
+    "place": "Thyatira",
+    "meta": "Praised & warned",
+    "lat": 38.9202,
+    "lon": 27.8365,
+    "placeIndex": 1184
+   },
+   {
+    "t": "Sardis",
+    "ref": "Rev.3.1",
+    "note": "\"You have the reputation of being alive, but you are dead.\"",
+    "place": "Sardis",
+    "meta": "Warned",
+    "lat": 38.4883,
+    "lon": 28.0403,
+    "placeIndex": 1051
+   },
+   {
+    "t": "Philadelphia",
+    "ref": "Rev.3.7",
+    "note": "Little power but faithful: \"I have set before you an open door.\"",
+    "place": "Philadelphia",
+    "meta": "Praised only",
+    "lat": 38.35,
+    "lon": 28.5167,
+    "placeIndex": 958
+   },
+   {
+    "t": "Laodicea",
+    "ref": "Rev.3.14",
+    "note": "Lukewarm: \"I stand at the door and knock.\"",
+    "place": "Laodicea",
+    "meta": "Warned",
+    "lat": 37.8358,
+    "lon": 29.1075,
+    "placeIndex": 736
+   }
+  ]
+ },
+ {
+  "id": "pauls-letters",
+  "title": "Paul's Letters",
+  "group": "New Testament",
+  "color": "#e76f51",
+  "summary": "Paul's thirteen letters in the order they were likely written, and where he wrote them. Dates are approximate; some are debated.",
+  "items": [
+   {
+    "t": "Galatians",
+    "ref": "Gal.1.1",
+    "note": "Saved by grace through faith, not by the works of the Law.",
+    "meta": "c. AD 49 · from Antioch (debated)"
+   },
+   {
+    "t": "1 Thessalonians",
+    "ref": "1Thess.1.1",
+    "note": "Encouragement for a young church; the Lord's return.",
+    "place": "Corinth",
+    "meta": "c. AD 51 · from Corinth",
+    "lat": 37.9058,
+    "lon": 22.8787,
+    "placeIndex": 316
+   },
+   {
+    "t": "2 Thessalonians",
+    "ref": "2Thess.1.1",
+    "note": "The day of the Lord has not yet come; keep working.",
+    "place": "Corinth",
+    "meta": "c. AD 51 · from Corinth",
+    "lat": 37.9058,
+    "lon": 22.8787,
+    "placeIndex": 316
+   },
+   {
+    "t": "1 Corinthians",
+    "ref": "1Cor.1.1",
+    "note": "Division, morality, worship, love (ch. 13) and the resurrection (ch. 15).",
+    "place": "Ephesus",
+    "meta": "c. AD 55 · from Ephesus (16:8)",
+    "lat": 37.9391,
+    "lon": 27.3407,
+    "placeIndex": 409
+   },
+   {
+    "t": "2 Corinthians",
+    "ref": "2Cor.1.1",
+    "note": "Paul defends his ministry; strength in weakness.",
+    "place": "Macedonia",
+    "meta": "c. AD 56 · from Macedonia",
+    "lat": 41.6,
+    "lon": 22.54,
+    "placeIndex": 766
+   },
+   {
+    "t": "Romans",
+    "ref": "Rom.1.1",
+    "note": "The gospel, the power of God for salvation.",
+    "place": "Corinth",
+    "meta": "c. AD 57 · from Corinth",
+    "lat": 37.9058,
+    "lon": 22.8787,
+    "placeIndex": 316
+   },
+   {
+    "t": "Ephesians",
+    "ref": "Eph.1.1",
+    "note": "The church as Christ's body; the armor of God.",
+    "place": "Rome",
+    "meta": "c. AD 60–62 · prison, Rome",
+    "lat": 41.8922,
+    "lon": 12.4852,
+    "placeIndex": 1034
+   },
+   {
+    "t": "Colossians",
+    "ref": "Col.1.1",
+    "note": "The supremacy of Christ.",
+    "place": "Rome",
+    "meta": "c. AD 60–62 · prison, Rome",
+    "lat": 41.8922,
+    "lon": 12.4852,
+    "placeIndex": 1034
+   },
+   {
+    "t": "Philemon",
+    "ref": "Phlm.1.1",
+    "note": "Receive Onesimus back as a brother.",
+    "place": "Rome",
+    "meta": "c. AD 60–62 · prison, Rome",
+    "lat": 41.8922,
+    "lon": 12.4852,
+    "placeIndex": 1034
+   },
+   {
+    "t": "Philippians",
+    "ref": "Phil.1.1",
+    "note": "Joy in Christ: \"To live is Christ, and to die is gain.\"",
+    "place": "Rome",
+    "meta": "c. AD 62 · prison, Rome",
+    "lat": 41.8922,
+    "lon": 12.4852,
+    "placeIndex": 1034
+   },
+   {
+    "t": "1 Timothy",
+    "ref": "1Tim.1.1",
+    "note": "Order and leadership in the church.",
+    "place": "Macedonia",
+    "meta": "c. AD 62–64 · from Macedonia (1:3)",
+    "lat": 41.6,
+    "lon": 22.54,
+    "placeIndex": 766
+   },
+   {
+    "t": "Titus",
+    "ref": "Titus.1.1",
+    "note": "Appoint elders; teach sound doctrine.",
+    "meta": "c. AD 63"
+   },
+   {
+    "t": "2 Timothy",
+    "ref": "2Tim.1.1",
+    "note": "His last letter: \"I have fought the good fight.\"",
+    "place": "Rome",
+    "meta": "c. AD 67 · prison, Rome",
+    "lat": 41.8922,
+    "lon": 12.4852,
+    "placeIndex": 1034
+   }
+  ]
+ },
+ {
+  "id": "fruit",
+  "title": "The Fruit of the Spirit",
+  "group": "New Testament",
+  "color": "#8fbf3f",
+  "summary": "The fruit the Spirit produces in a Christian's life (Galatians 5:22-23).",
+  "items": [
+   {
+    "t": "Love",
+    "ref": "Gal.5.22",
+    "note": "\"Love is patient and kind\" (1 Cor 13:4)."
+   },
+   {
+    "t": "Joy",
+    "ref": "Gal.5.22",
+    "note": "\"Rejoice in the Lord always\" (Phil 4:4)."
+   },
+   {
+    "t": "Peace",
+    "ref": "Gal.5.22",
+    "note": "The peace of God that surpasses understanding (Phil 4:7)."
+   },
+   {
+    "t": "Patience",
+    "ref": "Gal.5.22",
+    "note": "Bearing with one another in love (Eph 4:2)."
+   },
+   {
+    "t": "Kindness",
+    "ref": "Gal.5.22",
+    "note": "\"Be kind to one another\" (Eph 4:32)."
+   },
+   {
+    "t": "Goodness",
+    "ref": "Gal.5.22",
+    "note": "\"Let us not grow weary of doing good\" (Gal 6:9)."
+   },
+   {
+    "t": "Faithfulness",
+    "ref": "Gal.5.22",
+    "note": "\"Be faithful unto death\" (Rev 2:10)."
+   },
+   {
+    "t": "Gentleness",
+    "ref": "Gal.5.23",
+    "note": "Restore others in a spirit of gentleness (Gal 6:1)."
+   },
+   {
+    "t": "Self-control",
+    "ref": "Gal.5.23",
+    "note": "\"Against such things there is no law.\""
+   }
+  ]
+ },
+ {
+  "id": "armor",
+  "title": "The Armor of God",
+  "group": "New Testament",
+  "color": "#5c677d",
+  "summary": "\"Put on the whole armor of God, that you may be able to stand\" (Ephesians 6:10-18).",
+  "items": [
+   {
+    "t": "Belt of truth",
+    "ref": "Eph.6.14"
+   },
+   {
+    "t": "Breastplate of righteousness",
+    "ref": "Eph.6.14"
+   },
+   {
+    "t": "Shoes of the gospel of peace",
+    "ref": "Eph.6.15",
+    "note": "Readiness to go with the good news."
+   },
+   {
+    "t": "Shield of faith",
+    "ref": "Eph.6.16",
+    "note": "Extinguishes the flaming darts of the evil one."
+   },
+   {
+    "t": "Helmet of salvation",
+    "ref": "Eph.6.17"
+   },
+   {
+    "t": "Sword of the Spirit",
+    "ref": "Eph.6.17",
+    "note": "The word of God (Heb 4:12)."
+   },
+   {
+    "t": "Prayer",
+    "ref": "Eph.6.18",
+    "note": "\"Praying at all times in the Spirit.\""
+   }
+  ]
+ },
+ {
+  "id": "signs-john",
+  "title": "The Seven Signs in John",
+  "group": "New Testament",
+  "color": "#2a9d8f",
+  "summary": "The miracles John records \"so that you may believe that Jesus is the Christ, the Son of God\" (John 20:31).",
+  "items": [
+   {
+    "t": "1. Water into wine",
+    "ref": "John.2.9",
+    "note": "\"This, the first of his signs\" (2:11).",
+    "place": "Cana",
+    "lat": 32.8222,
+    "lon": 35.3027,
+    "placeIndex": 278
+   },
+   {
+    "t": "2. The official's son healed",
+    "ref": "John.4.50",
+    "note": "Healed by a word, from twenty miles away.",
+    "place": "Cana",
+    "lat": 32.8222,
+    "lon": 35.3027,
+    "placeIndex": 278
+   },
+   {
+    "t": "3. The lame man at Bethesda",
+    "ref": "John.5.8",
+    "note": "Lame for 38 years.",
+    "place": "Bethesda",
+    "lat": 31.7814,
+    "lon": 35.2358,
+    "placeIndex": 214
+   },
+   {
+    "t": "4. Feeding the five thousand",
+    "ref": "John.6.11",
+    "note": "Leads to \"I am the bread of life.\"",
+    "place": "Tiberias",
+    "lat": 32.7736,
+    "lon": 35.5442,
+    "placeIndex": 1185
+   },
+   {
+    "t": "5. Walking on the water",
+    "ref": "John.6.19",
+    "note": "\"It is I; do not be afraid.\"",
+    "place": "Sea of Galilee",
+    "lat": 32.8189,
+    "lon": 35.59,
+    "placeIndex": 1055
+   },
+   {
+    "t": "6. The man born blind",
+    "ref": "John.9.7",
+    "note": "\"I am the light of the world.\"",
+    "place": "Siloam",
+    "lat": 31.7706,
+    "lon": 35.235,
+    "placeIndex": 1116
+   },
+   {
+    "t": "7. Lazarus raised",
+    "ref": "John.11.44",
+    "note": "\"I am the resurrection and the life.\"",
+    "place": "Bethany",
+    "lat": 31.7717,
+    "lon": 35.2559,
+    "placeIndex": 194
    }
   ]
  }

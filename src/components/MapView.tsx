@@ -1,9 +1,8 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
 import L from 'leaflet';
 import {
   MapContainer,
   TileLayer,
-  CircleMarker,
   Marker,
   Polyline,
   Tooltip,
@@ -104,12 +103,12 @@ function arrowIcon(angle: number, color: string) {
     className: 'arrow-icon',
     iconSize: [18, 18],
     iconAnchor: [9, 9],
-    html: `<svg width="18" height="18" viewBox="0 0 18 18" style="transform:rotate(${-angle}deg)"><path d="M3 3 L16 9 L3 15 L6 9 Z" fill="${color}" stroke="white" stroke-width="1.2" stroke-linejoin="round"/></svg>`,
+    html: `<svg width="18" height="18" viewBox="0 0 18 18" style="transform:rotate(${-angle}deg)"><path d="M3 3 L16 9 L3 15 L6 9 Z" fill="${color}" stroke="#111" stroke-width="1.6" stroke-linejoin="round"/></svg>`,
   });
 }
 
 function stopIcon(n: number, color: string, state: 'past' | 'current' | 'future') {
-  const size = state === 'current' ? 30 : 22;
+  const size = state === 'current' ? 30 : 24;
   return L.divIcon({
     className: `stop-icon stop-${state}`,
     iconSize: [size, size],
@@ -132,8 +131,16 @@ const focusIcon = (inferred: boolean) =>
     iconSize: [28, 40],
     iconAnchor: [14, 38],
     popupAnchor: [0, -34],
-    html: `<svg width="28" height="40" viewBox="0 0 28 40"><path d="M14 1C7 1 1.5 6.5 1.5 13.5 1.5 23 14 39 14 39S26.5 23 26.5 13.5C26.5 6.5 21 1 14 1Z"/><circle cx="14" cy="13.5" r="5" fill="white"/></svg>`,
+    html: `<svg width="28" height="40" viewBox="0 0 28 40"><path d="M14 1.5C7.2 1.5 2 6.7 2 13.5 2 22.5 14 38.5 14 38.5S26 22.5 26 13.5C26 6.7 20.8 1.5 14 1.5Z"/><rect x="9.5" y="9" width="9" height="9" fill="#fff" stroke="#111" stroke-width="2"/></svg>`,
   });
+
+/** Small outlined square for every place named in the chapter. */
+const placeDotIcon = L.divIcon({
+  className: 'place-dot',
+  iconSize: [12, 12],
+  iconAnchor: [6, 6],
+  html: '<div></div>',
+});
 
 /** Moves the camera when the verse focus or the journey stop changes. */
 function CameraController({ focus, journey, stopIndex }: Pick<Props, 'focus' | 'journey' | 'stopIndex'>) {
@@ -204,6 +211,12 @@ function Traveler({ journey, stopIndex }: { journey: Journey; stopIndex: number 
           ];
     prev.current = { id: journey.id, index: stopIndex };
     if (!m) return;
+    // only visible while moving, so it never hides the current stop's number
+    if (path[0][0] === path[path.length - 1][0] && path[0][1] === path[path.length - 1][1]) {
+      m.setOpacity(0);
+      return;
+    }
+    m.setOpacity(1);
     m.setLatLng(path[0]);
     const start = performance.now();
     const dur = path.length > 2 ? 1800 : 1100;
@@ -213,6 +226,7 @@ function Traveler({ journey, stopIndex }: { journey: Journey; stopIndex: number 
       const e = k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
       m.setLatLng(pointAlong(path, e).point);
       if (k < 1) raf = requestAnimationFrame(tick);
+      else m.setOpacity(0);
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
@@ -240,17 +254,27 @@ function JourneyLayer({ journey, stopIndex, onStopClick }: { journey: Journey; s
         if (leg.same) return null;
         const done = leg.i <= stopIndex;
         return (
-          <Polyline
-            key={`l${leg.i}`}
-            positions={leg.positions}
-            pathOptions={{
-              color: journey.color,
-              weight: done ? 4 : 2.5,
-              opacity: done ? 0.95 : 0.45,
-              dashArray: done ? undefined : '6 8',
-              className: leg.i === stopIndex ? 'leg-current' : undefined,
-            }}
-          />
+          <Fragment key={`l${leg.i}`}>
+            {/* dark outline under travelled legs; always mounted so it stays beneath the colored line */}
+            <Polyline
+              positions={leg.positions}
+              interactive={false}
+              pathOptions={{ color: '#111', weight: 8, opacity: done ? 1 : 0, lineCap: 'square', lineJoin: 'miter' }}
+            />
+            <Polyline
+              positions={leg.positions}
+              interactive={false}
+              pathOptions={{
+                color: journey.color,
+                weight: done ? 4.5 : 3,
+                opacity: done ? 1 : 0.75,
+                dashArray: done ? undefined : '2 9',
+                lineCap: done ? 'square' : 'round',
+                lineJoin: 'miter',
+                className: leg.i === stopIndex ? 'leg-current' : undefined,
+              }}
+            />
+          </Fragment>
         );
       })}
       {legs.map((leg) =>
@@ -324,17 +348,17 @@ export default function MapView({
         chapterPlaces
           .filter((p) => !focusIds.has(p.index))
           .map((p) => (
-            <CircleMarker
+            <Marker
               key={p.index}
-              center={[p.lat, p.lon]}
-              radius={5}
-              pathOptions={{ color: '#5b3a1a', weight: 1.5, fillColor: '#f4e4c1', fillOpacity: 0.9 }}
+              position={[p.lat, p.lon]}
+              icon={placeDotIcon}
+              title={`About ${p.name}`}
               eventHandlers={{ click: () => onPlaceInfo(p) }}
             >
-              <Tooltip direction="top" offset={[0, -4]}>
+              <Tooltip direction="top" offset={[0, -6]} className="place-tip">
                 {p.name}
               </Tooltip>
-            </CircleMarker>
+            </Marker>
           ))}
 
       {journey && <JourneyLayer journey={journey} stopIndex={stopIndex} onStopClick={onStopClick} />}

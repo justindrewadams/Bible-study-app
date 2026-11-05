@@ -2918,3 +2918,147 @@ body {
     border-width: 1.5px;
   }
 }
+
+/* =====================================================================
+   Map markers: flat, outlined style to match the interface
+   ===================================================================== */
+
+.map {
+  background: #eef2f4;
+}
+
+/* base map: lighter and flatter instead of sepia "parchment" */
+.tiles-parchment {
+  filter: saturate(0.55) brightness(1.07) contrast(0.95);
+}
+
+/* places named in the chapter */
+.place-dot div {
+  width: 12px;
+  height: 12px;
+  background: #fff;
+  border: 2px solid #111;
+  box-sizing: border-box;
+  transition: transform 0.1s;
+}
+
+.place-dot:hover div {
+  background: var(--sun);
+  transform: scale(1.25);
+}
+
+.leaflet-tooltip.place-tip,
+.leaflet-tooltip {
+  background: #fff;
+  color: #111;
+  border: 2px solid #111;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 2px 7px;
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 0.8rem;
+}
+
+.leaflet-tooltip-top::before {
+  border-top-color: #111;
+}
+
+/* the selected verse's pin */
+.focus-pin svg path {
+  fill: var(--flame);
+  stroke: #111;
+  stroke-width: 2.5;
+  filter: none;
+}
+
+.focus-pin.inferred svg path {
+  fill: #fff;
+  stroke-dasharray: 4 3;
+}
+
+/* journey stops: numbered squares */
+.stop-icon div {
+  border-radius: 0;
+  border: 2px solid #111;
+  background: #fff;
+  color: #111;
+  font-family: var(--sans);
+  font-weight: 800;
+  font-size: 11px;
+  box-shadow: none;
+}
+
+.stop-past div {
+  background: var(--c);
+  color: #fff;
+}
+
+.stop-future div {
+  opacity: 1;
+  border-style: dashed;
+  color: #444;
+}
+
+.stop-current div {
+  background: var(--c);
+  color: #fff;
+  font-size: 13px;
+  border-width: 2.5px;
+  box-shadow: 4px 4px 0 #111;
+}
+
+/* the moving marker */
+.traveler-icon div {
+  width: 16px;
+  height: 16px;
+  border-radius: 0;
+  background: var(--sun);
+  border: 2.5px solid #111;
+  transform: rotate(45deg);
+  animation: none;
+}
+
+.arrow-icon svg {
+  filter: none;
+}
+
+/* ancient region names */
+.region-label span {
+  font-family: var(--sans);
+  font-style: normal;
+  font-weight: 800;
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  color: rgba(17, 17, 17, 0.5);
+  text-shadow:
+    0 0 2px #fff,
+    0 0 4px #fff,
+    0 0 6px rgba(255, 255, 255, 0.9);
+}
+
+@media (max-width: 860px) {
+  .region-label span {
+    font-size: 10px;
+    letter-spacing: 0.14em;
+  }
+
+  .stop-icon div {
+    font-size: 10px;
+  }
+
+  .stop-current div {
+    box-shadow: 3px 3px 0 #111;
+  }
+}
+
+.jp-num,
+.jp-li-num {
+  border-radius: 0;
+  border: 2px solid var(--ink);
+}
+
+.jp-num {
+  background: var(--c);
+  color: #fff;
+}

@@ -17,7 +17,7 @@ export interface ListItem {
 export interface StudyList {
   id: string;
   title: string;
-  group: 'Old Testament' | 'New Testament';
+  group: 'Old Testament' | 'Whole Bible' | 'New Testament';
   color: string;
   summary: string;
   note?: string;
@@ -25,6 +25,8 @@ export interface StudyList {
 }
 
 export const LISTS = raw as StudyList[];
+
+export const LIST_GROUPS = ['Old Testament', 'Whole Bible', 'New Testament'] as const;
 
 /** Lists + item indexes whose reference is this verse. */
 export function listsAtVerse(book: string, chapter: number, verse: number) {

@@ -37,7 +37,7 @@ const ch = (book: string, from: number, to: number): PassageRange => ({ book, fr
 const RAW: Omit<Period, 'n'>[] = [
   {
     id: 'beginnings',
-    lists: ['creation'],
+    lists: ['creation', 'women'],
     name: 'Beginnings',
     dates: 'Creation – c. 2100 BC',
     color: '#6b8e23',
@@ -57,6 +57,7 @@ const RAW: Omit<Period, 'n'>[] = [
   },
   {
     id: 'patriarchs',
+    lists: ['sons-of-jacob', 'women'],
     name: 'Patriarchs',
     dates: 'c. 2100 – 1876 BC',
     color: '#a0522d',
@@ -96,7 +97,7 @@ const RAW: Omit<Period, 'n'>[] = [
   },
   {
     id: 'wilderness',
-    lists: ['commandments'],
+    lists: ['commandments', 'feasts'],
     name: 'Wilderness Wandering',
     dates: '1446 – 1406 BC',
     color: '#c2873b',
@@ -307,7 +308,7 @@ const RAW: Omit<Period, 'n'>[] = [
   },
   {
     id: 'life-of-christ',
-    lists: ['apostles', 'miracles', 'parables', 'i-am', 'beatitudes', 'cross'],
+    lists: ['apostles', 'miracles', 'signs-john', 'parables', 'i-am', 'beatitudes', 'cross', 'women'],
     name: 'Life of Christ',
     dates: 'c. 5 BC – AD 30',
     color: '#1d4e89',
@@ -328,7 +329,7 @@ const RAW: Omit<Period, 'n'>[] = [
   },
   {
     id: 'early-church',
-    lists: ['conversions', 'apostles'],
+    lists: ['conversions', 'apostles', 'pauls-letters', 'seven-churches', 'hall-of-faith', 'fruit', 'armor'],
     name: 'Early Church',
     dates: 'AD 30 – c. 96',
     color: '#e76f51',
