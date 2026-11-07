@@ -8,7 +8,7 @@
   --hair: #e2e2e2; /* quiet dividers */
   --accent: #111111;
   --accent-soft: #55b4e8;
-  --select: #fff0b3;
+  --select: #fbe4a8; /* sun, 45% */
   --place: #1f5fbf;
   --sky: #55b4e8;
   --blush: #e9c2b8;
@@ -34,7 +34,7 @@
     --hair: #333333;
     --accent: #f2f2f2;
     --accent-soft: #1f5f86;
-    --select: #4a3f12;
+    --select: #5b4b23; /* sun, 30% on dark paper */
     --place: #8fc3ff;
     --sky: #2b7fb0;
     --blush: #6e4a42;
@@ -3741,4 +3741,35 @@ body {
   .hymns-modal h2 {
     font-size: 1.1rem;
   }
+}
+
+/* =====================================================================
+   Verse and name highlighting in the flat style: square corners, the
+   site's sun yellow, and solid underlines (replaces the older rounded,
+   pale-cream highlight and dotted place underline)
+   ===================================================================== */
+
+.verse {
+  border-radius: 0;
+}
+
+.verse:hover {
+  background: color-mix(in srgb, var(--sun) 14%, transparent);
+}
+
+.verse.selected {
+  background: var(--select);
+  box-shadow: inset 4px 0 0 var(--ink);
+}
+
+.place-name {
+  border-bottom: 0;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--place) 55%, transparent);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
+}
+
+.place-name:hover {
+  text-decoration-color: var(--place);
 }
