@@ -34,11 +34,34 @@ export const DEFAULT_MAP_SETTINGS: MapSettings = {
 
 const ESRI = 'https://server.arcgisonline.com/ArcGIS/rest/services';
 
-const BASE_LAYERS: Record<BaseLayerId, { label: string; url: string; maxNativeZoom: number; attribution: string; className?: string }> = {
+/**
+ * Esri answers requests past the detail it has for a region with a "Map data not yet
+ * available" picture, so each base map only asks for zoom levels it covers here
+ * (`maxNativeZoom`; Leaflet enlarges the last good level a little further). From
+ * `handoff` onward a light, label-free street map takes over for close-up detail.
+ */
+interface BaseLayer {
+  label: string;
+  url: string;
+  maxNativeZoom: number;
+  attribution: string;
+  className?: string;
+  handoff?: number;
+}
+
+/** Close-up detail without modern place names (CARTO, from OpenStreetMap data). */
+const DETAIL_LAYER = {
+  url: 'https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png',
+  attribution:
+    '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+};
+
+const BASE_LAYERS: Record<BaseLayerId, BaseLayer> = {
   terrain: {
     label: 'Ancient terrain (no modern labels)',
     url: `${ESRI}/World_Terrain_Base/MapServer/tile/{z}/{y}/{x}`,
-    maxNativeZoom: 13,
+    maxNativeZoom: 9,
+    handoff: 11,
     attribution: 'Tiles &copy; Esri &mdash; Source: USGS, Esri, TANA, DeLorme, NPS',
     className: 'tiles-parchment',
   },
@@ -46,18 +69,20 @@ const BASE_LAYERS: Record<BaseLayerId, { label: string; url: string; maxNativeZo
     label: 'Physical relief',
     url: `${ESRI}/World_Physical_Map/MapServer/tile/{z}/{y}/{x}`,
     maxNativeZoom: 8,
+    handoff: 10,
     attribution: 'Tiles &copy; Esri &mdash; Source: US National Park Service',
   },
   satellite: {
     label: 'Satellite',
     url: `${ESRI}/World_Imagery/MapServer/tile/{z}/{y}/{x}`,
-    maxNativeZoom: 18,
+    maxNativeZoom: 16,
     attribution: 'Tiles &copy; Esri &mdash; Source: Esri, Maxar, Earthstar Geographics',
   },
   roman: {
     label: 'Roman Empire (roads & ancient names)',
     url: 'https://dh.gu.se/tiles/imperium/{z}/{x}/{y}.png',
     maxNativeZoom: 11,
+    handoff: 13,
     attribution:
       '<a href="https://imperium.ahlfeldt.se/">Digital Atlas of the Roman Empire</a> (CC BY 4.0, Johan &Aring;hlfeldt)',
   },
@@ -68,7 +93,7 @@ export const BASE_LAYER_OPTIONS = Object.entries(BASE_LAYERS).map(([id, b]) => (
 const MODERN_LAYERS: Record<Exclude<ModernOverlay, 'off'>, { url: string; maxNativeZoom: number; attribution: string }> = {
   labels: {
     url: `${ESRI}/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}`,
-    maxNativeZoom: 13,
+    maxNativeZoom: 12,
     attribution: 'Modern labels &copy; Esri',
   },
   full: {
@@ -511,10 +536,19 @@ export default function MapView({
         key={settings.base}
         url={base.url}
         maxNativeZoom={base.maxNativeZoom}
-        maxZoom={16}
+        maxZoom={base.handoff ? base.handoff - 1 : 16}
         attribution={base.attribution}
         className={base.className}
       />
+      {base.handoff && (
+        <TileLayer
+          key={`${settings.base}-detail`}
+          url={DETAIL_LAYER.url}
+          minZoom={base.handoff}
+          maxZoom={16}
+          attribution={DETAIL_LAYER.attribution}
+        />
+      )}
       {modern && (
         <TileLayer
           key={settings.modern}
