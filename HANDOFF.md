@@ -85,7 +85,7 @@ Generated files are committed. Raw downloads are cached in `scripts/.cache/` (gi
   - `via`: route waypoints
   - `meta`, `tag`: extra details and markers on list items
   - `words`: when several list items share one verse (fruit of the Spirit, armor, apostles), the word(s) to
-    mark in yellow inside it, first match wins; include other translations' wording (KJV "longsuffering")
+    bold inside it, first match wins; include other translations' wording (KJV "longsuffering")
 
   The build fails loudly if a place can't be resolved.
 - OSIS book codes (`Gen`, `1Kgs`, `Ps`, `Song`, …) are used everywhere.

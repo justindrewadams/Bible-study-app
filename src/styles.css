@@ -3774,14 +3774,12 @@ body {
   text-decoration-color: var(--place);
 }
 
-/* the current list item's word inside a shared verse (e.g. "joy" in Galatians 5:22) */
+/* the current list item's word inside a shared verse (e.g. "joy" in Galatians 5:22): bold, no highlight */
 .list-word,
 mark.list-word {
-  background: var(--sun);
-  color: #111;
-  padding: 0 2px;
-  box-decoration-break: clone;
-  -webkit-box-decoration-break: clone;
+  background: none;
+  color: inherit;
+  font-weight: 600;
 }
 
 /* a place carried over from an earlier verse ("last mentioned"): a small dot and its name, no box */
