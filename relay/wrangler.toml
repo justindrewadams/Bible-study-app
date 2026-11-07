@@ -1,0 +1,8 @@
+# Only needed if you deploy with Cloudflare's command-line tool (npx wrangler deploy).
+# Using the Cloudflare dashboard instead? See README.md in this folder; this file is not needed.
+name = "bible-atlas-esv"
+main = "esv-relay.js"
+compatibility_date = "2024-09-23"
+
+# The ESV key is a secret, never written here. Add it with:
+#   npx wrangler secret put ESV_API_KEY

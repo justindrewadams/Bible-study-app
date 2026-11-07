@@ -82,7 +82,7 @@ The app is free, with no ads and no donations, so it qualifies for each provider
 - It keeps no more than 500 ESV verses on the device, and only in memory (`src/lib/bible.ts`, `ESV_TERMS`).
 - The API allows up to 5,000 requests a day, 1,000 an hour and 60 a minute. Passages already seen are reused from memory.
 
-**ESV key.** Each reader adds their own free key: create an account and a non-commercial API application at [api.esv.org](https://api.esv.org/), then paste the token in the app under **Settings**. The key stays in that browser only. A key is deliberately *not* built into the published site, because anyone could read it there. To share one key without exposing it, it would have to sit behind a small server-side proxy. Without a key, the app shows the WEB and explains why.
+**ESV key.** The app reads the ESV through a small relay (a free Cloudflare Worker in [`relay/`](relay/README.md)) that holds the ESV API key as a Cloudflare secret. The key is never in this repository or the published site. The relay itself enforces Crossway's limits and doesn't cache ESV text. Setup takes about 10 minutes; see [relay/README.md](relay/README.md). Once it's running, put its address in `src/config.ts`. Readers can also add a personal key under **Settings** as a backup. If neither is available, the app shows the WEB and explains why.
 
 **Everything else** is credited in the app under **Settings → Sources & licenses**.
 - Public domain: the public-domain Bibles, Easton's Bible Dictionary and Natural Earth.

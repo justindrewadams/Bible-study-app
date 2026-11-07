@@ -1,5 +1,6 @@
 import { bookNumber, getBook } from '../data/books';
 import verseCounts from '../data/verseCounts.json';
+import { ESV_RELAY_URL } from '../config';
 
 export interface Verse {
   verse: number;
@@ -184,7 +185,31 @@ async function fetchBolls(t: Translation, osis: string, chapter: number): Promis
 
 export class EsvKeyMissing extends Error {}
 
+/** True when the app can read the ESV for everyone, through the relay. */
+export const ESV_RELAY_ENABLED = ESV_RELAY_URL.trim() !== '';
+
+function toVerses(passages: string[]): Verse[] {
+  const parts = passages.join(' ').split(/\[(\d+)\]/);
+  const verses: Verse[] = [];
+  for (let i = 1; i < parts.length; i += 2) {
+    verses.push({ verse: Number(parts[i]), text: clean(parts[i + 1] ?? '') });
+  }
+  return verses;
+}
+
+/** Through the relay, which holds the app's key (relay/esv-relay.js). */
+async function fetchEsvViaRelay(osis: string, chapter: number, from: number, to: number): Promise<Verse[]> {
+  const params = new URLSearchParams({ book: osis, chapter: String(chapter), from: String(from), to: String(to) });
+  const res = await fetch(`${ESV_RELAY_URL.replace(/\/$/, '')}/passage?${params}`);
+  const data = (await res.json().catch(() => ({}))) as { passages?: string[]; error?: string };
+  if (res.status === 429) throw new Error('The ESV service is busy (daily or hourly limit reached). Please try again later.');
+  if (!res.ok) throw new EsvKeyMissing(data.error ?? `The ESV relay returned ${res.status}.`);
+  return toVerses(data.passages ?? []);
+}
+
 async function fetchEsv(osis: string, chapter: number, from: number, to: number, apiKey: string): Promise<Verse[]> {
+  // a reader's own key goes straight to Crossway; otherwise use the app's relay
+  if (!apiKey && ESV_RELAY_ENABLED) return fetchEsvViaRelay(osis, chapter, from, to);
   if (!apiKey) throw new EsvKeyMissing('No ESV API key is set up yet.');
   const book = getBook(osis);
   const params = new URLSearchParams({
@@ -204,13 +229,7 @@ async function fetchEsv(osis: string, chapter: number, from: number, to: number,
   if (res.status === 429) throw new Error('The ESV service is busy (daily or hourly limit reached). Please try again later.');
   if (!res.ok) throw new Error(`ESV API returned ${res.status}`);
   const data = (await res.json()) as { passages: string[] };
-  const text = (data.passages ?? []).join(' ');
-  const parts = text.split(/\[(\d+)\]/);
-  const verses: Verse[] = [];
-  for (let i = 1; i < parts.length; i += 2) {
-    verses.push({ verse: Number(parts[i]), text: clean(parts[i + 1] ?? '') });
-  }
-  return verses;
+  return toVerses(data.passages ?? []);
 }
 
 /** One screen of text: the whole chapter, or for the ESV, the part allowed on one page. */

@@ -7,6 +7,7 @@ import {
   ESV_COPYRIGHT,
   ESV_TRANSLATION,
   EsvKeyMissing,
+  ESV_RELAY_ENABLED,
   FALLBACK_TRANSLATION,
   fetchPassage,
   findTranslation,
@@ -574,10 +575,12 @@ export default function App() {
               <>
                 {fallbackReason && (
                   <div className="text-notice">
-                    <strong>Showing the World English Bible.</strong> The ESV comes from Crossway's official ESV
-                    service and needs a free key ({fallbackReason}){' '}
+                    <strong>Showing the World English Bible.</strong>{' '}
+                    {ESV_RELAY_ENABLED
+                      ? `The ESV service isn't available right now (${fallbackReason}) `
+                      : `The ESV comes from Crossway's official ESV service and needs a free key (${fallbackReason}) `}
                     <button className="link" onClick={() => setSettingsOpen(true)}>
-                      Add your ESV key
+                      {ESV_RELAY_ENABLED ? 'ESV settings' : 'Add your ESV key'}
                     </button>
                   </div>
                 )}
@@ -751,7 +754,7 @@ export default function App() {
           <div className="modal" onClick={(e) => e.stopPropagation()} role="dialog" aria-label="Settings">
             <h2>Settings</h2>
             <label className="field">
-              <span>ESV API key</span>
+              <span>{ESV_RELAY_ENABLED ? 'Your own ESV API key (optional)' : 'ESV API key'}</span>
               <input
                 type="password"
                 value={esvKey}
@@ -759,6 +762,8 @@ export default function App() {
                 onChange={(e) => setEsvKey(e.target.value.trim())}
               />
               <small className="muted">
+                {ESV_RELAY_ENABLED &&
+                  'The ESV is already set up for everyone; a key of your own is only a backup if the shared service is busy. '}
                 To read the ESV, create a free key at{' '}
                 <a href="https://api.esv.org/" target="_blank" rel="noreferrer">
                   api.esv.org
