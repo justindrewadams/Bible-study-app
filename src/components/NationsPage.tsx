@@ -127,11 +127,13 @@ export default function NationsPage({ focusId, onOpenPerson, onShowOnMap, onRead
           {FAMILIES.map((f) => (
             <div key={f} className="ni-group" style={{ '--c': FAMILY_INFO[f].color } as React.CSSProperties}>
               <span className="ni-label">{FAMILY_INFO[f].label}</span>
-              {NATIONS.filter((n) => n.family === f).map((n) => (
-                <button key={n.id} className={`ni-item${shown.includes(n) ? '' : ' dimmed'}`} onClick={() => jump(n.id)}>
-                  {n.name}
-                </button>
-              ))}
+              <div className="ni-items">
+                {NATIONS.filter((n) => n.family === f).map((n) => (
+                  <button key={n.id} className={`ni-item${shown.includes(n) ? '' : ' dimmed'}`} onClick={() => jump(n.id)}>
+                    {n.name}
+                  </button>
+                ))}
+              </div>
             </div>
           ))}
         </nav>
