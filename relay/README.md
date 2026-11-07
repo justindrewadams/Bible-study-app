@@ -21,10 +21,10 @@ without each person needing a key. It holds the ESV API key as a Cloudflare **se
 
 **2. Create the relay on Cloudflare** (free plan: 100,000 requests a day)
 1. Go to <https://dash.cloudflare.com/> and sign up or log in.
-2. Open **Workers & Pages** (it may be under *Compute*), then click **Create** → **Create Worker**
-   (or *Start with Hello World*).
-3. Name it `bible-atlas-esv` and click **Deploy**.
-4. Click **Edit code**. Delete everything in the editor, then paste the entire contents of
+2. Open **Workers & Pages** (it may be under *Compute*) and click **Create application**.
+   If there are *Workers* and *Pages* tabs, stay on **Workers**.
+3. Choose **Start with Hello World!** (not *Import a repository*). Name it `bible-atlas-esv` and click **Deploy**.
+4. Click **Edit code** (sometimes a `</>` icon). Delete everything in the editor, then paste the entire contents of
    [`esv-relay.js`](./esv-relay.js) (open it on GitHub and use the copy button). Click **Deploy**.
 
 **3. Add the key as a secret**
