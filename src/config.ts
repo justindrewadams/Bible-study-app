@@ -8,4 +8,4 @@
  * "https://bible-atlas-esv.yourname.workers.dev". Leave empty until the relay is set up;
  * until then readers can add their own key in Settings, or see the WEB.
  */
-export const ESV_RELAY_URL = '';
+export const ESV_RELAY_URL = 'https://bible-atlas-esv.justindrewadams.workers.dev';
