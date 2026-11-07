@@ -13,7 +13,7 @@ import {
 import { loadChapterGeo, placesForVerse, type ChapterGeo, type Place } from './lib/geo';
 import { JOURNEYS, parseRef, type Journey } from './lib/journeys';
 import { usePersistentState } from './lib/usePersistentState';
-import MapView, { DEFAULT_MAP_SETTINGS, type MapFocus, type MapSettings } from './components/MapView';
+import MapView, { DEFAULT_MAP_SETTINGS, MapErrorBoundary, type MapFocus, type MapSettings } from './components/MapView';
 import MapControls from './components/MapControls';
 import Reader from './components/Reader';
 import JourneyPanel from './components/JourneyPanel';
@@ -406,12 +406,16 @@ export default function App() {
           <button
             className="btn"
             onClick={() => {
-              setMapVisible(!mapVisible);
               setMenuOpen(false);
+              // on the People or Periods page, this takes you back to reading with the map showing
+              if (pageOpen) {
+                closePeriods();
+                setMapVisible(true);
+              } else setMapVisible(!mapVisible);
             }}
-            aria-pressed={mapVisible}
+            aria-pressed={mapVisible && !pageOpen}
           >
-            {mapVisible ? 'Hide map' : 'Show map'}
+            {mapVisible && !pageOpen ? 'Hide map' : 'Show map'}
           </button>
           <button
             className="icon-btn"
@@ -564,6 +568,7 @@ export default function App() {
 
         {mapVisible && (
           <section className="map-pane">
+            <MapErrorBoundary>
             <MapView
               settings={mapSettings}
               chapterPlaces={geo?.all ?? []}
@@ -574,6 +579,7 @@ export default function App() {
               onPlaceInfo={setCardPlace}
               onStopClick={(i) => journey && (setPlaying(false), goToStop(journey, i))}
             />
+            </MapErrorBoundary>
             <MapControls settings={mapSettings} onChange={setMapSettings} />
             {journey && (
               <JourneyPanel

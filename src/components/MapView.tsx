@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
+import { Component, Fragment, useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import L from 'leaflet';
 import {
   MapContainer,
@@ -143,13 +143,52 @@ function CameraController({
 }: Pick<Props, 'focus' | 'journey' | 'stopIndex' | 'chapterPlaces'>) {
   const map = useMap();
 
+  // Camera moves need a map with a real size. While the map is hidden (another page is
+  // open, or it is still being laid out) a move is held back and run once it has a size;
+  // flying a zero-sized map produces NaN coordinates and throws.
+  const pending = useRef<(() => void) | null>(null);
+  const move = useCallback(
+    (fn: () => void) => {
+      const size = map.getSize();
+      if (!size.x || !size.y) {
+        pending.current = fn;
+        return;
+      }
+      try {
+        fn();
+      } catch (e) {
+        console.warn('Map move skipped:', e);
+      }
+    },
+    [map],
+  );
+  useEffect(() => {
+    const ro = new ResizeObserver(() => {
+      map.invalidateSize();
+      const size = map.getSize();
+      if (size.x && size.y && pending.current) {
+        const fn = pending.current;
+        pending.current = null;
+        try {
+          fn();
+        } catch (e) {
+          console.warn('Map move skipped:', e);
+        }
+      }
+    });
+    ro.observe(map.getContainer());
+    return () => ro.disconnect();
+  }, [map]);
+
   // a new chapter: frame its places (unless a journey or a selected verse is steering)
   const chapterKey = chapterPlaces.map((p) => p.index).join(',');
   useEffect(() => {
     if (journey || focus || !chapterPlaces.length) return;
     const b = L.latLngBounds(chapterPlaces.map((p) => [p.lat, p.lon]));
-    if (chapterPlaces.length === 1) map.flyTo(b.getCenter(), 8, { duration: 0.8 });
-    else map.flyToBounds(b, { padding: [50, 50], maxZoom: 10, duration: 0.8 });
+    move(() => {
+      if (chapterPlaces.length === 1) map.flyTo(b.getCenter(), 8, { duration: 0.8 });
+      else map.flyToBounds(b, { padding: [50, 50], maxZoom: 10, duration: 0.8 });
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chapterKey]);
   const lastJourney = useRef<string | null>(null);
@@ -161,22 +200,28 @@ function CameraController({
     }
     if (lastJourney.current !== journey.id) {
       lastJourney.current = journey.id;
-      map.flyToBounds(L.latLngBounds(journey.stops.map((s) => [s.lat, s.lon])), { padding: [40, 40], duration: 1 });
+      move(() =>
+        map.flyToBounds(L.latLngBounds(journey.stops.map((s) => [s.lat, s.lon])), { padding: [40, 40], duration: 1 }),
+      );
       return;
     }
     const cur = journey.stops[stopIndex];
     const pts: L.LatLngExpression[] = stopIndex > 0 ? legPath(journey, stopIndex) : [[cur.lat, cur.lon]];
     const b = L.latLngBounds(pts);
-    const zoom = Math.min(map.getBoundsZoom(b.pad(0.6)), 9);
-    map.flyTo(b.getCenter(), Math.max(zoom, 5), { duration: 1.1 });
-  }, [journey, stopIndex, map]);
+    move(() => {
+      const zoom = Math.min(map.getBoundsZoom(b.pad(0.6)), 9);
+      map.flyTo(b.getCenter(), Math.max(zoom, 5), { duration: 1.1 });
+    });
+  }, [journey, stopIndex, map, move]);
 
   useEffect(() => {
     if (!focus?.places.length) return;
     const b = L.latLngBounds(focus.places.map((p) => [p.lat, p.lon]));
-    if (focus.places.length === 1) map.flyTo(b.getCenter(), Math.max(map.getZoom(), 8), { duration: 0.9 });
-    else map.flyToBounds(b, { padding: [60, 60], maxZoom: 10, duration: 0.9 });
-  }, [focus, map]);
+    move(() => {
+      if (focus.places.length === 1) map.flyTo(b.getCenter(), Math.max(map.getZoom(), 8), { duration: 0.9 });
+      else map.flyToBounds(b, { padding: [60, 60], maxZoom: 10, duration: 0.9 });
+    });
+  }, [focus, map, move]);
 
   return null;
 }
@@ -538,4 +583,26 @@ function FocusMarker({
       </Tooltip>
     </Marker>
   );
+}
+
+/** Keeps a map failure from taking down the whole app; offers a retry instead. */
+export class MapErrorBoundary extends Component<{ children: ReactNode }, { failed: boolean }> {
+  state = { failed: false };
+  static getDerivedStateFromError() {
+    return { failed: true };
+  }
+  componentDidCatch(error: unknown) {
+    console.warn('Map error:', error);
+  }
+  render() {
+    if (!this.state.failed) return this.props.children;
+    return (
+      <div className="map map-failed">
+        <p>The map hit a problem.</p>
+        <button className="btn" onClick={() => this.setState({ failed: false })}>
+          Reload map
+        </button>
+      </div>
+    );
+  }
 }

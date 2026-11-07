@@ -3536,3 +3536,12 @@ body {
   padding: 4px 2px;
   margin: -4px -2px;
 }
+
+.map-failed {
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 10px;
+  text-align: center;
+  font-weight: 600;
+}
