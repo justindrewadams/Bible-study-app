@@ -95,9 +95,6 @@ export default function HymnsPanel({ book, bookName, chapter, onClose }: Props) 
                 </ul>
               </section>
             )}
-            <p className="hymns-note small muted">
-              Songs often sung in a cappella Churches of Christ. Titles and writers only; words are not shown.
-            </p>
           </>
         )}
       </div>

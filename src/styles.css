@@ -3715,10 +3715,6 @@ body {
   line-height: 1.35;
 }
 
-.hymns-note {
-  margin: 12px 0 0;
-}
-
 @media (max-width: 860px) {
   .chapter-head {
     margin: 0 0 6px;
