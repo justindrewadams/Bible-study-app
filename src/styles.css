@@ -1086,7 +1086,7 @@ a {
   }
 }
 
-/* ---------- 13 periods ---------- */
+/* ---------- periods of Bible history ---------- */
 
 .layout[hidden] {
   display: none;
@@ -1827,7 +1827,7 @@ body {
   margin: 22px 0 6px;
   padding: 0;
   gap: 0;
-  grid-template-columns: repeat(14, minmax(0, 1fr));
+  grid-template-columns: repeat(17, minmax(0, 1fr));
   border: var(--border);
   background: var(--paper);
 }
@@ -3544,4 +3544,13 @@ body {
   gap: 10px;
   text-align: center;
   font-weight: 600;
+}
+
+/* 17 narrow timeline columns: break between words (or hyphenate), never mid-word */
+.tl-name {
+  overflow-wrap: normal;
+  word-break: normal;
+  hyphens: auto;
+  font-size: 0.62rem;
+  padding: 0 2px;
 }

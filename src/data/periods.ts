@@ -1,10 +1,10 @@
 import { BOOKS, getBook } from './books';
 
 /**
- * The periods of Bible history: Bob and Sandra Waldron's 13-period outline, plus
- * the 400 "silent years" between the Testaments as a period of its own. Chapter boundaries for books that span
- * periods (and the placement of the prophets and poetry) follow common
- * conservative datings; a few placements (Job, Joel, Obadiah) are debated.
+ * The 17 periods of Bible history, as arranged by Bob and Sandra Waldron
+ * ("The Three Cycle Approach"). Chapter boundaries for books that span periods,
+ * and the placement of the prophets and poetry, follow common conservative
+ * datings; a few placements (Job, Joel, Obadiah) are debated.
  */
 
 export interface PassageRange {
@@ -36,23 +36,58 @@ const ch = (book: string, from: number, to: number): PassageRange => ({ book, fr
 
 const RAW: Omit<Period, 'n'>[] = [
   {
-    id: 'beginnings',
+    id: 'before-flood',
     lists: ['creation', 'women'],
-    name: 'Beginnings',
-    dates: 'Creation – c. 2100 BC',
+    name: 'Before the Flood',
+    dates: 'Creation – the Flood',
     color: '#6b8e23',
     summary:
-      'God creates the heavens and the earth and makes man in His image. Sin enters through Adam and Eve, and God promises a Seed who will crush the serpent. Wickedness grows until the Flood; God saves Noah and makes a covenant with him. Afterward mankind rebels again at Babel and is scattered into nations.',
-    people: ['Adam & Eve', 'Cain & Abel', 'Seth', 'Enoch', 'Noah', 'Shem, Ham & Japheth'],
+      'God creates the heavens and the earth in six days and makes man in His image. Adam and Eve sin in the garden, and God promises a Seed who will crush the serpent. Cain murders Abel; Seth\'s line calls on the name of the LORD, and Enoch walks with God. Mankind multiplies, and so does wickedness.',
+    people: ['Adam & Eve', 'Cain & Abel', 'Seth', 'Enoch', 'Methuselah', 'Lamech'],
     events: [
       { t: 'Creation', ref: 'Gen.1.1' },
+      { t: 'Man made in the image of God', ref: 'Gen.1.27' },
       { t: 'The fall and the first promise', ref: 'Gen.3.15' },
       { t: 'Cain and Abel', ref: 'Gen.4.8' },
-      { t: 'The Flood', ref: 'Gen.7.11' },
-      { t: "God's covenant with Noah", ref: 'Gen.9.11' },
-      { t: 'The tower of Babel', ref: 'Gen.11.4' },
+      { t: 'Enoch walked with God', ref: 'Gen.5.24' },
     ],
-    passages: [ch('Gen', 1, 11)],
+    passages: [ch('Gen', 1, 5)],
+    journeys: [],
+  },
+  {
+    id: 'flood',
+    name: 'The Flood',
+    dates: 'The days of Noah',
+    color: '#2f6fd6',
+    summary:
+      'The earth is filled with violence, and God resolves to destroy it, but Noah finds grace. He builds the ark as God commands, and eight people and the animals are saved through the waters. Afterward God makes a covenant with Noah, never again to destroy the earth by flood, and sets His rainbow in the cloud.',
+    people: ['Noah', 'Shem, Ham & Japheth', "Noah's wife & sons' wives"],
+    events: [
+      { t: 'Wickedness fills the earth', ref: 'Gen.6.5' },
+      { t: 'Noah finds grace', ref: 'Gen.6.8' },
+      { t: 'The flood begins', ref: 'Gen.7.11' },
+      { t: 'God remembers Noah', ref: 'Gen.8.1' },
+      { t: 'The rainbow covenant', ref: 'Gen.9.13' },
+    ],
+    passages: [ch('Gen', 6, 9)],
+    journeys: [],
+  },
+  {
+    id: 'scattering',
+    name: 'Scattering of the People',
+    dates: 'After the Flood – c. 2100 BC',
+    color: '#8a9a5b',
+    summary:
+      "Noah's descendants spread out into the nations. United by one language, people build a city and a tower at Babel to make a name for themselves, and God confuses their speech and scatters them over the face of the earth. The line of Shem is traced down to Terah and his son Abram.",
+    people: ['Shem, Ham & Japheth', 'Nimrod', 'Eber', 'Terah', 'Abram'],
+    events: [
+      { t: 'The table of nations', ref: 'Gen.10.32' },
+      { t: 'Nimrod, a mighty hunter', ref: 'Gen.10.8' },
+      { t: 'The tower of Babel', ref: 'Gen.11.4' },
+      { t: 'Languages confused, people scattered', ref: 'Gen.11.9' },
+      { t: "Terah's family leaves Ur", ref: 'Gen.11.31' },
+    ],
+    passages: [ch('Gen', 10, 11)],
     journeys: [],
   },
   {
@@ -77,13 +112,13 @@ const RAW: Omit<Period, 'n'>[] = [
     note: 'Job is usually placed in the patriarchal era.',
   },
   {
-    id: 'bondage',
+    id: 'exodus',
     lists: ['plagues'],
-    name: 'Bondage in Egypt',
+    name: 'The Exodus',
     dates: 'c. 1876 – 1446 BC',
     color: '#b5651d',
     summary:
-      "Israel multiplies in Egypt and is enslaved by a new Pharaoh. God raises up Moses, speaks from the burning bush, and sends ten plagues on Egypt. On the night of the first Passover the firstborn of Egypt die, and Israel is set free.",
+      "Israel multiplies in Egypt and is enslaved by a new Pharaoh. God raises up Moses, speaks from the burning bush, and sends ten plagues on Egypt. On the night of the first Passover the firstborn of Egypt die and Israel goes free. God parts the Red Sea, feeds the people with manna, and brings them to Mount Sinai.",
     people: ['Moses', 'Aaron', 'Miriam', 'Pharaoh'],
     events: [
       { t: 'Israel enslaved', ref: 'Exod.1.8' },
@@ -91,33 +126,36 @@ const RAW: Omit<Period, 'n'>[] = [
       { t: 'The burning bush', ref: 'Exod.3.2' },
       { t: 'The ten plagues begin', ref: 'Exod.7.20' },
       { t: 'The Passover', ref: 'Exod.12.21' },
+      { t: 'Crossing the Red Sea', ref: 'Exod.14.21' },
+      { t: 'Manna from heaven', ref: 'Exod.16.15' },
     ],
-    passages: [ch('Exod', 1, 12)],
-    journeys: [],
+    passages: [ch('Exod', 1, 18)],
+    journeys: ['exodus'],
+    note: 'This period runs from the bondage in Egypt to Israel\'s arrival at Mount Sinai (Exodus 19).',
   },
   {
     id: 'wilderness',
     lists: ['commandments', 'feasts'],
-    name: 'Wilderness Wandering',
+    name: 'Wandering in the Wilderness',
     dates: '1446 – 1406 BC',
     color: '#c2873b',
     summary:
-      'God parts the Red Sea and leads Israel to Mount Sinai, where He gives the Law and the plans for the tabernacle. When the people refuse to enter Canaan at Kadesh, they are sentenced to wander forty years until that generation dies. Moses restates the Law on the plains of Moab before his death.',
+      'At Mount Sinai God makes His covenant with Israel, gives the Law, and has the tabernacle built. When the people refuse to enter Canaan at Kadesh, they are sentenced to wander forty years until that generation dies. Moses restates the Law on the plains of Moab before his death.',
     people: ['Moses', 'Aaron', 'Joshua', 'Caleb', 'Korah', 'Balaam'],
     events: [
-      { t: 'Crossing the Red Sea', ref: 'Exod.14.21' },
+      { t: 'Israel camps before Sinai', ref: 'Exod.19.1' },
       { t: 'The Ten Commandments', ref: 'Exod.20.1' },
       { t: 'The golden calf', ref: 'Exod.32.4' },
       { t: 'The twelve spies', ref: 'Num.13.25' },
       { t: 'The bronze serpent', ref: 'Num.21.8' },
       { t: 'Death of Moses', ref: 'Deut.34.5' },
     ],
-    passages: [ch('Exod', 13, 40), all('Lev'), all('Num'), all('Deut')],
+    passages: [ch('Exod', 19, 40), all('Lev'), all('Num'), all('Deut')],
     journeys: ['exodus'],
   },
   {
     id: 'conquest',
-    name: 'Conquest of Canaan',
+    name: 'Invasion and Conquest',
     dates: '1406 – c. 1380 BC',
     color: '#9b2226',
     summary:
@@ -248,7 +286,7 @@ const RAW: Omit<Period, 'n'>[] = [
   {
     id: 'captivity',
     lists: ['prophets'],
-    name: 'Captivity',
+    name: 'The Captivity',
     dates: '605 / 586 – 536 BC',
     color: '#3d405b',
     summary:
@@ -268,7 +306,7 @@ const RAW: Omit<Period, 'n'>[] = [
   {
     id: 'return',
     lists: ['prophets'],
-    name: 'Return',
+    name: 'Return from Captivity',
     dates: '536 – c. 430 BC',
     color: '#2a9d8f',
     summary:
@@ -287,7 +325,7 @@ const RAW: Omit<Period, 'n'>[] = [
   },
   {
     id: 'silent-years',
-    name: '400 Silent Years',
+    name: 'Years of Silence',
     dates: 'c. 430 – 5 BC',
     color: '#7f7f7f',
     between: true,
@@ -329,24 +367,46 @@ const RAW: Omit<Period, 'n'>[] = [
   },
   {
     id: 'early-church',
-    lists: ['conversions', 'apostles', 'pauls-letters', 'seven-churches', 'hall-of-faith', 'fruit', 'armor'],
-    name: 'Early Church',
-    dates: 'AD 30 – c. 96',
+    lists: ['conversions', 'apostles'],
+    name: 'The Early Church',
+    dates: 'AD 30 – c. 62',
     color: '#e76f51',
     summary:
-      'On Pentecost the Holy Spirit comes, Peter preaches, and about 3,000 are baptized. The church spreads from Jerusalem to Judea, Samaria and the Gentiles. Saul the persecutor becomes Paul the apostle and carries the gospel across the Roman world. The letters teach and correct the churches, and Revelation assures them that Christ wins.',
-    people: ['Peter', 'Stephen', 'Philip', 'Paul', 'Barnabas', 'Timothy', 'Luke', 'James', 'John'],
+      'On Pentecost the Holy Spirit comes, Peter preaches, and about 3,000 are baptized. Persecution scatters the church from Jerusalem through Judea and Samaria, and the gospel reaches the Gentiles. Saul the persecutor becomes Paul the apostle and carries the gospel across the Roman world on three journeys, until he arrives in Rome as a prisoner.',
+    people: ['Peter', 'John', 'Stephen', 'Philip', 'Cornelius', 'Paul', 'Barnabas', 'Silas', 'Timothy', 'Luke'],
     events: [
       { t: 'Pentecost', ref: 'Acts.2.38' },
       { t: 'Stephen martyred', ref: 'Acts.7.59' },
+      { t: 'Philip in Samaria', ref: 'Acts.8.5' },
       { t: "Saul's conversion", ref: 'Acts.9.3' },
       { t: 'The gospel to the Gentiles', ref: 'Acts.10.44' },
       { t: 'The Jerusalem Council', ref: 'Acts.15.6' },
       { t: 'Paul reaches Rome', ref: 'Acts.28.16' },
+    ],
+    passages: [all('Acts')],
+    journeys: ['saul', 'paul1', 'paul2', 'paul3', 'rome'],
+  },
+  {
+    id: 'letters',
+    lists: ['pauls-letters', 'seven-churches', 'hall-of-faith', 'fruit', 'armor'],
+    name: 'Letters to Christians',
+    dates: 'c. AD 49 – 96',
+    color: '#c2185b',
+    summary:
+      'The apostles and their companions write to churches and to individual Christians: to teach the gospel, correct error, encourage the persecuted, and show how to live as the people of God. Paul writes thirteen letters; Hebrews, James, Peter, John and Jude add theirs. Revelation, given to John on Patmos, assures the churches that Christ will overcome.',
+    people: ['Paul', 'Peter', 'James', 'John', 'Jude', 'Timothy', 'Titus', 'Philemon'],
+    events: [
+      { t: 'The gospel, the power of God for salvation', ref: 'Rom.1.16' },
+      { t: 'The greatest is love', ref: '1Cor.13.13' },
+      { t: 'Christ died, was buried and was raised', ref: '1Cor.15.3' },
+      { t: 'One body, one Spirit, one faith', ref: 'Eph.4.4' },
+      { t: 'Faith: the assurance of things hoped for', ref: 'Heb.11.1' },
+      { t: '"I have fought the good fight"', ref: '2Tim.4.7' },
       { t: 'The new heaven and new earth', ref: 'Rev.21.1' },
     ],
-    passages: BOOKS.slice(BOOKS.findIndex((b) => b.osis === 'Acts')).map((b) => all(b.osis)),
-    journeys: ['saul', 'paul1', 'paul2', 'paul3', 'rome'],
+    passages: BOOKS.slice(BOOKS.findIndex((b) => b.osis === 'Rom')).map((b) => all(b.osis)),
+    journeys: [],
+    note: "The letters were written during the years of Acts and afterward; Waldron groups them as their own period.",
   },
 ];
 

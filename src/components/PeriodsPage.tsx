@@ -84,8 +84,8 @@ export default function PeriodsPage({ focusId, currentId, onRead, onFollowJourne
         <div className="hero-text">
           <h1>Periods of Bible History</h1>
           <p>
-            From Creation to the early church, the Bible's story unfolds in {PERIODS.length} periods: Bob Waldron's
-            thirteen, plus the 400 silent years between the Testaments.{' '}
+            From Creation to the letters to Christians, the Bible's story unfolds in Bob and Sandra Waldron's{' '}
+            {PERIODS.length} periods.{' '}
             <span className="hero-more">
               Each one gives a short summary, the people and events to know, the scriptures that belong to it, and
               journeys to follow on the map.
