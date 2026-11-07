@@ -1,5 +1,5 @@
 {
-  "name": "bible-atlas",
+  "name": "bible-study-companion",
   "version": "0.1.0",
   "description": "Read the Bible with an interactive map of the places in every verse, and follow journeys stop by stop.",
   "scripts": {
@@ -9,7 +9,8 @@
     "build:data": "node scripts/build-data.mjs && node scripts/build-people.mjs && node scripts/build-water.mjs",
     "typecheck": "tsc",
     "build:relay": "node scripts/build-relay.mjs",
-    "check:hymns": "node --experimental-strip-types --no-warnings scripts/check-hymns.mjs"
+    "check:hymns": "node --experimental-strip-types --no-warnings scripts/check-hymns.mjs",
+    "check:nations": "node --experimental-strip-types --no-warnings scripts/check-nations.mjs"
   },
   "repository": {
     "type": "git",

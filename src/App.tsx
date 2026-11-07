@@ -25,6 +25,7 @@ import PlaceCard from './components/PlaceCard';
 import { loadPlaces } from './lib/geo';
 import PeriodsPage from './components/PeriodsPage';
 import PeoplePage from './components/PeoplePage';
+import NationsPage from './components/NationsPage';
 import PersonCard from './components/PersonCard';
 import { loadChapterPeople, type PersonEntry } from './lib/people';
 import ListPanel from './components/ListPanel';
@@ -93,7 +94,12 @@ export default function App() {
   // "#periods" or "#periods/<id>" shows the periods page (so the back button works)
   const periodsOpen = hash.startsWith('#periods');
   const peopleOpen = hash.startsWith('#people');
-  const pageOpen = periodsOpen || peopleOpen;
+  const nationsOpen = hash.startsWith('#nations');
+  const pageOpen = periodsOpen || peopleOpen || nationsOpen;
+  const nationFocus = nationsOpen ? (hash.split('/')[1] ?? null) : null;
+  const openNations = (id?: string) => {
+    window.location.hash = id ? `nations/${id}` : 'nations';
+  };
   const openPeople = () => {
     window.location.hash = 'people';
   };
@@ -282,9 +288,9 @@ export default function App() {
   return (
     <div className={`app${mapVisible ? '' : ' map-hidden'}${journey ? ' journey-active' : ''}`}>
       <header className="topbar">
-        <button className="brand" title="Bible Atlas: back to reading" onClick={() => pageOpen && closePeriods()}>
-          <span>BIBLE</span>
-          <span>ATLAS</span>
+        <button className="brand" title="Bible Study Companion: back to reading" onClick={() => pageOpen && closePeriods()}>
+          <span>BIBLE STUDY</span>
+          <span>COMPANION</span>
         </button>
         <div className="nav">
           <button className="icon-btn" onClick={prevChapter} aria-label="Previous chapter">
@@ -439,6 +445,17 @@ export default function App() {
             People
           </button>
           <button
+            className={`btn${nationsOpen ? ' active' : ''}`}
+            onClick={() => {
+              setMenuOpen(false);
+              if (nationsOpen) closePeriods();
+              else openNations();
+            }}
+            aria-pressed={nationsOpen}
+          >
+            Nations
+          </button>
+          <button
             className="btn"
             onClick={() => {
               setMenuOpen(false);
@@ -492,6 +509,25 @@ export default function App() {
       )}
 
       {peopleOpen && <PeoplePage onClose={closePeriods} onOpenPerson={setPersonSlug} />}
+
+      {nationsOpen && (
+        <NationsPage
+          focusId={nationFocus}
+          onClose={closePeriods}
+          onOpenPerson={setPersonSlug}
+          onRead={(b, c, v) => {
+            goTo(b, c, v);
+            closePeriods();
+          }}
+          onShowOnMap={(n) => {
+            closePeriods();
+            setMapVisible(true);
+            setSelectedVerse(null);
+            setPersonSlug(null);
+            setPlaceOverride({ index: -1, name: n.name, lat: n.lat, lon: n.lon, type: 'region', confidence: 50 });
+          }}
+        />
+      )}
 
       <main className="layout" hidden={pageOpen}>
         <section className="text-pane">
@@ -713,6 +749,10 @@ export default function App() {
           slug={personSlug}
           onClose={() => setPersonSlug(null)}
           onOpenPerson={setPersonSlug}
+          onOpenNation={(id) => {
+            openNations(id);
+            if (isNarrow()) setPersonSlug(null);
+          }}
           onGoToRef={(ref) => {
             const r = parseRef(ref);
             if (pageOpen) closePeriods();

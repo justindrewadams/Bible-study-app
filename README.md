@@ -1,4 +1,4 @@
-# Bible Atlas
+# Bible Study Companion
 
 A Bible study app that puts the text and the map side by side.
 

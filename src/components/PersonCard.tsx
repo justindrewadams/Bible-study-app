@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { BOOKS, getBook } from '../data/books';
 import { PERIODS, periodFor } from '../data/periods';
+import { nationsFoundedBy } from '../data/nations';
 import { formatOsis } from '../lib/placeInfo';
 import FamilyTree from './FamilyTree';
 import {
@@ -19,12 +20,15 @@ interface Props {
   onOpenPerson: (slug: string) => void;
   onGoToRef: (ref: string) => void;
   onOpenPlace: (place: PlaceRef) => void;
+  /** opens the Nations page at a nation this person founded */
+  onOpenNation?: (id: string) => void;
 }
 
 const PREVIEW_BOOKS = 4;
 const BIO_PREVIEW = 700;
 
-export default function PersonCard({ slug, onClose, onOpenPerson, onGoToRef, onOpenPlace }: Props) {
+export default function PersonCard({ slug, onClose, onOpenPerson, onGoToRef, onOpenPlace, onOpenNation }: Props) {
+  const nations = nationsFoundedBy(slug);
   const [entry, setEntry] = useState<PersonEntry | null>(null);
   const [details, setDetails] = useState<PersonDetails | null>(null);
   const [people, setPeople] = useState<Map<string, PersonEntry>>(new Map());
@@ -132,6 +136,19 @@ export default function PersonCard({ slug, onClose, onOpenPerson, onGoToRef, onO
       </header>
 
       <div className="pc-body">
+        {nations.length > 0 && onOpenNation && (
+          <p className="pc-nations">
+            Ancestor of:{' '}
+            {nations.map((n, i) => (
+              <span key={n.id}>
+                {i > 0 && ', '}
+                <button className="link" onClick={() => onOpenNation(n.id)}>
+                  {n.name}
+                </button>
+              </span>
+            ))}
+          </p>
+        )}
         {!details && <p className="muted small">Loading…</p>}
         {details && (
           <dl className="pc-facts">

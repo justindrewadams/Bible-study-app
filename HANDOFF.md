@@ -1,4 +1,4 @@
-# Bible Atlas: handoff notes
+# Bible Study Companion: handoff notes
 
 Read this first when picking the project back up. It records what exists, how it fits together,
 the decisions already made (and why), and how the owner likes to work.
@@ -42,6 +42,16 @@ the decisions already made (and why), and how the owner likes to work.
 8. **Hymns:** a quiet "♪ Hymns" button beside each chapter title opens a pop-up (a bottom sheet on phones) of
    hymns commonly sung in a cappella Churches of Christ: "Written from this chapter", "Fits this chapter's
    message", and, when a chapter has fewer than 3, suggestions from the book's themes.
+9. **Nations page** (`#nations`, `#nations/<id>`): 31 nations and peoples, grouped by Noah's sons (Genesis 10)
+   with Abraham's family marked. Each has where they lived (with "Show on map", which pins the homeland), origin
+   with a tappable family line of person cards, a short original history, and key verses. A person card shows
+   "Ancestor of: …" linking back. Data in `src/data/nations.ts`; `npm run check:nations` validates every person
+   slug and reference. Where Scripture doesn't name an ancestor (Rome, Persia, Samaritans…), it says so.
+
+**Name:** the app is called **Bible Study Companion** (renamed from Bible Atlas). The title is two lines,
+"BIBLE STUDY" / "COMPANION", sized (15.3px / 14.6px Figtree 800) so both lines are the same width. The repo,
+site address and the relay's Cloudflare name (`bible-atlas-esv`) were deliberately kept, since the relay only
+answers the existing site address.
 
 ## Stack and layout
 
@@ -51,7 +61,7 @@ the decisions already made (and why), and how the owner likes to work.
 - `src/components/`:
   - `Reader`, `MapView` (also holds `WaterLayer`, `PlaceAndRegionLabels` and `MapErrorBoundary`), `MapControls`
   - `PlaceCard`, `PersonCard`, `FamilyTree`
-  - `JourneyPanel`, `ListPanel`, `PeriodsPage`, `PeoplePage`
+  - `JourneyPanel`, `ListPanel`, `PeriodsPage`, `PeoplePage`, `NationsPage`, `HymnsPanel`
 - `src/lib/`:
   - `bible.ts`: translations, fetching, ESV rules and caches
   - `geo.ts`, `placeInfo.ts`, `people.ts`
@@ -123,6 +133,7 @@ Generated files are committed. Raw downloads are cached in `scripts/.cache/` (gi
   EB Garamond for the Bible text only.
 - **Phones must stay calm and uncluttered.** The owner asked for this explicitly:
   - a one-row header with a ☰ menu
+  - the ☰ menu is also used from 861 to 1439px wide, because the full header needs about 1440px
   - thin lines, compact cards, no zoom buttons
   - the map takes about 36vh, or 46vh while a journey is active
 - Cards: one at a time (place or person). They are a side panel on desktop and a bottom sheet on phones.

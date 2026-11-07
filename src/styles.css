@@ -3809,3 +3809,318 @@ mark.list-word {
 .leaflet-tooltip.dot-label::before {
   display: none;
 }
+
+/* =====================================================================
+   Nations page (reuses the Periods page layout)
+   ===================================================================== */
+
+.nations-hero .hero-text {
+  background: color-mix(in srgb, var(--sky) 45%, var(--paper));
+}
+
+.nation-index {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0 0 18px;
+}
+
+.ni-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  padding-left: 10px;
+  border-left: 4px solid var(--c);
+}
+
+.ni-label {
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  margin-right: 4px;
+}
+
+.ni-item {
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 3px 9px;
+  border: 1.5px solid var(--line);
+  background: var(--paper);
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.ni-item:hover {
+  background: var(--select);
+}
+
+.ni-item.dimmed {
+  opacity: 0.35;
+}
+
+.nation .period-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nation-family {
+  flex: none;
+  background: #fff;
+  color: #111;
+  border: 2px solid #111;
+  padding: 3px 8px;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.nation-text {
+  margin: 0 0 8px;
+  line-height: 1.5;
+}
+
+.nation-map {
+  margin: 0 0 4px;
+  font-weight: 700;
+}
+
+.nation-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 2px;
+  margin: 2px 0 8px;
+}
+
+.nl-arrow {
+  color: var(--muted);
+  font-weight: 700;
+  padding: 0 2px;
+}
+
+.nl-person.founder {
+  background: color-mix(in srgb, var(--c) 18%, var(--paper));
+  border-color: var(--c);
+  border-width: 2px;
+  font-weight: 800;
+}
+
+.nation-related {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.nation-related .link {
+  font-weight: 700;
+}
+
+/* "Founder of the Edomites" link on a person card */
+.pc-nations {
+  margin: 4px 0 8px;
+  font-size: 0.88rem;
+}
+
+.pc-nations .link {
+  font-weight: 700;
+}
+
+@media (max-width: 860px) {
+  .nation .period-head {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .nation-family {
+    font-size: 0.7rem;
+    padding: 2px 6px;
+    border-width: 1.5px;
+  }
+
+  .ni-item {
+    font-size: 0.78rem;
+    padding: 2px 7px;
+  }
+}
+
+/* =====================================================================
+   Title: "BIBLE STUDY / COMPANION", both lines the same width
+   (sizes measured in Figtree 800 so the two lines line up edge to edge)
+   ===================================================================== */
+
+.brand {
+  align-items: flex-start;
+  gap: 2px;
+  letter-spacing: 0;
+}
+
+.brand span {
+  display: block;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+.brand span:first-child {
+  font-size: 15.3px;
+  letter-spacing: 0.04em;
+}
+
+.brand span:last-child {
+  font-size: 14.6px;
+  letter-spacing: 0.06em;
+}
+
+@media (max-width: 1240px) and (min-width: 861px) {
+  .brand span:first-child {
+    font-size: 15.3px;
+  }
+}
+
+/* =====================================================================
+   Header fit: one row on wide screens; the ☰ menu on medium screens too
+   ===================================================================== */
+
+@media (min-width: 1440px) {
+  .topbar .translation {
+    width: 170px;
+  }
+
+  .topbar .journey-select {
+    width: 170px;
+  }
+
+  .topbar .list-select {
+    width: 150px;
+  }
+
+  .topbar .topbar-actions .btn {
+    padding: 0 12px;
+  }
+}
+
+/* medium screens (laptops, tablets): fold the selects and page buttons into ☰, as on phones */
+@media (max-width: 1439px) and (min-width: 861px) {
+  .topbar {
+    position: relative;
+    z-index: 2500;
+  }
+
+  .topbar .nav {
+    flex: 1;
+  }
+
+  .menu-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    align-self: stretch;
+    margin-left: auto;
+    padding: 0 16px;
+    border: 0;
+    border-left: var(--border);
+    background: var(--paper);
+    color: var(--ink);
+    font-weight: 700;
+    font-size: 1.1rem;
+    cursor: pointer;
+  }
+
+  .menu-btn.open {
+    background: var(--sky);
+    color: #111;
+  }
+
+  .menu-btn-code {
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+    border: 1.5px solid currentColor;
+    padding: 1px 4px;
+  }
+
+  .topbar-extra {
+    display: none;
+  }
+
+  .topbar-extra.open {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 340px;
+    background: var(--paper);
+    border: var(--border);
+    border-top: 0;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+  }
+
+  .menu-scrim {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 2400;
+    background: rgba(0, 0, 0, 0.2);
+  }
+
+  .menu-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--hair);
+  }
+
+  .menu-label {
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+  }
+
+  .topbar .menu-field select,
+  .topbar .translation,
+  .topbar .journey-select,
+  .topbar .list-select {
+    width: 100%;
+    margin: 0;
+    flex: none;
+    padding: 10px 30px 10px 10px;
+  }
+
+  .topbar .topbar-actions {
+    width: 100%;
+    flex-direction: column;
+    border: 0;
+  }
+
+  .topbar .topbar-actions .btn,
+  .topbar .topbar-actions .icon-btn {
+    flex: none;
+    width: 100%;
+    text-align: left;
+    padding: 14px 16px;
+    border: 0;
+    border-bottom: 1px solid var(--hair);
+    font-size: 0.9rem;
+  }
+
+  .topbar .topbar-actions .icon-btn {
+    border-bottom: 0;
+  }
+
+  .topbar .topbar-actions .btn.active {
+    background: var(--sky);
+  }
+
+  .narrow-only {
+    display: inline;
+  }
+}
