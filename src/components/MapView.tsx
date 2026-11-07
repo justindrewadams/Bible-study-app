@@ -4,6 +4,8 @@ import {
   MapContainer,
   TileLayer,
   Marker,
+  Pane,
+  Polygon,
   Polyline,
   Tooltip,
   useMap,
@@ -35,33 +37,30 @@ export const DEFAULT_MAP_SETTINGS: MapSettings = {
 const ESRI = 'https://server.arcgisonline.com/ArcGIS/rest/services';
 
 /**
- * Esri answers requests past the detail it has for a region with a "Map data not yet
- * available" picture, so each base map only asks for zoom levels it covers here
- * (`maxNativeZoom`; Leaflet enlarges the last good level a little further). From
- * `handoff` onward a light, label-free street map takes over for close-up detail.
+ * The map stops at a regional close-up (MAX_ZOOM): enough to see the Sea of Galilee and the
+ * Jordan valley, without street-level detail. Esri answers requests past the detail it has
+ * for a region with a "Map data not yet available" picture, so each base map only asks for
+ * levels it covers here (`maxNativeZoom`) and Leaflet enlarges the last good level. Lakes and
+ * rivers are drawn on top as crisp shapes (`water`), so they stay sharp up close.
  */
+export const MAX_ZOOM = 11;
+
 interface BaseLayer {
   label: string;
   url: string;
   maxNativeZoom: number;
   attribution: string;
   className?: string;
-  handoff?: number;
+  /** draw our lake & river shapes over this map */
+  water?: boolean;
 }
-
-/** Close-up detail without modern place names (CARTO, from OpenStreetMap data). */
-const DETAIL_LAYER = {
-  url: 'https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png',
-  attribution:
-    '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-};
 
 const BASE_LAYERS: Record<BaseLayerId, BaseLayer> = {
   terrain: {
     label: 'Ancient terrain (no modern labels)',
     url: `${ESRI}/World_Terrain_Base/MapServer/tile/{z}/{y}/{x}`,
     maxNativeZoom: 9,
-    handoff: 11,
+    water: true,
     attribution: 'Tiles &copy; Esri &mdash; Source: USGS, Esri, TANA, DeLorme, NPS',
     className: 'tiles-parchment',
   },
@@ -69,20 +68,19 @@ const BASE_LAYERS: Record<BaseLayerId, BaseLayer> = {
     label: 'Physical relief',
     url: `${ESRI}/World_Physical_Map/MapServer/tile/{z}/{y}/{x}`,
     maxNativeZoom: 8,
-    handoff: 10,
+    water: true,
     attribution: 'Tiles &copy; Esri &mdash; Source: US National Park Service',
   },
   satellite: {
     label: 'Satellite',
     url: `${ESRI}/World_Imagery/MapServer/tile/{z}/{y}/{x}`,
-    maxNativeZoom: 16,
+    maxNativeZoom: MAX_ZOOM,
     attribution: 'Tiles &copy; Esri &mdash; Source: Esri, Maxar, Earthstar Geographics',
   },
   roman: {
     label: 'Roman Empire (roads & ancient names)',
     url: 'https://dh.gu.se/tiles/imperium/{z}/{x}/{y}.png',
     maxNativeZoom: 11,
-    handoff: 13,
     attribution:
       '<a href="https://imperium.ahlfeldt.se/">Digital Atlas of the Roman Empire</a> (CC BY 4.0, Johan &Aring;hlfeldt)',
   },
@@ -98,7 +96,7 @@ const MODERN_LAYERS: Record<Exclude<ModernOverlay, 'off'>, { url: string; maxNat
   },
   full: {
     url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-    maxNativeZoom: 19,
+    maxNativeZoom: MAX_ZOOM,
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
   },
 };
@@ -531,33 +529,28 @@ export default function MapView({
   );
 
   return (
-    <MapContainer center={[31.78, 35.23]} zoom={7} minZoom={3} maxZoom={16} className="map" worldCopyJump>
+    <MapContainer center={[31.78, 35.23]} zoom={7} minZoom={3} maxZoom={MAX_ZOOM} className="map" worldCopyJump>
+      {/* water above the base map, modern overlay above the water */}
+      <Pane name="water" style={{ zIndex: 250 }} />
+      <Pane name="modern" style={{ zIndex: 300 }} />
       <TileLayer
         key={settings.base}
         url={base.url}
         maxNativeZoom={base.maxNativeZoom}
-        maxZoom={base.handoff ? base.handoff - 1 : 16}
+        maxZoom={MAX_ZOOM}
         attribution={base.attribution}
         className={base.className}
       />
-      {base.handoff && (
-        <TileLayer
-          key={`${settings.base}-detail`}
-          url={DETAIL_LAYER.url}
-          minZoom={base.handoff}
-          maxZoom={16}
-          attribution={DETAIL_LAYER.attribution}
-        />
-      )}
+      {base.water && <WaterLayer />}
       {modern && (
         <TileLayer
           key={settings.modern}
           url={modern.url}
           maxNativeZoom={modern.maxNativeZoom}
-          maxZoom={16}
+          maxZoom={MAX_ZOOM}
           opacity={settings.modernOpacity}
           attribution={modern.attribution}
-          zIndex={5}
+          pane="modern"
         />
       )}
       <PlaceAndRegionLabels
@@ -616,6 +609,45 @@ function FocusMarker({
         {focus.inferred && <span className="pin-label-sub"> · last mentioned</span>}
       </Tooltip>
     </Marker>
+  );
+}
+
+type WaterData = { lakes: [string, [number, number][][]][]; rivers: [string, [number, number][][]][] };
+let waterPromise: Promise<WaterData> | null = null;
+
+/** Lakes and rivers (Natural Earth, public domain) drawn as crisp shapes over the base map. */
+function WaterLayer() {
+  const [water, setWater] = useState<WaterData | null>(null);
+  useEffect(() => {
+    waterPromise ??= fetch(`${import.meta.env.BASE_URL}data/water.json`).then((r) => r.json());
+    waterPromise.then(setWater).catch(() => {});
+  }, []);
+  if (!water) return null;
+  return (
+    <>
+      {water.lakes.map(([name, rings], i) => (
+        <Polygon
+          key={`lake${i}`}
+          pane="water"
+          positions={rings}
+          interactive={!!name}
+          pathOptions={{ color: '#2c6e9e', weight: 1, fillColor: '#8fc3e3', fillOpacity: 0.9 }}
+        >
+          {name && <Tooltip sticky>{name}</Tooltip>}
+        </Polygon>
+      ))}
+      {water.rivers.map(([name, lines], i) => (
+        <Polyline
+          key={`river${i}`}
+          pane="water"
+          positions={lines}
+          interactive={!!name}
+          pathOptions={{ color: '#3d86b8', weight: 2.5, opacity: 0.9, lineCap: 'round', lineJoin: 'round' }}
+        >
+          {name && <Tooltip sticky>{name}</Tooltip>}
+        </Polyline>
+      ))}
+    </>
   );
 }
 

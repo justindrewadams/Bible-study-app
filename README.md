@@ -69,5 +69,5 @@ The script looks up coordinates from the dataset, using the verse to tell apart 
 - Places and verse links: [OpenBible.info Bible Geocoding Data](https://github.com/openbibleinfo/Bible-Geocoding-Data), CC BY 4.0. Many ancient sites are uncertain; pins show the most likely identification, and the popup says how certain it is.
 - Place histories, photos and founding dates are loaded live from Wikipedia and Wikidata when available.
 - Journey legs are straight lines between stops, not exact roads or sea routes. The order of some Gospel events is debated.
-- Map tiles: Esri, OpenStreetMap contributors, and the [Digital Atlas of the Roman Empire](https://imperium.ahlfeldt.se/) (CC BY 4.0).
+- Map tiles: Esri, OpenStreetMap contributors, and the [Digital Atlas of the Roman Empire](https://imperium.ahlfeldt.se/) (CC BY 4.0). Lakes and rivers: [Natural Earth](https://www.naturalearthdata.com/) (public domain), built by `scripts/build-water.mjs`. The map stops at a regional close-up, which is enough to see the Sea of Galilee and the Jordan valley.
 - Bible text: [bible-api.com](https://bible-api.com), [bolls.life](https://bolls.life), [ESV API](https://api.esv.org). Copyrighted translations are shown for personal study under each provider's terms.

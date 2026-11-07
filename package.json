@@ -6,7 +6,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "build:data": "node scripts/build-data.mjs && node scripts/build-people.mjs",
+    "build:data": "node scripts/build-data.mjs && node scripts/build-people.mjs && node scripts/build-water.mjs",
     "typecheck": "tsc"
   },
   "repository": {
