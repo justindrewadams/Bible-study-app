@@ -859,6 +859,11 @@ export default function App() {
                 <strong>Periods of Bible history</strong> follow the outline arranged by Bob and Sandra Waldron. Summaries
                 in this app are original. Fonts: Figtree and EB Garamond (SIL Open Font License).
               </p>
+              <p>
+                <strong>Hymns for each chapter</strong> are an original list made for this app of songs often sung in
+                a cappella Churches of Christ, tied to scripture by hand. Only titles, writers and years are shown; no
+                hymn words are included, since many are still under copyright.
+              </p>
               <p className="muted">
                 Journey legs are drawn as straight lines between stops (some follow known routes), not exact roads.
               </p>

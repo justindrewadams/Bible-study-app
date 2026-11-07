@@ -1,4 +1,5 @@
-import { Fragment, useEffect, useRef, type ReactNode } from 'react';
+import { Fragment, useEffect, useRef, useState, type ReactNode } from 'react';
+import HymnsPanel from './HymnsPanel';
 import type { Verse } from '../lib/bible';
 import type { ChapterGeo, Place } from '../lib/geo';
 import { journeysAtVerse, type Journey } from '../lib/journeys';
@@ -83,6 +84,9 @@ export default function Reader({
   after,
 }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [hymnsOpen, setHymnsOpen] = useState(false);
+
+  useEffect(() => setHymnsOpen(false), [book, chapter]);
 
   useEffect(() => {
     if (selectedVerse == null) return;
@@ -96,9 +100,17 @@ export default function Reader({
 
   return (
     <div className="reader" ref={containerRef}>
-      <h1 className="chapter-title">
-        {bookName} {chapter}
-      </h1>
+      <div className="chapter-head">
+        <h1 className="chapter-title">
+          {bookName} {chapter}
+        </h1>
+        <button className="hymns-btn" onClick={() => setHymnsOpen(true)} title="Hymns for this chapter">
+          <span aria-hidden="true">♪</span> Hymns
+        </button>
+      </div>
+      {hymnsOpen && (
+        <HymnsPanel book={book} bookName={bookName} chapter={chapter} onClose={() => setHymnsOpen(false)} />
+      )}
       {period && (
         <button
           className="period-badge"

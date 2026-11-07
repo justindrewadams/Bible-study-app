@@ -39,6 +39,10 @@ the decisions already made (and why), and how the owner likes to work.
    "Period N of 17". The chapter boundaries were inferred from the period names because Waldron's
    pages couldn't be fetched. The owner may send corrections (Exodus ends at Exod 18? Flood starts at Gen 6?).
 
+8. **Hymns:** a quiet "♪ Hymns" button beside each chapter title opens a pop-up (a bottom sheet on phones) of
+   hymns commonly sung in a cappella Churches of Christ: "Written from this chapter", "Fits this chapter's
+   message", and, when a chapter has fewer than 3, suggestions from the book's themes.
+
 ## Stack and layout
 
 - Vite + React 18 + TypeScript, react-leaflet 4. No backend except the ESV relay. `npm run dev` / `npm run build`.
@@ -56,6 +60,10 @@ the decisions already made (and why), and how the owner likes to work.
   - `books.ts` and `regions.ts`
   - `periods.ts`: the 17 periods, `periodFor()`
   - generated: `journeys.json`, `lists.json`, `verseCounts.json`
+- `src/data/hymns.ts`: about 210 hymns, each with `from` (passages it was written from), `fits` (thematic
+  passages) and `themes`; `BOOK_THEMES` gives each book's fallback themes. **Titles, writers and years only, no
+  lyrics** (many are still under copyright). `npm run check:hymns` validates every reference (Node 22.6+).
+  Shown by `src/components/HymnsPanel.tsx`, loaded only when the pop-up opens.
 - `src/config.ts`: `ESV_RELAY_URL` (public address of the relay).
 - `src/styles.css`: one stylesheet, with later sections overriding earlier ones (redesign blocks are appended).
 
