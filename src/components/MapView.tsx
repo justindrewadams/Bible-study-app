@@ -616,8 +616,25 @@ type WaterData = { lakes: [string, [number, number][][]][]; rivers: [string, [nu
 let waterPromise: Promise<WaterData> | null = null;
 
 /** Lakes and rivers (Natural Earth, public domain) drawn as crisp shapes over the base map. */
+/**
+ * River and lake-outline styles by zoom level. Zoomed out, the lines get thinner and lighter so they don't
+ * take over the map; from zoom 8 in they are drawn at full strength.
+ */
+function waterStyle(zoom: number) {
+  const z = Math.max(3, Math.min(8, zoom));
+  return {
+    riverWeight: 0.6 + (z - 3) * 0.38, // 0.6 at zoom 3 → 2.5 at zoom 8
+    riverOpacity: 0.45 + (z - 3) * 0.09, // 0.45 → 0.9
+    lakeWeight: z < 6 ? 0.5 : 1,
+  };
+}
+
 function WaterLayer() {
   const [water, setWater] = useState<WaterData | null>(null);
+  const map = useMap();
+  const [zoom, setZoom] = useState(() => map.getZoom());
+  useMapEvents({ zoomend: () => setZoom(map.getZoom()) });
+  const style = waterStyle(zoom);
   useEffect(() => {
     waterPromise ??= fetch(`${import.meta.env.BASE_URL}data/water.json`).then((r) => r.json());
     waterPromise.then(setWater).catch(() => {});
@@ -631,7 +648,7 @@ function WaterLayer() {
           pane="water"
           positions={rings}
           interactive={!!name}
-          pathOptions={{ color: '#2c6e9e', weight: 1, fillColor: '#8fc3e3', fillOpacity: 0.9 }}
+          pathOptions={{ color: '#2c6e9e', weight: style.lakeWeight, fillColor: '#8fc3e3', fillOpacity: 0.9 }}
         >
           {name && <Tooltip sticky>{name}</Tooltip>}
         </Polygon>
@@ -642,7 +659,13 @@ function WaterLayer() {
           pane="water"
           positions={lines}
           interactive={!!name}
-          pathOptions={{ color: '#3d86b8', weight: 2.5, opacity: 0.9, lineCap: 'round', lineJoin: 'round' }}
+          pathOptions={{
+            color: '#3d86b8',
+            weight: style.riverWeight,
+            opacity: style.riverOpacity,
+            lineCap: 'round',
+            lineJoin: 'round',
+          }}
         >
           {name && <Tooltip sticky>{name}</Tooltip>}
         </Polyline>
