@@ -3783,3 +3783,31 @@ mark.list-word {
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
 }
+
+/* a place carried over from an earlier verse ("last mentioned"): a small dot and its name, no box */
+.focus-dot div {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #111;
+  border: 2px solid #fff;
+  box-sizing: border-box;
+}
+
+.leaflet-tooltip.dot-label {
+  background: none;
+  border: 0;
+  box-shadow: none;
+  padding: 0 2px;
+  color: #111;
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-shadow:
+    0 0 2px #fff,
+    0 0 3px #fff,
+    0 0 4px #fff;
+}
+
+.leaflet-tooltip.dot-label::before {
+  display: none;
+}

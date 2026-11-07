@@ -149,7 +149,10 @@ const travelerIcon = (color: string) =>
   });
 
 const focusIcon = (inferred: boolean) =>
-  L.divIcon({
+  inferred
+    ? // a place carried over from an earlier verse: a quiet dot, not the full pin
+      L.divIcon({ className: 'focus-dot', iconSize: [10, 10], iconAnchor: [5, 5], html: '<div></div>' })
+    : L.divIcon({
     className: `focus-pin${inferred ? ' inferred' : ''}`,
     iconSize: [28, 40],
     iconAnchor: [14, 38],
@@ -601,12 +604,11 @@ function FocusMarker({
         permanent
         interactive={hasCard}
         eventHandlers={hasCard ? { click: () => onPlaceInfo(place) } : undefined}
-        direction="top"
-        offset={[0, -38]}
-        className={`pin-label${focus.inferred ? ' inferred' : ''}`}
+        direction={focus.inferred ? 'right' : 'top'}
+        offset={focus.inferred ? [4, 0] : [0, -38]}
+        className={focus.inferred ? 'dot-label' : 'pin-label'}
       >
         {place.name}
-        {focus.inferred && <span className="pin-label-sub"> · last mentioned</span>}
       </Tooltip>
     </Marker>
   );
