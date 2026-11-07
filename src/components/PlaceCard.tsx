@@ -169,9 +169,17 @@ export default function PlaceCard({ place, onClose, onGoToRef, onFollowJourney, 
               <>
                 <p className="pc-extract">{wiki.extract}</p>
                 {wiki.url && (
-                  <a className="small" href={wiki.url} target="_blank" rel="noreferrer">
-                    Read more on Wikipedia ↗
-                  </a>
+                  <p className="small muted wiki-credit">
+                    From the Wikipedia article{' '}
+                    <a href={wiki.url} target="_blank" rel="noreferrer">
+                      “{wiki.title ?? place.name}” ↗
+                    </a>
+                    , text under{' '}
+                    <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noreferrer">
+                      CC BY-SA 4.0
+                    </a>
+                    {wiki.thumbnail && '; image from Wikimedia Commons (license on the article page)'}.
+                  </p>
                 )}
               </>
             ) : (

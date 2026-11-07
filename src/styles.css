@@ -3554,3 +3554,62 @@ body {
   font-size: 0.62rem;
   padding: 0 2px;
 }
+
+/* =====================================================================
+   Translation notices & licenses
+   ===================================================================== */
+
+.text-notice {
+  border: var(--border);
+  background: color-mix(in srgb, var(--sun) 22%, var(--paper));
+  padding: 10px 12px;
+  margin: 0 0 14px;
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.part-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px 12px;
+  background: color-mix(in srgb, var(--sky) 18%, var(--paper));
+}
+
+.part-buttons {
+  display: flex;
+  gap: 6px;
+}
+
+.part-buttons .btn {
+  padding: 4px 10px;
+  font-size: 0.82rem;
+}
+
+.part-nav small {
+  flex-basis: 100%;
+}
+
+.copyright-notice {
+  max-width: 42em;
+  margin: 18px 0 6px;
+  padding-top: 10px;
+  border-top: 1px solid var(--hair);
+  font-size: 0.75rem;
+  line-height: 1.45;
+  color: var(--muted);
+}
+
+.copyright-notice strong {
+  color: var(--ink);
+}
+
+.licenses p {
+  margin: 0 0 8px;
+  line-height: 1.45;
+}
+
+.wiki-credit {
+  margin: 4px 0 0;
+}

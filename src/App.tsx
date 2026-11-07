@@ -2,12 +2,15 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { BOOKS, getBook } from './data/books';
 import {
   BIBLE_API_TRANSLATIONS,
+  chapterPages,
   DEFAULT_TRANSLATION,
+  ESV_COPYRIGHT,
   ESV_TRANSLATION,
-  fetchChapter,
+  EsvKeyMissing,
+  FALLBACK_TRANSLATION,
+  fetchPassage,
   findTranslation,
-  loadBollsTranslations,
-  type Translation,
+  OPEN_TRANSLATIONS,
   type Verse,
 } from './lib/bible';
 import { loadChapterGeo, placesForVerse, type ChapterGeo, type Place } from './lib/geo';
@@ -36,13 +39,22 @@ const formatRef = (bookName: string, chapter: number, verse: number) => `${bookN
 
 export default function App() {
   const [loc, setLoc] = usePersistentState<Location>('loc', { book: 'Acts', chapter: 13 });
-  // ESV by default (served by bolls.life, no key needed). A new storage key so everyone starts on ESV once.
-  const [translationId, setTranslationId] = usePersistentState('translation-v2', DEFAULT_TRANSLATION);
+  // ESV by default, through Crossway's official API only. (Older saved choices from the
+  // retired bolls.life source are treated as ESV.)
+  const [savedTranslation, setTranslationId] = usePersistentState('translation-v2', DEFAULT_TRANSLATION);
+  const translationId =
+    savedTranslation.startsWith('bolls:') && !OPEN_TRANSLATIONS.some((t) => t.id === savedTranslation)
+      ? DEFAULT_TRANSLATION
+      : savedTranslation;
+  // Each reader's own free key from api.esv.org, kept only in their browser. (A key is never
+  // built into the published site, where anyone could read it.)
   const [esvKey, setEsvKey] = usePersistentState('esvKey', '');
+  const [esvPageIndex, setEsvPageIndex] = useState(0);
+  /** set when the ESV couldn't be used and a public-domain version is shown instead */
+  const [fallbackReason, setFallbackReason] = useState<string | null>(null);
   const [mapSettings, setMapSettings] = usePersistentState<MapSettings>('map', DEFAULT_MAP_SETTINGS);
   const [mapVisible, setMapVisible] = usePersistentState('mapVisible', true);
 
-  const [bolls, setBolls] = useState<Translation[]>([]);
   const [verses, setVerses] = useState<Verse[] | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -95,26 +107,46 @@ export default function App() {
 
   const book = getBook(loc.book);
   const currentPeriod = periodFor(loc.book, loc.chapter);
-  const translation = findTranslation(translationId, bolls);
+  const chosenTranslation = findTranslation(translationId);
+  const translation = fallbackReason ? findTranslation(FALLBACK_TRANSLATION) : chosenTranslation;
   const journey = JOURNEYS.find((j) => j.id === journeyId) ?? null;
 
+  // Screens for this chapter: one, unless a licensed translation's per-page limit splits it
+  const pages = chapterPages(chosenTranslation, loc.book, loc.chapter);
+  const pageIndex = Math.min(esvPageIndex, pages.length - 1);
+  const page = pages[pageIndex];
+  useEffect(() => setEsvPageIndex(0), [loc.book, loc.chapter, translationId]);
+  // jumping to a verse opens the screen that contains it
   useEffect(() => {
-    loadBollsTranslations().then(setBolls);
-  }, []);
+    if (selectedVerse == null || pages.length < 2) return;
+    const i = pages.findIndex((pg) => selectedVerse >= pg.from && selectedVerse <= pg.to);
+    if (i >= 0 && i !== pageIndex) setEsvPageIndex(i);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedVerse, loc.book, loc.chapter]);
+  useEffect(() => setFallbackReason(null), [translationId, esvKey]);
 
   // Load chapter text
   useEffect(() => {
     let cancelled = false;
     setLoading(true);
     setError(null);
-    fetchChapter(translation, loc.book, loc.chapter, { esvKey })
+    fetchPassage(chosenTranslation, loc.book, loc.chapter, page, { esvKey })
+      .catch((e: Error) => {
+        // the ESV isn't available: show the public-domain WEB instead, and say why
+        if (e instanceof EsvKeyMissing && chosenTranslation.provider === 'esv') {
+          if (!cancelled) setFallbackReason(e.message);
+          const web = findTranslation(FALLBACK_TRANSLATION);
+          return fetchPassage(web, loc.book, loc.chapter, chapterPages(web, loc.book, loc.chapter)[0]);
+        }
+        throw e;
+      })
       .then((v) => !cancelled && setVerses(v))
       .catch((e: Error) => !cancelled && (setError(e.message), setVerses(null)))
       .finally(() => !cancelled && setLoading(false));
     return () => {
       cancelled = true;
     };
-  }, [translation.id, loc.book, loc.chapter, esvKey]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [chosenTranslation.id, loc.book, loc.chapter, esvKey, page.from, page.to]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // People named in each verse of the chapter
   useEffect(() => {
@@ -303,29 +335,31 @@ export default function App() {
           <span className="menu-label">Translation</span>
         <select
           className="translation"
-          value={translation.id}
+          value={chosenTranslation.id}
           onChange={(e) => {
             setTranslationId(e.target.value);
             setMenuOpen(false);
           }}
           aria-label="Translation"
         >
-          <optgroup label="Public domain (bible-api.com)">
+          <optgroup label="Licensed (Crossway's official ESV API)">
+            <option value={ESV_TRANSLATION.id}>ESV — {ESV_TRANSLATION.name}</option>
+          </optgroup>
+          {OPEN_TRANSLATIONS.length > 0 && (
+            <optgroup label="Freely licensed">
+              {OPEN_TRANSLATIONS.map((t) => (
+                <option key={t.id} value={t.id}>
+                  {t.code} — {t.name}
+                </option>
+              ))}
+            </optgroup>
+          )}
+          <optgroup label="Public domain">
             {BIBLE_API_TRANSLATIONS.map((t) => (
               <option key={t.id} value={t.id}>
                 {t.code.toUpperCase()} — {t.name}
               </option>
             ))}
-          </optgroup>
-          <optgroup label="Modern translations (bolls.life)">
-            {(bolls.length ? bolls : [translation].filter((t) => t.provider === 'bolls')).map((t) => (
-              <option key={t.id} value={t.id}>
-                {t.code} — {t.name}
-              </option>
-            ))}
-          </optgroup>
-          <optgroup label="Official publisher API">
-            <option value={ESV_TRANSLATION.id}>ESV — {ESV_TRANSLATION.name}</option>
           </optgroup>
         </select>
         </label>
@@ -536,6 +570,72 @@ export default function App() {
             onOpenListItem={(l, i) => openList(l.id, i)}
             period={currentPeriod ?? null}
             onOpenPeriod={openPeriods}
+            before={
+              <>
+                {fallbackReason && (
+                  <div className="text-notice">
+                    <strong>Showing the World English Bible.</strong> The ESV comes from Crossway's official ESV
+                    service and needs a free key ({fallbackReason}){' '}
+                    <button className="link" onClick={() => setSettingsOpen(true)}>
+                      Add your ESV key
+                    </button>
+                  </div>
+                )}
+                {!fallbackReason && pages.length > 1 && (
+                  <div className="text-notice part-nav">
+                    <span>
+                      <strong>
+                        Part {pageIndex + 1} of {pages.length}
+                      </strong>{' '}
+                      · verses {page.from}–{page.to}
+                    </span>
+                    <span className="part-buttons">
+                      <button
+                        className="btn"
+                        disabled={pageIndex === 0}
+                        onClick={() => {
+                          setSelectedVerse(null);
+                          setEsvPageIndex(pageIndex - 1);
+                        }}
+                      >
+                        ‹ Previous part
+                      </button>
+                      <button
+                        className="btn"
+                        disabled={pageIndex === pages.length - 1}
+                        onClick={() => {
+                          setSelectedVerse(null);
+                          setEsvPageIndex(pageIndex + 1);
+                        }}
+                      >
+                        Next part ›
+                      </button>
+                    </span>
+                    <small className="muted">
+                      Crossway's free ESV license shows at most half of a book on screen at a time.
+                    </small>
+                  </div>
+                )}
+              </>
+            }
+            after={
+              translation.provider === 'esv' ? (
+                <p className="copyright-notice">
+                  <strong>ESV</strong> · {ESV_COPYRIGHT}{' '}
+                  <a href="https://www.esv.org/" target="_blank" rel="noreferrer">
+                    ESV.org
+                  </a>
+                </p>
+              ) : translation.notice ? (
+                <p className="copyright-notice">
+                  <strong>{translation.code}</strong> · {translation.notice}
+                </p>
+              ) : (
+                <p className="copyright-notice">
+                  {translation.code.toUpperCase()} · {translation.name}, public domain.
+                </p>
+              )
+            }
           />
           {studyList && (
             <ListPanel
@@ -651,31 +751,113 @@ export default function App() {
           <div className="modal" onClick={(e) => e.stopPropagation()} role="dialog" aria-label="Settings">
             <h2>Settings</h2>
             <label className="field">
-              <span>ESV API key (optional)</span>
+              <span>ESV API key</span>
               <input
                 type="password"
                 value={esvKey}
-                placeholder="Paste token from api.esv.org"
+                placeholder="Paste a token from api.esv.org"
                 onChange={(e) => setEsvKey(e.target.value.trim())}
               />
               <small className="muted">
-                Free for personal use at{' '}
+                To read the ESV, create a free key at{' '}
                 <a href="https://api.esv.org/" target="_blank" rel="noreferrer">
                   api.esv.org
-                </a>
-                . Stored only in this browser.
+                </a>{' '}
+                (sign up, then create an application for non-commercial use) and paste its token here. It is kept only
+                in this browser. Without a key, the public-domain World English Bible is shown.
               </small>
             </label>
-            <h3>About the data</h3>
-            <p className="muted small">
-              Place identifications and verse links come from{' '}
-              <a href="https://www.openbible.info/geo/" target="_blank" rel="noreferrer">
-                OpenBible.info Bible Geocoding Data
-              </a>{' '}
-              (CC BY 4.0). Many ancient sites are uncertain; pins show the most likely identification. Journey legs are
-              drawn as straight lines between stops, not exact routes. Bible text is loaded from bible-api.com
-              (public-domain versions), bolls.life (modern versions), or the official ESV API.
-            </p>
+
+            <h3>Sources & licenses</h3>
+            <div className="licenses small">
+              <p>
+                <strong>ESV.</strong> {ESV_COPYRIGHT} Provided through Crossway's free{' '}
+                <a href="https://api.esv.org/" target="_blank" rel="noreferrer">
+                  ESV API
+                </a>{' '}
+                for non-commercial use. This app has no ads, charges nothing and asks for no donations. In keeping with
+                the terms, it shows at most 500 verses or half a book at a time, keeps no more than 500 ESV verses on
+                your device (in memory only), and labels ESV text. See{' '}
+                <a href="https://www.esv.org/" target="_blank" rel="noreferrer">
+                  ESV.org
+                </a>
+                .
+              </p>
+              <p>
+                <strong>Public-domain translations</strong> (WEB, KJV, ASV, BBE, Darby, YLT, OEB) are free to use
+                without restriction, served by{' '}
+                <a href="https://bible-api.com/" target="_blank" rel="noreferrer">
+                  bible-api.com
+                </a>
+                .
+              </p>
+              <p>
+                <strong>Places & verse links:</strong>{' '}
+                <a href="https://www.openbible.info/geo/" target="_blank" rel="noreferrer">
+                  OpenBible.info Bible Geocoding Data
+                </a>
+                ,{' '}
+                <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">
+                  CC BY 4.0
+                </a>
+                . Many ancient sites are uncertain; pins show the most likely identification.
+              </p>
+              <p>
+                <strong>People, families & dates:</strong>{' '}
+                <a href="https://github.com/robertrouse/theographic-bible-metadata" target="_blank" rel="noreferrer">
+                  Theographic Bible Metadata
+                </a>
+                ,{' '}
+                <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noreferrer">
+                  CC BY-SA 4.0
+                </a>{' '}
+                (this app's derived people data is shared under the same license). Biographies: Easton's Bible
+                Dictionary (1897), public domain.
+              </p>
+              <p>
+                <strong>Place histories & photos:</strong>{' '}
+                <a href="https://en.wikipedia.org/" target="_blank" rel="noreferrer">
+                  Wikipedia
+                </a>{' '}
+                text under{' '}
+                <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noreferrer">
+                  CC BY-SA 4.0
+                </a>
+                , with each card linking to its article; images from Wikimedia Commons under their own licenses (see
+                the linked article). Founding dates:{' '}
+                <a href="https://www.wikidata.org/" target="_blank" rel="noreferrer">
+                  Wikidata
+                </a>{' '}
+                (CC0).
+              </p>
+              <p>
+                <strong>Maps:</strong> terrain, relief, satellite and modern labels © Esri and its data providers
+                (Powered by Esri); street map ©{' '}
+                <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">
+                  OpenStreetMap contributors
+                </a>{' '}
+                (ODbL); Roman Empire map:{' '}
+                <a href="https://imperium.ahlfeldt.se/" target="_blank" rel="noreferrer">
+                  Digital Atlas of the Roman Empire
+                </a>{' '}
+                (CC BY 4.0); lakes & rivers:{' '}
+                <a href="https://www.naturalearthdata.com/" target="_blank" rel="noreferrer">
+                  Natural Earth
+                </a>{' '}
+                (public domain); map library:{' '}
+                <a href="https://leafletjs.com/" target="_blank" rel="noreferrer">
+                  Leaflet
+                </a>
+                .
+              </p>
+              <p>
+                <strong>Periods of Bible history</strong> follow the outline arranged by Bob and Sandra Waldron. Summaries
+                in this app are original. Fonts: Figtree and EB Garamond (SIL Open Font License).
+              </p>
+              <p className="muted">
+                Journey legs are drawn as straight lines between stops (some follow known routes), not exact roads.
+              </p>
+            </div>
             <button className="btn primary" onClick={() => setSettingsOpen(false)}>
               Done
             </button>

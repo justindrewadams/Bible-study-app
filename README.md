@@ -2,7 +2,7 @@
 
 A Bible study app that puts the text and the map side by side.
 
-- **Read in your translation.** Opens in the **ESV** by default (via bolls.life, no key needed). KJV, WEB, ASV and other public-domain versions load with no setup. Modern versions (NIV, NKJV, NLT, NASB, ESV, CSB…) come from [bolls.life](https://bolls.life), and the official ESV API works with a free personal key.
+- **Read in the ESV or a public-domain translation.** The ESV comes only from Crossway's official [ESV API](https://api.esv.org/), under its free non-commercial terms (see *Translations & licensing* below). WEB, KJV, ASV, BBE, Darby, YLT and OEB are public domain and come from [bible-api.com](https://bible-api.com).
 - **Tap a verse to see where it happens.** Every place the verse names is pinned on the map with a popup. Place names in the text are highlighted, and you can tap one to jump to it. If a verse names no place, the map shows the **last place mentioned** (e.g. Acts 13:9 → Paphos, v. 6), which is usually where the story is.
 - **Place info cards.** Tap a place name in the text, or any pin or dot on the map, to open a card with: today's site and how certain it is, other biblical names and spellings, when it was established, a short history with a photo (from Wikipedia), key stories (hand-picked for about 75 major places), the journeys that stop there, and every verse that names it. Tap any reference to go to that verse.
 - **Study lists.** Step through a list the way you follow a journey, with Prev, Next or Play. The Bible text jumps to each item's verse, and the map pins its place when it has one. The 24 lists:
@@ -70,4 +70,24 @@ The script looks up coordinates from the dataset, using the verse to tell apart 
 - Place histories, photos and founding dates are loaded live from Wikipedia and Wikidata when available.
 - Journey legs are straight lines between stops, not exact roads or sea routes. The order of some Gospel events is debated.
 - Map tiles: Esri, OpenStreetMap contributors, and the [Digital Atlas of the Roman Empire](https://imperium.ahlfeldt.se/) (CC BY 4.0). Lakes and rivers: [Natural Earth](https://www.naturalearthdata.com/) (public domain), built by `scripts/build-water.mjs`. The map stops at a regional close-up, which is enough to see the Sea of Galilee and the Jordan valley.
-- Bible text: [bible-api.com](https://bible-api.com), [bolls.life](https://bolls.life), [ESV API](https://api.esv.org). Copyrighted translations are shown for personal study under each provider's terms.
+- Bible text: the ESV from Crossway's [ESV API](https://api.esv.org) (see below), and public-domain translations from [bible-api.com](https://bible-api.com).
+
+## Translations & licensing
+
+The app is free, with no ads and no donations, so it qualifies for each provider's free, non-commercial terms. It keeps to them as follows.
+
+**ESV (Crossway).** The app uses only the official ESV API.
+- It shows Crossway's copyright notice under ESV text, labels the text "ESV", and links to ESV.org.
+- It never shows more than 500 verses, or half of a book, on screen at once. Short books such as Jude, Philemon and Obadiah are shown in two parts.
+- It keeps no more than 500 ESV verses on the device, and only in memory (`src/lib/bible.ts`, `ESV_TERMS`).
+- The API allows up to 5,000 requests a day, 1,000 an hour and 60 a minute. Passages already seen are reused from memory.
+
+**ESV key.** Each reader adds their own free key: create an account and a non-commercial API application at [api.esv.org](https://api.esv.org/), then paste the token in the app under **Settings**. The key stays in that browser only. A key is deliberately *not* built into the published site, because anyone could read it there. To share one key without exposing it, it would have to sit behind a small server-side proxy. Without a key, the app shows the WEB and explains why.
+
+**Everything else** is credited in the app under **Settings → Sources & licenses**.
+- Public domain: the public-domain Bibles, Easton's Bible Dictionary and Natural Earth.
+- CC BY 4.0: OpenBible.info places and the Digital Atlas of the Roman Empire.
+- CC BY-SA 4.0: Theographic people data (this repository's derived people files carry the same license) and Wikipedia text, credited and linked on each place card.
+- CC0: Wikidata.
+- Esri and OpenStreetMap map tiles carry their attribution on the map.
+

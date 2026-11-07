@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useRef } from 'react';
+import { Fragment, useEffect, useRef, type ReactNode } from 'react';
 import type { Verse } from '../lib/bible';
 import type { ChapterGeo, Place } from '../lib/geo';
 import { journeysAtVerse, type Journey } from '../lib/journeys';
@@ -26,6 +26,10 @@ interface Props {
   onOpenListItem: (list: StudyList, index: number) => void;
   period: Period | null;
   onOpenPeriod: (id: string) => void;
+  /** shown above the text (e.g. which part of a chapter, or why another version is shown) */
+  before?: ReactNode;
+  /** shown below the text (e.g. the translation's copyright notice) */
+  after?: ReactNode;
 }
 
 const escapeRe = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -75,6 +79,8 @@ export default function Reader({
   onOpenListItem,
   period,
   onOpenPeriod,
+  before,
+  after,
 }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -105,6 +111,7 @@ export default function Reader({
           <span className="muted"> · {period.dates}</span>
         </button>
       )}
+      {before}
       {loading && <p className="muted">Loading…</p>}
       {error && (
         <div className="error">
@@ -209,6 +216,7 @@ export default function Reader({
           })}
         </div>
       )}
+      {!loading && !error && verses && after}
     </div>
   );
 }

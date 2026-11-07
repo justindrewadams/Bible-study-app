@@ -61,7 +61,7 @@ const BASE_LAYERS: Record<BaseLayerId, BaseLayer> = {
     url: `${ESRI}/World_Terrain_Base/MapServer/tile/{z}/{y}/{x}`,
     maxNativeZoom: 9,
     water: true,
-    attribution: 'Tiles &copy; Esri &mdash; Source: USGS, Esri, TANA, DeLorme, NPS',
+    attribution: 'Powered by Esri &mdash; Source: USGS, Esri, TANA, DeLorme, NPS',
     className: 'tiles-parchment',
   },
   physical: {
@@ -69,13 +69,13 @@ const BASE_LAYERS: Record<BaseLayerId, BaseLayer> = {
     url: `${ESRI}/World_Physical_Map/MapServer/tile/{z}/{y}/{x}`,
     maxNativeZoom: 8,
     water: true,
-    attribution: 'Tiles &copy; Esri &mdash; Source: US National Park Service',
+    attribution: 'Powered by Esri &mdash; Source: US National Park Service',
   },
   satellite: {
     label: 'Satellite',
     url: `${ESRI}/World_Imagery/MapServer/tile/{z}/{y}/{x}`,
     maxNativeZoom: MAX_ZOOM,
-    attribution: 'Tiles &copy; Esri &mdash; Source: Esri, Maxar, Earthstar Geographics',
+    attribution: 'Powered by Esri &mdash; Source: Esri, Maxar, Earthstar Geographics, and the GIS User Community',
   },
   roman: {
     label: 'Roman Empire (roads & ancient names)',
@@ -92,7 +92,7 @@ const MODERN_LAYERS: Record<Exclude<ModernOverlay, 'off'>, { url: string; maxNat
   labels: {
     url: `${ESRI}/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}`,
     maxNativeZoom: 12,
-    attribution: 'Modern labels &copy; Esri',
+    attribution: 'Modern labels: Powered by Esri',
   },
   full: {
     url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',

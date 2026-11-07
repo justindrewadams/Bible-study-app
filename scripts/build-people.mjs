@@ -131,5 +131,15 @@ fs.mkdirSync(path.join(out, 'people-verses'), { recursive: true });
 for (const [letter, data] of Object.entries(shards)) fs.writeFileSync(path.join(out, 'people', `${letter}.json`), JSON.stringify(data));
 for (const [book, data] of Object.entries(byBook)) fs.writeFileSync(path.join(out, 'people-verses', `${book}.json`), JSON.stringify(data));
 
+// Verses per chapter (all 66 books), used to keep each screen of a licensed
+// translation within its publisher's limits (e.g. at most half of a book).
+const verseCounts = {};
+for (const v of verses) {
+  const [b, c] = v.fields.osisRef.split('.');
+  ((verseCounts[b] ??= [])[Number(c) - 1] ??= 0);
+  verseCounts[b][Number(c) - 1]++;
+}
+fs.writeFileSync(path.join(root, 'src', 'data', 'verseCounts.json'), JSON.stringify(verseCounts));
+
 const linked = Object.values(shards).flatMap((s) => Object.values(s)).filter((d) => d.bornAt?.place != null || d.diedAt?.place != null).length;
 console.log(`people: ${index.length}, shards: ${Object.keys(shards).length}, books: ${Object.keys(byBook).length}, with linked places: ${linked}`);
