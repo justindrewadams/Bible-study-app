@@ -27,6 +27,7 @@ import PeriodsPage from './components/PeriodsPage';
 import PeoplePage from './components/PeoplePage';
 import NationsPage from './components/NationsPage';
 import PersonCard from './components/PersonCard';
+import WordStudy from './components/WordStudy';
 import { loadChapterPeople, type PersonEntry } from './lib/people';
 import ListPanel from './components/ListPanel';
 import { LISTS, LIST_GROUPS, type StudyList } from './lib/lists';
@@ -72,13 +73,26 @@ export default function App() {
   const [personSlug, setPersonSlug] = useState<string | null>(null);
   const [chapterPeople, setChapterPeople] = useState<Map<number, PersonEntry[]>>(new Map());
 
-  // only one info card at a time
+  // only one info card at a time (place, person, or Hebrew/Greek word study)
+  const [wordStudyOpen, setWordStudyOpen] = useState(false);
   useEffect(() => {
-    if (cardPlace) setPersonSlug(null);
+    if (cardPlace) {
+      setPersonSlug(null);
+      setWordStudyOpen(false);
+    }
   }, [cardPlace]);
   useEffect(() => {
-    if (personSlug) setCardPlace(null);
+    if (personSlug) {
+      setCardPlace(null);
+      setWordStudyOpen(false);
+    }
   }, [personSlug]);
+  useEffect(() => {
+    if (wordStudyOpen) {
+      setCardPlace(null);
+      setPersonSlug(null);
+    }
+  }, [wordStudyOpen]);
   const [listId, setListId] = useState<string | null>(null);
   const [listIndex, setListIndex] = useState(0);
   const [listPlaying, setListPlaying] = useState(false);
@@ -533,7 +547,16 @@ export default function App() {
         <section className="text-pane">
           {selectedInfo && selectedVerse != null && (
             <div className="verse-info" aria-live="polite">
-              <div className="verse-info-ref">{formatRef(book.name, loc.chapter, selectedVerse)}</div>
+              <div className="verse-info-ref">
+                {formatRef(book.name, loc.chapter, selectedVerse)}
+                <button
+                  className={`word-study-btn${wordStudyOpen ? ' on' : ''}`}
+                  onClick={() => setWordStudyOpen(!wordStudyOpen)}
+                  title={`See the ${book.testament === 'OT' ? 'Hebrew' : 'Greek'} words of this verse`}
+                >
+                  {book.testament === 'OT' ? 'Hebrew' : 'Greek'}
+                </button>
+              </div>
               {selectedInfo.places.length ? (
                 <div>
                   {selectedInfo.inferred ? 'No place named here — last mentioned: ' : 'Places: '}
@@ -744,6 +767,19 @@ export default function App() {
         )}
       </main>
 
+      {wordStudyOpen && selectedVerse != null && !pageOpen && (
+        <WordStudy
+          book={loc.book}
+          chapter={loc.chapter}
+          verse={selectedVerse}
+          onClose={() => setWordStudyOpen(false)}
+          onGoToRef={(ref) => {
+            const r = parseRef(ref);
+            goTo(r.book, r.chapter, r.verse);
+          }}
+        />
+      )}
+
       {personSlug && (
         <PersonCard
           slug={personSlug}
@@ -835,6 +871,23 @@ export default function App() {
                   bible-api.com
                 </a>
                 .
+              </p>
+              <p>
+                <strong>Hebrew & Greek word study:</strong> words, transliterations, glosses, grammar and brief
+                lexicons from{' '}
+                <a href="https://github.com/STEPBible/STEPBible-Data" target="_blank" rel="noreferrer">
+                  STEPBible Data
+                </a>{' '}
+                by Tyndale House, Cambridge (
+                <a href="https://www.STEPBible.org" target="_blank" rel="noreferrer">
+                  STEPBible.org
+                </a>
+                ),{' '}
+                <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">
+                  CC BY 4.0
+                </a>
+                . Lexicon entries are based on Brown-Driver-Briggs and Abbott-Smith (public domain). The Greek follows
+                the editions used by most modern translations; words found only in the KJV's Greek are marked.
               </p>
               <p>
                 <strong>Places & verse links:</strong>{' '}

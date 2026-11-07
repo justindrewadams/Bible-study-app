@@ -4153,3 +4153,181 @@ mark.list-word {
     display: inline;
   }
 }
+
+/* =====================================================================
+   Hebrew & Greek word study (verse bar button + card)
+   ===================================================================== */
+
+.verse-info-ref {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.word-study-btn {
+  font: inherit;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 1px 7px;
+  border: 1.5px solid #111;
+  background: #fff;
+  color: #111;
+  cursor: pointer;
+  line-height: 1.4;
+}
+
+.word-study-btn:hover,
+.word-study-btn.on {
+  background: var(--sun);
+}
+
+.he {
+  font-family: 'SBL Hebrew', 'Ezra SIL', 'Taamey Frank CLM', 'Times New Roman', 'Arial Hebrew', serif;
+}
+
+.gr {
+  font-family: var(--serif);
+}
+
+.ws-hint {
+  margin: 0 0 8px;
+}
+
+.ws-list {
+  list-style: none;
+  margin: 0 0 10px;
+  padding: 0;
+  border-top: 1px solid var(--hair);
+}
+
+.ws-word {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr) auto;
+  grid-template-areas:
+    'orig gloss strong'
+    'tr gloss strong';
+  align-items: center;
+  column-gap: 10px;
+  width: 100%;
+  padding: 7px 4px;
+  border: 0;
+  border-bottom: 1px solid var(--hair);
+  background: none;
+  color: var(--ink);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.ws-word:hover {
+  background: var(--select);
+}
+
+.ws-word.following {
+  background: color-mix(in srgb, var(--sun) 35%, var(--paper));
+}
+
+.ws-word.kjv {
+  opacity: 0.55;
+}
+
+.ws-orig {
+  grid-area: orig;
+  font-size: 1.3rem;
+  line-height: 1.2;
+  text-align: left;
+}
+
+.ws-orig.he {
+  font-size: 1.45rem;
+  text-align: right;
+}
+
+.ws-tr {
+  grid-area: tr;
+  font-size: 0.78rem;
+  font-style: italic;
+  color: var(--muted);
+}
+
+.ws-gloss {
+  grid-area: gloss;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.ws-strong {
+  grid-area: strong;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.ws-kjv {
+  grid-column: 1 / -1;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+
+.ws-back {
+  margin: 0 0 8px;
+  padding: 0;
+}
+
+.ws-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 2px 0 12px;
+}
+
+.ws-big {
+  font-size: 2.2rem;
+  line-height: 1.1;
+}
+
+.ws-head-tr {
+  font-style: italic;
+  color: var(--muted);
+}
+
+.ws-head-gloss {
+  font-weight: 800;
+  font-size: 1.05rem;
+}
+
+.ws-def {
+  font-size: 0.9rem;
+  line-height: 1.55;
+  margin: 0;
+}
+
+.pc-chip.here {
+  background: var(--select);
+  font-weight: 800;
+}
+
+@media (max-width: 860px) {
+  .verse-info-ref {
+    display: inline-flex;
+  }
+
+  .word-study-btn {
+    font-size: 0.66rem;
+    padding: 0 5px;
+    border-width: 1px;
+  }
+
+  .ws-orig {
+    font-size: 1.2rem;
+  }
+
+  .ws-orig.he {
+    font-size: 1.35rem;
+  }
+}

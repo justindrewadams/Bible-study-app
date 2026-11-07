@@ -48,6 +48,15 @@ the decisions already made (and why), and how the owner likes to work.
    "Ancestor of: …" linking back. Data in `src/data/nations.ts`; `npm run check:nations` validates every person
    slug and reference. Where Scripture doesn't name an ancestor (Rome, Persia, Samaritans…), it says so.
 
+10. **Hebrew & Greek word study:** select a verse, then the "Hebrew"/"Greek" button in the blue verse bar opens
+   a card listing every original word (word, transliteration, gloss, Strong's). Tapping a word shows its lexicon
+   entry, plain-English grammar, and other verses using it (tapping one moves the reader and marks the word).
+   Data from STEPBible (Tyndale House), **CC BY 4.0**, credited in Sources & licenses and on the card. Greek
+   follows the Nestle-Aland text; KJV-only (Textus Receptus) words are included but faded. Hebrew skips
+   LXX-only additions. Built by `npm run build:words` into `public/data/words/<Book>/<chapter>.json`,
+   `public/data/lexicon/<H|G><n>.json` and `grammar-H.json`/`grammar-G.json`; code in `src/lib/words.ts`
+   and `src/components/WordStudy.tsx`.
+
 **Name:** the app is called **Bible Study Companion** (renamed from Bible Atlas). The title is two lines,
 "BIBLE STUDY" / "COMPANION", sized (15.3px / 14.6px Figtree 800) so both lines are the same width. The repo,
 site address and the relay's Cloudflare name (`bible-atlas-esv`) were deliberately kept, since the relay only
@@ -87,6 +96,7 @@ Generated files are committed. Raw downloads are cached in `scripts/.cache/` (gi
 | `build-people.mjs` | Theographic Bible Metadata (CC BY-SA 4.0) and Easton's Bible Dictionary (public domain) | `public/data/people.json`, `people/<letter>.json`, `people-verses/<Book>.json`, `place-people.json`, `src/data/verseCounts.json` |
 | `build-water.mjs` | Natural Earth 10m lakes and rivers (public domain) | `public/data/water.json` |
 | `build-relay.mjs` | app book data | `relay/esv-relay.js` |
+| `build-words.mjs` | STEPBible TAHOT, TAGNT, TBESH, TBESG, TEHMC, TEGMC (CC BY 4.0) | `public/data/words/`, `lexicon/`, `grammar-*.json` |
 
 - **Journeys and lists:** edit the `*.source.json` files. Each item has `place` (the OpenBible name), `ref` (OSIS,
   e.g. `Acts.16.12`) and a `note`. Optional extras:

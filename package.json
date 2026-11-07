@@ -9,6 +9,7 @@
     "build:data": "node scripts/build-data.mjs && node scripts/build-people.mjs && node scripts/build-water.mjs",
     "typecheck": "tsc",
     "build:relay": "node scripts/build-relay.mjs",
+    "build:words": "node scripts/build-words.mjs",
     "check:hymns": "node --experimental-strip-types --no-warnings scripts/check-hymns.mjs",
     "check:nations": "node --experimental-strip-types --no-warnings scripts/check-nations.mjs"
   },
