@@ -3773,3 +3773,13 @@ body {
 .place-name:hover {
   text-decoration-color: var(--place);
 }
+
+/* the current list item's word inside a shared verse (e.g. "joy" in Galatians 5:22) */
+.list-word,
+mark.list-word {
+  background: var(--sun);
+  color: #111;
+  padding: 0 2px;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}

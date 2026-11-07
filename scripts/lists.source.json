@@ -1151,75 +1151,117 @@
     "ref": "Matt.10.2",
     "note": "Fisherman; confesses Jesus as the Christ; preaches at Pentecost; writes 1–2 Peter.",
     "place": "Bethsaida",
-    "lookup": "John.1.44"
+    "lookup": "John.1.44",
+    "words": [
+     "Peter",
+     "Simon"
+    ]
    },
    {
     "t": "Andrew",
     "ref": "Matt.10.2",
     "note": "Peter's brother; first a disciple of John the Baptist (John 1:40).",
     "place": "Bethsaida",
-    "lookup": "John.1.44"
+    "lookup": "John.1.44",
+    "words": [
+     "Andrew"
+    ]
    },
    {
     "t": "James, son of Zebedee",
     "ref": "Matt.10.2",
-    "note": "A \"son of thunder\"; first apostle martyred (Acts 12:2)."
+    "note": "A \"son of thunder\"; first apostle martyred (Acts 12:2).",
+    "words": [
+     "James"
+    ]
    },
    {
     "t": "John, son of Zebedee",
     "ref": "Matt.10.2",
-    "note": "The disciple Jesus loved; writes the Gospel, three letters and Revelation."
+    "note": "The disciple Jesus loved; writes the Gospel, three letters and Revelation.",
+    "words": [
+     "John"
+    ]
    },
    {
     "t": "Philip",
     "ref": "Matt.10.3",
     "note": "From Bethsaida; brings Nathanael to Jesus.",
     "place": "Bethsaida",
-    "lookup": "John.1.44"
+    "lookup": "John.1.44",
+    "words": [
+     "Philip"
+    ]
    },
    {
     "t": "Bartholomew (Nathanael)",
     "ref": "Matt.10.3",
     "note": "\"An Israelite in whom there is no deceit\" (John 1:47); from Cana.",
     "place": "Cana",
-    "lookup": "John.21.2"
+    "lookup": "John.21.2",
+    "words": [
+     "Bartholomew"
+    ]
    },
    {
     "t": "Thomas",
     "ref": "Matt.10.3",
-    "note": "Doubts, then confesses: \"My Lord and my God!\" (John 20:28)."
+    "note": "Doubts, then confesses: \"My Lord and my God!\" (John 20:28).",
+    "words": [
+     "Thomas"
+    ]
    },
    {
     "t": "Matthew (Levi)",
     "ref": "Matt.10.3",
     "note": "Tax collector at Capernaum; writes the first Gospel.",
     "place": "Capernaum",
-    "lookup": "Mark.2.1"
+    "lookup": "Mark.2.1",
+    "words": [
+     "Matthew"
+    ]
    },
    {
     "t": "James, son of Alphaeus",
     "ref": "Matt.10.3",
-    "note": "Sometimes called James the Less."
+    "note": "Sometimes called James the Less.",
+    "words": [
+     "James"
+    ]
    },
    {
     "t": "Thaddaeus (Judas son of James)",
     "ref": "Matt.10.3",
-    "note": "Asks Jesus a question at the Last Supper (John 14:22)."
+    "note": "Asks Jesus a question at the Last Supper (John 14:22).",
+    "words": [
+     "Thaddaeus",
+     "Lebbaeus"
+    ]
    },
    {
     "t": "Simon the Zealot",
     "ref": "Matt.10.4",
-    "note": "Once a member (or in the spirit) of the Zealots."
+    "note": "Once a member (or in the spirit) of the Zealots.",
+    "words": [
+     "Simon"
+    ]
    },
    {
     "t": "Judas Iscariot",
     "ref": "Matt.10.4",
-    "note": "Betrays Jesus for thirty pieces of silver."
+    "note": "Betrays Jesus for thirty pieces of silver.",
+    "words": [
+     "Judas Iscariot",
+     "Judas"
+    ]
    },
    {
     "t": "Matthias",
     "ref": "Acts.1.26",
-    "note": "Chosen by lot to replace Judas."
+    "note": "Chosen by lot to replace Judas.",
+    "words": [
+     "Matthias"
+    ]
    },
    {
     "t": "Paul",
@@ -2125,47 +2167,94 @@
    {
     "t": "Love",
     "ref": "Gal.5.22",
-    "note": "\"Love is patient and kind\" (1 Cor 13:4)."
+    "note": "\"Love is patient and kind\" (1 Cor 13:4).",
+    "words": [
+     "love"
+    ]
    },
    {
     "t": "Joy",
     "ref": "Gal.5.22",
-    "note": "\"Rejoice in the Lord always\" (Phil 4:4)."
+    "note": "\"Rejoice in the Lord always\" (Phil 4:4).",
+    "words": [
+     "joy"
+    ]
    },
    {
     "t": "Peace",
     "ref": "Gal.5.22",
-    "note": "The peace of God that surpasses understanding (Phil 4:7)."
+    "note": "The peace of God that surpasses understanding (Phil 4:7).",
+    "words": [
+     "peace"
+    ]
    },
    {
     "t": "Patience",
     "ref": "Gal.5.22",
-    "note": "Bearing with one another in love (Eph 4:2)."
+    "note": "Bearing with one another in love (Eph 4:2).",
+    "words": [
+     "patience",
+     "longsuffering",
+     "long-suffering",
+     "long suffering",
+     "forbearance",
+     "a quiet mind"
+    ]
    },
    {
     "t": "Kindness",
     "ref": "Gal.5.22",
-    "note": "\"Be kind to one another\" (Eph 4:32)."
+    "note": "\"Be kind to one another\" (Eph 4:32).",
+    "words": [
+     "kindness",
+     "kindliness",
+     "kind acts",
+     "gentleness"
+    ]
    },
    {
     "t": "Goodness",
     "ref": "Gal.5.22",
-    "note": "\"Let us not grow weary of doing good\" (Gal 6:9)."
+    "note": "\"Let us not grow weary of doing good\" (Gal 6:9).",
+    "words": [
+     "goodness",
+     "well-doing",
+     "generosity"
+    ]
    },
    {
     "t": "Faithfulness",
     "ref": "Gal.5.22",
-    "note": "\"Be faithful unto death\" (Rev 2:10)."
+    "note": "\"Be faithful unto death\" (Rev 2:10).",
+    "words": [
+     "faithfulness",
+     "fidelity",
+     "faith",
+     "trustfulness"
+    ]
    },
    {
     "t": "Gentleness",
     "ref": "Gal.5.23",
-    "note": "Restore others in a spirit of gentleness (Gal 6:1)."
+    "note": "Restore others in a spirit of gentleness (Gal 6:1).",
+    "words": [
+     "gentleness",
+     "meekness",
+     "gentle behaviour",
+     "gentle"
+    ]
    },
    {
     "t": "Self-control",
     "ref": "Gal.5.23",
-    "note": "\"Against such things there is no law.\""
+    "note": "\"Against such things there is no law.\"",
+    "words": [
+     "self-control",
+     "self control",
+     "temperance",
+     "control over desires",
+     "self-restraint"
+    ]
    }
   ]
  },
@@ -2178,35 +2267,65 @@
   "items": [
    {
     "t": "Belt of truth",
-    "ref": "Eph.6.14"
+    "ref": "Eph.6.14",
+    "words": [
+     "truth",
+     "true word"
+    ]
    },
    {
     "t": "Breastplate of righteousness",
-    "ref": "Eph.6.14"
+    "ref": "Eph.6.14",
+    "words": [
+     "breastplate",
+     "breast-plate",
+     "righteousness"
+    ]
    },
    {
     "t": "Shoes of the gospel of peace",
     "ref": "Eph.6.15",
-    "note": "Readiness to go with the good news."
+    "note": "Readiness to go with the good news.",
+    "words": [
+     "gospel of peace",
+     "good news of peace",
+     "Good News of peace",
+     "peace"
+    ]
    },
    {
     "t": "Shield of faith",
     "ref": "Eph.6.16",
-    "note": "Extinguishes the flaming darts of the evil one."
+    "note": "Extinguishes the flaming darts of the evil one.",
+    "words": [
+     "shield",
+     "cover"
+    ]
    },
    {
     "t": "Helmet of salvation",
-    "ref": "Eph.6.17"
+    "ref": "Eph.6.17",
+    "words": [
+     "helmet",
+     "head-dress"
+    ]
    },
    {
     "t": "Sword of the Spirit",
     "ref": "Eph.6.17",
-    "note": "The word of God (Heb 4:12)."
+    "note": "The word of God (Heb 4:12).",
+    "words": [
+     "sword"
+    ]
    },
    {
     "t": "Prayer",
     "ref": "Eph.6.18",
-    "note": "\"Praying at all times in the Spirit.\""
+    "note": "\"Praying at all times in the Spirit.\"",
+    "words": [
+     "prayer",
+     "praying"
+    ]
    }
   ]
  },

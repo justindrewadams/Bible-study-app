@@ -3,7 +3,7 @@ import HymnsPanel from './HymnsPanel';
 import type { Verse } from '../lib/bible';
 import type { ChapterGeo, Place } from '../lib/geo';
 import { journeysAtVerse, type Journey } from '../lib/journeys';
-import { listsAtVerse, type StudyList } from '../lib/lists';
+import { LISTS, listsAtVerse, type StudyList } from '../lib/lists';
 import { PERIODS, type Period } from '../data/periods';
 import { NO_INLINE, NO_INLINE_NAMES, type PersonEntry } from '../lib/people';
 
@@ -61,6 +61,15 @@ function highlightNames(text: string, places: Place[], people: PersonEntry[]): P
   return out;
 }
 
+/** Where the first of `words` (in order of preference) appears in the verse, as whole words. */
+function findMark(text: string, words: string[] | undefined): [number, number] | null {
+  for (const w of words ?? []) {
+    const m = new RegExp(`(?<![\\w-])${escapeRe(w)}(?![\\w-])`, 'i').exec(text);
+    if (m) return [m.index, m.index + m[0].length];
+  }
+  return null;
+}
+
 export default function Reader({
   book,
   bookName,
@@ -84,6 +93,8 @@ export default function Reader({
   after,
 }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
+  // the open list item's word to mark inside its verse (e.g. "joy" in Galatians 5:22)
+  const listItem = activeList ? LISTS.find((l) => l.id === activeList.id)?.items[activeList.index] : undefined;
   const [hymnsOpen, setHymnsOpen] = useState(false);
 
   useEffect(() => setHymnsOpen(false), [book, chapter]);
@@ -137,7 +148,12 @@ export default function Reader({
             const places = geo?.byVerse.get(v.verse) ?? [];
             const selected = selectedVerse === v.verse;
             const journeys = selected ? journeysAtVerse(book, chapter, v.verse) : [];
-            const lists = selected ? listsAtVerse(book, chapter, v.verse) : [];
+            // several items can share a verse (the fruit of the Spirit): show the open one, not the first
+            const lists = (selected ? listsAtVerse(book, chapter, v.verse) : []).map((x) =>
+              activeList?.id === x.list.id && x.list.items[activeList.index]?.ref === `${book}.${chapter}.${v.verse}`
+                ? { ...x, index: activeList.index }
+                : x,
+            );
             return (
               <Fragment key={v.verse}>
                 <p
@@ -154,13 +170,28 @@ export default function Reader({
                   }}
                 >
                   <sup className="vnum">{v.verse}</sup>
-                  {highlightNames(v.text, places, chapterPeople.get(v.verse) ?? []).map((part, i) =>
-                    typeof part === 'string' ? (
-                      <Fragment key={i}>{part}</Fragment>
-                    ) : 'person' in part ? (
+                  {highlightNames(v.text, places, chapterPeople.get(v.verse) ?? []).map((part, i, all) => {
+                    const mark = listItem?.ref === `${book}.${chapter}.${v.verse}` ? findMark(v.text, listItem.words) : null;
+                    const start = all.slice(0, i).reduce((n, p) => n + (typeof p === 'string' ? p.length : p.name.length), 0);
+                    const text = typeof part === 'string' ? part : part.name;
+                    const end = start + text.length;
+                    const hit = mark && mark[0] < end && mark[1] > start;
+                    if (typeof part === 'string') {
+                      if (!hit) return <Fragment key={i}>{part}</Fragment>;
+                      const a = Math.max(0, mark![0] - start);
+                      const b = Math.min(text.length, mark![1] - start);
+                      return (
+                        <Fragment key={i}>
+                          {text.slice(0, a)}
+                          <mark className="list-word">{text.slice(a, b)}</mark>
+                          {text.slice(b)}
+                        </Fragment>
+                      );
+                    }
+                    return 'person' in part ? (
                       <button
                         key={i}
-                        className="person-name"
+                        className={`person-name${hit ? ' list-word' : ''}`}
                         title={`About ${part.person.title}`}
                         onClick={(e) => {
                           e.stopPropagation();
@@ -172,7 +203,7 @@ export default function Reader({
                     ) : (
                       <button
                         key={i}
-                        className="place-name"
+                        className={`place-name${hit ? ' list-word' : ''}`}
                         title={`Show ${part.place.name} on the map`}
                         onClick={(e) => {
                           e.stopPropagation();
@@ -181,8 +212,8 @@ export default function Reader({
                       >
                         {part.name}
                       </button>
-                    ),
-                  )}
+                    );
+                  })}
                   {places.length > 0 && (
                     <span className="pin" aria-label={`${places.length} place(s)`}>
                       ⌖

@@ -8,6 +8,8 @@ export interface ListItem {
   meta?: string;
   /** kings: the Bible's verdict on their reign */
   tag?: 'good' | 'evil';
+  /** words to mark inside the verse when several items share it (first match wins; covers other translations' wording) */
+  words?: string[];
   place?: string;
   lat?: number;
   lon?: number;
