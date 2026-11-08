@@ -120,7 +120,8 @@ Generated files are committed. Raw downloads are cached in `scripts/.cache/` (gi
     half a book per request, validates ranges, and sends `no-store`. Setup is in `relay/README.md`.
     To change it, edit `scripts/build-relay.mjs`, run `npm run build:relay`, and the owner re-pastes it
     into the Cloudflare dashboard.
-  - Readers can add a personal key in Settings as a backup. With no ESV, the app falls back to the WEB
+  - The personal-key field was removed from Settings at the owner's request (a key saved earlier is still used as
+    a backup). With no ESV, the app falls back to the WEB
     with a notice.
   - The app enforces the terms: `chapterPages()` splits chapters (Jude shows as 3 parts); ESV is cached in
     memory only, at most 500 verses; the Crossway copyright notice and ESV.org link appear under ESV text.

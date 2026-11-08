@@ -7,7 +7,6 @@ import {
   ESV_COPYRIGHT,
   ESV_TRANSLATION,
   EsvKeyMissing,
-  ESV_RELAY_ENABLED,
   FALLBACK_TRANSLATION,
   fetchPassage,
   findTranslation,
@@ -51,7 +50,8 @@ export default function App() {
       : savedTranslation;
   // Each reader's own free key from api.esv.org, kept only in their browser. (A key is never
   // built into the published site, where anyone could read it.)
-  const [esvKey, setEsvKey] = usePersistentState('esvKey', '');
+  // a personal ESV key saved by an earlier version of the app is still used as a backup (no longer editable)
+  const [esvKey] = usePersistentState('esvKey', '');
   const [esvPageIndex, setEsvPageIndex] = useState(0);
   /** set when the ESV couldn't be used and a public-domain version is shown instead */
   const [fallbackReason, setFallbackReason] = useState<string | null>(null);
@@ -635,12 +635,7 @@ export default function App() {
                 {fallbackReason && (
                   <div className="text-notice">
                     <strong>Showing the World English Bible.</strong>{' '}
-                    {ESV_RELAY_ENABLED
-                      ? `The ESV service isn't available right now (${fallbackReason}) `
-                      : `The ESV comes from Crossway's official ESV service and needs a free key (${fallbackReason}) `}
-                    <button className="link" onClick={() => setSettingsOpen(true)}>
-                      {ESV_RELAY_ENABLED ? 'ESV settings' : 'Add your ESV key'}
-                    </button>
+                    The ESV service isn't available right now ({fallbackReason}). Please try again in a little while.
                   </div>
                 )}
                 {!fallbackReason && pages.length > 1 && (
@@ -827,29 +822,8 @@ export default function App() {
 
       {settingsOpen && (
         <div className="modal-backdrop" onClick={() => setSettingsOpen(false)}>
-          <div className="modal" onClick={(e) => e.stopPropagation()} role="dialog" aria-label="Settings">
-            <h2>Settings</h2>
-            <label className="field">
-              <span>{ESV_RELAY_ENABLED ? 'Your own ESV API key (optional)' : 'ESV API key'}</span>
-              <input
-                type="password"
-                value={esvKey}
-                placeholder="Paste a token from api.esv.org"
-                onChange={(e) => setEsvKey(e.target.value.trim())}
-              />
-              <small className="muted">
-                {ESV_RELAY_ENABLED &&
-                  'The ESV is already set up for everyone; a key of your own is only a backup if the shared service is busy. '}
-                To read the ESV, create a free key at{' '}
-                <a href="https://api.esv.org/" target="_blank" rel="noreferrer">
-                  api.esv.org
-                </a>{' '}
-                (sign up, then create an application for non-commercial use) and paste its token here. It is kept only
-                in this browser. Without a key, the public-domain World English Bible is shown.
-              </small>
-            </label>
-
-            <h3>Sources & licenses</h3>
+          <div className="modal" onClick={(e) => e.stopPropagation()} role="dialog" aria-label="Sources and licenses">
+            <h2>Sources & licenses</h2>
             <div className="licenses small">
               <p>
                 <strong>ESV.</strong> {ESV_COPYRIGHT} Provided through Crossway's free{' '}
