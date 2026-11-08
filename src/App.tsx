@@ -27,6 +27,7 @@ import PeoplePage from './components/PeoplePage';
 import NationsPage from './components/NationsPage';
 import PersonCard from './components/PersonCard';
 import WordStudy from './components/WordStudy';
+import SiteSearch from './components/SiteSearch';
 import { loadChapterPeople, type PersonEntry } from './lib/people';
 import ListPanel from './components/ListPanel';
 import { LISTS, LIST_GROUPS, type StudyList } from './lib/lists';
@@ -341,6 +342,36 @@ export default function App() {
             ›
           </button>
         </div>
+        <SiteSearch
+          onGoTo={(b, c, v) => {
+            if (pageOpen) closePeriods();
+            goTo(b, c, v);
+          }}
+          onOpenPerson={setPersonSlug}
+          onOpenPlace={(i) => {
+            if (pageOpen) closePeriods();
+            setMapVisible(true);
+            setSelectedVerse(null);
+            loadPlaces().then((ps) => {
+              setPlaceOverride(ps[i]);
+              setCardPlace(ps[i]);
+            });
+          }}
+          onFollowJourney={(id, i) => {
+            const j = JOURNEYS.find((x) => x.id === id);
+            if (!j) return;
+            if (pageOpen) closePeriods();
+            setPlaying(false);
+            goToStop(j, i);
+            setMapVisible(true);
+          }}
+          onOpenList={(id, i) => {
+            if (pageOpen) closePeriods();
+            openList(id, i);
+          }}
+          onOpenPeriod={openPeriods}
+          onOpenNation={openNations}
+        />
         <button
           className={`menu-btn${menuOpen ? ' open' : ''}`}
           onClick={() => setMenuOpen(!menuOpen)}

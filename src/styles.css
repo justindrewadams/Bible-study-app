@@ -4331,3 +4331,290 @@ mark.list-word {
     font-size: 1.35rem;
   }
 }
+
+/* =====================================================================
+   Site search: a box in the header when there's room (861–1439px, where
+   the other controls fold into ☰), otherwise a magnifying glass
+   ===================================================================== */
+
+.topbar {
+  position: relative;
+  z-index: 2500;
+}
+
+.site-search {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+}
+
+.search-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 52px;
+  padding: 0 14px;
+  border: 0;
+  border-left: var(--border);
+  background: var(--paper);
+  color: var(--ink);
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.search-toggle:hover,
+.site-search.expanded .search-toggle {
+  background: var(--select);
+}
+
+.search-box {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px;
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.search-box-icon {
+  display: flex;
+  color: var(--muted);
+}
+
+.search-box input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.95rem;
+  padding: 8px 0;
+}
+
+.search-box input::-webkit-search-cancel-button {
+  cursor: pointer;
+}
+
+/* the opened box (magnifying-glass version): a bar under the header */
+.site-search.expanded .search-box {
+  display: flex;
+  position: absolute;
+  z-index: 2;
+  top: 100%;
+  right: 0;
+  width: 460px;
+  height: 52px;
+  border: var(--border);
+  border-top: 0;
+}
+
+.search-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.search-panel {
+  position: absolute;
+  z-index: 2;
+  top: 100%;
+  right: 0;
+  width: 460px;
+  max-height: calc(100vh - 90px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: var(--paper);
+  color: var(--ink);
+  border: var(--border);
+  border-top: 0;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+}
+
+.site-search.expanded .search-panel {
+  top: calc(100% + 52px);
+  max-height: calc(100vh - 142px);
+  border-top: 1px solid var(--hair);
+}
+
+.search-empty {
+  margin: 0;
+  padding: 16px;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.search-empty:empty {
+  display: none;
+}
+
+.search-section {
+  border-bottom: 1px solid var(--hair);
+  padding-bottom: 6px;
+}
+
+.search-section:last-child {
+  border-bottom: 0;
+}
+
+.search-section h3 {
+  margin: 0;
+  padding: 12px 16px 4px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+.search-count {
+  font-weight: 700;
+  margin-left: 4px;
+  padding: 0 5px;
+  border: 1.5px solid currentColor;
+}
+
+.search-section ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.search-row {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  width: 100%;
+  padding: 8px 16px;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.search-row:hover,
+.search-row:focus-visible {
+  background: var(--select);
+  outline: 0;
+}
+
+.search-row-title {
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.search-row-sub {
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.search-row-sub::first-letter {
+  text-transform: uppercase;
+}
+
+.search-row-text {
+  font-size: 0.85rem;
+  line-height: 1.35;
+}
+
+.search-row strong {
+  font-weight: 800;
+}
+
+.search-more {
+  margin: 2px 16px 4px;
+  padding: 4px 0;
+  border: 0;
+  background: transparent;
+  color: var(--place);
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* medium screens: the box sits in the header itself */
+@media (max-width: 1439px) and (min-width: 861px) {
+  .site-search {
+    margin-left: auto;
+  }
+
+  .topbar .menu-btn {
+    margin-left: 0;
+  }
+
+  .search-toggle {
+    display: none;
+  }
+
+  .search-box {
+    display: flex;
+    width: 300px;
+    border-left: var(--border);
+  }
+
+  .site-search.has-results .search-box {
+    background: var(--select);
+  }
+}
+
+/* phones: the magnifying glass opens a full-width bar */
+@media (max-width: 860px) {
+  .site-search {
+    position: static;
+    align-self: stretch;
+  }
+
+  .search-toggle {
+    min-width: 0;
+    padding: 0 12px;
+  }
+
+  .site-search.expanded .search-box {
+    left: 0;
+    width: auto;
+    height: 48px;
+    border-left: 0;
+    border-right: 0;
+    border-bottom: var(--border);
+  }
+
+  .search-box input {
+    font-size: 16px; /* stops iOS zooming in on focus */
+  }
+
+  .search-panel,
+  .site-search.expanded .search-panel {
+    left: 0;
+    width: auto;
+    top: calc(100% + 48px);
+    max-height: calc(100dvh - 100px - env(safe-area-inset-top));
+    border-left: 0;
+    border-right: 0;
+  }
+}
+
+/* wide screens: the magnifying glass sits at the far right; the selects give up a little width for it */
+@media (min-width: 1440px) {
+  .site-search {
+    order: 10;
+  }
+
+  .topbar .translation {
+    width: 144px;
+  }
+
+  .topbar .journey-select {
+    width: 162px;
+  }
+
+  .topbar .list-select {
+    width: 134px;
+  }
+}

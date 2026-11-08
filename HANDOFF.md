@@ -52,7 +52,14 @@ the decisions already made (and why), and how the owner likes to work.
     plain-English grammar, a brief lexicon entry with tappable verse links, and other verses using it; jumping to
     one moves the reader and marks the same word there. Greek follows Nestle-Aland (as the ESV does); words only
     in the KJV's Greek (Textus Receptus, e.g. 1 John 5:7) are shown faded and labelled. Hebrew skips LXX-only words.
-11. **Sources & licenses** pop-up (the ⚙ button): lists every source and license. The personal ESV key field was
+11. **Search** (the box in the header from 861 to 1439px wide; a magnifying glass on phones and at 1440px+, which
+    opens a bar under the header): one search across people (including other names, e.g. "Saul" finds Paul), places
+    (names, other spellings, key stories, birth/death places of the person searched, stops of journeys named after
+    them), journeys, study lists and their items, periods, nations, hymns (titles and writers only) and Bible
+    references ("John 3:16", "1 cor 13", "Psalm 23"). The searched word is bolded in each excerpt; Enter opens the first
+    result. It searches **only the app's own data, never Bible text** (searching the ESV would need Crossway's search
+    API: ask the owner first). Code: `src/lib/search.ts` (index, matching, ranking) and `components/SiteSearch.tsx`.
+12. **Sources & licenses** pop-up (the ⚙ button): lists every source and license. The personal ESV key field was
     **removed** at the owner's request (a key saved by an older version is still used quietly as a backup).
 
 ## Stack and layout
@@ -63,10 +70,10 @@ the decisions already made (and why), and how the owner likes to work.
 - `src/components/`:
   - `Reader` (chapter title row with the Hymns button, verses, list-word bolding), `MapView` (also `WaterLayer`,
     `PlaceAndRegionLabels`, `MapErrorBoundary`), `MapControls`
-  - `PlaceCard`, `PersonCard`, `FamilyTree`, `WordStudy`, `HymnsPanel`
+  - `PlaceCard`, `PersonCard`, `FamilyTree`, `WordStudy`, `HymnsPanel`, `SiteSearch`
   - `JourneyPanel`, `ListPanel`, `PeriodsPage`, `PeoplePage`, `NationsPage`
 - `src/lib/`: `bible.ts` (translations, fetching, ESV rules), `geo.ts`, `placeInfo.ts`, `people.ts`,
-  `journeys.ts`, `lists.ts`, `words.ts` (word-study loaders), `usePersistentState.ts`
+  `journeys.ts`, `lists.ts`, `words.ts` (word-study loaders), `search.ts`, `usePersistentState.ts`
 - `src/data/`:
   - `books.ts`, `regions.ts`, `periods.ts`
   - `hymns.ts`: ~210 hymns with `from` (passages written from), `fits` (thematic passages) and `themes`;
@@ -83,7 +90,7 @@ Generated files are committed. Raw downloads are cached in `scripts/.cache/` (gi
 | Command / script | Source (license) | Outputs |
 |---|---|---|
 | `npm run build:data` → `build-data.mjs` | OpenBible.info geocoding (CC BY 4.0) + `journeys.source.json`, `lists.source.json`, `place-stories.json` | `public/data/places.json`, `verses/<Book>.json`, `place-details.json`, `src/data/journeys.json`, `lists.json` |
-| (same) → `build-people.mjs` | Theographic Bible Metadata (CC BY-SA 4.0), Easton's (public domain) | `public/data/people.json`, `people/<letter>.json`, `people-verses/`, `place-people.json`, `verseCounts.json` |
+| (same) → `build-people.mjs` | Theographic Bible Metadata (CC BY-SA 4.0), Easton's (public domain) | `public/data/people.json`, `people/<letter>.json`, `people-verses/`, `place-people.json`, `people-aka.json` (other names, for search), `verseCounts.json` |
 | (same) → `build-water.mjs` | Natural Earth (public domain) | `public/data/water.json` |
 | `npm run build:relay` | app book data | `relay/esv-relay.js` |
 | `npm run build:words` | STEPBible TAHOT, TAGNT, TBESH, TBESG, TEHMC, TEGMC (CC BY 4.0) | `public/data/words/<Book>/<chapter>.json`, `lexicon/<H\|G><n>.json`, `grammar-H.json`, `grammar-G.json` |
@@ -175,7 +182,7 @@ Hymns for each chapter; rivers that thin out when zoomed out; flat-style verse h
 solid place-name underlines; bolded word for list items that share a verse (and the correct "N of M" chip);
 quieter last-mentioned map marker; the Nations page with person-card links; the rename to Bible Study Companion
 with the equal-width title and a header that folds into ☰ below 1440px; Hebrew & Greek word study; removal of the
-personal ESV key field. Earlier: ESV via relay, the 17 periods, the People page with family trees, map clusters,
+personal ESV key field; site-wide search. Earlier: ESV via relay, the 17 periods, the People page with family trees, map clusters,
 and the phone layout.
 
 ## Ideas not yet started (only if the owner asks)
@@ -184,6 +191,7 @@ and the phone layout.
   owner may also add or remove hymns
 - More nations (Perizzites, Girgashites, Horites, Gauls/Galatians) and owner corrections to nation summaries
 - Waldron's exact scripture boundaries, once the owner provides them
-- Linking place cards to their nation; a word-study search by Strong's number or English word
+- Linking place cards to their nation; a word-study search by Strong's number or English word (could join the
+  site search)
 - More translations through licensed channels
 - Notes and highlights; offline use; more journeys and lists

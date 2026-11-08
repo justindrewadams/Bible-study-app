@@ -125,6 +125,10 @@ for (const [i, f] of recs.entries()) {
 const out = path.join(root, 'public', 'data');
 fs.writeFileSync(path.join(out, 'people.json'), JSON.stringify(index));
 fs.writeFileSync(path.join(out, 'place-people.json'), JSON.stringify(placePeople));
+// other names (e.g. Paul: Saul), so the site search finds people by any of their names
+const akaBySlug = {};
+for (const shard of Object.values(shards)) for (const [slug, d] of Object.entries(shard)) if (d.aka?.length) akaBySlug[slug] = d.aka;
+fs.writeFileSync(path.join(out, 'people-aka.json'), JSON.stringify(akaBySlug));
 for (const dir of ['people', 'people-verses']) fs.rmSync(path.join(out, dir), { recursive: true, force: true });
 fs.mkdirSync(path.join(out, 'people'), { recursive: true });
 fs.mkdirSync(path.join(out, 'people-verses'), { recursive: true });
