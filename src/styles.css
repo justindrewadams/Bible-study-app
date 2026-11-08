@@ -4600,10 +4600,15 @@ mark.list-word {
   }
 }
 
-/* wide screens: the magnifying glass sits at the far right; the selects give up a little width for it */
+/* wide screens: the magnifying glass sits right after "Study a list", before the page buttons;
+   the selects give up a little width for it */
 @media (min-width: 1440px) {
   .site-search {
-    order: 10;
+    order: 1;
+  }
+
+  .topbar .topbar-actions {
+    order: 2;
   }
 
   .topbar .translation {

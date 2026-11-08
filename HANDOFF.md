@@ -52,7 +52,7 @@ the decisions already made (and why), and how the owner likes to work.
     plain-English grammar, a brief lexicon entry with tappable verse links, and other verses using it; jumping to
     one moves the reader and marks the same word there. Greek follows Nestle-Aland (as the ESV does); words only
     in the KJV's Greek (Textus Receptus, e.g. 1 John 5:7) are shown faded and labelled. Hebrew skips LXX-only words.
-11. **Search** (the box in the header from 861 to 1439px wide; a magnifying glass on phones and at 1440px+, which
+11. **Search** (the box in the header from 861 to 1439px wide; a magnifying glass on phones and, at 1440px+, right after "Study a list", which
     opens a bar under the header): one search across people (including other names, e.g. "Saul" finds Paul), places
     (names, other spellings, key stories, birth/death places of the person searched, stops of journeys named after
     them), journeys, study lists and their items, periods, nations, hymns (titles and writers only) and Bible
