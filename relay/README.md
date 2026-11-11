@@ -1,10 +1,10 @@
 # ESV relay (Cloudflare Worker)
 
-This is a small, free Cloudflare Worker that lets everyone using Bible Atlas read the ESV
+This is a small, free Cloudflare Worker that lets everyone using Ancient Pathfinder read the ESV
 without each person needing a key. It holds the ESV API key as a Cloudflare **secret**:
 
 - the key is never in this repository, never in the website, and never sent to anyone's browser;
-- the relay only answers requests from the Bible Atlas site;
+- the relay only answers requests from the Ancient Pathfinder site;
 - it keeps to Crossway's free, non-commercial terms on its own side. It returns at most 500
   verses or half a book per request, never caches ESV text, and only accepts real
   book/chapter/verse ranges.
@@ -16,7 +16,7 @@ without each person needing a key. It holds the ESV API key as a Cloudflare **se
 **1. Get an ESV API key**
 1. Go to <https://api.esv.org/> and create a free account.
 2. Create an API application. Describe it as a free, non-commercial Bible study website with no ads
-   or donations, and give the site address `https://justindrewadams.github.io/Bible-study-app/`.
+   or donations, and give the site address `https://ancientpathfinder.com/`.
 3. Copy the application's **token**. That's the key.
 
 **2. Create the relay on Cloudflare** (free plan: 100,000 requests a day)
@@ -38,13 +38,13 @@ without each person needing a key. It holds the ESV API key as a Cloudflare **se
    The address is not secret; only the key is.
 
 To check it, open the Worker's address with `/passage?book=John&chapter=3&from=1&to=5` added on the end.
-Opened directly in a browser tab, it should answer *"This relay only serves the Bible Atlas app"*.
+Opened directly in a browser tab, it should answer *"This relay only serves the Ancient Pathfinder app"*.
 That refusal is expected: it means the relay is running and only talks to the app.
 
 ## Optional settings
 
 - `ALLOWED_ORIGINS` (text variable): sites allowed to use the relay, comma-separated.
-  The default is `https://justindrewadams.github.io`. Add `http://localhost:5173` to test locally.
+  The default is `https://ancientpathfinder.com,https://www.ancientpathfinder.com,https://justindrewadams.github.io`. Add `http://localhost:5173` to test locally.
 
 ## Updating
 

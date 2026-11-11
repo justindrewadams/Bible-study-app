@@ -315,9 +315,9 @@ export default function App() {
   return (
     <div className={`app${mapVisible ? '' : ' map-hidden'}${journey ? ' journey-active' : ''}${measure ? ' measuring' : ''}`}>
       <header className="topbar">
-        <button className="brand" title="Bible Study Companion: back to reading" onClick={() => pageOpen && closePeriods()}>
-          <span>BIBLE STUDY</span>
-          <span>COMPANION</span>
+        <button className="brand" title="Ancient Pathfinder: back to reading" onClick={() => pageOpen && closePeriods()}>
+          <span>ANCIENT</span>
+          <span>PATHFINDER</span>
         </button>
         <div className="nav">
           <button className="icon-btn" onClick={prevChapter} aria-label="Previous chapter">

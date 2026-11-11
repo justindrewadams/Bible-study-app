@@ -3979,8 +3979,9 @@ mark.list-word {
 }
 
 /* =====================================================================
-   Title: "BIBLE STUDY / COMPANION", both lines the same width
-   (sizes measured in Figtree 800 so the two lines line up edge to edge)
+   Title: "ANCIENT / PATHFINDER", both lines the same width
+   (measured in Figtree 800: ANCIENT is tracked out to match PATHFINDER edge to edge;
+   the negative right margin drops the spacing after its last letter)
    ===================================================================== */
 
 .brand {
@@ -3996,18 +3997,19 @@ mark.list-word {
 }
 
 .brand span:first-child {
-  font-size: 15.3px;
-  letter-spacing: 0.04em;
+  font-size: 15.2px;
+  letter-spacing: 0.345em;
+  margin-right: -0.345em;
 }
 
 .brand span:last-child {
-  font-size: 14.6px;
-  letter-spacing: 0.06em;
+  font-size: 15.2px;
+  letter-spacing: 0.04em;
 }
 
 @media (max-width: 1240px) and (min-width: 861px) {
   .brand span:first-child {
-    font-size: 15.3px;
+    font-size: 15.2px;
   }
 }
 

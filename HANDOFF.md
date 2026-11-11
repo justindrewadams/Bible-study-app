@@ -1,14 +1,18 @@
-# Bible Study Companion: handoff notes
+# Ancient Pathfinder: handoff notes
 
 Read this first when picking the project back up. It records what exists, how it fits together,
 the decisions already made (and why), and how the owner likes to work.
 
-- **Live site:** https://justindrewadams.github.io/Bible-study-app/ (GitHub Pages, deployed by
-  `.github/workflows/deploy.yml` on every push to `main`, in about 1 minute)
+- **Live site:** https://ancientpathfinder.com/ (custom domain, bought November 2026; the old address
+  https://justindrewadams.github.io/Bible-study-app/ redirects there once the domain is set in Settings → Pages).
+  GitHub Pages, deployed by `.github/workflows/deploy.yml` on every push to `main`, in about 1 minute.
+  The domain is set in the repo's Settings → Pages (no CNAME file: an Actions deploy ignores one).
 - **Repo:** `justindrewadams/Bible-study-app`, branch `main`
-- **Name:** **Bible Study Companion** (renamed from "Bible Atlas" in November 2026). The repo name, the site
-  address and the relay's Cloudflare name (`bible-atlas-esv`) were deliberately **kept**: the relay only answers
-  the existing site address, so renaming the repo would break the ESV.
+- **Name:** **Ancient Pathfinder** (from Jeremiah 6:16, "ask for the ancient paths"; renamed November 2026 from
+  "Bible Study Companion", which was earlier "Bible Atlas"). The repo name and the relay's Cloudflare name
+  (`bible-atlas-esv`) were deliberately **kept**. The relay only answers the sites in its `ALLOWED_ORIGINS`
+  (ancientpathfinder.com, www.ancientpathfinder.com and justindrewadams.github.io), so a new address must be
+  added there first or the ESV stops loading.
 - **Purpose:** a free Bible study app for the owner, family, friends and whoever they share it with.
   It is **non-commercial** (no ads, fees or donations), and must stay that way for the licenses below.
 
@@ -199,7 +203,7 @@ blocks bible-api.com, api.esv.org, workers.dev, map tiles and Wikipedia; stub th
 Hymns for each chapter; rivers that thin out when zoomed out; flat-style verse highlight (now light blue) and
 solid place-name underlines; bolded word for list items that share a verse (and the correct "N of M" chip);
 quieter last-mentioned map marker; the Nations page with person-card links; the rename to Bible Study Companion
-with the equal-width title and a header that folds into ☰ below 1440px; Hebrew & Greek word study; removal of the
+with the equal-width title (then to Ancient Pathfinder with the ancientpathfinder.com domain) and a header that folds into ☰ below 1440px; Hebrew & Greek word study; removal of the
 personal ESV key field; site-wide search; the distance tool with Roman-road routes; journeys along Roman roads. Earlier: ESV via relay, the 17 periods, the People page with family trees, map clusters,
 and the phone layout.
 

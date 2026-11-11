@@ -1,4 +1,4 @@
-# Bible Study Companion
+# Ancient Pathfinder
 
 A Bible study app that puts the text and the map side by side.
 
