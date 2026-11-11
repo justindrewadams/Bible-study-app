@@ -10,6 +10,7 @@
     "typecheck": "tsc",
     "build:relay": "node scripts/build-relay.mjs",
     "build:words": "node scripts/build-words.mjs",
+    "build:roads": "node scripts/build-roads.mjs",
     "check:hymns": "node --experimental-strip-types --no-warnings scripts/check-hymns.mjs",
     "check:nations": "node --experimental-strip-types --no-warnings scripts/check-nations.mjs"
   },

@@ -28,7 +28,7 @@ import NationsPage from './components/NationsPage';
 import PersonCard from './components/PersonCard';
 import WordStudy from './components/WordStudy';
 import SiteSearch from './components/SiteSearch';
-import DistancePanel, { type Measure } from './components/DistancePanel';
+import DistancePanel, { useRoadRoute, type Measure } from './components/DistancePanel';
 import { loadChapterPeople, type PersonEntry } from './lib/people';
 import ListPanel from './components/ListPanel';
 import { LISTS, LIST_GROUPS, type StudyList } from './lib/lists';
@@ -76,6 +76,7 @@ export default function App() {
   const [chapterPeople, setChapterPeople] = useState<Map<number, PersonEntry[]>>(new Map());
   /** the distance tool: open while not null */
   const [measure, setMeasure] = useState<Measure | null>(null);
+  const road = useRoadRoute(measure);
   const samePlace = (x: Place | null, y: Place) => !!x && x.index === y.index && x.lat === y.lat && x.lon === y.lon;
   /** While measuring, tapping a place on the map fills the next end instead of opening its card. */
   const onMapPlace = (p: Place) => {
@@ -776,6 +777,8 @@ export default function App() {
               testament={book.testament}
               onPlaceInfo={onMapPlace}
               measure={measure}
+              roadPath={road?.state === 'found' ? road.route.path : null}
+              roadMiles={road?.state === 'found' ? road.route.miles : null}
               onStopClick={(i) => journey && (setPlaying(false), goToStop(journey, i))}
             />
             </MapErrorBoundary>
@@ -785,7 +788,9 @@ export default function App() {
               measuring={!!measure}
               onToggleMeasure={() => setMeasure(measure ? null : { a: null, b: null })}
             />
-            {measure && <DistancePanel measure={measure} onChange={setMeasure} onClose={() => setMeasure(null)} />}
+            {measure && (
+              <DistancePanel measure={measure} road={road} onChange={setMeasure} onClose={() => setMeasure(null)} />
+            )}
             {journey && (
               <JourneyPanel
                 journey={journey}
@@ -969,7 +974,19 @@ export default function App() {
                 <a href="https://www.naturalearthdata.com/" target="_blank" rel="noreferrer">
                   Natural Earth
                 </a>{' '}
-                (public domain); map library:{' '}
+                (public domain); ancient roads for the distance tool:{' '}
+                <a href="https://itiner-e.org/" target="_blank" rel="noreferrer">
+                  Itiner-e: The Digital Atlas of Ancient Roads
+                </a>{' '}
+                by de Soto, Pažout, Brughmans et al. (
+                <a href="https://doi.org/10.1038/s41597-025-06140-z" target="_blank" rel="noreferrer">
+                  Scientific Data, 2025
+                </a>
+                ; 2024 static version,{' '}
+                <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">
+                  CC BY 4.0
+                </a>
+                ), clipped to the Bible lands, simplified and joined into a network for route finding; map library:{' '}
                 <a href="https://leafletjs.com/" target="_blank" rel="noreferrer">
                   Leaflet
                 </a>

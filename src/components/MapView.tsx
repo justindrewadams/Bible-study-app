@@ -15,6 +15,7 @@ import type { Place } from '../lib/geo';
 import { type Journey, legPath, pointAlong } from '../lib/journeys';
 import { REGIONS } from '../data/regions';
 import { formatDistance, milesBetween } from '../lib/distance';
+import { midpointAlong } from '../lib/roads';
 
 export type BaseLayerId = 'terrain' | 'physical' | 'satellite' | 'roman';
 export type ModernOverlay = 'off' | 'labels' | 'full';
@@ -121,6 +122,9 @@ interface Props {
   onPlaceInfo: (p: Place) => void;
   /** two places being measured (the distance tool) */
   measure?: { a: Place | null; b: Place | null } | null;
+  /** the road route between the measured places, when one was found */
+  roadPath?: [number, number][] | null;
+  roadMiles?: number | null;
 }
 
 function arrowIcon(angle: number, color: string) {
@@ -518,6 +522,8 @@ export default function MapView({
   testament,
   onPlaceInfo,
   measure,
+  roadPath,
+  roadMiles,
 }: Props) {
   const base = BASE_LAYERS[settings.base];
   const modern = settings.modern !== 'off' ? MODERN_LAYERS[settings.modern] : null;
@@ -580,7 +586,9 @@ export default function MapView({
         />
       ))}
 
-      {measure && <MeasureLayer a={measure.a} b={measure.b} onPlaceInfo={onPlaceInfo} />}
+      {measure && (
+        <MeasureLayer a={measure.a} b={measure.b} roadPath={roadPath ?? null} roadMiles={roadMiles ?? null} onPlaceInfo={onPlaceInfo} />
+      )}
 
       <CameraController focus={focus} journey={journey} stopIndex={stopIndex} chapterPlaces={chapterPlaces} />
     </MapContainer>
@@ -597,33 +605,45 @@ const measurePin = (end: 'a' | 'b') =>
   });
 
 /** The distance tool: a pin at each end, a dashed line between them, and the distance on the line. */
-function MeasureLayer({ a, b, onPlaceInfo }: { a: Place | null; b: Place | null; onPlaceInfo: (p: Place) => void }) {
+function MeasureLayer({
+  a,
+  b,
+  roadPath,
+  roadMiles,
+  onPlaceInfo,
+}: {
+  a: Place | null;
+  b: Place | null;
+  roadPath: [number, number][] | null;
+  roadMiles: number | null;
+  onPlaceInfo: (p: Place) => void;
+}) {
   const map = useMap();
-  const key = `${a?.index ?? ''}:${a?.lat}|${b?.index ?? ''}:${b?.lat}`;
+  const key = `${a?.index ?? ''}:${a?.lat}|${b?.index ?? ''}:${b?.lat}|${roadPath?.length ?? 0}`;
   useEffect(() => {
     const ends = [a, b].filter((p): p is Place => !!p);
     if (!ends.length) return;
-    const bounds = L.latLngBounds(ends.map((p) => [p.lat, p.lon]));
+    const bounds = L.latLngBounds([...ends.map((p) => [p.lat, p.lon] as [number, number]), ...(roadPath ?? [])]);
     // leave room for the distance panel: top-left on desktop, along the bottom on phones
     const phone = window.matchMedia('(max-width: 860px)').matches;
     if (ends.length === 2)
       map.flyToBounds(bounds, {
         paddingTopLeft: phone ? [40, 50] : [340, 60],
-        paddingBottomRight: phone ? [40, 190] : [60, 60],
+        // on phones the panel covers the bottom of the map: keep the route above it
+        paddingBottomRight: phone ? [40, (document.querySelector('.distance-panel')?.clientHeight ?? 200) + 24] : [60, 60],
         maxZoom: 9,
         duration: 0.9,
       });
     else if (!map.getBounds().pad(-0.1).contains(bounds)) map.flyTo(bounds.getCenter(), Math.max(map.getZoom(), 6), { duration: 0.8 });
   }, [key, map]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // the label sits halfway along the road when there is one, otherwise on the straight line
   const label = useMemo(() => {
     if (!a || !b) return null;
-    return L.divIcon({
-      className: 'measure-label',
-      iconSize: [0, 0],
-      html: `<span>${formatDistance(milesBetween(a, b)).short}</span>`,
-    });
-  }, [a, b]);
+    const at: [number, number] = roadPath ? midpointAlong(roadPath) : [(a.lat + b.lat) / 2, (a.lon + b.lon) / 2];
+    const text = roadMiles != null ? `${formatDistance(roadMiles).short} by road` : formatDistance(milesBetween(a, b)).short;
+    return { at, icon: L.divIcon({ className: 'measure-label', iconSize: [0, 0], html: `<span>${text}</span>` }) };
+  }, [a, b, roadPath, roadMiles]);
 
   return (
     <>
@@ -633,10 +653,24 @@ function MeasureLayer({ a, b, onPlaceInfo }: { a: Place | null; b: Place | null;
             [a.lat, a.lon],
             [b.lat, b.lon],
           ]}
-          pathOptions={{ className: 'measure-line', color: '#111', weight: 3, dashArray: '8 7', interactive: false }}
+          pathOptions={{
+            className: 'measure-line',
+            color: '#111',
+            weight: roadPath ? 2 : 3,
+            opacity: roadPath ? 0.45 : 1,
+            dashArray: '8 7',
+            interactive: false,
+          }}
         />
       )}
-      {a && b && label && <Marker position={[(a.lat + b.lat) / 2, (a.lon + b.lon) / 2]} icon={label} interactive={false} zIndexOffset={3500} />}
+      {roadPath && (
+        <>
+          {/* the road: the app's sun yellow with a dark edge, so it isn't mistaken for a river */}
+          <Polyline positions={roadPath} pathOptions={{ color: '#111', weight: 7, opacity: 0.9, interactive: false, lineJoin: 'round' }} />
+          <Polyline positions={roadPath} pathOptions={{ color: '#f7c33d', weight: 4, opacity: 1, interactive: false, lineJoin: 'round' }} />
+        </>
+      )}
+      {label && <Marker position={label.at} icon={label.icon} interactive={false} zIndexOffset={3500} />}
       {(['a', 'b'] as const).map((end) => {
         const p = end === 'a' ? a : b;
         if (!p) return null;

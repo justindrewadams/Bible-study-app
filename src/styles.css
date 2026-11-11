@@ -4865,3 +4865,51 @@ mark.list-word {
     font-size: 0.74rem;
   }
 }
+
+/* distance tool: road and straight-line rows */
+.dp-road,
+.dp-row {
+  display: grid;
+  grid-template-columns: 82px 1fr;
+  gap: 8px;
+  align-items: baseline;
+  padding: 3px 0;
+}
+
+.dp-row-label {
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+}
+
+.dp-road .dp-number {
+  font-size: 1.2rem;
+}
+
+.dp-walk {
+  font-size: 0.82rem;
+}
+
+.dp-road-none {
+  display: block;
+  font-size: 0.8rem;
+  line-height: 1.35;
+}
+
+.dp-note a {
+  color: inherit;
+}
+
+@media (max-width: 860px) {
+  .dp-road,
+  .dp-row {
+    grid-template-columns: 70px 1fr;
+    padding: 2px 0;
+  }
+
+  .dp-road .dp-number {
+    font-size: 1.05rem;
+  }
+}

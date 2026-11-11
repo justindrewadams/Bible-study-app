@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { loadPlaces, type Place } from '../lib/geo';
 import { loadPlaceDetails } from '../lib/placeInfo';
 import { formatDistance, milesBetween, walkingTime } from '../lib/distance';
+import { loadRoads, routeBetween, type NoRoute, type RoadRoute } from '../lib/roads';
 import { norm } from '../lib/search';
 
 export interface Measure {
@@ -9,8 +10,40 @@ export interface Measure {
   b: Place | null;
 }
 
+/** The road route between the two measured places: still loading, found, or why there is none. */
+export type RoadResult = { state: 'loading' } | { state: 'found'; route: RoadRoute } | { state: 'none'; why: NoRoute | 'error' };
+
+export function useRoadRoute(measure: Measure | null): RoadResult | null {
+  const a = measure?.a ?? null;
+  const b = measure?.b ?? null;
+  const [result, setResult] = useState<RoadResult | null>(null);
+  useEffect(() => {
+    if (!a || !b) {
+      setResult(null);
+      return;
+    }
+    let live = true;
+    setResult({ state: 'loading' });
+    loadRoads()
+      .then((g) => {
+        if (!live) return;
+        const r = routeBetween(g, a, b);
+        setResult('none' in r ? { state: 'none', why: r } : { state: 'found', route: r });
+      })
+      .catch(() => live && setResult({ state: 'none', why: 'error' }));
+    return () => {
+      live = false;
+    };
+  }, [a, b]);
+  return result;
+}
+
+/** Usually a sea voyage: the road way round is far longer than the straight line. */
+const LIKELY_BY_SEA = (road: number, straight: number) => straight > 150 && road > straight * 1.5;
+
 interface Props {
   measure: Measure;
+  road: RoadResult | null;
   onChange: (m: Measure) => void;
   onClose: () => void;
 }
@@ -119,8 +152,47 @@ function PlacePicker({
   );
 }
 
-/** Measures the straight-line distance between two places. */
-export default function DistancePanel({ measure, onChange, onClose }: Props) {
+function RoadLine({ road, straight, a, b }: { road: RoadResult | null; straight: number; a: Place; b: Place }) {
+  if (!road || road.state === 'loading')
+    return (
+      <div className="dp-road">
+        <span className="dp-row-label">By road</span>
+        <span className="muted">Finding the road route…</span>
+      </div>
+    );
+  if (road.state === 'none') {
+    const why = road.why;
+    const text =
+      why === 'error'
+        ? 'The road map could not be loaded. Please try again in a little while.'
+        : why.none === 'unconnected'
+          ? 'No road joins these places: the way between them crosses the sea.'
+          : `No Roman road is known near ${why.end === 'a' ? a.name : b.name}, so only the straight line is shown.`;
+    return (
+      <div className="dp-road">
+        <span className="dp-row-label">By road</span>
+        <span className="dp-road-none">{text}</span>
+      </div>
+    );
+  }
+  const r = road.route;
+  const d = formatDistance(r.miles);
+  return (
+    <div className="dp-road">
+      <span className="dp-row-label">By road</span>
+      <span>
+        <span className="dp-number">{d.miles}</span> <span className="dp-km">({d.km})</span>
+        <span className="dp-walk"> · {walkingTime(r.miles)}</span>
+        {LIKELY_BY_SEA(r.miles, straight) && (
+          <span className="dp-road-none"> Most travellers would have gone much of this way by sea.</span>
+        )}
+      </span>
+    </div>
+  );
+}
+
+/** Measures the distance between two places: by Roman road, and in a straight line. */
+export default function DistancePanel({ measure, road, onChange, onClose }: Props) {
   const { a, b } = measure;
   const miles = a && b ? milesBetween(a, b) : null;
   const d = miles != null ? formatDistance(miles) : null;
@@ -135,14 +207,26 @@ export default function DistancePanel({ measure, onChange, onClose }: Props) {
       </div>
       <PlacePicker label="From" value={a} onPick={(p) => onChange({ a: p, b })} autoFocus={!a} />
       <PlacePicker label="To" value={b} onPick={(p) => onChange({ a, b: p })} autoFocus={!!a && !b} />
-      {d && miles != null ? (
+      {d && miles != null && a && b ? (
         <div className="dp-result" aria-live="polite">
-          <div className="dp-number">
-            {d.miles} <span className="dp-km">({d.km})</span>
+          <RoadLine road={road} straight={miles} a={a} b={b} />
+          <div className="dp-row">
+            <span className="dp-row-label">Straight line</span>
+            <span>
+              <strong>{d.miles}</strong> <span className="dp-km">({d.km})</span>
+            </span>
           </div>
           <div className="dp-note">
-            In a straight line · {walkingTime(miles)} at about 20 miles a day. Real roads, hills and sea routes made
-            journeys longer.
+            Walking times assume about 20 miles a day. Roads follow the Roman era (c. 300 BC – AD 300); many ran along older
+            routes. Roads:{' '}
+            <a href="https://itiner-e.org/" target="_blank" rel="noreferrer">
+              Itiner-e
+            </a>{' '}
+            (
+            <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">
+              CC BY 4.0
+            </a>
+            ).
           </div>
         </div>
       ) : (

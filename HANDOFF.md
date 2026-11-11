@@ -61,10 +61,14 @@ the decisions already made (and why), and how the owner likes to work.
     API: ask the owner first). Code: `src/lib/search.ts` (index, matching, ranking) and `components/SiteSearch.tsx`.
 12. **Distance tool:** a "↔ Distance" button on the map (beside "Modern") or "↔ Distance from <place> to…" on a place
     card. Choose two places by typing (suggestions from all ~1,300 places) or by tapping them on the map; while it is
-    open, tapping a place fills the next slot instead of opening its card. Shows straight-line miles (km), a rough
-    time on foot at 20 miles a day, and a note that real routes were longer; the map draws blue A/B pins and a dashed
-    line labelled with the miles. Regions (e.g. Egypt) measure from their single map point. On phones the map grows
-    to 56vh while measuring. Code: `lib/distance.ts`, `components/DistancePanel.tsx`, `MeasureLayer` in `MapView.tsx`.
+    open, tapping a place fills the next slot instead of opening its card. Shows the distance **by Roman road**
+    (shortest route over the Itiner-e network, drawn in yellow with a dark edge) with a time on foot at 20 miles a day,
+    and the straight line (thin dashed). Places more than 30 miles from a road (e.g. Ur, Mesopotamia) get "no Roman road
+    is known near…"; places with no road between them (Cyprus, across the sea) say so; very roundabout land routes
+    (e.g. Caesarea–Rome) add "most travellers would have gone much of this way by sea". Regions (e.g. Egypt) measure
+    from their single map point. On phones the map grows to 56vh while measuring. Code: `lib/distance.ts`,
+    `lib/roads.ts` (graph + Dijkstra), `components/DistancePanel.tsx` (`useRoadRoute`), `MeasureLayer` in `MapView.tsx`.
+    The road file (`public/data/roads.json`, ~540 KB, ~210 KB gzipped) loads only when two places are picked.
 13. **Sources & licenses** pop-up (the ⚙ button): lists every source and license. The personal ESV key field was
     **removed** at the owner's request (a key saved by an older version is still used quietly as a backup).
 
@@ -99,6 +103,7 @@ Generated files are committed. Raw downloads are cached in `scripts/.cache/` (gi
 | (same) → `build-people.mjs` | Theographic Bible Metadata (CC BY-SA 4.0), Easton's (public domain) | `public/data/people.json`, `people/<letter>.json`, `people-verses/`, `place-people.json`, `people-aka.json` (other names, for search), `verseCounts.json` |
 | (same) → `build-water.mjs` | Natural Earth (public domain) | `public/data/water.json` |
 | `npm run build:relay` | app book data | `relay/esv-relay.js` |
+| `npm run build:roads` → `build-roads.mjs` | Itiner-e static version 2024 (CC BY 4.0, zenodo.org/records/17122148) | `public/data/roads.json` (Bible lands + Mediterranean, simplified, road ends joined into a network) |
 | `npm run build:words` | STEPBible TAHOT, TAGNT, TBESH, TBESG, TEHMC, TEGMC (CC BY 4.0) | `public/data/words/<Book>/<chapter>.json`, `lexicon/<H\|G><n>.json`, `grammar-H.json`, `grammar-G.json` |
 
 Checks (Node 22.6+): `npm run check:hymns` and `npm run check:nations` validate every reference and person slug.
@@ -130,6 +135,8 @@ Checks (Node 22.6+): `npm run check:hymns` and `npm run check:nations` validate 
   non-commercial plan through a relay. `OPEN_TRANSLATIONS` in `bible.ts` is the hook for freely licensed texts.
 - **Hymns:** titles, writers and years only (facts, not copyrightable). **Never add lyrics.** No link-outs.
 - **Nations, period and hymn-tie summaries** are original writing for this app.
+- **Itiner-e** roads (CC BY 4.0) are credited in Sources & licenses (authors, paper, license, and that we clipped and
+  simplified it) and in the distance panel. Approved by the owner in November 2026.
 - **STEPBible** (CC BY 4.0) is credited in Sources & licenses and in the footer of every word-study card.
 - Other attributions in Sources & licenses: Wikipedia (CC BY-SA, also on each place card), "Powered by Esri",
   OSM, DARE, Natural Earth, Theographic, OpenBible, Waldron's outline.
@@ -188,7 +195,7 @@ Hymns for each chapter; rivers that thin out when zoomed out; flat-style verse h
 solid place-name underlines; bolded word for list items that share a verse (and the correct "N of M" chip);
 quieter last-mentioned map marker; the Nations page with person-card links; the rename to Bible Study Companion
 with the equal-width title and a header that folds into ☰ below 1440px; Hebrew & Greek word study; removal of the
-personal ESV key field; site-wide search; the distance tool. Earlier: ESV via relay, the 17 periods, the People page with family trees, map clusters,
+personal ESV key field; site-wide search; the distance tool with Roman-road routes. Earlier: ESV via relay, the 17 periods, the People page with family trees, map clusters,
 and the phone layout.
 
 ## Ideas not yet started (only if the owner asks)
