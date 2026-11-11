@@ -4913,3 +4913,11 @@ mark.list-word {
     font-size: 1.05rem;
   }
 }
+
+/* journey panel: how far the current stop is from the last one */
+.jp-leg {
+  margin-top: 3px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--muted);
+}

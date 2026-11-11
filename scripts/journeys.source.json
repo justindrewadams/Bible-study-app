@@ -313,7 +313,8 @@
         "ref": "Deut.34.1",
         "note": "Moses views the Promised Land from Mount Nebo and dies."
       }
-    ]
+    ],
+    "roads": false
   },
   {
     "id": "conquest",
@@ -986,17 +987,20 @@
         "lat": 32.826,
         "lon": 35.65,
         "ref": "Mark.5.1",
-        "note": "Across the lake, frees a man from a legion of demons (traditional site at Kursi)."
+        "note": "Across the lake, frees a man from a legion of demons (traditional site at Kursi).",
+        "sea": true
       },
       {
         "place": "Bethsaida",
         "ref": "Luke.9.10",
-        "note": "Feeds the five thousand near Bethsaida."
+        "note": "Feeds the five thousand near Bethsaida.",
+        "sea": true
       },
       {
         "place": "Gennesaret",
         "ref": "Matt.14.34",
-        "note": "After walking on the water, lands at Gennesaret."
+        "note": "After walking on the water, lands at Gennesaret.",
+        "sea": true
       },
       {
         "place": "Tyre",
@@ -1125,7 +1129,8 @@
       {
         "place": "Tarsus",
         "ref": "Acts.9.30",
-        "note": "...and send him home to Tarsus."
+        "note": "...and send him home to Tarsus.",
+        "sea": true
       },
       {
         "place": "Antioch",
@@ -1164,7 +1169,8 @@
       {
         "place": "Salamis",
         "ref": "Acts.13.5",
-        "note": "Preach in the synagogues of Salamis on Cyprus."
+        "note": "Preach in the synagogues of Salamis on Cyprus.",
+        "sea": true
       },
       {
         "place": "Paphos",
@@ -1174,7 +1180,8 @@
       {
         "place": "Perga",
         "ref": "Acts.13.13",
-        "note": "John Mark leaves them and returns to Jerusalem."
+        "note": "John Mark leaves them and returns to Jerusalem.",
+        "sea": true
       },
       {
         "place": "Antioch",
@@ -1224,7 +1231,8 @@
       {
         "place": "Antioch",
         "ref": "Acts.14.26",
-        "note": "Report to the church at Syrian Antioch all God had done."
+        "note": "Report to the church at Syrian Antioch all God had done.",
+        "sea": true
       }
     ]
   },
@@ -1258,12 +1266,14 @@
       {
         "place": "Samothrace",
         "ref": "Acts.16.11",
-        "note": "Sail straight to Samothrace."
+        "note": "Sail straight to Samothrace.",
+        "sea": true
       },
       {
         "place": "Neapolis",
         "ref": "Acts.16.11",
-        "note": "Land at Neapolis."
+        "note": "Land at Neapolis.",
+        "sea": true
       },
       {
         "place": "Philippi",
@@ -1293,7 +1303,8 @@
       {
         "place": "Athens",
         "ref": "Acts.17.15",
-        "note": "Sermon at the Areopagus: \"the unknown god\"."
+        "note": "Sermon at the Areopagus: \"the unknown god\".",
+        "sea": true
       },
       {
         "place": "Corinth",
@@ -1308,12 +1319,14 @@
       {
         "place": "Ephesus",
         "ref": "Acts.18.19",
-        "note": "Brief visit; reasons in the synagogue."
+        "note": "Brief visit; reasons in the synagogue.",
+        "sea": true
       },
       {
         "place": "Caesarea",
         "ref": "Acts.18.22",
-        "note": "Lands at Caesarea..."
+        "note": "Lands at Caesarea...",
+        "sea": true
       },
       {
         "place": "Jerusalem",
@@ -1352,7 +1365,8 @@
       {
         "place": "Philippi",
         "ref": "Acts.20.1",
-        "note": "Travels through Macedonia."
+        "note": "Travels through Macedonia.",
+        "sea": true
       },
       {
         "place": "Corinth",
@@ -1367,7 +1381,8 @@
       {
         "place": "Troas",
         "ref": "Acts.20.6",
-        "note": "Eutychus falls from the window and is raised."
+        "note": "Eutychus falls from the window and is raised.",
+        "sea": true
       },
       {
         "place": "Assos",
@@ -1377,47 +1392,56 @@
       {
         "place": "Mitylene",
         "ref": "Acts.20.14",
-        "note": "Arrive at Mitylene."
+        "note": "Arrive at Mitylene.",
+        "sea": true
       },
       {
         "place": "Chios",
         "ref": "Acts.20.15",
-        "note": "Opposite Chios."
+        "note": "Opposite Chios.",
+        "sea": true
       },
       {
         "place": "Samos",
         "ref": "Acts.20.15",
-        "note": "Touch at Samos."
+        "note": "Touch at Samos.",
+        "sea": true
       },
       {
         "place": "Miletus",
         "ref": "Acts.20.15",
-        "note": "Farewell to the Ephesian elders."
+        "note": "Farewell to the Ephesian elders.",
+        "sea": true
       },
       {
         "place": "Cos",
         "ref": "Acts.21.1",
-        "note": "Straight course to Cos..."
+        "note": "Straight course to Cos...",
+        "sea": true
       },
       {
         "place": "Rhodes",
         "ref": "Acts.21.1",
-        "note": "...then Rhodes..."
+        "note": "...then Rhodes...",
+        "sea": true
       },
       {
         "place": "Patara",
         "ref": "Acts.21.1",
-        "note": "...and Patara, where they change ships."
+        "note": "...and Patara, where they change ships.",
+        "sea": true
       },
       {
         "place": "Tyre",
         "ref": "Acts.21.3",
-        "note": "Seven days with the disciples at Tyre."
+        "note": "Seven days with the disciples at Tyre.",
+        "sea": true
       },
       {
         "place": "Ptolemais",
         "ref": "Acts.21.7",
-        "note": "Greet the brothers at Ptolemais."
+        "note": "Greet the brothers at Ptolemais.",
+        "sea": true
       },
       {
         "place": "Caesarea",
@@ -1446,42 +1470,50 @@
       {
         "place": "Sidon",
         "ref": "Acts.27.3",
-        "note": "Julius lets Paul visit friends at Sidon."
+        "note": "Julius lets Paul visit friends at Sidon.",
+        "sea": true
       },
       {
         "place": "Myra",
         "ref": "Acts.27.5",
-        "note": "Transfer to an Alexandrian grain ship at Myra."
+        "note": "Transfer to an Alexandrian grain ship at Myra.",
+        "sea": true
       },
       {
         "place": "Cnidus",
         "ref": "Acts.27.7",
-        "note": "Slow going against the wind off Cnidus."
+        "note": "Slow going against the wind off Cnidus.",
+        "sea": true
       },
       {
         "place": "Fair Havens",
         "ref": "Acts.27.8",
-        "note": "Paul warns against sailing on."
+        "note": "Paul warns against sailing on.",
+        "sea": true
       },
       {
         "place": "Malta",
         "ref": "Acts.28.1",
-        "note": "After fourteen days in the storm, shipwrecked on Malta."
+        "note": "After fourteen days in the storm, shipwrecked on Malta.",
+        "sea": true
       },
       {
         "place": "Syracuse",
         "ref": "Acts.28.12",
-        "note": "Three days at Syracuse."
+        "note": "Three days at Syracuse.",
+        "sea": true
       },
       {
         "place": "Rhegium",
         "ref": "Acts.28.13",
-        "note": "Arrive at Rhegium."
+        "note": "Arrive at Rhegium.",
+        "sea": true
       },
       {
         "place": "Puteoli",
         "ref": "Acts.28.13",
-        "note": "Land at Puteoli; a week with believers."
+        "note": "Land at Puteoli; a week with believers.",
+        "sea": true
       },
       {
         "place": "Forum of Appius",

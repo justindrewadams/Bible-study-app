@@ -1,5 +1,38 @@
 import { useEffect, useRef, useState } from 'react';
 import type { Journey } from '../lib/journeys';
+import { journeyLegs, loadRoads, type JourneyLeg } from '../lib/roads';
+import { formatDistance, walkingTime } from '../lib/distance';
+
+const legCache = new Map<string, (JourneyLeg | null)[]>();
+
+/** The journey's legs along Roman roads where possible (null until the road map has loaded). */
+export function useJourneyLegs(journey: Journey | null): (JourneyLeg | null)[] | null {
+  const [legs, setLegs] = useState<(JourneyLeg | null)[] | null>(journey ? (legCache.get(journey.id) ?? null) : null);
+  useEffect(() => {
+    if (!journey) {
+      setLegs(null);
+      return;
+    }
+    const cached = legCache.get(journey.id);
+    if (cached) {
+      setLegs(cached);
+      return;
+    }
+    setLegs(null);
+    let live = true;
+    loadRoads()
+      .then((g) => {
+        const l = journeyLegs(g, journey);
+        legCache.set(journey.id, l);
+        if (live) setLegs(l);
+      })
+      .catch(() => {}); // without the road map, legs stay as drawn
+    return () => {
+      live = false;
+    };
+  }, [journey]);
+  return legs;
+}
 
 interface Props {
   journey: Journey;
@@ -9,6 +42,8 @@ interface Props {
   onTogglePlay: () => void;
   onClose: () => void;
   onPlaceInfo: (placeIndex: number) => void;
+  /** legs along roads (see useJourneyLegs), for the distance from the previous stop */
+  legs?: (JourneyLeg | null)[] | null;
 }
 
 const fmt = (ref: string) => {
@@ -16,7 +51,9 @@ const fmt = (ref: string) => {
   return `${b.replace(/^(\d)/, '$1 ')} ${c}:${v}`;
 };
 
-export default function JourneyPanel({ journey, stopIndex, playing, onGo, onTogglePlay, onClose, onPlaceInfo }: Props) {
+export default function JourneyPanel({ journey, stopIndex, playing, onGo, onTogglePlay, onClose, onPlaceInfo, legs }: Props) {
+  const leg = legs?.[stopIndex] ?? null;
+  const prevStop = stopIndex > 0 ? journey.stops[stopIndex - 1] : null;
   const [expanded, setExpanded] = useState(false);
   const listRef = useRef<HTMLOListElement>(null);
   const stop = journey.stops[stopIndex];
@@ -44,6 +81,18 @@ export default function JourneyPanel({ journey, stopIndex, playing, onGo, onTogg
             {stop.place} <span className="muted">· {fmt(stop.ref)}</span>
           </div>
           <div className="jp-note">{stop.note}</div>
+          {leg && prevStop && leg.miles >= 0.5 && (
+            <div className="jp-leg">
+              {formatDistance(leg.miles).miles} from {prevStop.place}{' '}
+              {leg.how === 'road'
+                ? `by road · ${walkingTime(leg.miles)}`
+                : leg.how === 'sea'
+                  ? 'by sea'
+                  : leg.how === 'traced'
+                    ? 'along the usual route'
+                    : 'as the crow flies'}
+            </div>
+          )}
           {stop.placeIndex != null && (
             <button className="link small" onClick={() => onPlaceInfo(stop.placeIndex!)}>
               About {stop.place} →

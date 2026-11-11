@@ -34,7 +34,12 @@ the decisions already made (and why), and how the owner likes to work.
 4. **Person cards and the People page** (`#people`): about 3,000 people. Cards show other names, tribe, dates,
    birth and death places, period, a **family tree**, Easton's biography with tappable references, every verse
    naming them, and, for nation founders, **"Ancestor of: …"** linking to the Nations page.
-5. **Journeys** (15): animated stop-by-stop routes (Abraham, Exodus, Paul's journeys, and more).
+5. **Journeys** (15): animated stop-by-stop routes (Abraham, Exodus, Paul's journeys, and more). Once the road
+   network loads, land legs follow Roman-era roads (Itiner-e) when a road joins the stops within 1.6× the drawn
+   length (+5 mi); legs marked `sea: true` (boat, incl. the Sea of Galilee), legs with hand-traced `via` points, and
+   journeys with `roads: false` (the Exodus) are drawn as before. The journey panel shows "N miles from <last stop>
+   by road · about N days on foot" / "by sea" / "along the usual route" / "as the crow flies". Code: `journeyLegs()`
+   in `lib/roads.ts`, `useJourneyLegs` in `JourneyPanel.tsx`; sea legs were set from Acts and the Gospels.
 6. **Study lists** (24), stepped through like journeys: kings, judges, prophets, apostles, miracles, parables,
    fruit of the Spirit, armor of God, and more. When several items share one verse (fruit of the Spirit, armor,
    apostles), the current item's word is **bolded** inside that verse (owner chose bold over a highlight).
@@ -109,7 +114,7 @@ Generated files are committed. Raw downloads are cached in `scripts/.cache/` (gi
 Checks (Node 22.6+): `npm run check:hymns` and `npm run check:nations` validate every reference and person slug.
 
 - **Journeys and lists:** edit the `*.source.json` files. Each item has `place`, `ref` (OSIS, e.g. `Acts.16.12`)
-  and a `note`. Optional: `lookup`, `lat`/`lon`, `via`, `meta`, `tag`, and `words` (when items share a verse:
+  and a `note`. Optional: `lookup`, `lat`/`lon`, `via`, `sea` (journey stop reached by boat), `meta`, `tag`, and `words` (when items share a verse:
   the word(s) to bold, first match wins; include other translations' wording, e.g. KJV "longsuffering").
   If you can't rerun `build:data` (it needs the OpenBible cache), apply the same change to `src/data/lists.json`.
 - **Word study data:** `build:words` downloads ~110 MB of STEPBible files into `scripts/.cache/step` on first run.
@@ -195,7 +200,7 @@ Hymns for each chapter; rivers that thin out when zoomed out; flat-style verse h
 solid place-name underlines; bolded word for list items that share a verse (and the correct "N of M" chip);
 quieter last-mentioned map marker; the Nations page with person-card links; the rename to Bible Study Companion
 with the equal-width title and a header that folds into ☰ below 1440px; Hebrew & Greek word study; removal of the
-personal ESV key field; site-wide search; the distance tool with Roman-road routes. Earlier: ESV via relay, the 17 periods, the People page with family trees, map clusters,
+personal ESV key field; site-wide search; the distance tool with Roman-road routes; journeys along Roman roads. Earlier: ESV via relay, the 17 periods, the People page with family trees, map clusters,
 and the phone layout.
 
 ## Ideas not yet started (only if the owner asks)

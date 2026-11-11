@@ -445,7 +445,8 @@
     "lon": 35.75,
     "placeIndex": 874
    }
-  ]
+  ],
+  "roads": false
  },
  {
   "id": "conquest",
@@ -1373,7 +1374,8 @@
     "lon": 35.65,
     "ref": "Mark.5.1",
     "note": "Across the lake, frees a man from a legion of demons (traditional site at Kursi).",
-    "placeIndex": null
+    "placeIndex": null,
+    "sea": true
    },
    {
     "place": "Bethsaida",
@@ -1381,7 +1383,8 @@
     "note": "Feeds the five thousand near Bethsaida.",
     "lat": 32.9104,
     "lon": 35.631,
-    "placeIndex": 240
+    "placeIndex": 240,
+    "sea": true
    },
    {
     "place": "Gennesaret",
@@ -1389,7 +1392,8 @@
     "note": "After walking on the water, lands at Gennesaret.",
     "lat": 32.8606,
     "lon": 35.5072,
-    "placeIndex": 479
+    "placeIndex": 479,
+    "sea": true
    },
    {
     "place": "Tyre",
@@ -1590,7 +1594,8 @@
     "note": "...and send him home to Tarsus.",
     "lat": 36.913,
     "lon": 34.8921,
-    "placeIndex": 1163
+    "placeIndex": 1163,
+    "sea": true
    },
    {
     "place": "Antioch",
@@ -1647,7 +1652,8 @@
     "note": "Preach in the synagogues of Salamis on Cyprus.",
     "lat": 35.1849,
     "lon": 33.9019,
-    "placeIndex": 1037
+    "placeIndex": 1037,
+    "sea": true
    },
    {
     "place": "Paphos",
@@ -1663,7 +1669,8 @@
     "note": "John Mark leaves them and returns to Jerusalem.",
     "lat": 36.9604,
     "lon": 30.8537,
-    "placeIndex": 953
+    "placeIndex": 953,
+    "sea": true
    },
    {
     "place": "Antioch",
@@ -1743,7 +1750,8 @@
     "note": "Report to the church at Syrian Antioch all God had done.",
     "lat": 36.2267,
     "lon": 36.1717,
-    "placeIndex": 74
+    "placeIndex": 74,
+    "sea": true
    }
   ]
  },
@@ -1792,7 +1800,8 @@
     "note": "Sail straight to Samothrace.",
     "lat": 40.45,
     "lon": 25.5833,
-    "placeIndex": 1047
+    "placeIndex": 1047,
+    "sea": true
    },
    {
     "place": "Neapolis",
@@ -1800,7 +1809,8 @@
     "note": "Land at Neapolis.",
     "lat": 40.935,
     "lon": 24.415,
-    "placeIndex": 903
+    "placeIndex": 903,
+    "sea": true
    },
    {
     "place": "Philippi",
@@ -1848,7 +1858,8 @@
     "note": "Sermon at the Areopagus: \"the unknown god\".",
     "lat": 37.9719,
     "lon": 23.7267,
-    "placeIndex": 128
+    "placeIndex": 128,
+    "sea": true
    },
    {
     "place": "Corinth",
@@ -1872,7 +1883,8 @@
     "note": "Brief visit; reasons in the synagogue.",
     "lat": 37.9391,
     "lon": 27.3407,
-    "placeIndex": 409
+    "placeIndex": 409,
+    "sea": true
    },
    {
     "place": "Caesarea",
@@ -1880,7 +1892,8 @@
     "note": "Lands at Caesarea...",
     "lat": 32.5,
     "lon": 34.8917,
-    "placeIndex": 273
+    "placeIndex": 273,
+    "sea": true
    },
    {
     "place": "Jerusalem",
@@ -1937,7 +1950,8 @@
     "note": "Travels through Macedonia.",
     "lat": 41.0121,
     "lon": 24.2846,
-    "placeIndex": 959
+    "placeIndex": 959,
+    "sea": true
    },
    {
     "place": "Corinth",
@@ -1961,7 +1975,8 @@
     "note": "Eutychus falls from the window and is raised.",
     "lat": 39.7519,
     "lon": 26.1586,
-    "placeIndex": 1205
+    "placeIndex": 1205,
+    "sea": true
    },
    {
     "place": "Assos",
@@ -1977,7 +1992,8 @@
     "note": "Arrive at Mitylene.",
     "lat": 39.1105,
     "lon": 26.547,
-    "placeIndex": 835
+    "placeIndex": 835,
+    "sea": true
    },
    {
     "place": "Chios",
@@ -1985,7 +2001,8 @@
     "note": "Opposite Chios.",
     "lat": 38.3725,
     "lon": 26.1375,
-    "placeIndex": 304
+    "placeIndex": 304,
+    "sea": true
    },
    {
     "place": "Samos",
@@ -1993,7 +2010,8 @@
     "note": "Touch at Samos.",
     "lat": 37.75,
     "lon": 26.8333,
-    "placeIndex": 1046
+    "placeIndex": 1046,
+    "sea": true
    },
    {
     "place": "Miletus",
@@ -2001,7 +2019,8 @@
     "note": "Farewell to the Ephesian elders.",
     "lat": 37.5311,
     "lon": 27.2756,
-    "placeIndex": 828
+    "placeIndex": 828,
+    "sea": true
    },
    {
     "place": "Cos",
@@ -2009,7 +2028,8 @@
     "note": "Straight course to Cos...",
     "lat": 36.8153,
     "lon": 27.1103,
-    "placeIndex": 318
+    "placeIndex": 318,
+    "sea": true
    },
    {
     "place": "Rhodes",
@@ -2017,7 +2037,8 @@
     "note": "...then Rhodes...",
     "lat": 36.4402,
     "lon": 28.2109,
-    "placeIndex": 1019
+    "placeIndex": 1019,
+    "sea": true
    },
    {
     "place": "Patara",
@@ -2025,7 +2046,8 @@
     "note": "...and Patara, where they change ships.",
     "lat": 36.2603,
     "lon": 29.3142,
-    "placeIndex": 943
+    "placeIndex": 943,
+    "sea": true
    },
    {
     "place": "Tyre",
@@ -2033,7 +2055,8 @@
     "note": "Seven days with the disciples at Tyre.",
     "lat": 33.2708,
     "lon": 35.1961,
-    "placeIndex": 1208
+    "placeIndex": 1208,
+    "sea": true
    },
    {
     "place": "Ptolemais",
@@ -2041,7 +2064,8 @@
     "note": "Greet the brothers at Ptolemais.",
     "lat": 32.9214,
     "lon": 35.0692,
-    "placeIndex": 974
+    "placeIndex": 974,
+    "sea": true
    },
    {
     "place": "Caesarea",
@@ -2082,7 +2106,8 @@
     "note": "Julius lets Paul visit friends at Sidon.",
     "lat": 33.561,
     "lon": 35.3719,
-    "placeIndex": 1114
+    "placeIndex": 1114,
+    "sea": true
    },
    {
     "place": "Myra",
@@ -2090,7 +2115,8 @@
     "note": "Transfer to an Alexandrian grain ship at Myra.",
     "lat": 36.2592,
     "lon": 29.9853,
-    "placeIndex": 888
+    "placeIndex": 888,
+    "sea": true
    },
    {
     "place": "Cnidus",
@@ -2098,7 +2124,8 @@
     "note": "Slow going against the wind off Cnidus.",
     "lat": 36.6858,
     "lon": 27.375,
-    "placeIndex": 314
+    "placeIndex": 314,
+    "sea": true
    },
    {
     "place": "Fair Havens",
@@ -2106,7 +2133,8 @@
     "note": "Paul warns against sailing on.",
     "lat": 34.9297,
     "lon": 24.8003,
-    "placeIndex": 436
+    "placeIndex": 436,
+    "sea": true
    },
    {
     "place": "Malta",
@@ -2114,7 +2142,8 @@
     "note": "After fourteen days in the storm, shipwrecked on Malta.",
     "lat": 35.9335,
     "lon": 14.4117,
-    "placeIndex": 787
+    "placeIndex": 787,
+    "sea": true
    },
    {
     "place": "Syracuse",
@@ -2122,7 +2151,8 @@
     "note": "Three days at Syracuse.",
     "lat": 37.0639,
     "lon": 15.2931,
-    "placeIndex": 1143
+    "placeIndex": 1143,
+    "sea": true
    },
    {
     "place": "Rhegium",
@@ -2130,7 +2160,8 @@
     "note": "Arrive at Rhegium.",
     "lat": 38.1088,
     "lon": 15.6441,
-    "placeIndex": 1018
+    "placeIndex": 1018,
+    "sea": true
    },
    {
     "place": "Puteoli",
@@ -2138,7 +2169,8 @@
     "note": "Land at Puteoli; a week with believers.",
     "lat": 40.8261,
     "lon": 14.1206,
-    "placeIndex": 978
+    "placeIndex": 978,
+    "sea": true
    },
    {
     "place": "Forum of Appius",

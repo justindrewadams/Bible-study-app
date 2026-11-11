@@ -9,6 +9,8 @@ export interface Stop {
   placeIndex: number | null;
   /** waypoints [lat, lon] for the leg arriving at this stop, so it follows a real route */
   via?: [number, number][];
+  /** reached by boat (sea, or across the Sea of Galilee): drawn directly, never along roads */
+  sea?: boolean;
 }
 
 export interface Journey {
@@ -17,6 +19,8 @@ export interface Journey {
   era: string;
   color: string;
   summary: string;
+  /** false: never follow roads (e.g. the Exodus, through the wilderness) */
+  roads?: boolean;
   stops: Stop[];
 }
 

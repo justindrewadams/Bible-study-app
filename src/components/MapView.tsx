@@ -125,6 +125,8 @@ interface Props {
   /** the road route between the measured places, when one was found */
   roadPath?: [number, number][] | null;
   roadMiles?: number | null;
+  /** journey legs along roads where possible (index = arriving stop); falls back to the drawn legs */
+  journeyLegs?: ({ path: [number, number][] } | null)[] | null;
 }
 
 function arrowIcon(angle: number, color: string) {
@@ -399,7 +401,11 @@ function PlaceAndRegionLabels({
 }
 
 /** Animates a small marker along the most recent leg of the journey. */
-function Traveler({ journey, stopIndex }: { journey: Journey; stopIndex: number }) {
+type Routed = ({ path: [number, number][] } | null)[] | null;
+/** a leg's path: along roads when routed, otherwise as drawn in the journey data */
+const legRoute = (journey: Journey, routed: Routed, i: number): [number, number][] => routed?.[i]?.path ?? legPath(journey, i);
+
+function Traveler({ journey, stopIndex, routed }: { journey: Journey; stopIndex: number; routed: Routed }) {
   const ref = useRef<L.Marker>(null);
   const prev = useRef({ id: journey.id, index: stopIndex });
   useEffect(() => {
@@ -409,7 +415,7 @@ function Traveler({ journey, stopIndex }: { journey: Journey; stopIndex: number 
     // stepping forward one stop follows the leg's route; any other jump goes straight
     const path: [number, number][] =
       prev.current.id === journey.id && prev.current.index === stopIndex - 1
-        ? legPath(journey, stopIndex)
+        ? legRoute(journey, routed, stopIndex)
         : [
             [from.lat, from.lon],
             [to.lat, to.lon],
@@ -440,17 +446,27 @@ function Traveler({ journey, stopIndex }: { journey: Journey; stopIndex: number 
   return <Marker ref={ref} position={[s.lat, s.lon]} icon={travelerIcon(journey.color)} interactive={false} zIndexOffset={2000} />;
 }
 
-function JourneyLayer({ journey, stopIndex, onStopClick }: { journey: Journey; stopIndex: number; onStopClick: (i: number) => void }) {
+function JourneyLayer({
+  journey,
+  stopIndex,
+  onStopClick,
+  routed,
+}: {
+  journey: Journey;
+  stopIndex: number;
+  onStopClick: (i: number) => void;
+  routed: Routed;
+}) {
   const legs = useMemo(
     () =>
       journey.stops.slice(1).map((b, i) => {
         const a = journey.stops[i];
         const same = a.lat === b.lat && a.lon === b.lon && !b.via;
-        const positions = legPath(journey, i + 1);
+        const positions = legRoute(journey, routed, i + 1);
         const { point, angle } = pointAlong(positions, 0.55);
         return { i: i + 1, same, positions: positions as L.LatLngTuple[], mid: point as L.LatLngTuple, angle };
       }),
-    [journey],
+    [journey, routed],
   );
 
   return (
@@ -507,7 +523,7 @@ function JourneyLayer({ journey, stopIndex, onStopClick }: { journey: Journey; s
           </Marker>
         );
       })}
-      <Traveler journey={journey} stopIndex={stopIndex} />
+      <Traveler journey={journey} stopIndex={stopIndex} routed={routed} />
     </>
   );
 }
@@ -524,6 +540,7 @@ export default function MapView({
   measure,
   roadPath,
   roadMiles,
+  journeyLegs,
 }: Props) {
   const base = BASE_LAYERS[settings.base];
   const modern = settings.modern !== 'off' ? MODERN_LAYERS[settings.modern] : null;
@@ -575,7 +592,7 @@ export default function MapView({
         onPlaceInfo={onPlaceInfo}
       />
 
-      {journey && <JourneyLayer journey={journey} stopIndex={stopIndex} onStopClick={onStopClick} />}
+      {journey && <JourneyLayer journey={journey} stopIndex={stopIndex} onStopClick={onStopClick} routed={journeyLegs ?? null} />}
 
       {focus?.places.map((p) => (
         <FocusMarker

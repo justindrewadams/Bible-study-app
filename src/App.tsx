@@ -19,7 +19,7 @@ import { usePersistentState } from './lib/usePersistentState';
 import MapView, { DEFAULT_MAP_SETTINGS, MapErrorBoundary, type MapFocus, type MapSettings } from './components/MapView';
 import MapControls from './components/MapControls';
 import Reader from './components/Reader';
-import JourneyPanel from './components/JourneyPanel';
+import JourneyPanel, { useJourneyLegs } from './components/JourneyPanel';
 import PlaceCard from './components/PlaceCard';
 import { loadPlaces } from './lib/geo';
 import PeriodsPage from './components/PeriodsPage';
@@ -143,6 +143,7 @@ export default function App() {
   const chosenTranslation = findTranslation(translationId);
   const translation = fallbackReason ? findTranslation(FALLBACK_TRANSLATION) : chosenTranslation;
   const journey = JOURNEYS.find((j) => j.id === journeyId) ?? null;
+  const journeyLegs = useJourneyLegs(journey);
 
   // Screens for this chapter: one, unless a licensed translation's per-page limit splits it
   const pages = chapterPages(chosenTranslation, loc.book, loc.chapter);
@@ -779,6 +780,7 @@ export default function App() {
               measure={measure}
               roadPath={road?.state === 'found' ? road.route.path : null}
               roadMiles={road?.state === 'found' ? road.route.miles : null}
+              journeyLegs={journeyLegs}
               onStopClick={(i) => journey && (setPlaying(false), goToStop(journey, i))}
             />
             </MapErrorBoundary>
@@ -797,6 +799,7 @@ export default function App() {
                 stopIndex={stopIndex}
                 playing={playing}
                 onPlaceInfo={openPlaceIndex}
+                legs={journeyLegs}
                 onGo={(i) => {
                   setPlaying(false);
                   goToStop(journey, i);
@@ -997,7 +1000,9 @@ export default function App() {
                 in this app are original. Fonts: Figtree and EB Garamond (SIL Open Font License).
               </p>
               <p className="muted">
-                Journey legs are drawn as straight lines between stops (some follow known routes), not exact roads.
+                Journey legs follow Roman-era roads (Itiner-e) where a road joins the stops without a long detour; sea
+                crossings and wilderness legs are drawn stop to stop, and a few follow hand-traced routes. They show the
+                likely way, not an exact record.
               </p>
             </div>
             <button className="btn primary" onClick={() => setSettingsOpen(false)}>

@@ -4,6 +4,7 @@
  * distance tool is used.
  */
 import { milesBetween } from './distance';
+import { legPath, type Journey } from './journeys';
 
 export interface RoadsFile {
   nodes: number[]; // flat [lat*1000, lon*1000, …]
@@ -205,4 +206,39 @@ export function midpointAlong(path: [number, number][]): [number, number] {
     half -= seg[i];
   }
   return path[path.length - 1];
+}
+
+/** Length of a path in miles. */
+export function pathMiles(path: [number, number][]): number {
+  let m = 0;
+  for (let i = 1; i < path.length; i++)
+    m += milesBetween({ lat: path[i - 1][0], lon: path[i - 1][1] }, { lat: path[i][0], lon: path[i][1] });
+  return m;
+}
+
+/** How a journey leg is drawn and measured. */
+export interface JourneyLeg {
+  path: [number, number][];
+  miles: number;
+  /** road: along Roman roads; sea: by boat; traced: the journey's hand-traced route; direct: stop to stop */
+  how: 'road' | 'sea' | 'traced' | 'direct';
+}
+
+/**
+ * Each leg of a journey (index i = the leg arriving at stop i; index 0 is empty): along Roman roads where a road
+ * joins the stops without a big detour; otherwise as drawn in the journey data (sea legs, hand-traced routes,
+ * the wilderness).
+ */
+export function journeyLegs(g: RoadGraph, journey: Journey): (JourneyLeg | null)[] {
+  return journey.stops.map((b, i) => {
+    if (i === 0) return null;
+    const a = journey.stops[i - 1];
+    const drawn = legPath(journey, i);
+    const direct: JourneyLeg = { path: drawn, miles: pathMiles(drawn), how: b.sea ? 'sea' : b.via ? 'traced' : 'direct' };
+    if (b.sea || b.via || journey.roads === false || (a.lat === b.lat && a.lon === b.lon)) return direct;
+    const r = routeBetween(g, a, b);
+    // a road that wanders far out of the way probably isn't the way they went
+    if ('none' in r || r.miles > direct.miles * 1.6 + 5) return direct;
+    return { path: r.path, miles: r.miles, how: 'road' };
+  });
 }
