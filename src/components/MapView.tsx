@@ -14,6 +14,7 @@ import {
 import type { Place } from '../lib/geo';
 import { type Journey, legPath, pointAlong } from '../lib/journeys';
 import { REGIONS } from '../data/regions';
+import { formatDistance, milesBetween } from '../lib/distance';
 
 export type BaseLayerId = 'terrain' | 'physical' | 'satellite' | 'roman';
 export type ModernOverlay = 'off' | 'labels' | 'full';
@@ -118,6 +119,8 @@ interface Props {
   /** which era's region names to show */
   testament: 'OT' | 'NT';
   onPlaceInfo: (p: Place) => void;
+  /** two places being measured (the distance tool) */
+  measure?: { a: Place | null; b: Place | null } | null;
 }
 
 function arrowIcon(angle: number, color: string) {
@@ -514,10 +517,12 @@ export default function MapView({
   onStopClick,
   testament,
   onPlaceInfo,
+  measure,
 }: Props) {
   const base = BASE_LAYERS[settings.base];
   const modern = settings.modern !== 'off' ? MODERN_LAYERS[settings.modern] : null;
-  const focusKey = focus?.places.map((p) => p.index).join(',') ?? '';
+  const measured = [measure?.a, measure?.b].filter((p): p is Place => !!p);
+  const focusKey = [...(focus?.places ?? []), ...measured].map((p) => p.index).join(',');
   const shownPlaces = useMemo(() => {
     const ids = new Set(focusKey.split(',').filter(Boolean).map(Number));
     return chapterPlaces.filter((p) => !ids.has(p.index));
@@ -525,10 +530,10 @@ export default function MapView({
   // spots that already carry their own marker and label
   const avoid = useMemo(
     () => [
-      ...(focus?.places ?? []).map((p) => ({ lat: p.lat, lon: p.lon, pin: true })),
+      ...[...(focus?.places ?? []), ...measured].map((p) => ({ lat: p.lat, lon: p.lon, pin: true })),
       ...(journey?.stops ?? []).map((st) => ({ lat: st.lat, lon: st.lon })),
     ],
-    [focus, journey],
+    [focus, journey, focusKey], // eslint-disable-line react-hooks/exhaustive-deps
   );
 
   return (
@@ -575,8 +580,76 @@ export default function MapView({
         />
       ))}
 
+      {measure && <MeasureLayer a={measure.a} b={measure.b} onPlaceInfo={onPlaceInfo} />}
+
       <CameraController focus={focus} journey={journey} stopIndex={stopIndex} chapterPlaces={chapterPlaces} />
     </MapContainer>
+  );
+}
+
+/** The distance tool's end pins: the verse pin's shape in sky blue, lettered A and B. */
+const measurePin = (end: 'a' | 'b') =>
+  L.divIcon({
+    className: 'focus-pin measure-pin',
+    iconSize: [28, 40],
+    iconAnchor: [14, 38],
+    html: `<svg width="28" height="40" viewBox="0 0 28 40"><path d="M14 1.5C7.2 1.5 2 6.7 2 13.5 2 22.5 14 38.5 14 38.5S26 22.5 26 13.5C26 6.7 20.8 1.5 14 1.5Z"/><text x="14" y="18.5" text-anchor="middle">${end.toUpperCase()}</text></svg>`,
+  });
+
+/** The distance tool: a pin at each end, a dashed line between them, and the distance on the line. */
+function MeasureLayer({ a, b, onPlaceInfo }: { a: Place | null; b: Place | null; onPlaceInfo: (p: Place) => void }) {
+  const map = useMap();
+  const key = `${a?.index ?? ''}:${a?.lat}|${b?.index ?? ''}:${b?.lat}`;
+  useEffect(() => {
+    const ends = [a, b].filter((p): p is Place => !!p);
+    if (!ends.length) return;
+    const bounds = L.latLngBounds(ends.map((p) => [p.lat, p.lon]));
+    // leave room for the distance panel: top-left on desktop, along the bottom on phones
+    const phone = window.matchMedia('(max-width: 860px)').matches;
+    if (ends.length === 2)
+      map.flyToBounds(bounds, {
+        paddingTopLeft: phone ? [40, 50] : [340, 60],
+        paddingBottomRight: phone ? [40, 190] : [60, 60],
+        maxZoom: 9,
+        duration: 0.9,
+      });
+    else if (!map.getBounds().pad(-0.1).contains(bounds)) map.flyTo(bounds.getCenter(), Math.max(map.getZoom(), 6), { duration: 0.8 });
+  }, [key, map]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const label = useMemo(() => {
+    if (!a || !b) return null;
+    return L.divIcon({
+      className: 'measure-label',
+      iconSize: [0, 0],
+      html: `<span>${formatDistance(milesBetween(a, b)).short}</span>`,
+    });
+  }, [a, b]);
+
+  return (
+    <>
+      {a && b && (
+        <Polyline
+          positions={[
+            [a.lat, a.lon],
+            [b.lat, b.lon],
+          ]}
+          pathOptions={{ className: 'measure-line', color: '#111', weight: 3, dashArray: '8 7', interactive: false }}
+        />
+      )}
+      {a && b && label && <Marker position={[(a.lat + b.lat) / 2, (a.lon + b.lon) / 2]} icon={label} interactive={false} zIndexOffset={3500} />}
+      {(['a', 'b'] as const).map((end) => {
+        const p = end === 'a' ? a : b;
+        if (!p) return null;
+        return (
+          <Marker key={end + p.index + p.lat} position={[p.lat, p.lon]} icon={measurePin(end)} zIndexOffset={4000} title={p.name}
+            eventHandlers={{ click: () => onPlaceInfo(p) }}>
+            <Tooltip permanent direction="top" offset={[0, -38]} className="pin-label">
+              {p.name}
+            </Tooltip>
+          </Marker>
+        );
+      })}
+    </>
   );
 }
 

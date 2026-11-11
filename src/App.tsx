@@ -28,6 +28,7 @@ import NationsPage from './components/NationsPage';
 import PersonCard from './components/PersonCard';
 import WordStudy from './components/WordStudy';
 import SiteSearch from './components/SiteSearch';
+import DistancePanel, { type Measure } from './components/DistancePanel';
 import { loadChapterPeople, type PersonEntry } from './lib/people';
 import ListPanel from './components/ListPanel';
 import { LISTS, LIST_GROUPS, type StudyList } from './lib/lists';
@@ -73,6 +74,15 @@ export default function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [personSlug, setPersonSlug] = useState<string | null>(null);
   const [chapterPeople, setChapterPeople] = useState<Map<number, PersonEntry[]>>(new Map());
+  /** the distance tool: open while not null */
+  const [measure, setMeasure] = useState<Measure | null>(null);
+  const samePlace = (x: Place | null, y: Place) => !!x && x.index === y.index && x.lat === y.lat && x.lon === y.lon;
+  /** While measuring, tapping a place on the map fills the next end instead of opening its card. */
+  const onMapPlace = (p: Place) => {
+    if (!measure) return setCardPlace(p);
+    if (samePlace(measure.a, p) || samePlace(measure.b, p)) return;
+    setMeasure(!measure.a ? { ...measure, a: p } : { ...measure, b: p });
+  };
 
   // only one info card at a time (place, person, or Hebrew/Greek word study)
   const [wordStudyOpen, setWordStudyOpen] = useState(false);
@@ -301,7 +311,7 @@ export default function App() {
   };
 
   return (
-    <div className={`app${mapVisible ? '' : ' map-hidden'}${journey ? ' journey-active' : ''}`}>
+    <div className={`app${mapVisible ? '' : ' map-hidden'}${journey ? ' journey-active' : ''}${measure ? ' measuring' : ''}`}>
       <header className="topbar">
         <button className="brand" title="Bible Study Companion: back to reading" onClick={() => pageOpen && closePeriods()}>
           <span>BIBLE STUDY</span>
@@ -764,11 +774,18 @@ export default function App() {
               journey={journey}
               stopIndex={stopIndex}
               testament={book.testament}
-              onPlaceInfo={setCardPlace}
+              onPlaceInfo={onMapPlace}
+              measure={measure}
               onStopClick={(i) => journey && (setPlaying(false), goToStop(journey, i))}
             />
             </MapErrorBoundary>
-            <MapControls settings={mapSettings} onChange={setMapSettings} />
+            <MapControls
+              settings={mapSettings}
+              onChange={setMapSettings}
+              measuring={!!measure}
+              onToggleMeasure={() => setMeasure(measure ? null : { a: null, b: null })}
+            />
+            {measure && <DistancePanel measure={measure} onChange={setMeasure} onClose={() => setMeasure(null)} />}
             {journey && (
               <JourneyPanel
                 journey={journey}
@@ -843,6 +860,11 @@ export default function App() {
           onOpenPerson={setPersonSlug}
           onClose={() => setCardPlace(null)}
           onGoToRef={(ref) => goToRefForPlace(ref, cardPlace)}
+          onMeasureFrom={(p) => {
+            setMeasure({ a: p, b: null });
+            setMapVisible(true);
+            setCardPlace(null);
+          }}
           onFollowJourney={(j, i) => {
             setPlaying(false);
             goToStop(j, i);

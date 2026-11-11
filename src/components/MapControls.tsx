@@ -4,9 +4,12 @@ import { BASE_LAYER_OPTIONS, type MapSettings, type ModernOverlay } from './MapV
 interface Props {
   settings: MapSettings;
   onChange: (s: MapSettings) => void;
+  /** the distance tool is open */
+  measuring: boolean;
+  onToggleMeasure: () => void;
 }
 
-export default function MapControls({ settings, onChange }: Props) {
+export default function MapControls({ settings, onChange, measuring, onToggleMeasure }: Props) {
   const [open, setOpen] = useState(false);
   const set = <K extends keyof MapSettings>(k: K, v: MapSettings[K]) => onChange({ ...settings, [k]: v });
   const modernOn = settings.modern !== 'off';
@@ -20,6 +23,14 @@ export default function MapControls({ settings, onChange }: Props) {
         aria-pressed={modernOn}
       >
         {modernOn ? '◉' : '○'} Modern<span className="wide-only"> map</span>
+      </button>
+      <button
+        className={`overlay-toggle measure-toggle${measuring ? ' on' : ''}`}
+        onClick={onToggleMeasure}
+        title="Measure the distance between two places"
+        aria-pressed={measuring}
+      >
+        <span aria-hidden="true">↔</span> Distance
       </button>
       <button className="icon-btn layers-btn" onClick={() => setOpen(!open)} aria-expanded={open} aria-label="Map layers">
         ☰

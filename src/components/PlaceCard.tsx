@@ -10,6 +10,8 @@ interface Props {
   onClose: () => void;
   onGoToRef: (ref: string) => void;
   onFollowJourney: (journey: Journey, stopIndex: number) => void;
+  /** start the distance tool from this place */
+  onMeasureFrom?: (place: Place) => void;
   onOpenPerson: (slug: string) => void;
 }
 
@@ -23,7 +25,7 @@ function likelihood(score: number) {
 
 const PREVIEW_BOOKS = 4;
 
-export default function PlaceCard({ place, onClose, onGoToRef, onFollowJourney, onOpenPerson }: Props) {
+export default function PlaceCard({ place, onClose, onGoToRef, onFollowJourney, onOpenPerson, onMeasureFrom }: Props) {
   const [natives, setNatives] = useState<{ born: PersonEntry[]; died: PersonEntry[] }>({ born: [], died: [] });
   useEffect(() => {
     let cancelled = false;
@@ -103,6 +105,12 @@ export default function PlaceCard({ place, onClose, onGoToRef, onFollowJourney, 
 
       <div className="pc-body">
         {wiki?.thumbnail && <img className="pc-img" src={wiki.thumbnail} alt={wiki.title ?? place.name} />}
+
+        {onMeasureFrom && (
+          <button className="pc-measure" onClick={() => onMeasureFrom(place)}>
+            <span aria-hidden="true">↔</span> Distance from {place.name} to…
+          </button>
+        )}
 
         <dl className="pc-facts">
           {details?.modern?.length ? (

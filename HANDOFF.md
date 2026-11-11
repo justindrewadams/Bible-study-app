@@ -59,7 +59,13 @@ the decisions already made (and why), and how the owner likes to work.
     references ("John 3:16", "1 cor 13", "Psalm 23"). The searched word is bolded in each excerpt; Enter opens the first
     result. It searches **only the app's own data, never Bible text** (searching the ESV would need Crossway's search
     API: ask the owner first). Code: `src/lib/search.ts` (index, matching, ranking) and `components/SiteSearch.tsx`.
-12. **Sources & licenses** pop-up (the ⚙ button): lists every source and license. The personal ESV key field was
+12. **Distance tool:** a "↔ Distance" button on the map (beside "Modern") or "↔ Distance from <place> to…" on a place
+    card. Choose two places by typing (suggestions from all ~1,300 places) or by tapping them on the map; while it is
+    open, tapping a place fills the next slot instead of opening its card. Shows straight-line miles (km), a rough
+    time on foot at 20 miles a day, and a note that real routes were longer; the map draws blue A/B pins and a dashed
+    line labelled with the miles. Regions (e.g. Egypt) measure from their single map point. On phones the map grows
+    to 56vh while measuring. Code: `lib/distance.ts`, `components/DistancePanel.tsx`, `MeasureLayer` in `MapView.tsx`.
+13. **Sources & licenses** pop-up (the ⚙ button): lists every source and license. The personal ESV key field was
     **removed** at the owner's request (a key saved by an older version is still used quietly as a backup).
 
 ## Stack and layout
@@ -70,10 +76,10 @@ the decisions already made (and why), and how the owner likes to work.
 - `src/components/`:
   - `Reader` (chapter title row with the Hymns button, verses, list-word bolding), `MapView` (also `WaterLayer`,
     `PlaceAndRegionLabels`, `MapErrorBoundary`), `MapControls`
-  - `PlaceCard`, `PersonCard`, `FamilyTree`, `WordStudy`, `HymnsPanel`, `SiteSearch`
+  - `PlaceCard`, `PersonCard`, `FamilyTree`, `WordStudy`, `HymnsPanel`, `SiteSearch`, `DistancePanel`
   - `JourneyPanel`, `ListPanel`, `PeriodsPage`, `PeoplePage`, `NationsPage`
 - `src/lib/`: `bible.ts` (translations, fetching, ESV rules), `geo.ts`, `placeInfo.ts`, `people.ts`,
-  `journeys.ts`, `lists.ts`, `words.ts` (word-study loaders), `search.ts`, `usePersistentState.ts`
+  `journeys.ts`, `lists.ts`, `words.ts` (word-study loaders), `search.ts`, `distance.ts`, `usePersistentState.ts`
 - `src/data/`:
   - `books.ts`, `regions.ts`, `periods.ts`
   - `hymns.ts`: ~210 hymns with `from` (passages written from), `fits` (thematic passages) and `themes`;
@@ -182,7 +188,7 @@ Hymns for each chapter; rivers that thin out when zoomed out; flat-style verse h
 solid place-name underlines; bolded word for list items that share a verse (and the correct "N of M" chip);
 quieter last-mentioned map marker; the Nations page with person-card links; the rename to Bible Study Companion
 with the equal-width title and a header that folds into ☰ below 1440px; Hebrew & Greek word study; removal of the
-personal ESV key field; site-wide search. Earlier: ESV via relay, the 17 periods, the People page with family trees, map clusters,
+personal ESV key field; site-wide search; the distance tool. Earlier: ESV via relay, the 17 periods, the People page with family trees, map clusters,
 and the phone layout.
 
 ## Ideas not yet started (only if the owner asks)
