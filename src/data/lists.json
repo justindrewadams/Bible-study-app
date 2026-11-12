@@ -2246,6 +2246,139 @@
   ]
  },
  {
+  "id": "baptisms",
+  "title": "Baptisms in the New Testament",
+  "group": "New Testament",
+  "color": "#2b7bb9",
+  "summary": "Every baptism the New Testament records, from John at the Jordan to Paul at Ephesus, with what led to each.",
+  "note": "For the teaching on baptism, see Romans 6:3-4, Galatians 3:27, Colossians 2:12 and 1 Peter 3:21.",
+  "items": [
+   {
+    "t": "People of Jerusalem and Judea",
+    "ref": "Matt.3.6",
+    "note": "John baptizes in the Jordan those confessing their sins: a baptism of repentance for the forgiveness of sins (Mark 1:4-5).",
+    "place": "Jordan",
+    "lat": 31.7614,
+    "lon": 35.5583,
+    "placeIndex": 676
+   },
+   {
+    "t": "Jesus",
+    "ref": "Matt.3.16",
+    "note": "Baptized by John \"to fulfill all righteousness\"; the Spirit descends like a dove and the Father speaks (3:15-17).",
+    "place": "Bethany",
+    "lat": 31.8371,
+    "lon": 35.5503,
+    "placeIndex": 195
+   },
+   {
+    "t": "Jesus' disciples in Judea",
+    "ref": "John.3.22",
+    "note": "Jesus' disciples baptize more people than John, though Jesus himself does not baptize (4:1-2)."
+   },
+   {
+    "t": "John at Aenon near Salim",
+    "ref": "John.3.23",
+    "note": "John baptizes there \"because water was plentiful there.\"",
+    "place": "Aenon",
+    "lat": 32.3815,
+    "lon": 35.5282,
+    "placeIndex": 34
+   },
+   {
+    "t": "The Great Commission",
+    "ref": "Matt.28.19",
+    "note": "Jesus sends the apostles to make disciples of all nations, baptizing them; \"whoever believes and is baptized will be saved\" (Mark 16:16)."
+   },
+   {
+    "t": "Pentecost: about 3,000",
+    "ref": "Acts.2.41",
+    "note": "\"Repent and be baptized … for the forgiveness of your sins\" (2:38).",
+    "place": "Jerusalem",
+    "lat": 31.7767,
+    "lon": 35.2342,
+    "placeIndex": 662
+   },
+   {
+    "t": "Men and women of Samaria",
+    "ref": "Acts.8.12",
+    "note": "Believed Philip's preaching of the kingdom and the name of Jesus.",
+    "place": "Samaria",
+    "lat": 32.2761,
+    "lon": 35.195,
+    "placeIndex": 1044
+   },
+   {
+    "t": "Simon the sorcerer",
+    "ref": "Acts.8.13",
+    "note": "Believed and was baptized, then stayed close to Philip."
+   },
+   {
+    "t": "The Ethiopian eunuch",
+    "ref": "Acts.8.38",
+    "note": "Both went down into the water, and Philip baptized him; he went on his way rejoicing.",
+    "place": "Gaza",
+    "lat": 31.504,
+    "lon": 34.4644,
+    "placeIndex": 459
+   },
+   {
+    "t": "Saul of Tarsus",
+    "ref": "Acts.9.18",
+    "note": "\"Rise and be baptized and wash away your sins\" (22:16).",
+    "place": "Damascus",
+    "lat": 33.5111,
+    "lon": 36.3064,
+    "placeIndex": 332
+   },
+   {
+    "t": "Cornelius and his household",
+    "ref": "Acts.10.48",
+    "note": "The first Gentiles; Peter commands them to be baptized in the name of Jesus Christ.",
+    "place": "Caesarea",
+    "lat": 32.5,
+    "lon": 34.8917,
+    "placeIndex": 273
+   },
+   {
+    "t": "Lydia and her household",
+    "ref": "Acts.16.15",
+    "note": "The Lord opened her heart to listen to Paul, by the river outside the city.",
+    "place": "Philippi",
+    "lat": 41.0121,
+    "lon": 24.2846,
+    "placeIndex": 959
+   },
+   {
+    "t": "The Philippian jailer and his household",
+    "ref": "Acts.16.33",
+    "note": "\"What must I do to be saved?\" Baptized the same hour of the night.",
+    "place": "Philippi",
+    "lat": 41.0121,
+    "lon": 24.2846,
+    "placeIndex": 959
+   },
+   {
+    "t": "Crispus and many Corinthians",
+    "ref": "Acts.18.8",
+    "note": "Hearing Paul, they believed and were baptized. Paul himself baptized Crispus, Gaius and Stephanas' household (1 Cor 1:14-16).",
+    "place": "Corinth",
+    "lat": 37.9058,
+    "lon": 22.8787,
+    "placeIndex": 316
+   },
+   {
+    "t": "The twelve disciples at Ephesus",
+    "ref": "Acts.19.5",
+    "note": "They knew only John's baptism; they are baptized in the name of the Lord Jesus.",
+    "place": "Ephesus",
+    "lat": 37.9391,
+    "lon": 27.3407,
+    "placeIndex": 409
+   }
+  ]
+ },
+ {
   "id": "hall-of-faith",
   "title": "The Hall of Faith (Hebrews 11)",
   "group": "New Testament",

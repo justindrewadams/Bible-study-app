@@ -6,6 +6,10 @@ import { journeysAtVerse, type Journey } from '../lib/journeys';
 import { LISTS, listsAtVerse, type StudyList } from '../lib/lists';
 import { PERIODS, type Period } from '../data/periods';
 import { NO_INLINE, NO_INLINE_NAMES, type PersonEntry } from '../lib/people';
+import { usePersistentState } from '../lib/usePersistentState';
+
+/** Bible text sizes the reader can step through (1 = the original size). */
+const TEXT_SIZES = [1, 1.12, 1.25, 1.4, 1.6];
 
 interface Props {
   book: string;
@@ -99,6 +103,25 @@ export default function Reader({
 
   useEffect(() => setHymnsOpen(false), [book, chapter]);
 
+  // reading comfort: text size step and bolder text, remembered on this device
+  const [textPrefs, setTextPrefs] = usePersistentState('textPrefs', { size: 0, bold: false });
+  const [textOpen, setTextOpen] = useState(false);
+  const sizeStep = Math.min(Math.max(Math.round(textPrefs.size) || 0, 0), TEXT_SIZES.length - 1);
+  const textRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!textOpen) return;
+    const close = (e: PointerEvent) => {
+      if (!textRef.current?.contains(e.target as Node)) setTextOpen(false);
+    };
+    const esc = (e: KeyboardEvent) => e.key === 'Escape' && setTextOpen(false);
+    document.addEventListener('pointerdown', close);
+    document.addEventListener('keydown', esc);
+    return () => {
+      document.removeEventListener('pointerdown', close);
+      document.removeEventListener('keydown', esc);
+    };
+  }, [textOpen]);
+
   useEffect(() => {
     if (selectedVerse == null) return;
     const el = containerRef.current?.querySelector(`[data-verse="${selectedVerse}"]`);
@@ -118,6 +141,53 @@ export default function Reader({
         <button className="hymns-btn" onClick={() => setHymnsOpen(true)} title="Hymns for this chapter">
           <span aria-hidden="true">♪</span> Hymns
         </button>
+        <div className="text-prefs" ref={textRef}>
+          <button
+            className="hymns-btn text-btn"
+            onClick={() => setTextOpen(!textOpen)}
+            aria-expanded={textOpen}
+            title="Text size"
+            aria-label="Text size"
+          >
+            <span className="text-btn-small">A</span>A
+          </button>
+          {textOpen && (
+            <div className="text-pop" role="dialog" aria-label="Text size">
+              <div className="text-pop-row">
+                <span className="text-pop-label">Text size</span>
+                <button
+                  className="text-step"
+                  onClick={() => setTextPrefs({ ...textPrefs, size: sizeStep - 1 })}
+                  disabled={sizeStep === 0}
+                  aria-label="Smaller text"
+                >
+                  A−
+                </button>
+                <span className="text-dots" aria-label={`Size ${sizeStep + 1} of ${TEXT_SIZES.length}`}>
+                  {TEXT_SIZES.map((_, i) => (
+                    <span key={i} className={i <= sizeStep ? 'on' : ''} />
+                  ))}
+                </span>
+                <button
+                  className="text-step big"
+                  onClick={() => setTextPrefs({ ...textPrefs, size: sizeStep + 1 })}
+                  disabled={sizeStep === TEXT_SIZES.length - 1}
+                  aria-label="Larger text"
+                >
+                  A+
+                </button>
+              </div>
+              <label className="text-pop-row text-bold">
+                <input
+                  type="checkbox"
+                  checked={textPrefs.bold}
+                  onChange={(e) => setTextPrefs({ ...textPrefs, bold: e.target.checked })}
+                />
+                Bolder text
+              </label>
+            </div>
+          )}
+        </div>
       </div>
       {hymnsOpen && (
         <HymnsPanel book={book} bookName={bookName} chapter={chapter} onClose={() => setHymnsOpen(false)} />
@@ -143,7 +213,10 @@ export default function Reader({
         </div>
       )}
       {!loading && !error && verses && (
-        <div className="verses">
+        <div
+          className={'verses' + (textPrefs.bold ? ' bolder' : '')}
+          style={{ '--text-scale': TEXT_SIZES[sizeStep] } as React.CSSProperties}
+        >
           {verses.map((v) => {
             const places = geo?.byVerse.get(v.verse) ?? [];
             const selected = selectedVerse === v.verse;

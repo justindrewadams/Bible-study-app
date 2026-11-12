@@ -44,7 +44,7 @@ the decisions already made (and why), and how the owner likes to work.
    journeys with `roads: false` (the Exodus) are drawn as before. The journey panel shows "N miles from <last stop>
    by road · about N days on foot" / "by sea" / "along the usual route" / "as the crow flies". Code: `journeyLegs()`
    in `lib/roads.ts`, `useJourneyLegs` in `JourneyPanel.tsx`; sea legs were set from Acts and the Gospels.
-6. **Study lists** (24), stepped through like journeys: kings, judges, prophets, apostles, miracles, parables,
+6. **Study lists** (25, including Baptisms in the New Testament), stepped through like journeys: kings, judges, prophets, apostles, miracles, parables,
    fruit of the Spirit, armor of God, and more. When several items share one verse (fruit of the Spirit, armor,
    apostles), the current item's word is **bolded** inside that verse (owner chose bold over a highlight).
 7. **Periods page** (`#periods`): **Bob & Sandra Waldron's 17 periods**. Every chapter maps to one period, and the
@@ -78,7 +78,10 @@ the decisions already made (and why), and how the owner likes to work.
     from their single map point. On phones the map grows to 56vh while measuring. Code: `lib/distance.ts`,
     `lib/roads.ts` (graph + Dijkstra), `components/DistancePanel.tsx` (`useRoadRoute`), `MeasureLayer` in `MapView.tsx`.
     The road file (`public/data/roads.json`, ~540 KB, ~210 KB gzipped) loads only when two places are picked.
-13. **Sources & licenses** pop-up (the ⚙ button): lists every source and license. The personal ESV key field was
+13. **Text size:** a quiet "AA" button beside Hymns opens a small pop-up: A−/A+ through five sizes of the Bible
+    text (×1 to ×1.6, `TEXT_SIZES` in `Reader.tsx`, via `--text-scale` on `.verses`) and a "Bolder text" box (EB
+    Garamond 500; place names and list words 700). Saved on the device as `textPrefs`.
+14. **Sources & licenses** pop-up (the ⚙ button): lists every source and license. The personal ESV key field was
     **removed** at the owner's request (a key saved by an older version is still used quietly as a backup).
 
 ## Stack and layout
@@ -156,7 +159,7 @@ Checks (Node 22.6+): `npm run check:hymns` and `npm run check:nations` validate 
 
 - Flat, high-contrast style from a sample the owner supplied: thick black outlines, **square corners**, flat
   color blocks (sky `--sky`, blush `--blush`, leaf, sun `--sun`, flame), Figtree for the interface, EB Garamond
-  for Bible text only (loaded in 400 and 600, so "bold" in Bible text is 600).
+  for Bible text only (loaded in 400, 500, 600 and 700; "bold" in Bible text is 600, 700 with Bolder text).
 - `--select` is the light sky blue (`#cce8f8`; dark mode `#23506b`), used for the selected verse and hover states.
   The owner tried yellow, then chose blue.
 - The top-left title is "BIBLE STUDY" / "COMPANION" on two lines of **equal width** (15.3px / 14.6px Figtree 800;

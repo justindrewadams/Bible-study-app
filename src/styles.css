@@ -4923,3 +4923,129 @@ mark.list-word {
   font-weight: 600;
   color: var(--muted);
 }
+
+/* =====================================================================
+   Text size and bolder text (the "AA" button beside Hymns). The size is
+   a multiplier on the Bible text only; "bolder" lifts EB Garamond from
+   400 to 500, and the already-bold place names and list words from 600 to 700.
+   ===================================================================== */
+
+.verses {
+  font-size: calc(1.22rem * var(--text-scale, 1));
+}
+
+@media (max-width: 860px) {
+  .verses {
+    font-size: calc(1.12rem * var(--text-scale, 1));
+  }
+}
+
+.verses.bolder {
+  font-weight: 500;
+}
+
+.verses.bolder .place-name,
+.verses.bolder .list-word {
+  font-weight: 700;
+}
+
+.text-prefs {
+  position: relative;
+  flex: none;
+}
+
+.text-btn {
+  letter-spacing: 0.02em;
+}
+
+.text-btn-small {
+  font-size: 0.75em;
+}
+
+.text-pop {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 6px);
+  z-index: 1200;
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  padding: 10px 12px;
+  display: grid;
+  gap: 10px;
+  min-width: 230px;
+  font-family: var(--sans);
+  font-size: 0.9rem;
+  box-shadow: 3px 3px 0 var(--ink);
+}
+
+.text-pop-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.text-pop-label {
+  font-weight: 600;
+  margin-right: auto;
+}
+
+.text-step {
+  font: inherit;
+  font-weight: 700;
+  font-size: 0.85rem;
+  min-width: 36px;
+  height: 32px;
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--ink);
+  border-radius: 0;
+  cursor: pointer;
+}
+
+.text-step.big {
+  font-size: 1.05rem;
+}
+
+.text-step:hover:not(:disabled) {
+  background: var(--select);
+}
+
+.text-step:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.text-dots {
+  display: flex;
+  gap: 3px;
+}
+
+.text-dots span {
+  width: 6px;
+  height: 6px;
+  border: 1px solid var(--ink);
+}
+
+.text-dots span.on {
+  background: var(--ink);
+}
+
+.text-bold {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.text-bold input {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  accent-color: var(--ink);
+}
+
+.chapter-head .chapter-title {
+  margin-right: auto;
+}
+
+.chapter-head .text-prefs {
+  margin-left: -4px;
+}

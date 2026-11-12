@@ -346,7 +346,7 @@ const RAW: Omit<Period, 'n'>[] = [
   },
   {
     id: 'life-of-christ',
-    lists: ['apostles', 'miracles', 'signs-john', 'parables', 'i-am', 'beatitudes', 'cross', 'women'],
+    lists: ['apostles', 'miracles', 'signs-john', 'parables', 'i-am', 'beatitudes', 'cross', 'baptisms', 'women'],
     name: 'Life of Christ',
     dates: 'c. 5 BC – AD 30',
     color: '#1d4e89',
@@ -367,7 +367,7 @@ const RAW: Omit<Period, 'n'>[] = [
   },
   {
     id: 'early-church',
-    lists: ['conversions', 'apostles'],
+    lists: ['conversions', 'baptisms', 'apostles'],
     name: 'The Early Church',
     dates: 'AD 30 – c. 62',
     color: '#e76f51',
