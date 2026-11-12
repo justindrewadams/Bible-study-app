@@ -44,7 +44,7 @@ the decisions already made (and why), and how the owner likes to work.
    journeys with `roads: false` (the Exodus) are drawn as before. The journey panel shows "N miles from <last stop>
    by road · about N days on foot" / "by sea" / "along the usual route" / "as the crow flies". Code: `journeyLegs()`
    in `lib/roads.ts`, `useJourneyLegs` in `JourneyPanel.tsx`; sea legs were set from Acts and the Gospels.
-6. **Study lists** (25, including Baptisms in the New Testament), stepped through like journeys: kings, judges, prophets, apostles, miracles, parables,
+6. **Study lists** (26, including Baptisms in the New Testament and False Gods and Idols), stepped through like journeys: kings, judges, prophets, apostles, miracles, parables,
    fruit of the Spirit, armor of God, and more. When several items share one verse (fruit of the Spirit, armor,
    apostles), the current item's word is **bolded** inside that verse (owner chose bold over a highlight).
 7. **Periods page** (`#periods`): **Bob & Sandra Waldron's 17 periods**. Every chapter maps to one period, and the

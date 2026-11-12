@@ -1074,6 +1074,247 @@
   ]
  },
  {
+  "id": "idols",
+  "title": "False Gods and Idols of the Old Testament",
+  "group": "Old Testament",
+  "color": "#8c2f39",
+  "summary": "\"You shall have no other gods before me\": the idols and foreign gods that drew Israel away, roughly in the order of the story.",
+  "note": "Some names may refer to the same god under different titles (Molech and Milcom are often linked).",
+  "items": [
+   {
+    "t": "Household gods (teraphim)",
+    "ref": "Gen.31.19",
+    "note": "Rachel steals her father Laban's household gods and hides them in a camel's saddle (31:34).",
+    "place": "Haran",
+    "lat": 36.8644,
+    "lon": 39.0328,
+    "placeIndex": 554
+   },
+   {
+    "t": "The gods of Egypt",
+    "ref": "Exod.12.12",
+    "note": "On Passover night God executes judgment on all the gods of Egypt; the plagues strike the Nile, the land and the sun.",
+    "place": "Egypt",
+    "lat": 30.1294,
+    "lon": 31.3075,
+    "placeIndex": 375
+   },
+   {
+    "t": "The golden calf",
+    "ref": "Exod.32.4",
+    "note": "Aaron makes a calf from the people's gold earrings while Moses is on the mountain.",
+    "place": "Mount Sinai",
+    "lat": 28.5397,
+    "lon": 33.9733,
+    "placeIndex": 881
+   },
+   {
+    "t": "Molech",
+    "ref": "Lev.18.21",
+    "note": "God forbids giving children to Molech. Kings Ahaz and Manasseh later burn their sons in the Valley of Hinnom (2 Kgs 16:3; 21:6).",
+    "place": "Valley of Hinnom",
+    "lat": 31.7692,
+    "lon": 35.2281,
+    "placeIndex": 1237
+   },
+   {
+    "t": "Chemosh",
+    "ref": "Num.21.29",
+    "note": "The god of Moab. Solomon builds him a high place east of Jerusalem (1 Kgs 11:7).",
+    "place": "Moab",
+    "lat": 31.1806,
+    "lon": 35.7014,
+    "placeIndex": 843
+   },
+   {
+    "t": "Baal of Peor",
+    "ref": "Num.25.3",
+    "note": "Israel joins in Moab's feasts and worship; 24,000 die in the plague (25:9).",
+    "place": "Peor",
+    "lat": 31.777,
+    "lon": 35.7385,
+    "placeIndex": 951
+   },
+   {
+    "t": "The Baals and the Ashtaroth",
+    "ref": "Judg.2.13",
+    "note": "After Joshua's generation dies, Israel forsakes the LORD again and again, starting the cycle of the judges."
+   },
+   {
+    "t": "Baal-berith",
+    "ref": "Judg.8.33",
+    "note": "\"Lord of the covenant\": worshiped at Shechem after Gideon dies; his temple funds Abimelech (9:4).",
+    "place": "Shechem",
+    "lat": 32.2136,
+    "lon": 35.2819,
+    "placeIndex": 1089
+   },
+   {
+    "t": "Micah's idol",
+    "ref": "Judg.18.30",
+    "note": "A silver image made in Ephraim is carried off by the tribe of Dan and set up in their new city.",
+    "place": "Dan",
+    "lat": 33.249,
+    "lon": 35.652,
+    "placeIndex": 333
+   },
+   {
+    "t": "Dagon",
+    "ref": "1Sam.5.3",
+    "note": "The Philistine god falls on his face before the ark of the LORD, and then breaks apart (5:4).",
+    "place": "Ashdod",
+    "lat": 31.7572,
+    "lon": 34.6578,
+    "placeIndex": 110
+   },
+   {
+    "t": "Ashtoreth",
+    "ref": "1Kgs.11.5",
+    "note": "The goddess of the Sidonians, one of the gods Solomon's foreign wives turn his heart to.",
+    "place": "Sidon",
+    "lat": 33.561,
+    "lon": 35.3719,
+    "placeIndex": 1114,
+    "words": [
+     "Ashtoreth",
+     "Astarte"
+    ]
+   },
+   {
+    "t": "Milcom",
+    "ref": "1Kgs.11.5",
+    "note": "\"The abomination of the Ammonites\"; Josiah later defiles Solomon's high places to these gods (2 Kgs 23:13).",
+    "words": [
+     "Milcom",
+     "Molech",
+     "Malcam"
+    ]
+   },
+   {
+    "t": "Jeroboam's golden calves",
+    "ref": "1Kgs.12.28",
+    "note": "\"Behold your gods, O Israel\": set up at Bethel and Dan so the north won't worship at Jerusalem.",
+    "place": "Bethel",
+    "lat": 31.9228,
+    "lon": 35.2414,
+    "placeIndex": 209
+   },
+   {
+    "t": "Baal",
+    "ref": "1Kgs.18.21",
+    "note": "Elijah challenges 450 prophets of Baal on Mount Carmel: \"If the LORD is God, follow him.\"",
+    "place": "Mount Carmel",
+    "lat": 32.6725,
+    "lon": 35.0233,
+    "placeIndex": 856
+   },
+   {
+    "t": "Baal-zebub",
+    "ref": "2Kgs.1.2",
+    "note": "King Ahaziah sends to ask the god of Ekron whether he will recover; Elijah says he will die.",
+    "place": "Ekron",
+    "lat": 31.7775,
+    "lon": 34.8519,
+    "placeIndex": 376
+   },
+   {
+    "t": "Rimmon",
+    "ref": "2Kgs.5.18",
+    "note": "Naaman, healed, asks pardon for bowing beside his master in the house of Rimmon in Damascus.",
+    "place": "Damascus",
+    "lat": 33.5111,
+    "lon": 36.3064,
+    "placeIndex": 332
+   },
+   {
+    "t": "Gods of the settlers in Samaria",
+    "ref": "2Kgs.17.30",
+    "note": "Peoples brought in by Assyria each make their own gods: Succoth-benoth, Nergal, Ashima, Nibhaz, Tartak and more (17:29-31).",
+    "place": "Samaria",
+    "lat": 32.2761,
+    "lon": 35.195,
+    "placeIndex": 1044
+   },
+   {
+    "t": "Nehushtan",
+    "ref": "2Kgs.18.4",
+    "note": "Hezekiah breaks the bronze serpent Moses made (Num 21:9), because Israel had been burning incense to it.",
+    "place": "Jerusalem",
+    "lat": 31.7767,
+    "lon": 35.2342,
+    "placeIndex": 662
+   },
+   {
+    "t": "Nisroch",
+    "ref": "2Kgs.19.37",
+    "note": "The Assyrian king Sennacherib is struck down by his sons while worshiping in his god's house.",
+    "place": "Nineveh",
+    "lat": 36.3594,
+    "lon": 43.1528,
+    "placeIndex": 920
+   },
+   {
+    "t": "The host of heaven",
+    "ref": "2Kgs.21.3",
+    "note": "Manasseh worships the sun, moon and stars and builds altars to them in the temple courts (21:5).",
+    "place": "Jerusalem",
+    "lat": 31.7767,
+    "lon": 35.2342,
+    "placeIndex": 662
+   },
+   {
+    "t": "The Asherah",
+    "ref": "2Kgs.21.7",
+    "note": "Manasseh sets a carved Asherah pole in the temple itself; Josiah burns it at the brook Kidron (23:6).",
+    "place": "Jerusalem",
+    "lat": 31.7767,
+    "lon": 35.2342,
+    "placeIndex": 662
+   },
+   {
+    "t": "The queen of heaven",
+    "ref": "Jer.7.18",
+    "note": "Whole families bake cakes for her; later the exiles in Egypt refuse to stop (44:17).",
+    "place": "Jerusalem",
+    "lat": 31.7767,
+    "lon": 35.2342,
+    "placeIndex": 662
+   },
+   {
+    "t": "Tammuz",
+    "ref": "Ezek.8.14",
+    "note": "In a vision Ezekiel sees women weeping for Tammuz at the north gate of the temple.",
+    "place": "Jerusalem",
+    "lat": 31.7767,
+    "lon": 35.2342,
+    "placeIndex": 662
+   },
+   {
+    "t": "Bel and Nebo",
+    "ref": "Isa.46.1",
+    "note": "The gods of Babylon must be carried as a burden, but the LORD carries his people (46:3-4).",
+    "place": "Babylon",
+    "lat": 32.5433,
+    "lon": 44.4222,
+    "placeIndex": 158
+   },
+   {
+    "t": "Nebuchadnezzar's golden image",
+    "ref": "Dan.3.1",
+    "note": "Ninety feet high on the plain of Dura; Shadrach, Meshach and Abednego refuse to bow.",
+    "place": "Dura",
+    "lat": 32.32,
+    "lon": 44.5017,
+    "placeIndex": 357
+   },
+   {
+    "t": "Idols made with hands",
+    "ref": "Isa.44.17",
+    "note": "A man burns half a log to cook and carves the rest into a god to pray to. \"They have mouths, but do not speak\" (Ps 115:5)."
+   }
+  ]
+ },
+ {
   "id": "women",
   "title": "Women of the Bible",
   "group": "Whole Bible",

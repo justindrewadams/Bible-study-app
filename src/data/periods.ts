@@ -173,7 +173,7 @@ const RAW: Omit<Period, 'n'>[] = [
   },
   {
     id: 'judges',
-    lists: ['judges'],
+    lists: ['judges', 'idols'],
     name: 'Judges',
     dates: 'c. 1380 – 1050 BC',
     color: '#8d6e63',
@@ -224,7 +224,7 @@ const RAW: Omit<Period, 'n'>[] = [
   },
   {
     id: 'divided-kingdom',
-    lists: ['kings-israel', 'kings-judah', 'prophets'],
+    lists: ['kings-israel', 'kings-judah', 'prophets', 'idols'],
     name: 'Divided Kingdom',
     dates: '931 – 722 BC',
     color: '#d1495b',
