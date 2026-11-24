@@ -6292,6 +6292,14 @@ button.hd-person:hover {
   background: var(--sun);
 }
 
+/* touchscreens keep the last-tapped button "hovered", so after un-saving it stayed yellow:
+   there, only the saved state is yellow */
+@media (hover: none) {
+  .word-study-btn.bookmark-btn:hover:not(.on) {
+    background: #fff;
+  }
+}
+
 /* phones: the pop-up becomes a calm bottom sheet */
 @media (max-width: 860px) {
   .modal-backdrop:has(.modal.acct) {
