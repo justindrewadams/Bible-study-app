@@ -44,7 +44,7 @@ the decisions already made (and why), and how the owner likes to work.
    journeys with `roads: false` (the Exodus) are drawn as before. The journey panel shows "N miles from <last stop>
    by road · about N days on foot" / "by sea" / "along the usual route" / "as the crow flies". Code: `journeyLegs()`
    in `lib/roads.ts`, `useJourneyLegs` in `JourneyPanel.tsx`; sea legs were set from Acts and the Gospels.
-6. **Study lists** (26, including Baptisms in the New Testament and False Gods and Idols), stepped through like journeys: kings, judges, prophets, apostles, miracles, parables,
+6. **Study lists** (25, including Baptisms in the New Testament and False Gods and Idols), stepped through like journeys: kings, judges, prophets, apostles, miracles, parables,
    fruit of the Spirit, armor of God, and more. When several items share one verse (fruit of the Spirit, armor,
    apostles), the current item's word is **bolded** inside that verse (owner chose bold over a highlight).
 7. **Periods page** (`#periods`): **Bob & Sandra Waldron's 17 periods**. Every chapter maps to one period, and the
@@ -116,7 +116,7 @@ the decisions already made (and why), and how the owner likes to work.
   Original, approximate drawing. Journey camera: each leg is framed (`flyToBounds`) clear of the journey card
   (`journeyPanelRoom`: bottom or left, whichever hides less), up to zoom 16 for legs inside the city and 11 elsewhere;
   another event at the same spot leaves the view alone. Stops at the same spot share one numbered square.
-- **Lists:** "Passion Week, Day by Day" (`meta` = the day), "Prophecies Fulfilled in Passion Week", "Christ Our
+- **Lists:** "Prophecies Fulfilled in Passion Week", "Christ Our
   Passover Lamb", "Rulers in Luke 3:1–2". List items may have an **`area`** (outlines of [lat, lon]) that the map
   shades in the list's color (`AreaLayer` in `MapView.tsx`); the rulers' territories are approximate, drawn here.
 - **Compare the accounts** (`src/data/parallels.ts`, `CompareGospels.tsx`): when a selected verse is in a parallel
@@ -138,6 +138,14 @@ the decisions already made (and why), and how the owner likes to work.
   committed people data) links Agrippa I, his children and Herodias, and adds other names (Herod the Great, Herod II,
   Philip the tetrarch, Herod Agrippa II). `HerodDynasty.tsx` draws the dynasty on those people's cards.
 - The hymn "Night, with Ebon Pinion" (L. H. Jameson) was already tied to Gethsemane.
+- The "Passion Week, Day by Day" list was **removed** at the owner's request (December 2026): the journey covers the
+  same 34 events, so the two only doubled up. Its note that the Gospels don't date every event moved into the
+  journey's summary.
+- **Journey and list menus on computers** (`PickerSelect.tsx`): the real `<select>` stays (its look, phones, focus),
+  but with a mouse on a wide screen the app draws its own menu below the box: full height, the chosen item ticked and
+  scrolled to the middle, ↑ ↓ Enter Esc. (A Mac's own menu lines the chosen item up with the box, which pushed the
+  menu off the top of the screen when the chosen journey was near the end.) Phones and tablets keep the system
+  picker.
 - **Presenting mode** (for a TV or projector): "⛶ Present" beside Hymns in the chapter heading (hidden under 860px).
   Asks for full screen (carries on without it where a browser refuses), hides the top bar and chapter buttons, makes
   the text ~1.45× larger and the map wider, and shows a slim bar ("‹ Passion Week · stop 6 of 38 ›", Finish

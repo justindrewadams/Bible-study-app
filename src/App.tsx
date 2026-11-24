@@ -30,6 +30,7 @@ import WordStudy from './components/WordStudy';
 import SiteSearch from './components/SiteSearch';
 import NationCard from './components/NationCard';
 import JerusalemPage from './components/JerusalemPage';
+import PickerSelect from './components/PickerSelect';
 import CompareGospels from './components/CompareGospels';
 import { PARALLELS, type ParallelSet } from './data/parallels';
 import { nationsInVerse } from './lib/nationMentions';
@@ -540,11 +541,11 @@ export default function App() {
         </label>
         <label className="menu-field">
           <span className="menu-label">Follow a journey</span>
-        <select
+        <PickerSelect
           className="journey-select"
           value={journeyId ?? ''}
-          onChange={(e) => {
-            const j = JOURNEYS.find((x) => x.id === e.target.value);
+          onChange={(v) => {
+            const j = JOURNEYS.find((x) => x.id === v);
             setPlaying(false);
             setMenuOpen(false);
             if (j) {
@@ -552,42 +553,35 @@ export default function App() {
               setMapVisible(true);
             } else setJourneyId(null);
           }}
-          aria-label="Follow a journey"
-        >
-          <option value="">Follow a journey…</option>
-          {(['OT', 'NT'] as const).map((t) => (
-            <optgroup key={t} label={t === 'OT' ? 'Old Testament' : 'New Testament'}>
-              {JOURNEYS.filter((j) => getBook(parseRef(j.stops[0].ref).book).testament === t).map((j) => (
-                <option key={j.id} value={j.id}>
-                  {j.title}
-                </option>
-              ))}
-            </optgroup>
-          ))}
-        </select>
+          ariaLabel="Follow a journey"
+          placeholder="Follow a journey…"
+          clearLabel="Stop following the journey"
+          groups={(['OT', 'NT'] as const).map((t) => ({
+            label: t === 'OT' ? 'Old Testament' : 'New Testament',
+            options: JOURNEYS.filter((j) => getBook(parseRef(j.stops[0].ref).book).testament === t).map((j) => ({
+              value: j.id,
+              label: j.title,
+            })),
+          }))}
+        />
         </label>
         <label className="menu-field">
           <span className="menu-label">Study a list</span>
-          <select
+          <PickerSelect
             className="list-select"
             value={listId ?? ''}
-            onChange={(e) => {
+            onChange={(v) => {
               setMenuOpen(false);
-              openList(e.target.value);
+              openList(v);
             }}
-            aria-label="Study a list"
-          >
-            <option value="">Study a list…</option>
-            {LIST_GROUPS.map((g) => (
-              <optgroup key={g} label={g}>
-                {LISTS.filter((l) => l.group === g).map((l) => (
-                  <option key={l.id} value={l.id}>
-                    {l.title}
-                  </option>
-                ))}
-              </optgroup>
-            ))}
-          </select>
+            ariaLabel="Study a list"
+            placeholder="Study a list…"
+            clearLabel="Close the list"
+            groups={LIST_GROUPS.map((g) => ({
+              label: g,
+              options: LISTS.filter((l) => l.group === g).map((l) => ({ value: l.id, label: l.title })),
+            }))}
+          />
         </label>
         <div className="topbar-actions">
           <button

@@ -5906,3 +5906,63 @@ button.hd-person:hover {
     display: none;
   }
 }
+
+/* ---------- The app's own dropdown menu (journeys, lists) on computers */
+.picker-menu {
+  position: fixed;
+  z-index: 3500;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  box-shadow: 3px 3px 0 var(--ink);
+  padding: 4px 0;
+  font-family: var(--sans);
+  font-size: 0.92rem;
+}
+
+.picker-group {
+  padding: 8px 12px 3px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.picker-option {
+  display: flex;
+  align-items: baseline;
+  width: 100%;
+  padding: 5px 12px 5px 6px;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.picker-check {
+  flex: none;
+  width: 18px;
+  font-weight: 800;
+  text-align: center;
+}
+
+.picker-option.on {
+  font-weight: 700;
+}
+
+.picker-option:hover,
+.picker-option:focus-visible,
+.picker-option:focus {
+  background: var(--select);
+  outline: none;
+}
+
+.picker-clear {
+  padding-left: 24px;
+  color: var(--muted);
+  border-bottom: 1px solid var(--hair);
+}
