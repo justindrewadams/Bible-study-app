@@ -56,6 +56,11 @@ the decisions already made (and why), and how the owner likes to work.
    Abraham's family marked. Each has where they lived ("Show on map" pins the homeland), origin with a tappable
    family line of person cards, a short original history, and key verses. Where Scripture doesn't name an
    ancestor (Rome, Persia, Samaritans, Kenites, Anakim, Sheba), it says so rather than guessing.
+   **Nations in the text:** people-group words ("Philistines", "Egyptians", "Romans", "Jews", "Hebrews") get a green
+   underline and open a **nation card** (side panel / bottom sheet, green head, like the person card: where, origin
+   with the family line, history, key verses, "Open on the Nations page"). Country words that are usually places or
+   people (Egypt, Moab, Babylon…) only appear in the blue verse bar's "Nations:" row. Bare "Israel"/"Judah" are left
+   out (too common, and also Jacob and his son). Word lists: `src/lib/nationMentions.ts`; card: `NationCard.tsx`.
 10. **Hebrew & Greek word study:** select a verse, then tap **HEBREW**/**GREEK** in the blue verse bar. A card lists
     every original word (word, transliteration, gloss, Strong's). Tapping a word shows its dictionary form,
     plain-English grammar, a brief lexicon entry with tappable verse links, and other verses using it; jumping to
@@ -67,7 +72,8 @@ the decisions already made (and why), and how the owner likes to work.
     them), journeys, study lists and their items, periods, nations, hymns (titles and writers only) and Bible
     references ("John 3:16", "1 cor 13", "Psalm 23"). The searched word is bolded in each excerpt; Enter opens the first
     result. It searches **only the app's own data, never Bible text** (searching the ESV would need Crossway's search
-    API: ask the owner first). Code: `src/lib/search.ts` (index, matching, ranking) and `components/SiteSearch.tsx`.
+    API: ask the owner first). Code: `src/lib/search.ts` (index, matching, ranking) and `components/SiteSearch.tsx`. Its styles use `ss-`/`search-` names
+    (`.ss-box`), **not** `.search-box`, which belongs to the People/Nations/Periods page search boxes.
 12. **Distance tool:** a "↔ Distance" button on the map (beside "Modern") or "↔ Distance from <place> to…" on a place
     card. Choose two places by typing (suggestions from all ~1,300 places) or by tapping them on the map; while it is
     open, tapping a place fills the next slot instead of opening its card. Shows the distance **by Roman road**
@@ -87,8 +93,10 @@ the decisions already made (and why), and how the owner likes to work.
 ## Stack and layout
 
 - Vite + React 18 + TypeScript, react-leaflet 4. No backend except the ESV relay. `npm run dev` / `npm run build`.
+- **Opening chapter:** the app always opens at **Genesis 1** (owner's choice, November 2026); the chapter is not
+  remembered between visits (the translation and text size still are).
 - `src/App.tsx`: app state and layout: header, ☰ menu, hash routes (`#periods`, `#people`, `#nations`), the
-  Sources & licenses pop-up, and all wiring. **Only one card at a time** (place, person or word study).
+  Sources & licenses pop-up, and all wiring. **Only one card at a time** (place, person, nation or word study).
 - `src/components/`:
   - `Reader` (chapter title row with the Hymns button, verses, list-word bolding), `MapView` (also `WaterLayer`,
     `PlaceAndRegionLabels`, `MapErrorBoundary`), `MapControls`
@@ -207,7 +215,7 @@ Hymns for each chapter; rivers that thin out when zoomed out; flat-style verse h
 solid place-name underlines; bolded word for list items that share a verse (and the correct "N of M" chip);
 quieter last-mentioned map marker; the Nations page with person-card links; the rename to Bible Study Companion
 with the equal-width title (then to Ancient Pathfinder with the ancientpathfinder.com domain) and a header that folds into ☰ below 1440px; Hebrew & Greek word study; removal of the
-personal ESV key field; site-wide search; the distance tool with Roman-road routes; journeys along Roman roads. Earlier: ESV via relay, the 17 periods, the People page with family trees, map clusters,
+personal ESV key field; site-wide search; the distance tool with Roman-road routes; journeys along Roman roads; nation cards from the text; always opening at Genesis 1. Earlier: ESV via relay, the 17 periods, the People page with family trees, map clusters,
 and the phone layout.
 
 ## Ideas not yet started (only if the owner asks)

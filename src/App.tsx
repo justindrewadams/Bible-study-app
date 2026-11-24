@@ -28,6 +28,8 @@ import NationsPage from './components/NationsPage';
 import PersonCard from './components/PersonCard';
 import WordStudy from './components/WordStudy';
 import SiteSearch from './components/SiteSearch';
+import NationCard from './components/NationCard';
+import { nationsInVerse } from './lib/nationMentions';
 import DistancePanel, { useRoadRoute, type Measure } from './components/DistancePanel';
 import { loadChapterPeople, type PersonEntry } from './lib/people';
 import ListPanel from './components/ListPanel';
@@ -42,7 +44,8 @@ interface Location {
 const formatRef = (bookName: string, chapter: number, verse: number) => `${bookName} ${chapter}:${verse}`;
 
 export default function App() {
-  const [loc, setLoc] = usePersistentState<Location>('loc', { book: 'Acts', chapter: 13 });
+  // always opens at Genesis 1 (the owner's choice); the chapter isn't remembered between visits
+  const [loc, setLoc] = useState<Location>({ book: 'Gen', chapter: 1 });
   // ESV by default, through Crossway's official API only. (Older saved choices from the
   // retired bolls.life source are treated as ESV.)
   const [savedTranslation, setTranslationId] = usePersistentState('translation-v2', DEFAULT_TRANSLATION);
@@ -85,26 +88,37 @@ export default function App() {
     setMeasure(!measure.a ? { ...measure, a: p } : { ...measure, b: p });
   };
 
-  // only one info card at a time (place, person, or Hebrew/Greek word study)
+  // only one info card at a time (place, person, nation, or Hebrew/Greek word study)
   const [wordStudyOpen, setWordStudyOpen] = useState(false);
+  const [nationId, setNationId] = useState<string | null>(null);
   useEffect(() => {
     if (cardPlace) {
       setPersonSlug(null);
       setWordStudyOpen(false);
+      setNationId(null);
     }
   }, [cardPlace]);
   useEffect(() => {
     if (personSlug) {
       setCardPlace(null);
       setWordStudyOpen(false);
+      setNationId(null);
     }
   }, [personSlug]);
   useEffect(() => {
     if (wordStudyOpen) {
       setCardPlace(null);
       setPersonSlug(null);
+      setNationId(null);
     }
   }, [wordStudyOpen]);
+  useEffect(() => {
+    if (nationId) {
+      setCardPlace(null);
+      setPersonSlug(null);
+      setWordStudyOpen(false);
+    }
+  }, [nationId]);
   const [listId, setListId] = useState<string | null>(null);
   const [listIndex, setListIndex] = useState(0);
   const [listPlaying, setListPlaying] = useState(false);
@@ -289,6 +303,12 @@ export default function App() {
     if (!r.places.length) return null;
     return { places: r.places, inferred: r.inferred, label };
   }, [selectedVerse, geo, placeOverride, book.name, loc, journey, stopIndex]);
+
+  // nations the selected verse names, for the verse bar
+  const selectedNations = useMemo(() => {
+    const text = selectedVerse != null ? verses?.find((v) => v.verse === selectedVerse)?.text : undefined;
+    return text ? nationsInVerse(text) : [];
+  }, [selectedVerse, verses]);
 
   const selectedInfo = useMemo(() => {
     if (selectedVerse == null || !geo) return null;
@@ -638,6 +658,17 @@ export default function App() {
                   ))}
                 </div>
               )}
+              {selectedNations.length > 0 && (
+                <div className="verse-info-people">
+                  Nations:{' '}
+                  {selectedNations.map((n, i, arr) => (
+                    <button key={n.id} className="link" onClick={() => setNationId(n.id)}>
+                      {n.name}
+                      {i < arr.length - 1 ? ',' : ''}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
           )}
           <Reader
@@ -657,6 +688,10 @@ export default function App() {
             onSelectPerson={(v, slug) => {
               setSelectedVerse(v);
               setPersonSlug(slug);
+            }}
+            onSelectNation={(v, id) => {
+              setSelectedVerse(v);
+              setNationId(id);
             }}
             onSelectPlace={(v, p) => {
               setSelectedVerse(v);
@@ -858,6 +893,31 @@ export default function App() {
               setPlaceOverride({ index: -1, name: at.name, lat: at.lat, lon: at.lon, type: 'place', confidence: 50 });
               if (isNarrow()) setPersonSlug(null);
             }
+          }}
+        />
+      )}
+
+      {nationId && (
+        <NationCard
+          id={nationId}
+          onClose={() => setNationId(null)}
+          onOpenPerson={setPersonSlug}
+          onGoToRef={(ref) => {
+            const r = parseRef(ref);
+            if (pageOpen) closePeriods();
+            goTo(r.book, r.chapter, r.verse);
+            if (isNarrow()) setNationId(null);
+          }}
+          onShowOnMap={(n) => {
+            if (pageOpen) closePeriods();
+            setMapVisible(true);
+            setSelectedVerse(null);
+            setPlaceOverride({ index: -1, name: n.name, lat: n.lat, lon: n.lon, type: 'region', confidence: 50 });
+            if (isNarrow()) setNationId(null);
+          }}
+          onOpenPage={(id) => {
+            setNationId(null);
+            openNations(id);
           }}
         />
       )}

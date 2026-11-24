@@ -164,8 +164,8 @@ export default function SiteSearch(props: SearchActions) {
       >
         {expanded ? <span aria-hidden="true">✕</span> : <MagnifierIcon />}
       </button>
-      <div className="search-box">
-        <span className="search-box-icon">
+      <div className="ss-box">
+        <span className="ss-box-icon">
           <MagnifierIcon />
         </span>
         <input

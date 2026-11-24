@@ -4370,7 +4370,7 @@ mark.list-word {
   background: var(--select);
 }
 
-.search-box {
+.ss-box {
   display: none;
   align-items: center;
   gap: 8px;
@@ -4379,12 +4379,12 @@ mark.list-word {
   color: var(--ink);
 }
 
-.search-box-icon {
+.ss-box-icon {
   display: flex;
   color: var(--muted);
 }
 
-.search-box input {
+.ss-box input {
   flex: 1;
   min-width: 0;
   border: 0;
@@ -4396,12 +4396,12 @@ mark.list-word {
   padding: 8px 0;
 }
 
-.search-box input::-webkit-search-cancel-button {
+.ss-box input::-webkit-search-cancel-button {
   cursor: pointer;
 }
 
 /* the opened box (magnifying-glass version): a bar under the header */
-.site-search.expanded .search-box {
+.site-search.expanded .ss-box {
   display: flex;
   position: absolute;
   z-index: 2;
@@ -4555,13 +4555,13 @@ mark.list-word {
     display: none;
   }
 
-  .search-box {
+  .ss-box {
     display: flex;
     width: 300px;
     border-left: var(--border);
   }
 
-  .site-search.has-results .search-box {
+  .site-search.has-results .ss-box {
     background: var(--select);
   }
 }
@@ -4578,7 +4578,7 @@ mark.list-word {
     padding: 0 12px;
   }
 
-  .site-search.expanded .search-box {
+  .site-search.expanded .ss-box {
     left: 0;
     width: auto;
     height: 48px;
@@ -4587,7 +4587,7 @@ mark.list-word {
     border-bottom: var(--border);
   }
 
-  .search-box input {
+  .ss-box input {
     font-size: 16px; /* stops iOS zooming in on focus */
   }
 
@@ -5048,4 +5048,51 @@ mark.list-word {
 
 .chapter-head .text-prefs {
   margin-left: -4px;
+}
+
+/* =====================================================================
+   Nations in the text ("Philistines", "Romans") and the nation card
+   ===================================================================== */
+
+.nation-name {
+  font: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  color: inherit;
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, #2f8a3a 60%, transparent);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
+}
+
+.nation-name:hover {
+  color: #2f8a3a;
+}
+
+@media (prefers-color-scheme: dark) {
+  .nation-name {
+    text-decoration-color: color-mix(in srgb, #8fe07a 60%, transparent);
+  }
+
+  .nation-name:hover {
+    color: #8fe07a;
+  }
+}
+
+.nation-card .pc-head {
+  background: var(--leaf);
+}
+
+.nation-card .pc-type {
+  text-transform: none;
+}
+
+.nation-card .pc-section h3 {
+  margin-top: 0;
+}
+
+.nation-card .nation-line {
+  margin-top: 8px;
 }

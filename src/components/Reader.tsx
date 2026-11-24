@@ -7,6 +7,8 @@ import { LISTS, listsAtVerse, type StudyList } from '../lib/lists';
 import { PERIODS, type Period } from '../data/periods';
 import { NO_INLINE, NO_INLINE_NAMES, type PersonEntry } from '../lib/people';
 import { usePersistentState } from '../lib/usePersistentState';
+import { nationWordsIn } from '../lib/nationMentions';
+import type { Nation } from '../data/nations';
 
 /** Bible text sizes the reader can step through (1 = the original size). */
 const TEXT_SIZES = [1, 1.12, 1.25, 1.4, 1.6];
@@ -25,6 +27,8 @@ interface Props {
   /** people named in each verse */
   people: Map<number, PersonEntry[]>;
   onSelectPerson: (verse: number, slug: string) => void;
+  /** a people-group word ("Philistines") was tapped */
+  onSelectNation: (verse: number, id: string) => void;
   onFollowJourney: (journey: Journey, stopIndex: number) => void;
   activeJourneyId: string | null;
   activeList: { id: string; index: number } | null;
@@ -39,7 +43,20 @@ interface Props {
 
 const escapeRe = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
-type Part = string | { name: string; place: Place } | { name: string; person: PersonEntry };
+type Part = string | { name: string; place: Place } | { name: string; person: PersonEntry } | { name: string; nation: Nation };
+
+/** Splits plain text around people-group words ("Philistines", "Romans"). */
+function splitNations(text: string): Part[] {
+  const out: Part[] = [];
+  let last = 0;
+  for (const [a, b, nation] of nationWordsIn(text)) {
+    if (a > last) out.push(text.slice(last, a));
+    out.push({ name: text.slice(a, b), nation });
+    last = b;
+  }
+  if (last < text.length) out.push(text.slice(last));
+  return out;
+}
 
 /** Splits verse text so place and people names can be highlighted and tapped. */
 function highlightNames(text: string, places: Place[], people: PersonEntry[]): Part[] {
@@ -50,7 +67,7 @@ function highlightNames(text: string, places: Place[], people: PersonEntry[]): P
     const k = p.name.toLowerCase();
     if (!byName.has(k)) byName.set(k, { person: p }); // a place with the same name wins
   }
-  if (!byName.size) return [text];
+  if (!byName.size) return splitNations(text);
   const names = [...byName.keys()].sort((a, b) => b.length - a.length);
   const re = new RegExp(`\\b(${names.map(escapeRe).join('|')})\\b`, 'gi');
   const out: Part[] = [];
@@ -62,7 +79,8 @@ function highlightNames(text: string, places: Place[], people: PersonEntry[]): P
     last = m.index! + m[0].length;
   }
   if (last < text.length) out.push(text.slice(last));
-  return out;
+  // places and people come first; people-group words are found in the text between them
+  return out.flatMap((p) => (typeof p === 'string' ? splitNations(p) : [p]));
 }
 
 /** Where the first of `words` (in order of preference) appears in the verse, as whole words. */
@@ -87,6 +105,7 @@ export default function Reader({
   onSelectPlace,
   people: chapterPeople,
   onSelectPerson,
+  onSelectNation,
   onFollowJourney,
   activeJourneyId,
   activeList,
@@ -261,6 +280,20 @@ export default function Reader({
                         </Fragment>
                       );
                     }
+                    if ('nation' in part)
+                      return (
+                        <button
+                          key={i}
+                          className={`nation-name${hit ? ' list-word' : ''}`}
+                          title={`About ${part.nation.name}`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onSelectNation(v.verse, part.nation.id);
+                          }}
+                        >
+                          {part.name}
+                        </button>
+                      );
                     return 'person' in part ? (
                       <button
                         key={i}
