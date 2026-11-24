@@ -5761,3 +5761,88 @@ button.hd-person:hover {
     color: color-mix(in srgb, var(--c) 50%, #fff);
   }
 }
+
+/* ---------- Presenting mode (a TV or projector): no top bar, larger text, a wider map */
+.presenting .topbar,
+.presenting .chapter-nav {
+  display: none;
+}
+
+.presenting .layout {
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+}
+
+.presenting .verses {
+  font-size: calc(1.22rem * var(--text-scale, 1) * 1.45);
+}
+
+.presenting .chapter-title {
+  font-size: 3rem;
+}
+
+.presenting .verse-info,
+.presenting .list-panel {
+  font-size: 1.1rem;
+}
+
+.presenting .journey-panel {
+  font-size: 1.1rem;
+  width: min(500px, calc(100% - 20px));
+}
+
+.present-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 12px;
+  background: var(--topbar);
+  color: var(--topbar-ink);
+  font-family: var(--sans);
+  border-bottom: var(--border);
+}
+
+.present-where {
+  font-weight: 700;
+  font-size: 1.05rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.present-step {
+  flex: none;
+  width: 36px;
+  height: 32px;
+  font: inherit;
+  font-size: 1.3rem;
+  font-weight: 700;
+  line-height: 1;
+  color: inherit;
+  background: transparent;
+  border: 2px solid currentColor;
+  border-radius: 0;
+  cursor: pointer;
+}
+
+.present-hint {
+  margin-left: auto;
+  font-size: 0.85rem;
+  opacity: 0.75;
+  white-space: nowrap;
+}
+
+.present-exit {
+  flex: none;
+}
+
+/* no arrow keys or projector on a phone: the button stays off small screens */
+@media (max-width: 860px) {
+  .present-btn {
+    display: none;
+  }
+
+  .present-hint {
+    display: none;
+  }
+}

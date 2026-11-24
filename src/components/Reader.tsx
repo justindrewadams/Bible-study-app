@@ -36,6 +36,8 @@ interface Props {
   onOpenListItem: (list: StudyList, index: number) => void;
   /** open the side-by-side accounts of an event (Compare the Gospels) */
   onCompare: (set: ParallelSet) => void;
+  /** start presenting mode (computers only; hidden on phones) */
+  onPresent?: () => void;
   period: Period | null;
   onOpenPeriod: (id: string) => void;
   /** shown above the text (e.g. which part of a chapter, or why another version is shown) */
@@ -114,6 +116,7 @@ export default function Reader({
   activeList,
   onOpenListItem,
   onCompare,
+  onPresent,
   period,
   onOpenPeriod,
   before,
@@ -164,6 +167,15 @@ export default function Reader({
         <button className="hymns-btn" onClick={() => setHymnsOpen(true)} title="Hymns for this chapter">
           <span aria-hidden="true">♪</span> Hymns
         </button>
+        {onPresent && (
+          <button
+            className="hymns-btn present-btn"
+            onClick={onPresent}
+            title="Present on a TV or projector: full screen, large text, step with the arrow keys or a clicker"
+          >
+            <span aria-hidden="true">⛶</span> Present
+          </button>
+        )}
         <div className="text-prefs" ref={textRef}>
           <button
             className="hymns-btn text-btn"

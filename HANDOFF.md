@@ -131,6 +131,14 @@ the decisions already made (and why), and how the owner likes to work.
   committed people data) links Agrippa I, his children and Herodias, and adds other names (Herod the Great, Herod II,
   Philip the tetrarch, Herod Agrippa II). `HerodDynasty.tsx` draws the dynasty on those people's cards.
 - The hymn "Night, with Ebon Pinion" (L. H. Jameson) was already tied to Gethsemane.
+- **Presenting mode** (for a TV or projector): "⛶ Present" beside Hymns in the chapter heading (hidden under 860px).
+  Asks for full screen (carries on without it where a browser refuses), hides the top bar and chapter buttons, makes
+  the text ~1.45× larger and the map wider, and shows a slim bar ("‹ Passion Week · stop 6 of 38 ›", Finish
+  presenting). → ↓ PageDown Space Enter step forward, ← ↑ PageUp Backspace step back (clickers send PageDown/PageUp);
+  it steps the open journey, else the open study list, else the chapter verse by verse (on to the next chapter at
+  the end). Esc (or leaving full screen) ends it; with a card or pop-up open, Esc closes that first. Keys are taken
+  in the capture phase so the map doesn't pan. Code: `presentStep`/`startPresenting` in `App.tsx`, `.presenting`
+  styles.
 
 ## Stack and layout
 

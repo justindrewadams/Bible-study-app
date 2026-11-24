@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { BOOKS, getBook } from './data/books';
 import {
   BIBLE_API_TRANSLATIONS,
@@ -169,6 +169,7 @@ export default function App() {
   const chosenTranslation = findTranslation(translationId);
   const translation = fallbackReason ? findTranslation(FALLBACK_TRANSLATION) : chosenTranslation;
   const journey = JOURNEYS.find((j) => j.id === journeyId) ?? null;
+  const [presenting, setPresenting] = useState(false);
   const journeyLegs = useJourneyLegs(journey);
 
   // Screens for this chapter: one, unless a licensed translation's per-page limit splits it
@@ -344,8 +345,80 @@ export default function App() {
     }
   };
 
+  // ---- Presenting mode: full screen, large text, stepping with the arrow keys or a clicker
+  /** One step forward or back: through the journey, else the study list, else the chapter's verses. */
+  const presentStep = (d: number) => {
+    if (journey) {
+      setPlaying(false);
+      goToStop(journey, Math.max(0, Math.min(journey.stops.length - 1, stopIndex + d)));
+    } else if (studyList) {
+      setListPlaying(false);
+      goToListItem(studyList, Math.max(0, Math.min(studyList.items.length - 1, listIndex + d)));
+    } else if (verses?.length) {
+      const nums = verses.map((v) => v.verse);
+      const at = selectedVerse == null ? -1 : nums.indexOf(selectedVerse);
+      const next = at + d;
+      if (next >= nums.length) nextChapter();
+      else if (next >= 0) {
+        setSelectedVerse(nums[next]);
+        setPlaceOverride(null);
+      }
+    }
+  };
+  const presentStepRef = useRef(presentStep);
+  presentStepRef.current = presentStep;
+  const anyCardOpen = !!(compareSet || personSlug || nationId || cardPlace || wordStudyOpen || settingsOpen);
+  const anyCardOpenRef = useRef(anyCardOpen);
+  anyCardOpenRef.current = anyCardOpen;
+
+  const startPresenting = () => {
+    setPresenting(true);
+    setMenuOpen(false);
+    setMapVisible(true);
+    if (!journey && !studyList && selectedVerse == null && verses?.length) setSelectedVerse(verses[0].verse);
+    document.documentElement.requestFullscreen?.().catch(() => {}); // not every browser allows it; the layout still changes
+  };
+  const stopPresenting = useCallback(() => {
+    setPresenting(false);
+    if (document.fullscreenElement) document.exitFullscreen?.().catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    if (!presenting) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.altKey || e.ctrlKey || e.metaKey) return;
+      const t = e.target;
+      if (t instanceof Element && t.closest('input, select, textarea, [contenteditable="true"]')) return;
+      const forward = ['ArrowRight', 'ArrowDown', 'PageDown', ' ', 'Enter'].includes(e.key);
+      const back = ['ArrowLeft', 'ArrowUp', 'PageUp', 'Backspace'].includes(e.key);
+      if (e.key === 'Escape') {
+        if (!anyCardOpenRef.current) stopPresenting(); // with a card open, Esc closes the card first
+        return;
+      }
+      if (!forward && !back) return;
+      // a button with focus would also "click" on Space/Enter: step only once
+      e.preventDefault();
+      e.stopPropagation();
+      presentStepRef.current(forward ? 1 : -1);
+    };
+    // leaving full screen (the browser's own Esc) ends presenting too
+    const onFull = () => !document.fullscreenElement && setPresenting(false);
+    window.addEventListener('keydown', onKey, true);
+    document.addEventListener('fullscreenchange', onFull);
+    return () => {
+      window.removeEventListener('keydown', onKey, true);
+      document.removeEventListener('fullscreenchange', onFull);
+    };
+  }, [presenting, stopPresenting]);
+
+  const presentLabel = journey
+    ? `${journey.title} · stop ${stopIndex + 1} of ${journey.stops.length}`
+    : studyList
+      ? `${studyList.title} · ${listIndex + 1} of ${studyList.items.length}`
+      : `${book.name} ${loc.chapter}${selectedVerse != null ? `:${selectedVerse}` : ''}`;
+
   return (
-    <div className={`app${mapVisible ? '' : ' map-hidden'}${journey ? ' journey-active' : ''}${measure ? ' measuring' : ''}`}>
+    <div className={`app${presenting ? ' presenting' : ''}${mapVisible ? '' : ' map-hidden'}${journey ? ' journey-active' : ''}${measure ? ' measuring' : ''}`}>
       <header className="topbar">
         <button className="brand" title="Ancient Pathfinder: back to reading" onClick={() => pageOpen && closePeriods()}>
           <span>ANCIENT</span>
@@ -575,6 +648,21 @@ export default function App() {
         </div>
       </header>
       {menuOpen && <div className="menu-scrim" onClick={() => setMenuOpen(false)} />}
+      {presenting && (
+        <div className="present-bar" role="toolbar" aria-label="Presenting">
+          <button className="present-step" onClick={() => presentStep(-1)} aria-label="Previous">
+            ‹
+          </button>
+          <span className="present-where">{presentLabel}</span>
+          <button className="present-step" onClick={() => presentStep(1)} aria-label="Next">
+            ›
+          </button>
+          <span className="present-hint">← → or a clicker to step · Esc to finish</span>
+          <button className="btn present-exit" onClick={stopPresenting}>
+            Finish presenting
+          </button>
+        </div>
+      )}
 
       {periodsOpen && (
         <PeriodsPage
@@ -733,6 +821,7 @@ export default function App() {
             activeList={studyList ? { id: studyList.id, index: listIndex } : null}
             onOpenListItem={(l, i) => openList(l.id, i)}
             onCompare={setCompareSet}
+            onPresent={presenting ? undefined : startPresenting}
             period={currentPeriod ?? null}
             onOpenPeriod={openPeriods}
             before={
