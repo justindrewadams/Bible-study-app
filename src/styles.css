@@ -5865,3 +5865,44 @@ button.hd-person:hover {
 .compare-col {
   overscroll-behavior: contain;
 }
+
+/* Compare the accounts, presenting: the whole screen, larger text */
+.compare-backdrop.presenting {
+  padding: 0;
+  background: var(--paper);
+}
+
+.compare-backdrop.presenting .compare-modal {
+  width: 100%;
+  height: 100dvh;
+  border: 0;
+}
+
+.compare-backdrop.presenting .compare-head h2 {
+  font-size: 1.8rem;
+}
+
+.compare-backdrop.presenting .compare-text {
+  font-size: calc(1.02rem * var(--text-scale, 1) * 1.45);
+}
+
+.compare-backdrop.presenting .compare-col h3,
+.compare-backdrop.presenting .compare-ref {
+  font-size: 1rem;
+}
+
+.present-step:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.present-next {
+  font-weight: 500;
+  opacity: 0.75;
+}
+
+@media (max-width: 860px) {
+  .present-next {
+    display: none;
+  }
+}

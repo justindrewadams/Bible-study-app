@@ -31,7 +31,7 @@ import SiteSearch from './components/SiteSearch';
 import NationCard from './components/NationCard';
 import JerusalemPage from './components/JerusalemPage';
 import CompareGospels from './components/CompareGospels';
-import type { ParallelSet } from './data/parallels';
+import { PARALLELS, type ParallelSet } from './data/parallels';
 import { nationsInVerse } from './lib/nationMentions';
 import DistancePanel, { useRoadRoute, type Measure } from './components/DistancePanel';
 import { loadChapterPeople, type PersonEntry } from './lib/people';
@@ -370,6 +370,8 @@ export default function App() {
   const anyCardOpen = !!(compareSet || personSlug || nationId || cardPlace || wordStudyOpen || settingsOpen);
   const anyCardOpenRef = useRef(anyCardOpen);
   anyCardOpenRef.current = anyCardOpen;
+  const compareOpenRef = useRef(false);
+  compareOpenRef.current = !!compareSet;
 
   const startPresenting = () => {
     setPresenting(true);
@@ -396,6 +398,7 @@ export default function App() {
         return;
       }
       if (!forward && !back) return;
+      if (compareOpenRef.current) return; // the comparison steps its own events
       // a button with focus would also "click" on Space/Enter: step only once
       e.preventDefault();
       e.stopPropagation();
@@ -1031,6 +1034,11 @@ export default function App() {
             setCompareSet(null);
             goTo(b, c, v);
           }}
+          onStep={(d) => {
+            const i = PARALLELS.findIndex((s) => s.id === compareSet.id) + d;
+            if (i >= 0 && i < PARALLELS.length) setCompareSet(PARALLELS[i]);
+          }}
+          startPresenting={presenting}
         />
       )}
 

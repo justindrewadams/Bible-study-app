@@ -126,6 +126,10 @@ the decisions already made (and why), and how the owner likes to work.
   It has the same "AA" text size / Bolder text control as the reader (`TextSizeControl.tsx`, one shared setting,
   `useTextPrefs`, saved as `textPrefs`), and each account scrolls on its own (side by side on computers; on phones
   each tab keeps its own place).
+  **Presenting** there too: "⛶ Present" in its header (computers only) fills the screen with larger text, and
+  → PageDown Space / ← PageUp step to the next / previous event in `PARALLELS` order (↑ ↓ still scroll an account).
+  Esc ends presenting, a second Esc closes the comparison. Opened while the app is presenting, it starts presenting,
+  and the app's own stepping pauses while it is open.
 - **Jerusalem in Jesus' Day** (`#jerusalem`, `#jerusalem/<spot>`; `JerusalemPage.tsx`, `src/data/jerusalem.ts`):
   an SVG city plan and temple plan drawn for the app, with 27 tappable spots (text + verses). Reached from place
   cards (`PLACE_TO_SPOT`), journey stops and the site search ("Jerusalem in Jesus' day" results). No header button

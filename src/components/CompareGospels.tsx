@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { getBook } from '../data/books';
-import { parsePassage, type ParallelSet, type Passage } from '../data/parallels';
+import { PARALLELS, parsePassage, type ParallelSet, type Passage } from '../data/parallels';
 import TextSizeControl, { useTextPrefs } from './TextSizeControl';
 import { ESV_COPYRIGHT, fetchPassage, type Translation, type Verse } from '../lib/bible';
 
@@ -12,6 +12,10 @@ interface Props {
   fromBook: string;
   onClose: () => void;
   onRead: (book: string, chapter: number, verse: number) => void;
+  /** move to the previous (-1) or next (+1) event in the parallels table */
+  onStep: (d: number) => void;
+  /** open already presenting (the app was presenting when this was opened) */
+  startPresenting?: boolean;
 }
 
 const ORDER = ['Matt', 'Mark', 'Luke', 'John'];
@@ -25,7 +29,7 @@ type Loaded = { state: 'loading' } | { state: 'ok'; verses: Verse[] } | { state:
  * Each passage is fetched like a page of the reader, so the ESV's limits (500 verses a page, half a book,
  * 500 verses kept in memory) still hold; the longest set here is about 120 verses.
  */
-export default function CompareGospels({ set, translation, esvKey, fromBook, onClose, onRead }: Props) {
+export default function CompareGospels({ set, translation, esvKey, fromBook, onClose, onRead, onStep, startPresenting = false }: Props) {
   // one column per book, in Gospel order (Acts or 1 Corinthians last)
   const columns = useMemo(() => {
     const byBook = new Map<string, { raw: string; p: Passage }[]>();
@@ -37,7 +41,8 @@ export default function CompareGospels({ set, translation, esvKey, fromBook, onC
       ([a], [b]) => (ORDER.indexOf(a) + 1 || 9) - (ORDER.indexOf(b) + 1 || 9),
     );
   }, [set]);
-  const [tab, setTab] = useState(() => Math.max(0, columns.findIndex(([b]) => b === fromBook)));
+  const [tabState, setTab] = useState(() => Math.max(0, columns.findIndex(([b]) => b === fromBook)));
+  const tab = Math.min(tabState, columns.length - 1);
   const [loaded, setLoaded] = useState<Record<string, Loaded>>({});
 
   useEffect(() => {
@@ -63,11 +68,72 @@ export default function CompareGospels({ set, translation, esvKey, fromBook, onC
     return () => window.removeEventListener('keydown', onKey);
   }, [onClose]);
 
+  // a new event starts each account at its top
+  const colsRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    colsRef.current?.querySelectorAll('.compare-col').forEach((c) => (c.scrollTop = 0));
+  }, [set]);
+
+  // ---- Presenting: full screen, larger text, ← → (or a clicker) for the previous / next event
+  const at = PARALLELS.findIndex((s) => s.id === set.id);
+  const prevSet = at > 0 ? PARALLELS[at - 1] : null;
+  const nextSet = at >= 0 && at < PARALLELS.length - 1 ? PARALLELS[at + 1] : null;
+  const [presenting, setPresenting] = useState(startPresenting);
+  const ownFullscreen = useRef(false);
+  const stepRef = useRef(onStep);
+  stepRef.current = onStep;
+  const startPresentingHere = () => {
+    setPresenting(true);
+    if (!document.fullscreenElement && document.documentElement.requestFullscreen) {
+      ownFullscreen.current = true;
+      document.documentElement.requestFullscreen().catch(() => (ownFullscreen.current = false));
+    }
+  };
+  const stopPresentingHere = () => {
+    setPresenting(false);
+    if (ownFullscreen.current && document.fullscreenElement) document.exitFullscreen?.().catch(() => {});
+    ownFullscreen.current = false;
+  };
+  const stopRef = useRef(stopPresentingHere);
+  stopRef.current = stopPresentingHere;
+  useEffect(() => {
+    if (!presenting) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.altKey || e.ctrlKey || e.metaKey) return;
+      if (e.target instanceof Element && e.target.closest('input, select, textarea')) return;
+      if (e.key === 'Escape') {
+        // Esc ends presenting first; a second Esc closes the comparison
+        if (document.querySelector('.compare-modal .text-pop')) return;
+        e.stopPropagation();
+        stopRef.current();
+        return;
+      }
+      const forward = ['ArrowRight', 'PageDown', ' ', 'Enter'].includes(e.key);
+      const back = ['ArrowLeft', 'PageUp', 'Backspace'].includes(e.key);
+      if (!forward && !back) return; // ↑ ↓ still scroll an account
+      e.preventDefault();
+      e.stopPropagation();
+      stepRef.current(forward ? 1 : -1);
+    };
+    const onFull = () => {
+      if (!document.fullscreenElement && ownFullscreen.current) {
+        ownFullscreen.current = false;
+        setPresenting(false);
+      }
+    };
+    window.addEventListener('keydown', onKey, true);
+    document.addEventListener('fullscreenchange', onFull);
+    return () => {
+      window.removeEventListener('keydown', onKey, true);
+      document.removeEventListener('fullscreenchange', onFull);
+    };
+  }, [presenting]);
+
   const code = translation.code.toUpperCase();
   const { prefs: textPrefs, scale: textScale } = useTextPrefs();
 
   return (
-    <div className="modal-backdrop compare-backdrop" onClick={onClose}>
+    <div className={`modal-backdrop compare-backdrop${presenting ? ' presenting' : ''}`} onClick={presenting ? undefined : onClose}>
       <div className="modal compare-modal" role="dialog" aria-label={`Compare: ${set.title}`} onClick={(e) => e.stopPropagation()}>
         <header className="compare-head">
           <div>
@@ -75,12 +141,40 @@ export default function CompareGospels({ set, translation, esvKey, fromBook, onC
             <h2>{set.title}</h2>
           </div>
           <div className="compare-tools">
+            {!presenting && (
+              <button
+                className="hymns-btn present-btn"
+                onClick={startPresentingHere}
+                title="Present on a TV or projector: full screen, large text, ← → for the previous or next event"
+              >
+                <span aria-hidden="true">⛶</span> Present
+              </button>
+            )}
             <TextSizeControl />
             <button className="icon-btn" onClick={onClose} aria-label="Close">
               ✕
             </button>
           </div>
         </header>
+
+        {presenting && (
+          <div className="present-bar compare-present-bar" role="toolbar" aria-label="Presenting">
+            <button className="present-step" onClick={() => onStep(-1)} disabled={!prevSet} aria-label="Previous event">
+              ‹
+            </button>
+            <span className="present-where">
+              Event {at + 1} of {PARALLELS.length}
+              {nextSet && <span className="present-next"> · next: {nextSet.title}</span>}
+            </span>
+            <button className="present-step" onClick={() => onStep(1)} disabled={!nextSet} aria-label="Next event">
+              ›
+            </button>
+            <span className="present-hint">← → or a clicker for the previous / next event · Esc to finish</span>
+            <button className="btn present-exit" onClick={stopPresentingHere}>
+              Finish presenting
+            </button>
+          </div>
+        )}
 
         <div className="compare-tabs" role="tablist">
           {columns.map(([b], i) => (
@@ -91,6 +185,7 @@ export default function CompareGospels({ set, translation, esvKey, fromBook, onC
         </div>
 
         <div
+          ref={colsRef}
           className={`compare-cols${textPrefs.bold ? ' bolder' : ''}`}
           style={{ '--cols': columns.length, '--text-scale': textScale } as React.CSSProperties}
         >
