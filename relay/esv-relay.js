@@ -126,9 +126,21 @@ async function abibleIds(env) {
   return ids;
 }
 
-/** "[1] In the beginning … [2] The earth …" -> [{ verse: 1, text }, …]; the wording itself is left as it is. */
-function abibleVerses(content) {
-  const parts = String(content || '').split(/\[(\d+)\]/);
+function abibleVerses(html) {
+  const MARK = '\u0001';
+  const entities = { amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", nbsp: ' ' };
+  const s = String(html || '')
+    // verse numbers: <span data-number="16" class="v">16</span>
+    .replace(/<span\b[^>]*\bclass="(?:[^"]*\s)?v(?:\s[^"]*)?"[^>]*>\s*(\d+)[^<]*<\/span>/g, (m, n) => ' ' + MARK + n + MARK + ' ')
+    // the divine name, in small capitals in print
+    .replace(/<span\b[^>]*\bclass="(?:[^"]*\s)?nd(?:\s[^"]*)?"[^>]*>([^<]*)<\/span>/g, (m, t) => t.toUpperCase())
+    // paragraphs and line breaks become spaces; other tags (italics, words of Jesus) just go
+    .replace(/<\/?(?:p|div|br|h\d)\b[^>]*>/gi, ' ')
+    .replace(/<[^>]+>/g, '')
+    .replace(/&(#x[0-9a-f]+|#\d+|[a-z]+);/gi, (m, e) =>
+      e[0] === '#' ? String.fromCodePoint(e[1] === 'x' || e[1] === 'X' ? parseInt(e.slice(2), 16) : Number(e.slice(1))) : entities[e.toLowerCase()] ?? m,
+    );
+  const parts = s.split(new RegExp(MARK + '(\\d+)' + MARK));
   const verses = [];
   for (let i = 1; i < parts.length; i += 2) {
     const text = (parts[i + 1] || '').replace(/\s+/g, ' ').trim();
@@ -143,7 +155,7 @@ async function abibleChapter(code, osis, book, chapter, env, origin) {
     return reply({ error: 'The ' + code + ' is not available right now.' }, 503, origin);
   }
   if (!env.API_BIBLE_KEY || !env.ABIBLE_STORE) return reply({ error: 'The relay is not set up for API.Bible yet.' }, 503, origin);
-  const key = 'ch:' + code + ':' + osis + '.' + chapter;
+  const key = 'ch2:' + code + ':' + osis + '.' + chapter;
   const saved = await env.ABIBLE_STORE.get(key, 'json');
   const age = saved ? Date.now() - saved.at : Infinity;
   const send = (c) => reply({ verses: c.verses, copyright: c.copyright, fums: c.fums }, 200, origin);
@@ -157,7 +169,7 @@ async function abibleChapter(code, osis, book, chapter, env, origin) {
     else if (!id) why = 'The ' + code + ' is not enabled on this API.Bible account.';
     else {
       const params = new URLSearchParams({
-        'content-type': 'text',
+        'content-type': 'html',
         'include-notes': 'false',
         'include-titles': 'false',
         'include-chapter-numbers': 'false',

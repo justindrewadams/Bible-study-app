@@ -42,7 +42,7 @@ export const OPEN_TRANSLATIONS: Translation[] = [];
  * each chapter in Cloudflare for at most 30 days (refreshed after 25). On this side: text is kept
  * in memory only, every view is reported to API.Bible's usage tracking (FUMS), the copyright
  * notice and a link to API.Bible appear under the text, and printing stops at 100 verses.
- * `notice` is the publisher's standard notice, replaced by the one API.Bible sends when it does.
+ * `notice` is the publisher's standard notice, used unless API.Bible sends a full one.
  */
 const ALL_APIBIBLE_TRANSLATIONS: Translation[] = [
   {
@@ -82,7 +82,10 @@ const apiBibleNotices = new Map<string, string>();
 /** The notice to show under a translation's text. */
 export function translationNotice(t: Translation): string {
   if (t.provider === 'esv') return ESV_COPYRIGHT;
-  return apiBibleNotices.get(t.code) || t.notice || `${t.name}, public domain.`;
+  // API.Bible's own line when it is a full notice (the NASB's is); a bare "© 2017 Holman Bible Publishers"
+  // gives way to the publisher's standard notice, which also carries the CSB trademark line
+  const sent = apiBibleNotices.get(t.code) ?? '';
+  return (sent.length >= 80 ? sent : t.notice) || `${t.name}, public domain.`;
 }
 
 /**
