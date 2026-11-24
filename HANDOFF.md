@@ -44,7 +44,7 @@ the decisions already made (and why), and how the owner likes to work.
    journeys with `roads: false` (the Exodus) are drawn as before. The journey panel shows "N miles from <last stop>
    by road · about N days on foot" / "by sea" / "along the usual route" / "as the crow flies". Code: `journeyLegs()`
    in `lib/roads.ts`, `useJourneyLegs` in `JourneyPanel.tsx`; sea legs were set from Acts and the Gospels.
-6. **Study lists** (25, including Baptisms in the New Testament and False Gods and Idols), stepped through like journeys: kings, judges, prophets, apostles, miracles, parables,
+6. **Study lists** (29, including Baptisms in the New Testament and False Gods and Idols), stepped through like journeys: kings, judges, prophets, apostles, miracles, parables,
    fruit of the Spirit, armor of God, and more. When several items share one verse (fruit of the Spirit, armor,
    apostles), the current item's word is **bolded** inside that verse (owner chose bold over a highlight).
 7. **Periods page** (`#periods`): **Bob & Sandra Waldron's 17 periods**. Every chapter maps to one period, and the
@@ -138,7 +138,7 @@ the decisions already made (and why), and how the owner likes to work.
   committed people data) links Agrippa I, his children and Herodias, and adds other names (Herod the Great, Herod II,
   Philip the tetrarch, Herod Agrippa II). `HerodDynasty.tsx` draws the dynasty on those people's cards.
 - The hymn "Night, with Ebon Pinion" (L. H. Jameson) was already tied to Gethsemane.
-- The "Passion Week, Day by Day" list was **removed** at the owner's request (December 2026): the journey covers the
+- The "Passion Week, Day by Day" list was **removed** at the owner's request (November 2026): the journey covers the
   same 34 events, so the two only doubled up. Its note that the Gospels don't date every event moved into the
   journey's summary.
 - **Journey and list menus on computers** (`PickerSelect.tsx`): the real `<select>` stays (its look, phones, focus),
