@@ -1,5 +1,6 @@
 /**
- * The Notes page (#notes): notebooks → folders → pages, all verse notes, and search.
+ * The My Content page (#notes): notebooks → folders → pages, all verse notes, your own journeys and lists,
+ * and search. (Called "Notes" in the code and the address; the owner renamed the page "My Content".)
  *   #notes              start (on phones: the list of notebooks)
  *   #notes/nb/<id>      a notebook or folder
  *   #notes/page/<id>    a page
@@ -154,8 +155,8 @@ export default function NotesPage({ route, onClose, onOpenRef, signedIn, onSignI
         className="notes-search"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
-        placeholder="Search your notes"
-        aria-label="Search your notes"
+        placeholder="Search my content"
+        aria-label="Search my content"
       />
       <button className={`notes-nav${view === 'verse' ? ' on' : ''}`} onClick={() => go('notes/verse')}>
         <span>Verse notes</span>
@@ -248,8 +249,11 @@ export default function NotesPage({ route, onClose, onOpenRef, signedIn, onSignI
   if (!signedIn) {
     main = (
       <div className="notes-welcome">
-        <h2>Your notes</h2>
-        <p>Sign in to write notes on verses and keep notebooks for sermons and classes. They follow you to all your devices.</p>
+        <h2>My Content</h2>
+        <p>
+          Sign in to write notes on verses, keep notebooks for sermons and classes, and make your own journeys and lists.
+          They follow you to all your devices.
+        </p>
         <button className="btn primary" onClick={onSignIn}>
           Sign in or create an account
         </button>
@@ -477,9 +481,9 @@ export default function NotesPage({ route, onClose, onOpenRef, signedIn, onSignI
     <div className={`periods-page notes-page${atStart ? ' at-start' : ''}`}>
       <div className="periods-bar">
         <button className="bar-back" onClick={atStart || !signedIn ? onClose : () => go('notes')}>
-          {atStart || !signedIn ? '‹ Back to reading' : '‹ Notebooks'}
+          {atStart || !signedIn ? '‹ Back to reading' : '‹ My Content'}
         </button>
-        <span className="bar-title">Notes</span>
+        <span className="bar-title">My Content</span>
       </div>
       <div className="notes-layout">
         {signedIn && sidebar}

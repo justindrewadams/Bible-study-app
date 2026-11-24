@@ -48,6 +48,7 @@ import { addBookmark, api, getAccount, initAccount, removeBookmark, useAccount, 
 import { useTextPrefs } from './components/TextSizeControl';
 import type { AccountStart } from './components/AccountPanel';
 import PrivacyPage from './components/PrivacyPage';
+import Preferences from './components/Preferences';
 import { lazyPart, PartBoundary } from './lib/lazyPart';
 import { loadNotes, noteMarks as noteMarksIn, pagesMentioning, useNotes, verseNotesAt } from './lib/notes';
 import type { Span } from './lib/refs';
@@ -740,7 +741,7 @@ export default function App() {
               }}
               aria-pressed={notesOpen}
             >
-              Notes
+              My Content
             </button>
           )}
           <button
@@ -944,6 +945,14 @@ export default function App() {
               goTo(b, c, v);
             }}
             onOpenPrivacy={() => window.open(`${window.location.pathname}#privacy`, '_blank', 'noopener')}
+            preferences={
+              <Preferences
+                translationId={chosenTranslation.id}
+                onTranslation={setTranslationId}
+                map={mapSettings}
+                onMap={setMapSettings}
+              />
+            }
           />
         </Suspense>
         </PartBoundary>

@@ -28,6 +28,8 @@ interface Props {
   onClose: () => void;
   onOpenRef: (book: string, chapter: number, verse: number | null) => void;
   onOpenPrivacy: () => void;
+  /** the Preferences section at the top of the account page (built by the app, which owns the settings) */
+  preferences?: ReactNode;
 }
 
 type View = 'signin' | 'signup' | 'forgot' | 'sent' | 'reset' | 'verify' | 'email' | 'account';
@@ -57,7 +59,7 @@ function deviceName(): string {
 }
 
 /** Sign in, create an account, reset a password, and the account page, in one pop-up. */
-export default function AccountPanel({ start, onClose, onOpenRef, onOpenPrivacy }: Props) {
+export default function AccountPanel({ start, onClose, onOpenRef, onOpenPrivacy, preferences }: Props) {
   const account = useAccount();
   const [view, setView] = useState<View>(start.view === 'account' && account.status !== 'signed-in' ? 'signin' : start.view);
   const [token] = useState('token' in start ? start.token : '');
@@ -180,7 +182,7 @@ export default function AccountPanel({ start, onClose, onOpenRef, onOpenPrivacy 
           />
         )}
         {view === 'account' && account.user && (
-          <AccountPage user={account.user} onOpenRef={onOpenRef} onOpenPrivacy={onOpenPrivacy} />
+          <AccountPage user={account.user} onOpenRef={onOpenRef} onOpenPrivacy={onOpenPrivacy} preferences={preferences} />
         )}
       </div>
     </div>
@@ -580,10 +582,12 @@ function AccountPage({
   user,
   onOpenRef,
   onOpenPrivacy,
+  preferences,
 }: {
   user: AccountUser;
   onOpenRef: (book: string, chapter: number, verse: number | null) => void;
   onOpenPrivacy: () => void;
+  preferences?: ReactNode;
 }) {
   const { bookmarks } = useAccount();
   const [open, setOpen] = useState<string | null>(null);
@@ -593,9 +597,15 @@ function AccountPage({
     <div className="acct-page">
       <p className="acct-intro">
         Signed in as <strong>{user.username}</strong>
-        {user.displayName ? <> ({user.displayName})</> : null}. Your text size, translation and map style are saved to
-        your account and follow you to your other devices.
+        {user.displayName ? <> ({user.displayName})</> : null}.
       </p>
+
+      {preferences && (
+        <section className="acct-section acct-prefs">
+          <h3>Preferences</h3>
+          {preferences}
+        </section>
+      )}
 
       <section className="acct-section">
         <h3>Bookmarks</h3>

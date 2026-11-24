@@ -231,6 +231,12 @@ possible version": keep it that way.
     boat", word to bold (lists). Incomplete stops (no place or verse) aren't saved until complete. Licensed wording
     is blocked per field. The journey and list panels show "Make my own copy" (built-in) or "Edit" (yours).
   - Switch: `MINE_LIVE` in `config.ts` (needs the re-pasted Worker; no new tables).
+- **Renamed and preferences (24 Nov 2026):** the Notes page is called **"My Content"** in the header, ☰ menu and
+  page title (code and address still say `notes` / `#notes`). The account page starts with a **Preferences**
+  section (`components/Preferences.tsx`, passed in from App): text size A−/A+ with a KJV sample line, Bolder text,
+  translation, map style, modern map on top, ancient region names, all chapter places. Same settings as the AA
+  button, translation menu and map layers; synced to the account. At 1440–1599px the header's page buttons are
+  tighter (7px padding, no letter-spacing) and the menus a little narrower so "My Content" still fits one row.
 - **Next stage (needs the owner's go-ahead):** 4 class lessons and share links (references only in links).
 
 ## Stack and layout

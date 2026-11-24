@@ -6913,20 +6913,22 @@ button.hd-person:hover {
 }
 
 @media (min-width: 1440px) and (max-width: 1599px) {
+  /* "My Content" is long: tighter page buttons and slightly narrower menus keep one row at 1440px */
   .topbar .topbar-actions .btn {
-    padding: 0 9px;
+    padding: 0 7px;
+    letter-spacing: 0;
   }
 
   .topbar .translation {
-    width: 128px;
+    width: 122px;
   }
 
   .topbar .journey-select {
-    width: 146px;
+    width: 138px;
   }
 
   .topbar .list-select {
-    width: 120px;
+    width: 114px;
   }
 }
 
@@ -7164,4 +7166,58 @@ button.hd-person:hover {
   .mine-map {
     height: 220px;
   }
+}
+
+/* Preferences at the top of the account page */
+.acct-prefs {
+  border-top: 0;
+  margin-top: 4px;
+  padding-top: 0;
+}
+
+.prefs {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.prefs-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.prefs-label {
+  font-weight: 700;
+  font-size: 0.8rem;
+}
+
+.prefs-size {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.prefs-size .btn {
+  min-width: 40px;
+  padding: 4px 8px;
+}
+
+.prefs-size-n {
+  font-size: 0.85rem;
+  min-width: 4.5em;
+  text-align: center;
+}
+
+.prefs-sample {
+  margin: 0;
+  font-family: var(--serif);
+  line-height: 1.45;
+  padding: 6px 10px;
+  border-left: 3px solid var(--sky);
+}
+
+.prefs-note {
+  margin: 0;
 }
