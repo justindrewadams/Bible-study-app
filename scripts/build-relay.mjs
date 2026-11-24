@@ -38,8 +38,9 @@ function abibleVerses(html) {
   const s = String(html || '')
     // verse numbers: <span data-number="16" class="v">16</span>
     .replace(/<span\b[^>]*\bclass="(?:[^"]*\s)?v(?:\s[^"]*)?"[^>]*>\s*(\d+)[^<]*<\/span>/g, (m, n) => ' ' + MARK + n + MARK + ' ')
-    // the divine name, in small capitals in print
-    .replace(/<span\b[^>]*\bclass="(?:[^"]*\s)?nd(?:\s[^"]*)?"[^>]*>([^<]*)<\/span>/g, (m, t) => t.toUpperCase())
+    // small capitals in print: the divine name ("nd", e.g. LORD) and other small-caps text ("sc", e.g.
+    // L<span class="sc">ord</span>, and the NASB's Old Testament quotations), shown in capitals
+    .replace(/<span\b[^>]*\bclass="(?:[^"]*\s)?(?:nd|sc)(?:\s[^"]*)?"[^>]*>([^<]*)<\/span>/g, (m, t) => t.toUpperCase())
     // paragraphs and line breaks become spaces; other tags (italics, words of Jesus) just go
     .replace(/<\/?(?:p|div|br|h\d)\b[^>]*>/gi, ' ')
     .replace(/<[^>]+>/g, '')
@@ -191,10 +192,10 @@ async function abibleChapter(code, osis, book, chapter, env, origin) {
     return reply({ error: 'The ' + code + ' is not available right now.' }, 503, origin);
   }
   if (!env.API_BIBLE_KEY || !env.ABIBLE_STORE) return reply({ error: 'The relay is not set up for API.Bible yet.' }, 503, origin);
-  const key = 'ch2:' + code + ':' + osis + '.' + chapter;
+  const key = 'ch3:' + code + ':' + osis + '.' + chapter;
   const saved = await env.ABIBLE_STORE.get(key, 'json');
   const age = saved ? Date.now() - saved.at : Infinity;
-  const send = (c) => reply({ verses: c.verses, copyright: c.copyright, fums: c.fums }, 200, origin);
+  const send = (c) => reply({ verses: c.verses, copyright: c.copyright, fums: c.fums, marks: c.marks || [] }, 200, origin);
   if (saved && age < REFRESH_AFTER) return send(saved);
 
   let why = 'The ' + code + ' service limit for this month was reached.';
@@ -223,6 +224,8 @@ async function abibleChapter(code, osis, book, chapter, env, origin) {
           verses: abibleVerses(data.data && data.data.content),
           copyright: (data.data && data.data.copyright) || '',
           fums: meta.fumsToken || meta.fumsId || '',
+          // the formatting marks in the chapter (class names only), for checking how text is shown
+          marks: [...new Set([...String((data.data && data.data.content) || '').matchAll(/class="([^"]+)"/g)].flatMap((m) => m[1].split(/\\s+/)))].sort(),
         };
         if (fresh.verses.length) {
           // KV deletes it by itself once it is 30 days old
