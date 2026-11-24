@@ -37,5 +37,5 @@ export const PRIVACY_CONTACT = '';
  * Notes and notebooks (accounts Stage 2). Turn on once the account service has been re-pasted with the notes
  * routes and the `notebooks` and `notes` tables exist (accounts/schema.sql). Testing on a computer turns it on.
  */
-const NOTES_LIVE = false;
+const NOTES_LIVE = true;
 export const NOTES_ENABLED: boolean = ACCOUNTS_ENABLED && (NOTES_LIVE || !!import.meta.env.VITE_ACCOUNTS_URL);

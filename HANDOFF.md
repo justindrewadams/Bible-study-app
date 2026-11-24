@@ -398,7 +398,7 @@ Hymns for each chapter; rivers that thin out when zoomed out; flat-style verse h
 solid place-name underlines; bolded word for list items that share a verse (and the correct "N of M" chip);
 quieter last-mentioned map marker; the Nations page with person-card links; the rename to Bible Study Companion
 with the equal-width title (then to Ancient Pathfinder with the ancientpathfinder.com domain) and a header that folds into ☰ below 1440px; Hebrew & Greek word study; removal of the
-personal ESV key field; site-wide search; the distance tool with Roman-road routes; journeys along Roman roads; nation cards from the text; always opening at Genesis 1; verse search by wording and meaning; Passion Week class tools (journey, lists, Compare the accounts, Jerusalem page, Herod's dynasty); NASB 1995, CSB and NKJV through API.Bible; accounts Stage 1 (live 24 Nov 2026: Cloudflare DNS, Worker, D1, Turnstile and Brevo free plan set up); notes and notebooks (Stage 2). Earlier: ESV via relay, the 17 periods, the People page with family trees, map clusters,
+personal ESV key field; site-wide search; the distance tool with Roman-road routes; journeys along Roman roads; nation cards from the text; always opening at Genesis 1; verse search by wording and meaning; Passion Week class tools (journey, lists, Compare the accounts, Jerusalem page, Herod's dynasty); NASB 1995, CSB and NKJV through API.Bible; accounts Stage 1 (live 24 Nov 2026: Cloudflare DNS, Worker, D1, Turnstile and Brevo free plan set up); notes and notebooks (Stage 2, live 24 Nov 2026). Earlier: ESV via relay, the 17 periods, the People page with family trees, map clusters,
 and the phone layout.
 
 ## Ideas not yet started (only if the owner asks)
