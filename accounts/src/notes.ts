@@ -12,6 +12,7 @@
  */
 import { decryptText, encryptText, randomToken } from './crypto';
 import { cleanText, HttpError, limit, now, requireUser, str, type Ctx, type Route } from './worker';
+export { cleanBody };
 
 const VERSE_NOTE_MAX = 5000;
 const PAGE_MAX = 20000;
@@ -37,9 +38,75 @@ interface NoteData {
   from?: string;
   stops?: Record<string, unknown>[];
   items?: Record<string, unknown>[];
+  steps?: Record<string, unknown>[];
 }
 
-const KINDS = new Set(['verse', 'page', 'journey', 'list']);
+const STEP_TYPES = new Set(['passage', 'note', 'place', 'journey', 'list', 'page', 'link']);
+const PAGE_TYPES = new Set(['person', 'nation', 'period', 'jerusalem']);
+const SLUG_RE = /^[A-Za-z0-9_.-]{1,60}$/;
+const MAX_STEPS = 100;
+const STEP_NOTE_MAX = 5000;
+
+/** One step of a class lesson: only known fields, each checked. */
+function readStep(raw: unknown): Record<string, unknown> {
+  if (typeof raw !== 'object' || raw === null || Array.isArray(raw)) throw new HttpError(400, 'Invalid step.');
+  const r = raw as Record<string, unknown>;
+  const type = str(r, 'type', 12);
+  if (!STEP_TYPES.has(type)) throw new HttpError(400, 'Invalid step.');
+  const note = cleanBody(typeof r.note === 'string' ? r.note : '');
+  if (note.length > STEP_NOTE_MAX) throw new HttpError(400, `A step's notes can be up to ${STEP_NOTE_MAX.toLocaleString()} characters.`);
+  const out: Record<string, unknown> = { type, note };
+  const title = cleanText(str(r, 'title', 300), 120);
+  if (title) out.title = title;
+  const ref = str(r, 'ref', 40);
+  if (type === 'passage') {
+    if (!PASSAGE_RE.test(ref)) throw new HttpError(400, 'A passage step needs a passage.');
+    out.ref = ref;
+  } else if (ref && VERSE_RE.test(ref)) out.ref = ref;
+  if (type === 'place') {
+    const lat = num(r.lat, -90, 90);
+    const lon = num(r.lon, -180, 180);
+    if (lat == null || lon == null) throw new HttpError(400, 'A map step needs a place.');
+    out.lat = Math.round(lat * 1e5) / 1e5;
+    out.lon = Math.round(lon * 1e5) / 1e5;
+    out.place = cleanText(str(r, 'place', 200), 80) || 'A spot on the map';
+    const pi = num(r.placeIndex, 0, 100000);
+    if (pi != null) out.placeIndex = Math.floor(pi);
+  }
+  if (type === 'journey' || type === 'list') {
+    const source = str(r, 'source', 8);
+    const id = str(r, 'id', 40);
+    if ((source !== 'builtin' && source !== 'mine') || !SLUG_RE.test(id)) throw new HttpError(400, 'Choose a journey or list.');
+    out.source = source;
+    out.id = id;
+    out.index = Math.floor(num(r.index, 0, 1000) ?? 0);
+  }
+  if (type === 'page') {
+    const pageType = str(r, 'pageType', 12);
+    const id = str(r, 'id', 60);
+    if (!PAGE_TYPES.has(pageType) || !SLUG_RE.test(id)) throw new HttpError(400, 'Choose a page.');
+    out.pageType = pageType;
+    out.id = id;
+    out.label = cleanText(str(r, 'label', 200), 80);
+  }
+  if (type === 'link') {
+    const url = str(r, 'url', 600).trim();
+    let ok = false;
+    try {
+      const u = new URL(url);
+      ok = (u.protocol === 'https:' || u.protocol === 'http:') && !!u.hostname && url.length <= 500;
+    } catch {
+      ok = false;
+    }
+    if (!ok) throw new HttpError(400, 'A link step needs a web address starting with https://');
+    out.url = url;
+    out.label = cleanText(str(r, 'label', 300), 120);
+  }
+  if (type === 'note' && !note.trim() && !title) throw new HttpError(400, 'A notes step needs some writing.');
+  return out;
+}
+
+const KINDS = new Set(['verse', 'page', 'journey', 'list', 'lesson']);
 const COLOR_RE = /^#[0-9a-fA-F]{6}$/;
 const ID_RE = /^[a-z0-9-]{1,40}$/;
 const MAX_STOPS = 150;
@@ -107,6 +174,13 @@ function cleanBody(s: string) {
 function readNote(kind: string, raw: unknown): NoteData {
   if (typeof raw !== 'object' || raw === null || Array.isArray(raw)) throw new HttpError(400, 'Invalid note.');
   const n = raw as Record<string, unknown>;
+  if (kind === 'lesson') {
+    const title = cleanText(str(n, 'title', 400), 120) || 'My lesson';
+    const summary = cleanBody(typeof n.summary === 'string' ? n.summary : '').slice(0, 2000);
+    const list = Array.isArray(n.steps) ? n.steps : [];
+    if (list.length > MAX_STEPS) throw new HttpError(400, `Up to ${MAX_STEPS} steps.`);
+    return { title, summary, steps: list.map(readStep), body: '' };
+  }
   if (kind === 'journey' || kind === 'list') {
     const title = cleanText(str(n, 'title', 400), 120) || (kind === 'journey' ? 'My journey' : 'My list');
     const color = str(n, 'color', 7);
@@ -326,7 +400,12 @@ export const NOTE_ROUTES: Record<string, Route> = {
 
   'POST /notes/delete': async (ctx, body) => {
     const s = await requireUser(ctx);
-    await ctx.env.DB.prepare('DELETE FROM notes WHERE id = ? AND user_id = ?').bind(str(body, 'id', 40), s.user.id).run();
+    const id = str(body, 'id', 40);
+    await ctx.env.DB.batch([
+      // a deleted lesson's share link stops working too
+      ctx.env.DB.prepare('DELETE FROM shares WHERE note_id = ? AND user_id = ?').bind(id, s.user.id),
+      ctx.env.DB.prepare('DELETE FROM notes WHERE id = ? AND user_id = ?').bind(id, s.user.id),
+    ]);
     return { ok: true };
   },
 };

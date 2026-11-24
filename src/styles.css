@@ -7221,3 +7221,123 @@ button.hd-person:hover {
 .prefs-note {
   margin: 0;
 }
+
+/* =====================================================================
+   Class lessons: editor extras, share box, player panel, intro
+   ===================================================================== */
+
+.lesson-add {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 6px;
+  align-items: stretch;
+}
+
+.lesson-add-kind {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-align: left;
+  border: 1.5px solid var(--line);
+  border-radius: 0;
+  background: var(--paper);
+  color: var(--ink);
+  padding: 8px 10px;
+  cursor: pointer;
+}
+
+.lesson-add-kind:hover {
+  background: var(--select);
+}
+
+.lesson-add .link-button {
+  justify-self: start;
+  align-self: center;
+}
+
+.share-box {
+  border: 1.5px dashed var(--line);
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.88rem;
+}
+
+.share-box.on {
+  border-style: solid;
+  border-left: 5px solid var(--sky);
+}
+
+.share-box .btn {
+  align-self: flex-start;
+  padding: 6px 12px;
+}
+
+.share-box > .link-button {
+  align-self: flex-start;
+}
+
+.share-row {
+  display: flex;
+  gap: 6px;
+}
+
+.share-row input {
+  flex: 1;
+  min-width: 0;
+  border: 1.5px solid var(--line);
+  border-radius: 0;
+  padding: 6px 8px;
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 0.85rem;
+}
+
+.share-row .btn {
+  align-self: stretch;
+}
+
+.lesson-shared-mark {
+  color: var(--muted);
+  font-weight: 500;
+  font-size: 0.8em;
+}
+
+.lesson-made-by {
+  margin: 2px 0 6px;
+  color: var(--muted);
+}
+
+.lesson-note {
+  font-size: 0.98rem;
+  margin-top: 4px;
+}
+
+.lesson-action {
+  margin-top: 6px;
+  padding: 5px 10px;
+}
+
+.lesson-shared-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 8px;
+}
+
+.lesson-intro .lp-kicker {
+  margin: 0;
+}
+
+.lesson-intro h2 {
+  margin: 2px 0 6px;
+}
+
+.lesson-disclaimer {
+  border-left: 4px solid var(--sun);
+  background: color-mix(in srgb, var(--sun) 14%, var(--paper));
+  padding: 8px 10px;
+  font-size: 0.92rem;
+  line-height: 1.45;
+}

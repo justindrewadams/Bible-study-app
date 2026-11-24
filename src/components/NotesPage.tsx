@@ -26,9 +26,11 @@ import {
 import { bookIndex, spanFromOsis, spanLabel, type Span } from '../lib/refs';
 import NoteEditor from './NoteEditor';
 import MineEditor from './MineEditor';
-import { myListNotes, myJourneyNotes, saveNote as saveMine } from '../lib/notes';
+import { myLessonNotes, myListNotes, myJourneyNotes, saveNote as saveMine } from '../lib/notes';
+import LessonEditor from './LessonEditor';
+import { useShares } from '../lib/lessons';
 import { PALETTE } from '../lib/mine';
-import { MINE_ENABLED } from '../config';
+import { LESSONS_ENABLED, MINE_ENABLED } from '../config';
 
 interface Props {
   route: string;
@@ -38,6 +40,8 @@ interface Props {
   onSignIn: () => void;
   /** follow your own journey / study your own list in the reader */
   onFollowMine: (kind: 'journey' | 'list', noteId: string) => void;
+  /** start one of your lessons in the reader */
+  onStartLesson: (noteId: string) => void;
 }
 
 const go = (h: string) => {
@@ -55,7 +59,8 @@ const snippet = (body: string) =>
     .trim()
     .slice(0, 120);
 
-export default function NotesPage({ route, onClose, onOpenRef, signedIn, onSignIn, onFollowMine }: Props) {
+export default function NotesPage({ route, onClose, onOpenRef, signedIn, onSignIn, onFollowMine, onStartLesson }: Props) {
+  const { shares } = useShares();
   const store = useNotes();
   const [query, setQuery] = useState('');
   const [creating, setCreating] = useState<NoteDraft | null>(null);
@@ -72,6 +77,15 @@ export default function NotesPage({ route, onClose, onOpenRef, signedIn, onSignI
   const notebook = view === 'nb' ? store.notebooks.find((b) => b.id === id) : undefined;
   const page = view === 'page' ? store.notes.find((n) => n.id === id) : undefined;
   const mine = view === 'journey' || view === 'list' ? store.notes.find((n) => n.id === id && n.kind === view) : undefined;
+  const lessonNote = view === 'lesson' ? store.notes.find((n) => n.id === id && n.kind === 'lesson') : undefined;
+  const newLesson = async () => {
+    try {
+      const n = await saveMine({ kind: 'lesson', notebookId: null, title: 'My lesson', summary: '', steps: [], body: '' });
+      go(`notes/lesson/${n.id}`);
+    } catch (e) {
+      alert(e instanceof Error ? e.message : 'Couldn’t create it.');
+    }
+  };
   const newMine = async (kind: 'journey' | 'list') => {
     try {
       const n = await saveMine({
@@ -187,6 +201,28 @@ export default function NotesPage({ route, onClose, onOpenRef, signedIn, onSignI
           </div>
         );
       })}
+      {LESSONS_ENABLED && (
+        <div className="notes-mine">
+          <div className="notes-side-head">
+            <span>My lessons</span>
+            <button className="link-button" onClick={newLesson}>
+              + New
+            </button>
+          </div>
+          {myLessonNotes(store).length === 0 && store.status === 'ready' && (
+            <p className="muted small notes-empty-side">None yet. A lesson is a series of steps you can present or share.</p>
+          )}
+          {myLessonNotes(store).map((n) => (
+            <button key={n.id} className={`notes-nav${lessonNote?.id === n.id ? ' on' : ''}`} onClick={() => go(`notes/lesson/${n.id}`)}>
+              <span>
+                {n.title || 'My lesson'}
+                {shares.some((s) => s.noteId === n.id) && <span className="lesson-shared-mark" title="Shared by link"> · shared</span>}
+              </span>
+              <span className="notes-count">{n.steps?.length ?? 0}</span>
+            </button>
+          ))}
+        </div>
+      )}
       {(MINE_ENABLED ? (['journey', 'list'] as const) : []).map((kind) => {
         const items = kind === 'journey' ? myJourneyNotes(store) : myListNotes(store);
         return (
@@ -289,7 +325,7 @@ export default function NotesPage({ route, onClose, onOpenRef, signedIn, onSignI
                   onClick={() => {
                     setQuery('');
                     if (n.kind === 'page') go(`notes/page/${n.id}`);
-                    else if (n.kind === 'journey' || n.kind === 'list') go(`notes/${n.kind}/${n.id}`);
+                    else if (n.kind === 'journey' || n.kind === 'list' || n.kind === 'lesson') go(`notes/${n.kind}/${n.id}`);
                     else {
                       setOpenVerseNote(n.id);
                       go('notes/verse');
@@ -300,14 +336,21 @@ export default function NotesPage({ route, onClose, onOpenRef, signedIn, onSignI
                     {n.kind === 'verse' ? (sp ? spanLabel(sp) : 'Verse note') : n.title || 'Untitled'}
                   </span>
                   <span className="notes-row-meta muted small">
-                    {n.kind === 'journey' ? 'My journey' : n.kind === 'list' ? 'My list' : placeName(n.notebookId, store) || (n.kind === 'verse' ? 'Verse note' : '')}
+                    {n.kind === 'journey' ? 'My journey' : n.kind === 'list' ? 'My list' : n.kind === 'lesson' ? 'My lesson' : placeName(n.notebookId, store) || (n.kind === 'verse' ? 'Verse note' : '')}
                   </span>
-                  <span className="notes-row-snip muted small">{snippet(n.kind === 'journey' || n.kind === 'list' ? n.summary ?? '' : n.body)}</span>
+                  <span className="notes-row-snip muted small">{snippet(n.kind === 'journey' || n.kind === 'list' || n.kind === 'lesson' ? n.summary ?? '' : n.body)}</span>
                 </button>
               </li>
             );
           })}
         </ul>
+      </div>
+    );
+  } else if (lessonNote) {
+    main = (
+      <div className="notes-pageview">
+        <p className="notes-crumbs muted small">My lessons</p>
+        <LessonEditor key={lessonNote.id} note={lessonNote} onStart={onStartLesson} onOpenRef={onOpenRef} onDeleted={() => go('notes')} />
       </div>
     );
   } else if (mine) {

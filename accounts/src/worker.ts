@@ -35,6 +35,7 @@ import {
 } from './crypto';
 import { sendEmail, type Mail } from './email';
 import { NOTE_ROUTES } from './notes';
+import { LESSON_ROUTES } from './lessons';
 
 export interface Env {
   DB: D1Database;
@@ -44,6 +45,8 @@ export interface Env {
   BREVO_API_KEY?: string;
   /** secret: Cloudflare Turnstile secret key */
   TURNSTILE_SECRET?: string;
+  /** plain variable: usernames (comma-separated) that may take down shared lessons and get reports */
+  ADMIN_USERNAMES?: string;
   /** set to "1" to switch accounts off (the app then says sign-in is unavailable) */
   ACCOUNTS_OFF?: string;
   // Only for testing on a computer (wrangler dev). Leave unset on Cloudflare.
@@ -242,7 +245,7 @@ export function cleanText(s: string, max: number): string {
   return s.replace(/[\u0000-\u001f\u007f​-‏‪-‮⁦-⁩]/g, '').replace(/\s+/g, ' ').trim().slice(0, max);
 }
 
-function clientIP(ctx: Ctx): string {
+export function clientIP(ctx: Ctx): string {
   return ctx.req.headers.get('CF-Connecting-IP') ?? (ctx.dev ? 'dev' : 'unknown');
 }
 
@@ -266,7 +269,7 @@ export async function limit(ctx: Ctx, action: string, who: string, max: number, 
     throw new HttpError(429, 'Too many attempts. Please wait a while and try again.', 'rate');
 }
 
-async function turnstile(ctx: Ctx, body: Record<string, unknown>) {
+export async function turnstile(ctx: Ctx, body: Record<string, unknown>) {
   const token = str(body, 'turnstile', 4096);
   const secret = ctx.env.TURNSTILE_SECRET;
   if (!secret) {
@@ -365,7 +368,7 @@ async function findToken(ctx: Ctx, token: string, kind: string, consume: boolean
   return row;
 }
 
-function mail(ctx: Ctx, m: Mail) {
+export function mail(ctx: Ctx, m: Mail) {
   // sent in the background, so the answer takes the same time whether or not an email goes out
   ctx.exec.waitUntil(
     sendEmail(ctx.env, ctx.dev, m).catch((e) => console.error('email failed', e instanceof Error ? e.message : String(e))),
@@ -375,6 +378,14 @@ function mail(ctx: Ctx, m: Mail) {
 const hello = (u: Pick<UserRow, 'username' | 'display_name'>) => `Hello ${u.display_name || u.username},`;
 const FOOTER =
   '\n\n— Ancient Pathfinder (https://ancientpathfinder.com)\nThis is an automatic message; replies are not read. Privacy: https://ancientpathfinder.com/#privacy';
+
+export function isAdmin(ctx: Ctx, username: string): boolean {
+  return (ctx.env.ADMIN_USERNAMES ?? '')
+    .split(',')
+    .map((x) => x.trim().toLowerCase())
+    .filter(Boolean)
+    .includes(username.toLowerCase());
+}
 
 async function publicUser(ctx: Ctx, u: UserRow) {
   const passkeys = await ctx.env.DB.prepare(
@@ -393,6 +404,7 @@ async function publicUser(ctx: Ctx, u: UserRow) {
     displayName: u.display_name,
     email: await decryptEmail(ctx.keys, u.email_enc),
     createdAt: u.created_at,
+    isAdmin: isAdmin(ctx, u.username),
     prefs,
     passkeys: passkeys.results.map((p) => ({ id: p.id, name: p.name, createdAt: p.created_at, lastUsed: p.last_used })),
   };
@@ -845,6 +857,7 @@ const ROUTES: Record<string, Route> = {
     const id = s.user.id;
     await db.batch([
       db.prepare('DELETE FROM bookmarks WHERE user_id = ?').bind(id),
+      db.prepare('DELETE FROM shares WHERE user_id = ?').bind(id),
       db.prepare('DELETE FROM notes WHERE user_id = ?').bind(id),
       db.prepare('DELETE FROM notebooks WHERE user_id = ?').bind(id),
       db.prepare('DELETE FROM passkeys WHERE user_id = ?').bind(id),
@@ -891,6 +904,7 @@ const ROUTES: Record<string, Route> = {
   },
 
   ...NOTE_ROUTES,
+  ...LESSON_ROUTES,
 };
 
 async function takeChallenge(ctx: Ctx, id: string, kind: string) {

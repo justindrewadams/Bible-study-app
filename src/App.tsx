@@ -42,8 +42,11 @@ import { loadChapterPeople, type PersonEntry } from './lib/people';
 import ListPanel from './components/ListPanel';
 import { allLists, LISTS, LIST_GROUPS, type StudyList } from './lib/lists';
 import { copyBuiltIn, myId, noteIdOf } from './lib/mine';
+import { closeSharedLesson, loadShares, loadSharedLesson, saveSharedCopy, stepTargetId, type OpenLesson } from './lib/lessons';
+import type { LessonStep } from './lib/notes';
+import { spanFromOsis } from './lib/refs';
 import { periodFor } from './data/periods';
-import { ACCOUNTS_ENABLED, MINE_ENABLED, NOTES_ENABLED } from './config';
+import { ACCOUNTS_ENABLED, LESSONS_ENABLED, MINE_ENABLED, NOTES_ENABLED } from './config';
 import { addBookmark, api, getAccount, initAccount, removeBookmark, useAccount, type SyncedPrefs } from './lib/account';
 import { useTextPrefs } from './components/TextSizeControl';
 import type { AccountStart } from './components/AccountPanel';
@@ -57,6 +60,8 @@ import type { Span } from './lib/refs';
 const AccountPanel = lazyPart(() => import('./components/AccountPanel'));
 const NotesPage = lazyPart(() => import('./components/NotesPage'));
 const VerseNotes = lazyPart(() => import('./components/VerseNotes'));
+const LessonPanel = lazyPart(() => import('./components/LessonPanel'));
+const LessonIntro = lazyPart(() => import('./components/LessonPanel').then((m) => ({ default: m.LessonIntro })));
 
 interface Location {
   book: string;
@@ -167,7 +172,23 @@ export default function App() {
   const notesStore = useNotes();
   useEffect(() => {
     if (NOTES_ENABLED && account.status === 'signed-in') loadNotes();
+    if (LESSONS_ENABLED && account.status === 'signed-in') loadShares();
   }, [account.status]);
+  // ---- Class lessons: playing one (yours, or shared with you by link)
+  const [lesson, setLesson] = useState<OpenLesson | null>(null);
+  const [lessonIndex, setLessonIndex] = useState(0);
+  const [lessonIntro, setLessonIntro] = useState<OpenLesson | null>(null);
+  const [lessonMsg, setLessonMsg] = useState<string | null>(null);
+  // a shared lesson's link: "#lesson/<code>"
+  useEffect(() => {
+    const m = hash.match(/^#lesson\/([A-Za-z0-9_-]{22})$/);
+    if (!m || !LESSONS_ENABLED) return;
+    history.replaceState(null, '', window.location.pathname + window.location.search);
+    setHash('');
+    loadSharedLesson(m[1])
+      .then(setLessonIntro)
+      .catch((e) => setLessonMsg(e instanceof Error ? e.message : 'Couldn’t open this lesson.'));
+  }, [hash]);
   const [verseNotesAtVerse, setVerseNotesAtVerse] = useState<number | null>(null);
   const [presentNotes, setPresentNotes] = useState(false);
   // Synced preferences. On signing in, the account's saved ones are used (a new account gets this
@@ -360,6 +381,57 @@ export default function App() {
     [goTo],
   );
 
+  // ---- Lessons: each step moves the reader and map
+  /** a step's page or link (the "Open …" button, and page steps when reached) */
+  const lessonAction = (s: LessonStep) => {
+    if (s.type === 'link' && s.url) window.open(s.url, '_blank', 'noopener,noreferrer');
+    if (s.type !== 'page' || !s.id) return;
+    if (s.pageType === 'person') setPersonSlug(s.id);
+    else if (s.pageType === 'nation') setNationId(s.id);
+    else if (s.pageType === 'period') openPeriods(s.id);
+    else if (s.pageType === 'jerusalem') openSpot(s.id);
+  };
+  const goLessonStep = (l: OpenLesson, i: number) => {
+    const s = l.steps[i];
+    if (!s) return;
+    setLessonIndex(i);
+    if (window.location.hash) closePeriods();
+    setPersonSlug(null);
+    setNationId(null);
+    setCardPlace(null);
+    if (s.type !== 'journey') {
+      setPlaying(false);
+      setJourneyId(null);
+    }
+    if (s.type !== 'list') {
+      setListPlaying(false);
+      setListId(null);
+    }
+    const sp = s.ref ? spanFromOsis(s.ref) : null;
+    if (sp) goTo(sp.osis, sp.chapter, sp.verse ?? null);
+    if (s.type === 'place' && s.lat != null && s.lon != null) {
+      setMapVisible(true);
+      setPlaceOverride({ index: s.placeIndex ?? -1, name: s.place ?? 'A spot on the map', lat: s.lat, lon: s.lon, type: 'region', confidence: 50 });
+    } else if (s.type === 'journey') {
+      const j = allJourneys().find((x) => x.id === stepTargetId(s, l));
+      if (j) {
+        setMapVisible(true);
+        goToStop(j, Math.min(s.index ?? 0, j.stops.length - 1));
+      }
+    } else if (s.type === 'list') {
+      const li = allLists().find((x) => x.id === stepTargetId(s, l));
+      if (li) goToListItem(li, Math.min(s.index ?? 0, li.items.length - 1));
+    } else if (s.type === 'page') lessonAction(s);
+  };
+  const startLesson = (l: OpenLesson) => {
+    setLesson(l);
+    goLessonStep(l, 0);
+  };
+  const closeLesson = () => {
+    if (lesson?.kind === 'shared') closeSharedLesson();
+    setLesson(null);
+  };
+
   // List autoplay
   useEffect(() => {
     if (!listPlaying || !studyList) return;
@@ -433,7 +505,9 @@ export default function App() {
   // ---- Presenting mode: full screen, large text, stepping with the arrow keys or a clicker
   /** One step forward or back: through the journey, else the study list, else the chapter's verses. */
   const presentStep = (d: number) => {
-    if (journey) {
+    if (lesson) {
+      goLessonStep(lesson, Math.max(0, Math.min(lesson.steps.length - 1, lessonIndex + d)));
+    } else if (journey) {
       setPlaying(false);
       goToStop(journey, Math.max(0, Math.min(journey.stops.length - 1, stopIndex + d)));
     } else if (studyList) {
@@ -546,7 +620,9 @@ export default function App() {
     };
   }, [presenting, stopPresenting]);
 
-  const presentLabel = journey
+  const presentLabel = lesson
+    ? `${lesson.title || 'Lesson'} · step ${lessonIndex + 1} of ${lesson.steps.length}`
+    : journey
     ? `${journey.title} · stop ${stopIndex + 1} of ${journey.stops.length}`
     : studyList
       ? `${studyList.title} · ${listIndex + 1} of ${studyList.items.length}`
@@ -896,6 +972,12 @@ export default function App() {
             onOpenRef={openSpan}
             signedIn={account.status === 'signed-in'}
             onSignIn={() => setAccountStart({ view: 'signin' })}
+            onStartLesson={(nid) => {
+              const n = notesStore.notes.find((x) => x.id === nid);
+              if (!n) return;
+              closePeriods();
+              startLesson({ kind: 'mine', id: n.id, title: n.title ?? '', summary: n.summary ?? '', steps: n.steps ?? [], author: null });
+            }}
             onFollowMine={(kind, nid) => {
               closePeriods();
               setMapVisible(true);
@@ -910,6 +992,37 @@ export default function App() {
           />
         </Suspense>
         </PartBoundary>
+      )}
+
+      {lessonIntro && (
+        <PartBoundary onClose={() => setLessonIntro(null)}>
+          <Suspense fallback={null}>
+            <LessonIntro
+              lesson={lessonIntro}
+              onStart={() => {
+                setPresenting(false);
+                setMapVisible(true);
+                startLesson(lessonIntro);
+                setLessonIntro(null);
+              }}
+              onCancel={() => {
+                closeSharedLesson();
+                setLessonIntro(null);
+              }}
+            />
+          </Suspense>
+        </PartBoundary>
+      )}
+      {lessonMsg && (
+        <div className="modal-backdrop" onClick={() => setLessonMsg(null)}>
+          <div className="modal acct" onClick={(e) => e.stopPropagation()} role="alert">
+            <h2>Lesson</h2>
+            <p>{lessonMsg}</p>
+            <button className="btn primary" onClick={() => setLessonMsg(null)}>
+              OK
+            </button>
+          </div>
+        </div>
       )}
 
       {verseNotesAtVerse != null && showNotes && (
@@ -1193,7 +1306,30 @@ export default function App() {
               )
             }
           />
-          {studyList && (
+          {lesson && (
+            <PartBoundary onClose={closeLesson}>
+              <Suspense fallback={null}>
+                <LessonPanel
+                  lesson={lesson}
+                  index={lessonIndex}
+                  onGo={(i) => goLessonStep(lesson, i)}
+                  onClose={closeLesson}
+                  onOpenRef={openSpan}
+                  onAction={lessonAction}
+                  signedIn={account.status === 'signed-in'}
+                  isAdmin={!!account.user?.isAdmin}
+                  onSaveCopy={async () => {
+                    await saveSharedCopy();
+                  }}
+                  onRemoved={() => {
+                    closeLesson();
+                    setLessonMsg('The shared lesson was removed; its link no longer works.');
+                  }}
+                />
+              </Suspense>
+            </PartBoundary>
+          )}
+          {studyList && !lesson && (
             <ListPanel
               list={studyList}
               action={panelAction('list', studyList.id)}

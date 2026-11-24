@@ -34,9 +34,14 @@ let mine: Journey[] = [];
 export function setMyJourneys(list: Journey[]) {
   mine = list;
 }
-/** Your own journeys first, then the built-in ones. */
+/** Journeys that came with a shared lesson someone opened (ids start with "shared:"). */
+let shared: Journey[] = [];
+export function setSharedJourneys(list: Journey[]) {
+  shared = list;
+}
+/** Your own journeys first, then any from an open shared lesson, then the built-in ones. */
 export function allJourneys(): Journey[] {
-  return mine.length ? [...mine, ...JOURNEYS] : JOURNEYS;
+  return mine.length || shared.length ? [...mine, ...shared, ...JOURNEYS] : JOURNEYS;
 }
 export const isMine = (id: string | null | undefined) => !!id && id.startsWith('my:');
 

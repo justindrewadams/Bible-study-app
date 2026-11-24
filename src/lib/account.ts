@@ -26,6 +26,8 @@ export interface AccountUser {
   displayName: string | null;
   email: string;
   createdAt: number;
+  /** may take down shared lessons and receives reports */
+  isAdmin?: boolean;
   prefs: SyncedPrefs | null;
   passkeys: Passkey[];
 }

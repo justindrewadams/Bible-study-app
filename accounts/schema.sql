@@ -8,7 +8,8 @@
    passkeys.public_key = public half only; bookmarks.ref = a reference such as "John.3.16";
    rate.key = keyed fingerprint of an action and address/account, expiring within a day;
    notebooks.data = notebook or folder name, encrypted (a folder has a parent_id: its notebook);
-   notes.data = a verse note or notebook page (title, date, passages, writing), encrypted. */
+   notes.data = a verse note, notebook page, your own journey or list, or a class lesson, encrypted;
+   shares.id = the random code in a shared lesson's link (the lesson itself stays encrypted in notes). */
 
 CREATE TABLE IF NOT EXISTS users (
   id TEXT PRIMARY KEY,
@@ -96,3 +97,13 @@ CREATE TABLE IF NOT EXISTS notes (
   updated_at INTEGER NOT NULL
 );
 CREATE INDEX IF NOT EXISTS notes_user ON notes(user_id, id);
+
+CREATE TABLE IF NOT EXISTS shares (
+  id TEXT PRIMARY KEY,
+  user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  note_id TEXT NOT NULL,
+  show_name INTEGER NOT NULL DEFAULT 0,
+  created_at INTEGER NOT NULL
+);
+CREATE INDEX IF NOT EXISTS shares_user ON shares(user_id);
+CREATE INDEX IF NOT EXISTS shares_note ON shares(note_id);

@@ -34,9 +34,30 @@ export interface MyStop {
   words?: string[];
 }
 
+/** One step of a class lesson. */
+export interface LessonStep {
+  type: 'passage' | 'note' | 'place' | 'journey' | 'list' | 'page' | 'link';
+  title?: string;
+  note: string;
+  /** passage: "John.13.1-John.13.17"; others: an optional verse to open */
+  ref?: string;
+  place?: string;
+  lat?: number;
+  lon?: number;
+  placeIndex?: number | null;
+  /** journey / list: built-in id or your own note id, and the stop to start at */
+  source?: 'builtin' | 'mine';
+  id?: string;
+  index?: number;
+  /** page: person, nation, period or Jerusalem spot */
+  pageType?: 'person' | 'nation' | 'period' | 'jerusalem';
+  label?: string;
+  url?: string;
+}
+
 export interface Note {
   id: string;
-  kind: 'verse' | 'page' | 'journey' | 'list';
+  kind: 'verse' | 'page' | 'journey' | 'list' | 'lesson';
   notebookId: string | null;
   version: number;
   createdAt: number;
@@ -56,6 +77,7 @@ export interface Note {
   from?: string;
   stops?: MyStop[];
   items?: MyStop[];
+  steps?: LessonStep[];
 }
 
 export const VERSE_NOTE_MAX = 5000;
@@ -140,7 +162,9 @@ export async function saveNote(d: NoteDraft): Promise<Note> {
       ? { ref: d.ref, end: d.end, body: d.body }
       : d.kind === 'page'
         ? { title: d.title ?? '', date: d.date, passages: d.passages ?? [], body: d.body }
-        : {
+        : d.kind === 'lesson'
+          ? { title: d.title ?? '', summary: d.summary ?? '', steps: d.steps ?? [], body: '' }
+          : {
             title: d.title ?? '',
             color: d.color,
             summary: d.summary ?? '',
@@ -284,6 +308,8 @@ export function noteMarks(osis: string, chapter: number, s: State = state): Set<
 
 export const myJourneyNotes = (s: State = state) =>
   s.notes.filter((n) => n.kind === 'journey').sort((a, b) => (a.title ?? '').localeCompare(b.title ?? ''));
+export const myLessonNotes = (s: State = state) =>
+  s.notes.filter((n) => n.kind === 'lesson').sort((a, b) => b.updatedAt - a.updatedAt);
 export const myListNotes = (s: State = state) =>
   s.notes.filter((n) => n.kind === 'list').sort((a, b) => (a.title ?? '').localeCompare(b.title ?? ''));
 
@@ -293,7 +319,9 @@ export function searchNotes(q: string, s: State = state): Note[] {
   if (!words.length) return [];
   return s.notes
     .filter((n) => {
-      const stops = [...(n.stops ?? []), ...(n.items ?? [])].map((x) => `${x.t ?? ''} ${x.place ?? ''} ${x.note}`).join('\n');
+      const stops = [...(n.stops ?? []), ...(n.items ?? []), ...(n.steps ?? [])]
+        .map((x) => `${'t' in x ? (x.t ?? '') : ''} ${'title' in x ? (x.title ?? '') : ''} ${x.place ?? ''} ${x.note}`)
+        .join('\n');
       const hay = `${n.title ?? ''}\n${n.summary ?? ''}\n${n.body}\n${stops}\n${placeName(n.notebookId, s)}`.toLowerCase();
       return words.every((w) => hay.includes(w));
     })

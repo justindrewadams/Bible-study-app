@@ -35,9 +35,14 @@ let mine: StudyList[] = [];
 export function setMyLists(list: StudyList[]) {
   mine = list;
 }
-/** Your own lists first, then the built-in ones. */
+/** Lists that came with a shared lesson someone opened (ids start with "shared:"). */
+let shared: StudyList[] = [];
+export function setSharedLists(list: StudyList[]) {
+  shared = list;
+}
+/** Your own lists first, then any from an open shared lesson, then the built-in ones. */
 export function allLists(): StudyList[] {
-  return mine.length ? [...mine, ...LISTS] : LISTS;
+  return mine.length || shared.length ? [...mine, ...shared, ...LISTS] : LISTS;
 }
 
 export const LIST_GROUPS = ['Old Testament', 'Whole Bible', 'New Testament'] as const;

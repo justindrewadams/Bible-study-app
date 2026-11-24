@@ -30,7 +30,7 @@ function parseVerse(text: string): string | null {
   return r && r.verse != null ? `${r.osis}.${r.chapter}.${r.verse}` : null;
 }
 
-interface Row extends MyStop {
+export interface Row extends MyStop {
   /** local key for React */
   k: number;
   /** what's typed in the verse box */
@@ -455,7 +455,7 @@ function StopForm({
 
 let placesCache: Place[] | null = null;
 
-function PlaceField({
+export function PlaceField({
   color,
   row,
   required,

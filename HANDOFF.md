@@ -237,7 +237,23 @@ possible version": keep it that way.
   translation, map style, modern map on top, ancient region names, all chapter places. Same settings as the AA
   button, translation menu and map layers; synced to the account. At 1440–1599px the header's page buttons are
   tighter (7px padding, no letter-spacing) and the menus a little narrower so "My Content" still fits one row.
-- **Next stage (needs the owner's go-ahead):** 4 class lessons and share links (references only in links).
+- **Stage 4, class lessons (built 24 Nov 2026):** owner's choices: **anyone with an account can share** by link,
+  links are **live** (always the latest), six kinds of step (passage, notes, map stop, journey/list from a chosen
+  stop, page: person/nation/period/Jerusalem spot, web link), "follow along" (phones following the presenter)
+  **later**. The owner asked for a **disclaimer** when a shared lesson opens (`DISCLAIMER` in
+  `components/LessonPanel.tsx`, shown in `LessonIntro` before it starts, and as a short "Made by a user · please
+  check it with Scripture" line on the panel). Because anyone can share: "Report this lesson" (emails the
+  administrators) and an administrator-only "Remove"; the author's name only if they tick "Show my display name".
+  - Service: `accounts/src/lessons.ts` (share/unshare, `GET /shared`, report, remove), `readStep` in `notes.ts`,
+    table `shares`, plain variable `ADMIN_USERNAMES` on the Worker (the owner's username). Tests: `lesson-test.mjs`.
+  - App: `lib/lessons.ts` (shares store, opening a shared lesson and registering its journeys/lists as `shared:<id>`,
+    "Save a copy"), `components/LessonEditor.tsx` (in My Content: "My lessons"; steps with ▲▼; Share box),
+    `components/LessonPanel.tsx` (player, intro/disclaimer, report form), `goLessonStep` / `lessonAction` in
+    `App.tsx` (each step moves the reader/map; presenting steps the lesson first). Links: `#lesson/<22-char code>`;
+    the app takes the code out of the address bar once opened.
+  - Switch: `LESSONS_LIVE` in `config.ts`.
+- **Possible next:** "follow along" (class phones follow the presenter's steps live), and the "Road to AD 70"
+  timeline from the class brainstorm.
 
 ## Stack and layout
 

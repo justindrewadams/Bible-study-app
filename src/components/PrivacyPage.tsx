@@ -48,10 +48,10 @@ export default function PrivacyPage({ onClose }: { onClose: () => void }) {
             <strong>bookmarks</strong> (Bible references such as “John 3:16” and any short label you add).
           </li>
           <li>
-            <strong>Your notes, notebooks, journeys and lists</strong>: notes on verses, notebook pages (title, date,
-            passages and writing), the names of your notebooks and folders, and the journeys and study lists you make
-            (their stops, places, verses and notes). All of it is stored locked (encrypted), and only you
-            can see it. What isn't locked is only what keeps things in order: which notebook or folder a page is in,
+            <strong>Your notes, notebooks, journeys, lists and lessons</strong>: notes on verses, notebook pages
+            (title, date, passages and writing), the names of your notebooks and folders, and the journeys, study lists
+            and class lessons you make. All of it is stored locked (encrypted), and only you can see it, unless you
+            share a lesson (below). What isn't locked is only what keeps things in order: which notebook or folder a page is in,
             how long it is, and when it was written or changed.
           </li>
           <li>
@@ -94,6 +94,26 @@ export default function PrivacyPage({ onClose }: { onClose: () => void }) {
             The rest of the app works as before: GitHub Pages hosts the website; Bible text comes from Crossway (ESV),
             API.Bible (NASB 1995, CSB, NKJV, which counts anonymous views for its publishers) and bible-api.com; maps from
             Esri and OpenStreetMap; place histories from Wikipedia. See “Sources & licenses” (⚙) for details.
+          </li>
+        </ul>
+
+        <h2>Sharing a lesson</h2>
+        <ul>
+          <li>
+            When you share a lesson, anyone with its link can read it, without an account: its steps, your notes in it,
+            and any of your own journeys or lists it uses. The link always shows your latest version. Nothing else of
+            yours is shared.
+          </li>
+          <li>Your display name is shown with it only if you tick “Show my display name”. Your email is never shown.</li>
+          <li>“Stop sharing” (or deleting the lesson) makes the link stop working at once.</li>
+          <li>
+            Links carry only a random code, never Bible wording. Passages in a shared lesson load in each reader's own
+            translation.
+          </li>
+          <li>
+            Anyone can report a shared lesson. The report (the link and any reason given) is emailed to the site's
+            administrators, who may take the lesson's link down. The person reporting doesn't need an account, and their
+            internet address isn't kept.
           </li>
         </ul>
 
@@ -151,6 +171,11 @@ export default function PrivacyPage({ onClose }: { onClose: () => void }) {
             stored or shared that way. Public-domain wording (KJV, WEB, ASV) is fine.
           </li>
           <li>Don't try to break into accounts, overload the service, or use it to harm others.</li>
+          <li>
+            You are responsible for lessons you share. Share only what you'd be glad for anyone to read, and nothing
+            that belongs to someone else. Shared lessons show readers a reminder that a user made them and that
+            everything should be checked against the Scriptures.
+          </li>
           <li>
             We may remove content or accounts that break these terms, and we may change or end the service. If accounts
             ever end, we'll say so in the app first, and you can download your data.
