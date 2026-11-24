@@ -108,8 +108,7 @@ the decisions already made (and why), and how the owner likes to work.
     and the account page (passkeys, change password/email/display name, sign out / everywhere, download my data,
     delete my account). **Privacy & terms** page at `#privacy` (linked from sign-up, the account page and Sources &
     licenses). Emailed links arrive as `#account/verify|reset|email/<code>`; the app removes the code from the
-    address bar at once. Everything is behind `ACCOUNTS_LIVE` in `config.ts` (false until the owner finishes
-    `accounts/README.md`); while off, nothing appears and the account service is never contacted. Even when on,
+    address bar at once. Everything is behind `ACCOUNTS_LIVE` in `config.ts` (**on** since 24 Nov 2026); while off, nothing appears and the account service is never contacted. Even when on,
     the service is contacted only after someone opens the pop-up or this device has signed in before (`acct` flag).
     See **Accounts** below.
 
@@ -193,6 +192,11 @@ possible version": keep it that way.
   test site key `1x00000000000000000000AA`. Rate limits persist in the local D1: clear with `DELETE FROM rate`.
   Passkeys can be tested with a small software authenticator (ES256, "none" attestation, CBOR by hand); the
   built-in browser pane has no platform authenticator.
+- **Setup done (24 Nov 2026):** DNS moved to Cloudflare (nameservers eugene/fish; Namecheap still the registrar;
+  its old records left in place unused). GitHub's A/AAAA/www records must stay **DNS only** (grey); they were found
+  orange once after Brevo's setup and switched back. `account` is a Worker custom domain (orange, correct). Brevo
+  free plan (300/day, may add a "Sent with Brevo" footer); domain authenticated (brevo-code TXT, brevo1/brevo2 DKIM
+  CNAMEs, `_dmarc` p=none). D1 console joins pasted lines, so `schema.sql` uses /* */ comments only.
 - **Next stages (each needs the owner's go-ahead):** 2 notes; 3 custom journeys and lists; 4 class lessons and
   share links (references only in links).
 
@@ -375,7 +379,7 @@ Hymns for each chapter; rivers that thin out when zoomed out; flat-style verse h
 solid place-name underlines; bolded word for list items that share a verse (and the correct "N of M" chip);
 quieter last-mentioned map marker; the Nations page with person-card links; the rename to Bible Study Companion
 with the equal-width title (then to Ancient Pathfinder with the ancientpathfinder.com domain) and a header that folds into ☰ below 1440px; Hebrew & Greek word study; removal of the
-personal ESV key field; site-wide search; the distance tool with Roman-road routes; journeys along Roman roads; nation cards from the text; always opening at Genesis 1; verse search by wording and meaning; Passion Week class tools (journey, lists, Compare the accounts, Jerusalem page, Herod's dynasty); NASB 1995, CSB and NKJV through API.Bible; accounts Stage 1 (built and tested locally, waiting for the owner's Cloudflare/Brevo setup). Earlier: ESV via relay, the 17 periods, the People page with family trees, map clusters,
+personal ESV key field; site-wide search; the distance tool with Roman-road routes; journeys along Roman roads; nation cards from the text; always opening at Genesis 1; verse search by wording and meaning; Passion Week class tools (journey, lists, Compare the accounts, Jerusalem page, Herod's dynasty); NASB 1995, CSB and NKJV through API.Bible; accounts Stage 1 (live 24 Nov 2026: Cloudflare DNS, Worker, D1, Turnstile and Brevo free plan set up). Earlier: ESV via relay, the 17 periods, the People page with family trees, map clusters,
 and the phone layout.
 
 ## Ideas not yet started (only if the owner asks)

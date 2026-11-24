@@ -24,11 +24,11 @@ export const APIBIBLE_ENABLED = true;
  */
 export const ACCOUNTS_URL: string = import.meta.env.VITE_ACCOUNTS_URL || 'https://account.ancientpathfinder.com';
 /** Turn on once the account service, its database, Brevo and Turnstile are set up (accounts/README.md). */
-const ACCOUNTS_LIVE = false;
+const ACCOUNTS_LIVE = true;
 export const ACCOUNTS_ENABLED: boolean = ACCOUNTS_LIVE || !!import.meta.env.VITE_ACCOUNTS_URL;
 
 /** Cloudflare Turnstile site key (public, not a secret): the "verify you are human" check on account forms. */
-export const TURNSTILE_SITE_KEY: string = import.meta.env.VITE_TURNSTILE_SITE_KEY || '';
+export const TURNSTILE_SITE_KEY: string = import.meta.env.VITE_TURNSTILE_SITE_KEY || '0x4AAAAAAGRIH1-lTnR2HV_S';
 
 /** An email address for privacy questions, shown on the Privacy & terms page. Empty = not shown. */
 export const PRIVACY_CONTACT = '';
