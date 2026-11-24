@@ -101,6 +101,17 @@ the decisions already made (and why), and how the owner likes to work.
     same relay (`/abible?bible=CSB&book=John&chapter=3`). See the licensing section below.
 15. **Sources & licenses** pop-up (the ⚙ button): lists every source and license. The personal ESV key field was
     **removed** at the owner's request (a key saved by an older version is still used quietly as a backup).
+16. **Accounts (Stage 1, built November 2026; off until set up)**: optional sign-in that syncs reading
+    preferences (translation, text size/bolder text, map style) and **bookmarks** (references only, "☆ Save" beside
+    HEBREW/GREEK in the blue verse bar, listed on the account page). A person icon beside ⚙ ("Sign in" / "Your
+    account" in the ☰ menu) opens one pop-up (bottom sheet on phones) for sign-in, create account, forgot password,
+    and the account page (passkeys, change password/email/display name, sign out / everywhere, download my data,
+    delete my account). **Privacy & terms** page at `#privacy` (linked from sign-up, the account page and Sources &
+    licenses). Emailed links arrive as `#account/verify|reset|email/<code>`; the app removes the code from the
+    address bar at once. Everything is behind `ACCOUNTS_LIVE` in `config.ts` (false until the owner finishes
+    `accounts/README.md`); while off, nothing appears and the account service is never contacted. Even when on,
+    the service is contacted only after someone opens the pop-up or this device has signed in before (`acct` flag).
+    See **Accounts** below.
 
 **Added for the owner's Passion Week class (November 2026):**
 - **Passion Week journey** (`passion` in `journeys.source.json`, 38 stops): follows the whole day-by-day timeline,
@@ -156,6 +167,34 @@ the decisions already made (and why), and how the owner likes to work.
   the end). Esc (or leaving full screen) ends it; with a card or pop-up open, Esc closes that first. Keys are taken
   in the capture phase so the map doesn't pan. Code: `presentStep`/`startPresenting` in `App.tsx`, `.presenting`
   styles.
+
+## Accounts
+
+Owner's decisions (November 2026): **email required** (confirmed at sign-up, used only for confirm/reset/security
+notices); **password + optional passkey**; **Brevo** (free) sends email; reset links last **15 minutes**; Turnstile
+on account forms; Have I Been Pwned refuses leaked passwords; domain settings moved from Namecheap to Cloudflare so
+the service can live at `account.ancientpathfinder.com` (first-party cookie). The owner asked for "the safest
+possible version": keep it that way.
+
+- **Service:** `accounts/` (separate Worker `ancientpathfinder-accounts` + D1 `ancientpathfinder-accounts`; not the
+  relay). Setup, security table, local testing and the incident checklist: `accounts/README.md`. Build:
+  `npm run build:accounts` → `accounts/accounts-worker.js` (minified, pasted into the dashboard like the relay);
+  type-check: `npm run check:accounts`. Secrets: `DATA_KEY` (never change it), `TURNSTILE_SECRET`, `BREVO_API_KEY`.
+- **Sign-in is by username** (email is for resets; the reset email also reminds people of their username), because
+  the password is stretched in the browser with the username as salt (Cloudflare's free plan can't afford slow
+  hashing on the server). Usernames therefore can't change.
+- **Licensing:** bookmarks/labels/preferences only; never store or email Bible wording. Notes, custom journeys/lists
+  and lessons (Stages 2–4) must follow the same rule: references, and the person's own words; warn on pasted
+  licensed text. The terms on the Privacy page already say so.
+- **Privacy page** (`PrivacyPage.tsx`) must stay true to what the service does; update its date when changed.
+  `PRIVACY_CONTACT` in `config.ts` (empty = hidden) is for a contact address once the owner picks one.
+- **Testing locally:** wrangler 4 needs Node ≥ 22.12 (22.21.1 worked). `wrangler dev` with `DEV=1` (localhost only)
+  writes emails to `GET /dev/outbox`. Build the app with `VITE_ACCOUNTS_URL=http://localhost:8787` and Turnstile's
+  test site key `1x00000000000000000000AA`. Rate limits persist in the local D1: clear with `DELETE FROM rate`.
+  Passkeys can be tested with a small software authenticator (ES256, "none" attestation, CBOR by hand); the
+  built-in browser pane has no platform authenticator.
+- **Next stages (each needs the owner's go-ahead):** 2 notes; 3 custom journeys and lists; 4 class lessons and
+  share links (references only in links).
 
 ## Stack and layout
 
@@ -336,13 +375,14 @@ Hymns for each chapter; rivers that thin out when zoomed out; flat-style verse h
 solid place-name underlines; bolded word for list items that share a verse (and the correct "N of M" chip);
 quieter last-mentioned map marker; the Nations page with person-card links; the rename to Bible Study Companion
 with the equal-width title (then to Ancient Pathfinder with the ancientpathfinder.com domain) and a header that folds into ☰ below 1440px; Hebrew & Greek word study; removal of the
-personal ESV key field; site-wide search; the distance tool with Roman-road routes; journeys along Roman roads; nation cards from the text; always opening at Genesis 1; verse search by wording and meaning; Passion Week class tools (journey, lists, Compare the accounts, Jerusalem page, Herod's dynasty); NASB 1995, CSB and NKJV through API.Bible. Earlier: ESV via relay, the 17 periods, the People page with family trees, map clusters,
+personal ESV key field; site-wide search; the distance tool with Roman-road routes; journeys along Roman roads; nation cards from the text; always opening at Genesis 1; verse search by wording and meaning; Passion Week class tools (journey, lists, Compare the accounts, Jerusalem page, Herod's dynasty); NASB 1995, CSB and NKJV through API.Bible; accounts Stage 1 (built and tested locally, waiting for the owner's Cloudflare/Brevo setup). Earlier: ESV via relay, the 17 periods, the People page with family trees, map clusters,
 and the phone layout.
 
 ## Ideas not yet started (only if the owner asks)
 
 - From the Passion Week class brainstorm: a **"Road to AD 70" timeline**, and **class lessons** (verses, notes, map
-  stops and links bundled into one shareable link; licensed wording must not be put in the link or sent by email)
+  stops and links bundled into one shareable link; licensed wording must not be put in the link or sent by email).
+  Class lessons are now planned as **Stage 4 of accounts** (see Accounts).
 
 - Hymn songbook numbers (e.g. *Songs of Faith and Praise*, *Praise for the Lord*) once the owner confirms them;
   owner may also add or remove hymns

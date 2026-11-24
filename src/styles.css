@@ -5985,3 +5985,356 @@ button.hd-person:hover {
     display: none !important;
   }
 }
+
+/* =====================================================================
+   Accounts: sign-in pop-up, account page, bookmark button, privacy page
+   ===================================================================== */
+
+.account-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.account-btn svg {
+  display: block;
+}
+
+.account-btn.on {
+  background: var(--sky);
+  color: #111;
+}
+
+/* in the ☰ menu (below 1440px) it is a plain row like Settings */
+@media (max-width: 1439px) {
+  .topbar-extra .account-btn {
+    justify-content: flex-start;
+  }
+  .topbar-extra .account-btn.on {
+    background: var(--paper);
+    color: var(--ink);
+  }
+}
+
+.modal.acct {
+  width: min(460px, 100%);
+  padding: 16px 18px 18px;
+}
+
+.acct-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.acct-head h2 {
+  margin: 0 0 10px;
+}
+
+.acct-close {
+  border: 0;
+  background: none;
+  font-size: 1.1rem;
+  line-height: 1;
+  padding: 4px;
+  cursor: pointer;
+  color: var(--muted);
+}
+
+.acct-intro {
+  margin: 0 0 12px;
+  font-size: 0.92rem;
+}
+
+.acct-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.acct-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.acct-label {
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.acct-hint {
+  font-size: 0.78rem;
+  color: var(--muted);
+  line-height: 1.35;
+}
+
+.acct-field input,
+.acct-pw input {
+  border: var(--border);
+  border-radius: 0;
+  padding: 8px 10px;
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 1rem; /* 16px keeps iPhones from zooming in */
+  width: 100%;
+  min-width: 0;
+}
+
+.acct-field input:focus-visible,
+.acct-pw input:focus-visible {
+  outline: 3px solid var(--sky);
+  outline-offset: 0;
+}
+
+.acct-pw {
+  display: flex;
+}
+
+.acct-pw input {
+  border-right: 0;
+}
+
+.acct-show {
+  border: var(--border);
+  border-radius: 0;
+  background: var(--paper);
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 0 10px;
+  cursor: pointer;
+}
+
+.acct-check {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  font-size: 0.9rem;
+}
+
+.acct-check input {
+  width: 18px;
+  height: 18px;
+  margin: 1px 0 0;
+  accent-color: var(--ink);
+  flex: none;
+}
+
+.acct-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.acct-actions .btn {
+  padding: 8px 14px;
+}
+
+.acct-links {
+  margin: 2px 0 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.acct-links .link-button {
+  color: var(--ink);
+}
+
+.acct-error {
+  margin: 0;
+  padding: 8px 10px;
+  border-left: 4px solid var(--flame);
+  background: color-mix(in srgb, var(--flame) 10%, var(--paper));
+  font-size: 0.88rem;
+}
+
+.acct-ok {
+  border-left: 4px solid var(--leaf);
+  padding: 6px 10px;
+  background: color-mix(in srgb, var(--leaf) 14%, var(--paper));
+}
+
+.acct-turnstile {
+  min-height: 65px;
+}
+
+.acct-section {
+  border-top: 1px solid var(--hair);
+  padding-top: 10px;
+  margin-top: 12px;
+}
+
+.acct-section h3 {
+  margin: 0 0 8px;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.acct-bookmarks,
+.acct-passkeys {
+  list-style: none;
+  margin: 0 0 8px;
+  padding: 0;
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.acct-bookmarks li,
+.acct-passkeys li {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 5px 0;
+  border-bottom: 1px solid var(--hair);
+  font-size: 0.92rem;
+}
+
+.acct-bookmarks li .muted {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.acct-passkeys li > span:first-child {
+  flex: 1;
+}
+
+.acct-bm-ref {
+  font-weight: 700;
+  color: var(--place);
+  text-decoration: none;
+}
+
+.acct-bm-ref:hover {
+  text-decoration: underline;
+}
+
+.acct-remove {
+  margin-left: auto;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font-size: 0.78rem;
+  text-decoration: underline;
+  cursor: pointer;
+  flex: none;
+}
+
+.acct-disc {
+  border: 1px solid var(--hair);
+  margin-bottom: -1px;
+}
+
+.acct-disc-btn {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  gap: 10px;
+  border: 0;
+  background: none;
+  padding: 9px 10px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+.acct-disc-btn span:first-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.acct-disc-btn:hover,
+.acct-disc.open .acct-disc-btn {
+  background: var(--select);
+}
+
+.acct-disc-body {
+  padding: 4px 10px 12px;
+}
+
+.acct-section > .acct-actions {
+  margin-top: 12px;
+}
+
+.acct-danger {
+  margin-top: 10px;
+  padding: 10px;
+  border: 2px solid var(--flame);
+}
+
+.btn.danger {
+  background: var(--flame);
+  border-color: var(--flame);
+  color: #111;
+  align-self: flex-start;
+  padding: 8px 14px;
+}
+
+.acct-form > .btn.primary {
+  align-self: flex-start;
+  padding: 8px 14px;
+}
+
+/* the bookmark button sits beside HEBREW/GREEK in the blue verse bar */
+.bookmark-btn {
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.bookmark-btn.on {
+  background: var(--sun);
+}
+
+/* phones: the pop-up becomes a calm bottom sheet */
+@media (max-width: 860px) {
+  .modal-backdrop:has(.modal.acct) {
+    place-items: end stretch;
+    padding: 0;
+  }
+  .modal.acct {
+    width: 100%;
+    max-height: 88vh;
+    border-width: 2px 0 0;
+    padding: 14px 16px calc(16px + env(safe-area-inset-bottom));
+  }
+  .acct-turnstile {
+    min-height: 0;
+  }
+}
+
+.privacy-inner {
+  max-width: 720px;
+  line-height: 1.55;
+}
+
+.privacy-inner h1 {
+  font-family: var(--serif);
+  margin: 8px 0 2px;
+}
+
+.privacy-inner h2 {
+  font-size: 1.05rem;
+  margin: 22px 0 6px;
+}
+
+.privacy-inner ul {
+  padding-left: 20px;
+  margin: 0;
+}
+
+.privacy-inner li {
+  margin: 0 0 6px;
+}
+
+.privacy-terms-title {
+  margin-top: 36px !important;
+  padding-top: 18px;
+  border-top: 2px solid var(--line);
+}

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { BOOKS, getBook } from './data/books';
 import {
   APIBIBLE_TRANSLATIONS,
@@ -42,6 +42,14 @@ import { loadChapterPeople, type PersonEntry } from './lib/people';
 import ListPanel from './components/ListPanel';
 import { LISTS, LIST_GROUPS, type StudyList } from './lib/lists';
 import { periodFor } from './data/periods';
+import { ACCOUNTS_ENABLED } from './config';
+import { addBookmark, api, getAccount, initAccount, removeBookmark, useAccount, type SyncedPrefs } from './lib/account';
+import { useTextPrefs } from './components/TextSizeControl';
+import type { AccountStart } from './components/AccountPanel';
+import PrivacyPage from './components/PrivacyPage';
+
+// the sign-in screens load only when someone opens them
+const AccountPanel = lazy(() => import('./components/AccountPanel'));
 
 interface Location {
   book: string;
@@ -132,6 +140,59 @@ export default function App() {
   const [listPlaying, setListPlaying] = useState(false);
   const studyList = LISTS.find((l) => l.id === listId) ?? null;
   const [hash, setHash] = useState(() => window.location.hash);
+  // ---- Accounts (off until set up; see accounts/README.md)
+  const account = useAccount();
+  const [accountStart, setAccountStart] = useState<AccountStart | null>(null);
+  useEffect(() => {
+    initAccount();
+  }, []);
+  // links from account emails: "#account/verify/<code>", "#account/reset/<code>", "#account/email/<code>"
+  useEffect(() => {
+    const m = hash.match(/^#account(?:\/(verify|reset|email)\/([A-Za-z0-9_-]{43}))?$/);
+    if (!m || !ACCOUNTS_ENABLED) return;
+    // take the code out of the address bar and history straight away
+    history.replaceState(null, '', window.location.pathname + window.location.search);
+    setHash('');
+    setAccountStart(m[1] ? { view: m[1] as 'verify' | 'reset' | 'email', token: m[2] } : { view: 'account' });
+  }, [hash]);
+  const { prefs: textPrefs, setPrefs: setTextPrefs } = useTextPrefs();
+  // Synced preferences. On signing in, the account's saved ones are used (a new account gets this
+  // device's); after that, changes are saved to the account a moment later.
+  const prefsSynced = useRef<string | null>(null);
+  const currentPrefs: SyncedPrefs = useMemo(
+    () => ({
+      translation: savedTranslation,
+      text: { size: textPrefs.size, bold: textPrefs.bold },
+      map: mapSettings as unknown as Record<string, unknown>,
+    }),
+    [savedTranslation, textPrefs, mapSettings],
+  );
+  useEffect(() => {
+    if (account.status !== 'signed-in' || !account.user) {
+      prefsSynced.current = null;
+      return;
+    }
+    if (prefsSynced.current === null) {
+      const p = account.user.prefs;
+      prefsSynced.current = '';
+      if (p && Object.keys(p).length) {
+        if (typeof p.translation === 'string' && findTranslation(p.translation).id === p.translation)
+          setTranslationId(p.translation);
+        if (p.text) setTextPrefs({ size: Number(p.text.size) || 0, bold: !!p.text.bold });
+        if (p.map) setMapSettings({ ...DEFAULT_MAP_SETTINGS, ...(p.map as Partial<MapSettings>) });
+        prefsSynced.current = JSON.stringify({ ...currentPrefs, ...p });
+        return;
+      }
+    }
+    const json = JSON.stringify(currentPrefs);
+    if (json === prefsSynced.current) return;
+    const t = setTimeout(() => {
+      if (getAccount().status !== 'signed-in') return;
+      prefsSynced.current = json;
+      api('/prefs', { prefs: currentPrefs }).catch(() => {});
+    }, 1500);
+    return () => clearTimeout(t);
+  }, [account.status, account.user?.username, currentPrefs]); // eslint-disable-line react-hooks/exhaustive-deps
   // moving to a page (People, Nations, Jerusalem…) puts the comparison away
   useEffect(() => setCompareSet(null), [hash]);
 
@@ -146,7 +207,8 @@ export default function App() {
   const peopleOpen = hash.startsWith('#people');
   const nationsOpen = hash.startsWith('#nations');
   const jerusalemOpen = hash.startsWith('#jerusalem');
-  const pageOpen = periodsOpen || peopleOpen || nationsOpen || jerusalemOpen;
+  const privacyOpen = hash.startsWith('#privacy');
+  const pageOpen = periodsOpen || peopleOpen || nationsOpen || jerusalemOpen || privacyOpen;
   const spotFocus = jerusalemOpen ? (hash.split('/')[1] ?? null) : null;
   /** the Jerusalem page, at a place on its plans */
   const openSpot = (id?: string) => {
@@ -375,7 +437,7 @@ export default function App() {
   };
   const presentStepRef = useRef(presentStep);
   presentStepRef.current = presentStep;
-  const anyCardOpen = !!(compareSet || personSlug || nationId || cardPlace || wordStudyOpen || settingsOpen);
+  const anyCardOpen = !!(compareSet || personSlug || nationId || cardPlace || wordStudyOpen || settingsOpen || accountStart);
   const anyCardOpenRef = useRef(anyCardOpen);
   anyCardOpenRef.current = anyCardOpen;
   const compareOpenRef = useRef(false);
@@ -647,6 +709,23 @@ export default function App() {
           >
             {mapVisible && !pageOpen ? 'Hide map' : 'Show map'}
           </button>
+          {ACCOUNTS_ENABLED && (
+            <button
+              className={`icon-btn account-btn${account.status === 'signed-in' ? ' on' : ''}`}
+              onClick={() => {
+                setMenuOpen(false);
+                setAccountStart({ view: account.status === 'signed-in' ? 'account' : 'signin' });
+              }}
+              aria-label={account.status === 'signed-in' ? `Your account (${account.user?.username})` : 'Sign in'}
+              title={account.status === 'signed-in' ? `Your account (${account.user?.username})` : 'Sign in'}
+            >
+              <svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true">
+                <circle cx="10" cy="6.5" r="3.5" fill="none" stroke="currentColor" strokeWidth="2" />
+                <path d="M3 18c0-3.9 3.1-6.5 7-6.5s7 2.6 7 6.5" fill="none" stroke="currentColor" strokeWidth="2" />
+              </svg>
+              <span className="narrow-only"> {account.status === 'signed-in' ? 'Your account' : 'Sign in'}</span>
+            </button>
+          )}
           <button
             className="icon-btn"
             onClick={() => {
@@ -714,6 +793,25 @@ export default function App() {
 
       {peopleOpen && <PeoplePage onClose={closePeriods} onOpenPerson={setPersonSlug} />}
 
+      {privacyOpen && <PrivacyPage onClose={closePeriods} />}
+
+      {accountStart && ACCOUNTS_ENABLED && (
+        <Suspense fallback={null}>
+          <AccountPanel
+            // a new emailed link (or a new way in) starts the pop-up afresh
+            key={accountStart.view + ('token' in accountStart ? accountStart.token.slice(0, 8) : '')}
+            start={accountStart}
+            onClose={() => setAccountStart(null)}
+            onOpenRef={(b, c, v) => {
+              setAccountStart(null);
+              if (pageOpen) closePeriods();
+              goTo(b, c, v);
+            }}
+            onOpenPrivacy={() => window.open(`${window.location.pathname}#privacy`, '_blank', 'noopener')}
+          />
+        </Suspense>
+      )}
+
       {nationsOpen && (
         <NationsPage
           focusId={nationFocus}
@@ -746,6 +844,21 @@ export default function App() {
                 >
                   {book.testament === 'OT' ? 'Hebrew' : 'Greek'}
                 </button>
+                {account.status === 'signed-in' &&
+                  (() => {
+                    const ref = `${loc.book}.${loc.chapter}.${selectedVerse}`;
+                    const saved = account.bookmarks.some((b) => b.ref === ref);
+                    return (
+                      <button
+                        className={`word-study-btn bookmark-btn${saved ? ' on' : ''}`}
+                        onClick={() => (saved ? removeBookmark(ref) : addBookmark(ref)).catch(() => {})}
+                        title={saved ? 'Remove this bookmark' : 'Bookmark this verse'}
+                        aria-pressed={saved}
+                      >
+                        {saved ? '★ Saved' : '☆ Save'}
+                      </button>
+                    );
+                  })()}
               </div>
               {selectedInfo.places.length ? (
                 <div>
@@ -1257,6 +1370,18 @@ export default function App() {
                 city close-up on the map), the Passion Week walking routes and the Herod's dynasty chart were compiled and drawn for this app, after Scripture, Josephus and the
                 Mishnah. Fonts: Figtree and EB Garamond (SIL Open Font License).
               </p>
+              {ACCOUNTS_ENABLED && (
+                <p>
+                  <strong>Accounts</strong> are optional. What is kept, and who helps run them:{' '}
+                  <a
+                    href="#privacy"
+                    onClick={() => setSettingsOpen(false)}
+                  >
+                    Privacy & terms
+                  </a>
+                  .
+                </p>
+              )}
               <p className="muted">
                 Journey legs follow Roman-era roads (Itiner-e) where a road joins the stops without a long detour; sea
                 crossings and wilderness legs are drawn stop to stop, and a few follow hand-traced routes. They show the

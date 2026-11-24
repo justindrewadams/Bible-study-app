@@ -1,0 +1,16 @@
+# For testing on a computer only (npx wrangler dev). The live service is set up in the Cloudflare
+# dashboard instead; see README.md. Secrets are never written here.
+name = "ancientpathfinder-accounts"
+main = "accounts-worker.js"
+compatibility_date = "2025-09-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "ancientpathfinder-accounts"
+database_id = "00000000-0000-0000-0000-000000000000"
+
+[vars]
+DEV = "1"
+SITE_URL = "http://localhost:4173"
+ALLOWED_ORIGINS = "http://localhost:4173"
+RP_ID = "localhost"
