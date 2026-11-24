@@ -16,6 +16,7 @@ import { type Journey, legPath, pointAlong } from '../lib/journeys';
 import { REGIONS } from '../data/regions';
 import { formatDistance, milesBetween } from '../lib/distance';
 import { midpointAlong } from '../lib/roads';
+import CityPlanLayer, { CITY_BOUNDS, CITY_MAX_ZOOM } from './CityPlanLayer';
 
 export type BaseLayerId = 'terrain' | 'physical' | 'satellite' | 'roman';
 export type ModernOverlay = 'off' | 'labels' | 'full';
@@ -44,6 +45,8 @@ const ESRI = 'https://server.arcgisonline.com/ArcGIS/rest/services';
  * for a region with a "Map data not yet available" picture, so each base map only asks for
  * levels it covers here (`maxNativeZoom`) and Leaflet enlarges the last good level. Lakes and
  * rivers are drawn on top as crisp shapes (`water`), so they stay sharp up close.
+ * Around Jerusalem the map can go closer (CITY_MAX_ZOOM), with the first-century city drawn on top
+ * (CityPlanLayer), so walks across the city can be followed.
  */
 export const MAX_ZOOM = 11;
 
@@ -76,7 +79,7 @@ const BASE_LAYERS: Record<BaseLayerId, BaseLayer> = {
   satellite: {
     label: 'Satellite',
     url: `${ESRI}/World_Imagery/MapServer/tile/{z}/{y}/{x}`,
-    maxNativeZoom: MAX_ZOOM,
+    maxNativeZoom: CITY_MAX_ZOOM,
     attribution: 'Powered by Esri &mdash; Source: Esri, Maxar, Earthstar Geographics, and the GIS User Community',
   },
   roman: {
@@ -98,7 +101,7 @@ const MODERN_LAYERS: Record<Exclude<ModernOverlay, 'off'>, { url: string; maxNat
   },
   full: {
     url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-    maxNativeZoom: MAX_ZOOM,
+    maxNativeZoom: CITY_MAX_ZOOM,
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
   },
 };
@@ -129,6 +132,8 @@ interface Props {
   journeyLegs?: ({ path: [number, number][] } | null)[] | null;
   /** a territory to shade (a study list item's area), with its color */
   area?: { outlines: [number, number][][]; color: string } | null;
+  /** open a place on the Jerusalem page (from the city close-up's labels) */
+  onOpenSpot?: (id: string) => void;
 }
 
 function arrowIcon(angle: number, color: string) {
@@ -170,6 +175,24 @@ const focusIcon = (inferred: boolean) =>
     popupAnchor: [0, -34],
     html: `<svg width="28" height="40" viewBox="0 0 28 40"><path d="M14 1.5C7.2 1.5 2 6.7 2 13.5 2 22.5 14 38.5 14 38.5S26 22.5 26 13.5C26 6.7 20.8 1.5 14 1.5Z"/><rect x="9.5" y="9" width="9" height="9" fill="#fff" stroke="#111" stroke-width="2"/></svg>`,
   });
+
+/**
+ * Room to leave for the journey card, which sits over a corner of the map: along the bottom, or down the
+ * left side, whichever hides less of the map.
+ */
+function journeyPanelRoom(map: L.Map): { topLeft: L.PointTuple; bottomRight: L.PointTuple } {
+  const box = map.getContainer().getBoundingClientRect();
+  const panel = document.querySelector('.journey-panel')?.getBoundingClientRect();
+  let topLeft: L.PointTuple = [30, 30];
+  let bottomRight: L.PointTuple = [30, 30];
+  if (panel && panel.width && box.width) {
+    const fromBottom = Math.max(0, box.bottom - panel.top) + 16;
+    const fromLeft = Math.max(0, panel.right - box.left) + 16;
+    if (fromBottom * box.width <= fromLeft * box.height) bottomRight = [30, Math.min(fromBottom, box.height * 0.6)];
+    else topLeft = [Math.min(fromLeft, box.width * 0.6), 30];
+  }
+  return { topLeft, bottomRight };
+}
 
 /** Moves the camera when the verse focus or the journey stop changes. */
 function CameraController({
@@ -243,11 +266,26 @@ function CameraController({
       return;
     }
     const cur = journey.stops[stopIndex];
-    const pts: L.LatLngExpression[] = stopIndex > 0 ? legPath(journey, stopIndex) : [[cur.lat, cur.lon]];
+    const pts: [number, number][] = stopIndex > 0 ? legPath(journey, stopIndex) : [[cur.lat, cur.lon]];
     const b = L.latLngBounds(pts);
+    // a walk in and around Jerusalem gets the city close-up; anything longer a regional view
+    const inCity = pts.every((p) => CITY_BOUNDS.contains(p));
+    const stay = b.getNorthEast().equals(b.getSouthWest());
     move(() => {
-      const zoom = Math.min(map.getBoundsZoom(b.pad(0.6)), 9);
-      map.flyTo(b.getCenter(), Math.max(zoom, 5), { duration: 1.1 });
+      const room = journeyPanelRoom(map);
+      // staying put (another event at the same spot): leave the view alone if the spot is in sight up close
+      if (stay && inCity && map.getZoom() >= 13) {
+        const p = map.latLngToContainerPoint(b.getCenter());
+        const size = map.getSize();
+        if (p.x > room.topLeft[0] + 30 && p.y > 30 && p.x < size.x - 30 && p.y < size.y - room.bottomRight[1] - 30) return;
+      }
+      if (inCity) map.setMaxZoom(CITY_MAX_ZOOM);
+      const cap = inCity ? (stay ? 14 : CITY_MAX_ZOOM) : stay ? 9 : MAX_ZOOM;
+      const view = b.pad(0.25);
+      const zoom = Math.min(cap, map.getBoundsZoom(view, false, L.point(room.topLeft).add(room.bottomRight)));
+      // a bigger change of scale gets a little longer, so the zoom out and back in can be followed
+      const duration = Math.min(2.2, 1.1 + Math.abs(zoom - map.getZoom()) * 0.15);
+      map.flyToBounds(view, { paddingTopLeft: room.topLeft, paddingBottomRight: room.bottomRight, maxZoom: cap, duration });
     });
   }, [journey, stopIndex, map, move]);
 
@@ -471,6 +509,19 @@ function JourneyLayer({
     [journey, routed],
   );
 
+  // stops at the same spot (the temple, Bethany…) share one square: the current stop, else the latest one passed
+  const shownStops = useMemo(() => {
+    const groups = new Map<string, number[]>();
+    journey.stops.forEach((s, i) => {
+      const k = `${s.lat},${s.lon}`;
+      groups.set(k, [...(groups.get(k) ?? []), i]);
+    });
+    const keep = new Set<number>();
+    for (const g of groups.values())
+      keep.add(g.includes(stopIndex) ? stopIndex : ([...g].reverse().find((i) => i < stopIndex) ?? g[0]));
+    return keep;
+  }, [journey, stopIndex]);
+
   return (
     <>
       {legs.map((leg) => {
@@ -506,6 +557,7 @@ function JourneyLayer({
         ),
       )}
       {journey.stops.map((s, i) => {
+        if (!shownStops.has(i)) return null;
         const state = i < stopIndex ? 'past' : i === stopIndex ? 'current' : 'future';
         return (
           <Marker
@@ -544,6 +596,7 @@ export default function MapView({
   roadMiles,
   journeyLegs,
   area,
+  onOpenSpot,
 }: Props) {
   const base = BASE_LAYERS[settings.base];
   const modern = settings.modern !== 'off' ? MODERN_LAYERS[settings.modern] : null;
@@ -571,7 +624,7 @@ export default function MapView({
         key={settings.base}
         url={base.url}
         maxNativeZoom={base.maxNativeZoom}
-        maxZoom={MAX_ZOOM}
+        maxZoom={CITY_MAX_ZOOM}
         attribution={base.attribution}
         className={base.className}
       />
@@ -581,7 +634,7 @@ export default function MapView({
           key={settings.modern}
           url={modern.url}
           maxNativeZoom={modern.maxNativeZoom}
-          maxZoom={MAX_ZOOM}
+          maxZoom={CITY_MAX_ZOOM}
           opacity={settings.modernOpacity}
           attribution={modern.attribution}
           pane="modern"
@@ -594,6 +647,8 @@ export default function MapView({
         avoid={avoid}
         onPlaceInfo={onPlaceInfo}
       />
+
+      <CityPlanLayer baseMaxZoom={MAX_ZOOM} onOpenSpot={onOpenSpot} />
 
       {journey && <JourneyLayer journey={journey} stopIndex={stopIndex} onStopClick={onStopClick} routed={journeyLegs ?? null} />}
 

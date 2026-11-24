@@ -843,6 +843,7 @@ export default function App() {
               roadPath={road?.state === 'found' ? road.route.path : null}
               roadMiles={road?.state === 'found' ? road.route.miles : null}
               journeyLegs={journeyLegs}
+              onOpenSpot={openSpot}
               area={
                 studyList?.items[listIndex]?.area
                   ? { outlines: studyList.items[listIndex].area!, color: studyList.color }
@@ -1114,8 +1115,8 @@ export default function App() {
               </p>
               <p>
                 <strong>Periods of Bible history</strong> follow the outline arranged by Bob and Sandra Waldron. Summaries
-                in this app are original. The Gospel parallels (Compare the accounts), the Jerusalem and temple plans
-                and the Herod's dynasty chart were compiled and drawn for this app, after Scripture, Josephus and the
+                in this app are original. The Gospel parallels (Compare the accounts), the Jerusalem and temple plans (and the
+                city close-up on the map), the Passion Week walking routes and the Herod's dynasty chart were compiled and drawn for this app, after Scripture, Josephus and the
                 Mishnah. Fonts: Figtree and EB Garamond (SIL Open Font License).
               </p>
               <p className="muted">

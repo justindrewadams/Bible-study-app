@@ -1537,121 +1537,535 @@
     "title": "Passion Week",
     "era": "c. AD 30",
     "color": "#8e2443",
-    "summary": "From Jericho up to Jerusalem, and the last week of Jesus’ life day by day: the entry, the temple, the Upper Room, Gethsemane, the trials, the cross and the empty tomb.",
+    "summary": "From Jericho up to Jerusalem, then the last week of Jesus’ life event by event: the entry, the days in the temple and the nights at Bethany, the Upper Room, Gethsemane, the trials, the cross and the empty tomb. Walks in and around the city follow routes drawn for this app; the sites are approximate or traditional.",
     "stops": [
       {
         "place": "Jericho",
         "lookup": "Mark.10.46",
         "ref": "Mark.10.46",
-        "note": "Leaves Jericho with the Passover crowds; blind Bartimaeus is healed on the way out."
+        "note": "Going up with the Passover crowds; blind Bartimaeus is healed on the way out.",
+        "day": "Before the week",
+        "event": "Leaving Jericho"
       },
       {
         "place": "Bethany",
         "lookup": "Mark.11.1",
-        "ref": "John.12.1",
-        "note": "Six days before the Passover: supper with Lazarus, Martha and Mary."
+        "ref": "John.12.2",
+        "note": "Six days before the Passover, with Lazarus, Martha and Mary.",
+        "day": "Saturday",
+        "event": "Supper at Bethany",
+        "via": [
+          [
+            31.851,
+            35.447
+          ],
+          [
+            31.85,
+            35.427
+          ],
+          [
+            31.819,
+            35.378
+          ],
+          [
+            31.815,
+            35.345
+          ],
+          [
+            31.809,
+            35.335
+          ],
+          [
+            31.808,
+            35.292
+          ],
+          [
+            31.79,
+            35.268
+          ]
+        ]
       },
       {
         "place": "Bethphage",
-        "ref": "Matt.21.1",
-        "note": "Sunday: two disciples are sent ahead for the colt."
+        "ref": "Matt.21.2",
+        "note": "Two disciples are sent into the village ahead for a donkey and her colt.",
+        "day": "Sunday",
+        "event": "The colt"
       },
       {
         "place": "Mount of Olives",
-        "ref": "Luke.19.37",
-        "note": "Coming down the Mount of Olives, the crowd praises God; Jesus weeps over the city (Luke 19:41)."
+        "ref": "Matt.21.9",
+        "note": "Riding the colt, as Zechariah 9:9 foretold; the crowds cry “Hosanna” from Psalm 118.",
+        "day": "Sunday",
+        "event": "The triumphal entry"
+      },
+      {
+        "place": "Mount of Olives",
+        "ref": "Luke.19.41",
+        "note": "As the city comes into view, he grieves over it: it did not know the time of its visitation.",
+        "day": "Sunday",
+        "event": "Weeping over Jerusalem"
       },
       {
         "place": "The temple",
         "lat": 31.7781,
         "lon": 35.2354,
         "ref": "Mark.11.11",
-        "note": "He enters Jerusalem and the temple and looks around at everything."
+        "note": "Down across the Kidron and into the temple, where he looks around at everything.",
+        "day": "Sunday",
+        "event": "A look around the temple",
+        "via": [
+          [
+            31.7786,
+            35.2425
+          ],
+          [
+            31.779,
+            35.2392
+          ],
+          [
+            31.7787,
+            35.2375
+          ]
+        ]
       },
       {
         "place": "Bethany",
         "lookup": "Mark.11.1",
         "ref": "Mark.11.11",
-        "note": "It is late, so he goes back out to Bethany with the Twelve."
+        "note": "It is already late, so he goes back out to Bethany with the Twelve.",
+        "day": "Sunday",
+        "event": "Back to Bethany",
+        "via": [
+          [
+            31.7787,
+            35.2375
+          ],
+          [
+            31.779,
+            35.2392
+          ],
+          [
+            31.7786,
+            35.2425
+          ],
+          [
+            31.7779,
+            35.2457
+          ],
+          [
+            31.776,
+            35.252
+          ]
+        ]
+      },
+      {
+        "place": "The road from Bethany",
+        "lat": 31.776,
+        "lon": 35.252,
+        "ref": "Mark.11.14",
+        "note": "Hungry on the way in, he finds leaves but no fruit: a picture of the nation’s leaders.",
+        "day": "Monday",
+        "event": "The fig tree cursed"
       },
       {
         "place": "The temple",
         "lat": 31.7781,
         "lon": 35.2354,
-        "ref": "Mark.11.15",
-        "note": "Monday: the fig tree is cursed on the way; he drives out the sellers and money-changers."
+        "ref": "Mark.11.17",
+        "note": "He drives out the sellers: “a house of prayer for all the nations,” made a den of robbers.",
+        "day": "Monday",
+        "event": "The temple cleansed",
+        "via": [
+          [
+            31.7779,
+            35.2457
+          ],
+          [
+            31.7786,
+            35.2425
+          ],
+          [
+            31.779,
+            35.2392
+          ],
+          [
+            31.7787,
+            35.2375
+          ]
+        ]
+      },
+      {
+        "place": "The temple",
+        "lat": 31.7781,
+        "lon": 35.2354,
+        "ref": "Matt.21.14",
+        "note": "The blind and lame come to him there; children shout “Hosanna to the Son of David.”",
+        "day": "Monday",
+        "event": "Healing in the temple"
       },
       {
         "place": "Bethany",
         "lookup": "Mark.11.1",
         "ref": "Mark.11.19",
-        "note": "Each evening he leaves the city (Luke 21:37)."
+        "note": "When evening comes they leave the city; each night he lodges on the Mount of Olives (Luke 21:37).",
+        "day": "Monday",
+        "event": "Out of the city",
+        "via": [
+          [
+            31.7787,
+            35.2375
+          ],
+          [
+            31.779,
+            35.2392
+          ],
+          [
+            31.7786,
+            35.2425
+          ],
+          [
+            31.7779,
+            35.2457
+          ],
+          [
+            31.776,
+            35.252
+          ]
+        ]
+      },
+      {
+        "place": "The road from Bethany",
+        "lat": 31.776,
+        "lon": 35.252,
+        "ref": "Mark.11.20",
+        "note": "In the morning they pass the fig tree, withered to its roots: a lesson on faith and prayer.",
+        "day": "Tuesday",
+        "event": "The fig tree withered"
       },
       {
         "place": "The temple",
         "lat": 31.7781,
         "lon": 35.2354,
-        "ref": "Mark.11.27",
-        "note": "Tuesday: his authority is questioned; parables, the tax question, the widow’s offering."
+        "ref": "Matt.21.23",
+        "note": "The leaders question him; he answers with a question about John.",
+        "day": "Tuesday",
+        "event": "By what authority?",
+        "via": [
+          [
+            31.7779,
+            35.2457
+          ],
+          [
+            31.7786,
+            35.2425
+          ],
+          [
+            31.779,
+            35.2392
+          ],
+          [
+            31.7787,
+            35.2375
+          ]
+        ]
+      },
+      {
+        "place": "The temple",
+        "lat": 31.7781,
+        "lon": 35.2354,
+        "ref": "Matt.21.28",
+        "note": "The two sons, the tenants and the wedding feast: the leaders see the stories are about them (21:45).",
+        "day": "Tuesday",
+        "event": "Three parables"
+      },
+      {
+        "place": "The temple",
+        "lat": 31.7781,
+        "lon": 35.2354,
+        "ref": "Matt.22.21",
+        "note": "Render to Caesar what is Caesar’s, and to God what is God’s.",
+        "day": "Tuesday",
+        "event": "Taxes to Caesar"
+      },
+      {
+        "place": "The temple",
+        "lat": 31.7781,
+        "lon": 35.2354,
+        "ref": "Mark.12.29",
+        "note": "Love God with all you are, and your neighbor as yourself (Deut 6:4–5; Lev 19:18).",
+        "day": "Tuesday",
+        "event": "The greatest commandment"
+      },
+      {
+        "place": "The temple",
+        "lat": 31.7781,
+        "lon": 35.2354,
+        "ref": "Matt.23.13",
+        "note": "His last public words to the leaders.",
+        "day": "Tuesday",
+        "event": "Woes on the scribes and Pharisees"
+      },
+      {
+        "place": "The temple",
+        "lat": 31.7781,
+        "lon": 35.2354,
+        "ref": "Mark.12.43",
+        "note": "Two small coins, all she had.",
+        "day": "Tuesday",
+        "event": "The widow’s offering"
       },
       {
         "place": "Mount of Olives",
-        "ref": "Mark.13.3",
-        "note": "Sitting opposite the temple, he answers the disciples about its destruction."
+        "ref": "Matt.24.3",
+        "note": "Sitting opposite the temple: not one stone will be left on another, fulfilled in AD 70.",
+        "day": "Tuesday",
+        "event": "The Olivet Discourse",
+        "via": [
+          [
+            31.7787,
+            35.2375
+          ],
+          [
+            31.779,
+            35.2392
+          ],
+          [
+            31.7786,
+            35.2425
+          ]
+        ]
       },
       {
         "place": "Bethany",
         "lookup": "Mark.11.1",
         "ref": "Mark.14.3",
-        "note": "At Simon the leper’s house a woman anoints him; Judas goes to the chief priests."
+        "note": "Two days before the Passover the leaders plot; at Simon the leper’s house a woman anoints him.",
+        "day": "Wednesday",
+        "event": "The plot and the anointing",
+        "via": [
+          [
+            31.776,
+            35.252
+          ]
+        ]
+      },
+      {
+        "place": "Bethany",
+        "lookup": "Mark.11.1",
+        "ref": "Matt.26.15",
+        "note": "Judas slips away to the chief priests in the city: thirty pieces of silver (Zech 11:12).",
+        "day": "Wednesday",
+        "event": "Judas agrees to betray him"
       },
       {
         "place": "The upper room",
         "lat": 31.7717,
         "lon": 35.229,
-        "ref": "Mark.14.15",
-        "note": "Thursday evening: the Passover, the washing of feet and the Lord’s Supper."
+        "ref": "Luke.22.8",
+        "note": "Peter and John prepare the meal in a large upper room; Jesus comes in the evening.",
+        "day": "Thursday",
+        "event": "Preparing the Passover",
+        "via": [
+          [
+            31.7745,
+            35.25
+          ],
+          [
+            31.7752,
+            35.242
+          ],
+          [
+            31.774,
+            35.2378
+          ],
+          [
+            31.7725,
+            35.2362
+          ],
+          [
+            31.7718,
+            35.2335
+          ],
+          [
+            31.7715,
+            35.231
+          ]
+        ]
+      },
+      {
+        "place": "The upper room",
+        "lat": 31.7717,
+        "lon": 35.229,
+        "ref": "John.13.5",
+        "note": "The Teacher takes the servant’s towel and basin.",
+        "day": "Thursday",
+        "event": "Washing the disciples’ feet"
+      },
+      {
+        "place": "The upper room",
+        "lat": 31.7717,
+        "lon": 35.229,
+        "ref": "John.13.26",
+        "note": "The morsel given to Judas; “what you are going to do, do quickly.”",
+        "day": "Thursday",
+        "event": "The betrayer revealed"
+      },
+      {
+        "place": "The upper room",
+        "lat": 31.7717,
+        "lon": 35.229,
+        "ref": "Luke.22.19",
+        "note": "The bread and the cup of the new covenant.",
+        "day": "Thursday",
+        "event": "The Lord’s Supper"
+      },
+      {
+        "place": "The Kidron Valley",
+        "lat": 31.7775,
+        "lon": 35.2378,
+        "ref": "Matt.26.34",
+        "note": "Out of the city toward the Mount of Olives: before the rooster crows, three denials.",
+        "day": "Thursday",
+        "event": "Peter warned",
+        "via": [
+          [
+            31.7712,
+            35.232
+          ],
+          [
+            31.77,
+            35.2345
+          ],
+          [
+            31.7703,
+            35.2364
+          ],
+          [
+            31.774,
+            35.2374
+          ]
+        ]
       },
       {
         "place": "Gethsemane",
-        "ref": "John.18.1",
-        "note": "Across the Kidron to the garden: he prays, and Judas arrives with the crowd."
+        "ref": "Matt.26.39",
+        "note": "Across the brook to the garden: “Not as I will, but as you will.”",
+        "day": "Thursday",
+        "event": "Gethsemane"
+      },
+      {
+        "place": "Gethsemane",
+        "ref": "Matt.26.49",
+        "note": "Judas’ kiss; Peter’s sword; Malchus healed (Luke 22:51).",
+        "day": "Thursday night",
+        "event": "The arrest"
       },
       {
         "place": "The high priest's house",
         "lat": 31.7703,
         "lon": 35.2317,
         "ref": "John.18.13",
-        "note": "Questioned by Annas, then Caiaphas and the council; Peter denies him three times."
+        "note": "Led back across the Kidron into the city; Annas, father-in-law of Caiaphas, questions him first.",
+        "day": "Thursday night",
+        "event": "Before Annas",
+        "via": [
+          [
+            31.7775,
+            35.2378
+          ],
+          [
+            31.774,
+            35.2374
+          ],
+          [
+            31.7703,
+            35.2364
+          ],
+          [
+            31.77,
+            35.2345
+          ]
+        ]
+      },
+      {
+        "place": "The high priest's house",
+        "lat": 31.7703,
+        "lon": 35.2317,
+        "ref": "Matt.26.57",
+        "note": "False witnesses; condemned for blasphemy.",
+        "day": "Thursday night",
+        "event": "Before Caiaphas and the council"
+      },
+      {
+        "place": "The high priest's house",
+        "lat": 31.7703,
+        "lon": 35.2317,
+        "ref": "Luke.22.61",
+        "note": "The rooster crows; the Lord turns and looks at Peter.",
+        "day": "Thursday night",
+        "event": "Peter’s denials"
       },
       {
         "place": "Gabbatha",
         "ref": "John.18.28",
-        "note": "Friday at dawn: led to Pilate’s headquarters."
+        "note": "Early in the morning, to the governor’s headquarters.",
+        "day": "Friday",
+        "event": "Before Pilate",
+        "via": [
+          [
+            31.7735,
+            35.2295
+          ]
+        ]
       },
       {
         "place": "Herod Antipas' quarters",
         "lat": 31.7765,
         "lon": 35.2318,
-        "ref": "Luke.23.7",
-        "note": "Pilate sends him to Herod, who is in Jerusalem for the feast."
+        "ref": "Luke.23.8",
+        "note": "Herod hopes for a sign; Jesus says nothing.",
+        "day": "Friday",
+        "event": "Before Herod Antipas"
       },
       {
         "place": "Gabbatha",
-        "ref": "John.19.13",
-        "note": "Back before Pilate, who sits on the judgment seat at the Stone Pavement."
+        "ref": "John.19.16",
+        "note": "Back before Pilate: Barabbas released, Jesus handed over to be crucified.",
+        "day": "Friday",
+        "event": "Sentenced"
       },
       {
         "place": "Golgotha",
-        "ref": "John.19.17",
-        "note": "Carrying his cross, he goes out to the Place of a Skull and is crucified."
+        "ref": "Luke.23.33",
+        "note": "Out of the gate to the place called The Skull, between two criminals.",
+        "day": "Friday",
+        "event": "The crucifixion"
+      },
+      {
+        "place": "Golgotha",
+        "ref": "Matt.27.50",
+        "note": "The temple curtain is torn from top to bottom.",
+        "day": "Friday",
+        "event": "His death"
       },
       {
         "place": "The tomb",
         "lat": 31.7787,
         "lon": 35.2295,
-        "ref": "John.19.41",
-        "note": "Buried in a new tomb in a nearby garden; on Sunday the tomb is empty (John 20:1)."
+        "ref": "John.19.42",
+        "note": "In a new tomb in a nearby garden, because the Sabbath was near.",
+        "day": "Friday",
+        "event": "The burial"
+      },
+      {
+        "place": "The tomb",
+        "lat": 31.7787,
+        "lon": 35.2295,
+        "ref": "Matt.28.6",
+        "note": "The tomb is empty, just as he said.",
+        "day": "Sunday",
+        "event": "He is risen"
       }
     ]
   }

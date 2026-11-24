@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import type { Journey } from '../lib/journeys';
 import { journeyLegs, loadRoads, type JourneyLeg } from '../lib/roads';
 import { formatDistance, walkingTime } from '../lib/distance';
@@ -80,19 +80,27 @@ export default function JourneyPanel({ journey, stopIndex, playing, onGo, onTogg
       <div className="jp-stop">
         <span className="jp-num">{stopIndex + 1}</span>
         <div>
+          {stop.day && (
+            <div className="jp-day">
+              {stop.day}
+              {stop.event && <span> · {stop.event}</span>}
+            </div>
+          )}
           <div className="jp-place">
             {stop.place} <span className="muted">· {fmt(stop.ref)}</span>
           </div>
           <div className="jp-note">{stop.note}</div>
-          {leg && prevStop && leg.miles >= 0.5 && (
+          {leg && prevStop && leg.miles >= 0.15 && (
             <div className="jp-leg">
-              {formatDistance(leg.miles).miles} from {prevStop.place}{' '}
+              {formatDistance(leg.miles).miles} from {prevStop.place.replace(/^The /, 'the ')}{' '}
               {leg.how === 'road'
                 ? `by road · ${walkingTime(leg.miles)}`
                 : leg.how === 'sea'
                   ? 'by sea'
                   : leg.how === 'traced'
-                    ? 'along the usual route'
+                    ? leg.miles < 2.5
+                      ? `on foot · ${walkingTime(leg.miles).replace(/ on foot$/, '')}`
+                      : `along the usual route · ${walkingTime(leg.miles)}`
                     : leg.miles < 3
                       ? `· ${walkingTime(leg.miles)}`
                       : 'as the crow flies'}
@@ -137,12 +145,19 @@ export default function JourneyPanel({ journey, stopIndex, playing, onGo, onTogg
       {expanded && (
         <ol className="jp-list" ref={listRef}>
           {journey.stops.map((s, i) => (
-            <li key={i} className={i === stopIndex ? 'current' : i < stopIndex ? 'past' : ''}>
-              <button onClick={() => onGo(i)}>
-                <span className="jp-li-num">{i + 1}</span> {s.place}
-                <span className="muted"> · {fmt(s.ref)}</span>
-              </button>
-            </li>
+            <Fragment key={i}>
+              {s.day && s.day !== journey.stops[i - 1]?.day && <li className="jp-list-day">{s.day}</li>}
+              <li className={i === stopIndex ? 'current' : i < stopIndex ? 'past' : ''}>
+                <button onClick={() => onGo(i)}>
+                  <span className="jp-li-num">{i + 1}</span> {s.event ?? s.place}
+                  <span className="muted">
+                    {' '}
+                    · {s.event ? `${s.place.replace(/^The /, 'the ')}, ` : ''}
+                    {fmt(s.ref)}
+                  </span>
+                </button>
+              </li>
+            </Fragment>
           ))}
         </ol>
       )}

@@ -11,6 +11,9 @@ export interface Stop {
   via?: [number, number][];
   /** reached by boat (sea, or across the Sea of Galilee): drawn directly, never along roads */
   sea?: boolean;
+  /** for a journey told day by day (Passion Week): the day, and what happened at this stop */
+  day?: string;
+  event?: string;
 }
 
 export interface Journey {

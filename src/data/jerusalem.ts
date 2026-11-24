@@ -182,4 +182,5 @@ export const SPOT_PLACES: Record<string, string> = {
   "The high priest's house": 'high-priest',
   "Herod Antipas' quarters": 'hasmonean-palace',
   'The tomb': 'tomb',
+  'The Kidron Valley': 'kidron',
 };

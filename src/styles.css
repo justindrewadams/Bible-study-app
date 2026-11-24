@@ -5690,3 +5690,74 @@ button.hd-person:hover {
     font-size: 1rem;
   }
 }
+
+/* ---------- Journey days (Passion Week) */
+.jp-day {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--c);
+  margin-bottom: 1px;
+}
+
+.jp-day span {
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 0.8rem;
+  color: var(--ink);
+}
+
+.jp-list li.jp-list-day {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--c);
+  padding: 8px 4px 2px;
+}
+
+/* ---------- City close-up (Jerusalem in Jesus' day, on the map) */
+.city-label span {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 700;
+  color: #111;
+  text-shadow:
+    0 0 2px #fff,
+    0 0 3px #fff,
+    0 0 4px #fff;
+  pointer-events: none;
+}
+
+.city-label.linked span {
+  pointer-events: auto;
+  cursor: pointer;
+  padding: 3px 2px;
+}
+
+.city-label.linked span:hover {
+  text-decoration: underline;
+}
+
+.city-area span {
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.city-valley span {
+  font-style: italic;
+  font-weight: 600;
+  color: #2f4f69;
+}
+
+@media (prefers-color-scheme: dark) {
+  .jp-day,
+  .jp-list li.jp-list-day {
+    color: color-mix(in srgb, var(--c) 50%, #fff);
+  }
+}
