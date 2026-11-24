@@ -197,8 +197,27 @@ possible version": keep it that way.
   orange once after Brevo's setup and switched back. `account` is a Worker custom domain (orange, correct). Brevo
   free plan (300/day, may add a "Sent with Brevo" footer); domain authenticated (brevo-code TXT, brevo1/brevo2 DKIM
   CNAMEs, `_dmarc` p=none). D1 console joins pasted lines, so `schema.sql` uses /* */ comments only.
-- **Next stages (each needs the owner's go-ahead):** 2 notes; 3 custom journeys and lists; 4 class lessons and
-  share links (references only in links).
+- **Stage 2, notes and notebooks (built 24 Nov 2026):** owner's choices: notes on a verse **or range**, automatic
+  verse links (a must), simple formatting with the buttons behind an "Aa" toggle on phones, 5,000 characters per
+  verse note and 20,000 per page, **notebook → folder → page** (folders don't nest further), notes **hidden while
+  presenting** with a "Show my notes" switch, licensed wording **blocked** (not just warned), notes **encrypted on
+  the server** (not device-only, which would lose notes on a password reset).
+  - Service: `accounts/src/notes.ts` (routes `/notebooks…`, `/notes…`), tables `notebooks` and `notes` in `schema.sql`.
+  - App: `lib/notes.ts` (store, loaded after sign-in, forgotten on sign-out), `lib/refs.ts` (finding references in
+    text; short abbreviations that are also words, like "He" or "Am", are left out), `lib/licenseGuard.ts` (8-word
+    runs matching licensed text in memory, newest chapter first, allowed if also in the KJV/WEB; offers "Use the
+    reference" / KJV / WEB wording), `components/NoteText.tsx` (Markdown subset drawn as React elements, never
+    HTML), `NoteEditor.tsx` (saves 1.5 s after typing stops; version conflicts offer newer copy / keep mine),
+    `VerseNotes.tsx` (from "✎ Note" in the verse bar or the ✎ mark by a verse number), `NotesPage.tsx` (`#notes`,
+    `#notes/nb/<id>`, `#notes/page/<id>`, `#notes/verse`). "Download my data" adds notes in the app.
+  - Header: "Notes" sits before Periods; at 1440–1599px the selects and page buttons are a little narrower so the
+    one-row header still fits (the Stage 1 account icon had already made it 8px too wide at 1440).
+  - `lib/lazyPart.tsx`: on-demand parts reload the page once if a new version removed their file, and a crash in
+    one part shows "Something went wrong" instead of blanking the app.
+  - Testing the guard locally: override `window.fetch` for `/abible?` with placeholder wording (the relay refuses
+    localhost), as for Stage 1.
+- **Next stages (each needs the owner's go-ahead):** 3 custom journeys and lists; 4 class lessons and share links
+  (references only in links).
 
 ## Stack and layout
 
@@ -379,7 +398,7 @@ Hymns for each chapter; rivers that thin out when zoomed out; flat-style verse h
 solid place-name underlines; bolded word for list items that share a verse (and the correct "N of M" chip);
 quieter last-mentioned map marker; the Nations page with person-card links; the rename to Bible Study Companion
 with the equal-width title (then to Ancient Pathfinder with the ancientpathfinder.com domain) and a header that folds into ☰ below 1440px; Hebrew & Greek word study; removal of the
-personal ESV key field; site-wide search; the distance tool with Roman-road routes; journeys along Roman roads; nation cards from the text; always opening at Genesis 1; verse search by wording and meaning; Passion Week class tools (journey, lists, Compare the accounts, Jerusalem page, Herod's dynasty); NASB 1995, CSB and NKJV through API.Bible; accounts Stage 1 (live 24 Nov 2026: Cloudflare DNS, Worker, D1, Turnstile and Brevo free plan set up). Earlier: ESV via relay, the 17 periods, the People page with family trees, map clusters,
+personal ESV key field; site-wide search; the distance tool with Roman-road routes; journeys along Roman roads; nation cards from the text; always opening at Genesis 1; verse search by wording and meaning; Passion Week class tools (journey, lists, Compare the accounts, Jerusalem page, Herod's dynasty); NASB 1995, CSB and NKJV through API.Bible; accounts Stage 1 (live 24 Nov 2026: Cloudflare DNS, Worker, D1, Turnstile and Brevo free plan set up); notes and notebooks (Stage 2). Earlier: ESV via relay, the 17 periods, the People page with family trees, map clusters,
 and the phone layout.
 
 ## Ideas not yet started (only if the owner asks)

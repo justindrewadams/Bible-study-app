@@ -20,8 +20,8 @@ export default function PrivacyPage({ onClose }: { onClose: () => void }) {
         <p className="muted small">Last updated {UPDATED}</p>
         <p>
           Ancient Pathfinder is a free Bible study app with no ads, no fees and no donations. You can use all of it
-          without an account. An account only saves your bookmarks and reading preferences, and keeps them the same on
-          your devices. This page explains, in plain words, what we keep and why.
+          without an account. An account saves your bookmarks, notes, notebooks and reading preferences, and keeps them
+          the same on your devices. This page explains, in plain words, what we keep and why.
         </p>
 
         <h2>What we keep if you create an account</h2>
@@ -48,6 +48,12 @@ export default function PrivacyPage({ onClose }: { onClose: () => void }) {
             <strong>bookmarks</strong> (Bible references such as “John 3:16” and any short label you add).
           </li>
           <li>
+            <strong>Your notes and notebooks</strong>: notes on verses, notebook pages (title, date, passages and
+            writing) and the names of your notebooks and folders. All of it is stored locked (encrypted), and only you
+            can see it. What isn't locked is only what keeps things in order: which notebook or folder a page is in,
+            how long it is, and when it was written or changed.
+          </li>
+          <li>
             <strong>A sign-in cookie</strong> on your device so you stay signed in for up to 30 days. It is used only for
             signing in, never for tracking or ads.
           </li>
@@ -60,7 +66,10 @@ export default function PrivacyPage({ onClose }: { onClose: () => void }) {
             Your internet address. To stop people from guessing passwords, we briefly count attempts using a scrambled
             fingerprint of the address. Those counts are erased within a day.
           </li>
-          <li>Bible text. Bookmarks store references only; the wording is loaded fresh each time you read.</li>
+          <li>
+            Wording from licensed Bible translations (ESV, NASB 1995, CSB, NKJV). Bookmarks store references only, and
+            the app won't save that wording in a note. Public-domain wording (KJV, WEB) may be kept in notes.
+          </li>
           <li>Anything about what you read when you aren't signed in.</li>
         </ul>
 
@@ -136,7 +145,7 @@ export default function PrivacyPage({ onClose }: { onClose: () => void }) {
           <li>Ancient Pathfinder is free and non-commercial. Please use it for personal study, teaching and sharing the Bible.</li>
           <li>Keep your password to yourself, and one account per person.</li>
           <li>
-            Bookmark labels (and, later, notes and lessons) should be in your own words. Please don't paste in the wording
+            Notes, notebook pages and bookmark labels (and, later, lessons) should be in your own words. Please don't paste in the wording
             of copyrighted Bible translations (ESV, NASB, CSB, NKJV and others); their publishers don't allow it to be
             stored or shared that way. Public-domain wording (KJV, WEB, ASV) is fine.
           </li>

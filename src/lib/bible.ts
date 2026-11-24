@@ -275,6 +275,11 @@ function reportView(token: string) {
 async function fetchApiBible(t: Translation, osis: string, chapter: number): Promise<Verse[]> {
   const key = `${t.code}:${osis}.${chapter}`;
   let hit = apiBibleCache.get(key);
+  if (hit) {
+    // keep the most recently read chapters last (the notes guard looks at the newest first)
+    apiBibleCache.delete(key);
+    apiBibleCache.set(key, hit);
+  }
   if (!hit) {
     if (!ESV_RELAY_ENABLED) throw new LicensedUnavailable('the relay is not set up');
     const params = new URLSearchParams({ bible: t.code, book: osis, chapter: String(chapter) });
@@ -473,6 +478,35 @@ export async function fetchVerses(t: Translation, refs: VerseRef[], opts: { esvK
     if (t.provider === 'esv') esvSet(key(r), v);
     else pdSet(key(r), v);
     out.set(r, text);
+  }
+  return out;
+}
+
+// --- for the notes guard ---------------------------------------------------------------------
+
+/** A chapter (or part) of licensed text that is in memory right now. */
+export interface LicensedChunk {
+  /** "ESV", "NASB1995", "CSB", "NKJV" */
+  code: string;
+  osis: string;
+  chapter: number;
+  verses: Verse[];
+}
+
+/**
+ * Every piece of licensed text currently held in memory (at most 500 verses per source). Notes use it to
+ * stop licensed wording from being saved; nothing here is stored or sent anywhere.
+ */
+export function licensedTextInMemory(): LicensedChunk[] {
+  const out: LicensedChunk[] = [];
+  for (const [key, verses] of esvCache) {
+    // "John.3:1-36" (a chapter screen) or "John.3:16-16" (one verse for search)
+    const m = /^([^.]+)\.(\d+):/.exec(key);
+    if (m) out.push({ code: 'ESV', osis: m[1], chapter: Number(m[2]), verses });
+  }
+  for (const [key, hit] of apiBibleCache) {
+    const m = /^([^:]+):([^.]+)\.(\d+)$/.exec(key);
+    if (m) out.push({ code: m[1], osis: m[2], chapter: Number(m[3]), verses: hit.verses });
   }
   return out;
 }

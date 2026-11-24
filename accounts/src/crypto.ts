@@ -3,6 +3,7 @@
  *
  * Every key is derived from ONE secret, DATA_KEY (32 random bytes, base64), with HKDF:
  *  - "email-enc"    AES-GCM key that locks email addresses in the database
+ *  - "notes-enc"    AES-GCM key that locks notes, notebook pages and notebook names
  *  - "email-lookup" HMAC key for a one-way fingerprint of each email (to find an account by email)
  *  - "pepper"       HMAC key mixed into every stored password check
  *  - "rate"         HMAC key for the short-lived attempt counters (so no internet address is stored)
@@ -39,6 +40,7 @@ export async function sha256(s: string): Promise<string> {
 
 export interface Keys {
   emailEnc: CryptoKey;
+  notesEnc: CryptoKey;
   emailLookup: CryptoKey;
   pepper: CryptoKey;
   rate: CryptoKey;
@@ -60,6 +62,10 @@ export function keysFor(secret: string): Promise<Keys> {
         'encrypt',
         'decrypt',
       ]),
+      notesEnc: await crypto.subtle.deriveKey(hkdf('notes-enc'), master, { name: 'AES-GCM', length: 256 }, false, [
+        'encrypt',
+        'decrypt',
+      ]),
       emailLookup: await hmac('email-lookup'),
       pepper: await hmac('pepper'),
       rate: await hmac('rate'),
@@ -73,19 +79,22 @@ export async function hmac(key: CryptoKey, data: string | Uint8Array): Promise<U
   return new Uint8Array(await crypto.subtle.sign('HMAC', key, typeof data === 'string' ? utf8(data) : data));
 }
 
-/** Lock an email address: "v1:<iv>:<ciphertext>". */
-export async function encryptEmail(keys: Keys, email: string): Promise<string> {
+/** Lock a piece of text with AES-GCM: "v1:<iv>:<ciphertext>". */
+export async function encryptText(key: CryptoKey, text: string): Promise<string> {
   const iv = crypto.getRandomValues(new Uint8Array(12));
-  const ct = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, keys.emailEnc, utf8(email));
+  const ct = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, utf8(text));
   return `v1:${b64url(iv)}:${b64url(ct)}`;
 }
 
-export async function decryptEmail(keys: Keys, stored: string): Promise<string> {
+export async function decryptText(key: CryptoKey, stored: string): Promise<string> {
   const [v, iv, ct] = stored.split(':');
-  if (v !== 'v1') throw new Error('unknown email format');
-  const pt = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: fromB64url(iv) }, keys.emailEnc, fromB64url(ct));
+  if (v !== 'v1') throw new Error('unknown format');
+  const pt = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: fromB64url(iv) }, key, fromB64url(ct));
   return td.decode(pt);
 }
+
+export const encryptEmail = (keys: Keys, email: string) => encryptText(keys.emailEnc, email);
+export const decryptEmail = (keys: Keys, stored: string) => decryptText(keys.emailEnc, stored);
 
 /** One-way fingerprint of an email, used to find an account by email without storing it readably. */
 export async function emailFingerprint(keys: Keys, email: string): Promise<string> {

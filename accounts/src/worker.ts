@@ -34,6 +34,7 @@ import {
   type Keys,
 } from './crypto';
 import { sendEmail, type Mail } from './email';
+import { NOTE_ROUTES } from './notes';
 
 export interface Env {
   DB: D1Database;
@@ -63,13 +64,14 @@ const SESSION_DAYS = 30;
 const RESET_MINUTES = 15;
 const VERIFY_HOURS = 24;
 const EMAIL_CHANGE_MINUTES = 60;
-const MAX_BODY = 16 * 1024;
+// a full notebook page (20,000 characters, up to 3 bytes each, plus JSON escaping) must fit
+const MAX_BODY = 128 * 1024;
 const MAX_BOOKMARKS = 2000;
 const MAX_PASSKEYS = 10;
 
-const now = () => Math.floor(Date.now() / 1000);
+export const now = () => Math.floor(Date.now() / 1000);
 
-interface Ctx {
+export interface Ctx {
   env: Env;
   req: Request;
   exec: ExecutionContext;
@@ -95,7 +97,9 @@ interface UserRow {
   created_at: number;
 }
 
-class HttpError extends Error {
+export class HttpError extends Error {
+  /** more fields for the answer (e.g. the newer copy of a note) */
+  extra?: Record<string, unknown>;
   constructor(
     public status: number,
     message: string,
@@ -190,18 +194,18 @@ export default {
       const result = await route(ctx, body);
       return out(200, result ?? { ok: true }, ctx.setCookie);
     } catch (e) {
-      if (e instanceof HttpError) return out(e.status, { error: e.message, code: e.code }, ctx.setCookie);
+      if (e instanceof HttpError) return out(e.status, { error: e.message, code: e.code, ...e.extra }, ctx.setCookie);
       console.error('accounts error', e instanceof Error ? e.message : String(e));
       return out(500, { error: 'Something went wrong. Please try again.' }, ctx.setCookie);
     }
   },
 };
 
-type Route = (ctx: Ctx, body: Record<string, unknown>) => Promise<unknown>;
+export type Route = (ctx: Ctx, body: Record<string, unknown>) => Promise<unknown>;
 
 // ------------------------------------------------------------------------------------------- helpers
 
-function str(body: Record<string, unknown>, key: string, max = 200): string {
+export function str(body: Record<string, unknown>, key: string, max = 200): string {
   const v = body[key];
   if (typeof v !== 'string') return '';
   return v.length > max ? v.slice(0, max) : v;
@@ -232,7 +236,7 @@ function email(body: Record<string, unknown>): string {
 }
 
 /** a short line of the person's own text: no control characters, collapsed spaces */
-function cleanText(s: string, max: number): string {
+export function cleanText(s: string, max: number): string {
   // eslint-disable-next-line no-control-regex
   return s.replace(/[\u0000-\u001f\u007f​-‏‪-‮⁦-⁩]/g, '').replace(/\s+/g, ' ').trim().slice(0, max);
 }
@@ -245,7 +249,7 @@ function clientIP(ctx: Ctx): string {
  * Count an attempt; refuse once `limit` is passed within `windowSec`. The stored key is a keyed fingerprint,
  * never the internet address or name itself, and the row expires with its window (at most a day).
  */
-async function limit(ctx: Ctx, action: string, who: string, max: number, windowSec: number) {
+export async function limit(ctx: Ctx, action: string, who: string, max: number, windowSec: number) {
   const key = b64url(await hmac(ctx.keys.rate, `${action}|${who}`)).slice(0, 32);
   const t = now();
   const row = await ctx.env.DB.prepare(
@@ -329,7 +333,7 @@ async function currentSession(ctx: Ctx): Promise<{ user: UserRow; sessionHash: s
   return { user: row, sessionHash: h };
 }
 
-async function requireUser(ctx: Ctx) {
+export async function requireUser(ctx: Ctx) {
   const s = await currentSession(ctx);
   if (!s) throw new HttpError(401, 'Please sign in again.', 'signed-out');
   return s;
@@ -840,6 +844,8 @@ const ROUTES: Record<string, Route> = {
     const id = s.user.id;
     await db.batch([
       db.prepare('DELETE FROM bookmarks WHERE user_id = ?').bind(id),
+      db.prepare('DELETE FROM notes WHERE user_id = ?').bind(id),
+      db.prepare('DELETE FROM notebooks WHERE user_id = ?').bind(id),
       db.prepare('DELETE FROM passkeys WHERE user_id = ?').bind(id),
       db.prepare('DELETE FROM tokens WHERE user_id = ?').bind(id),
       db.prepare('DELETE FROM sessions WHERE user_id = ?').bind(id),
@@ -882,6 +888,8 @@ const ROUTES: Record<string, Route> = {
     const r = await ctx.env.DB.prepare('SELECT * FROM dev_outbox ORDER BY rowid DESC LIMIT 20').all();
     return { mail: r.results };
   },
+
+  ...NOTE_ROUTES,
 };
 
 async function takeChallenge(ctx: Ctx, id: string, kind: string) {

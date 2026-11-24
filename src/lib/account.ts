@@ -42,6 +42,8 @@ export class AccountError extends Error {
     message: string,
     public code?: string,
     public status?: number,
+    /** the whole answer, for errors that carry more (e.g. the newer copy of a note) */
+    public body?: Record<string, unknown>,
   ) {
     super(message);
   }
@@ -62,7 +64,7 @@ export async function api<T = { ok: true }>(path: string, body?: unknown): Promi
   const j = (await r.json().catch(() => ({}))) as { error?: string; code?: string };
   if (!r.ok) {
     if (r.status === 401 && j.code === 'signed-out') setSignedOut();
-    throw new AccountError(j.error || 'Something went wrong. Please try again.', j.code, r.status);
+    throw new AccountError(j.error || 'Something went wrong. Please try again.', j.code, r.status, j as Record<string, unknown>);
   }
   return j as T;
 }
@@ -95,6 +97,12 @@ export function useAccount(): State {
 
 export function getAccount() {
   return state;
+}
+
+/** Be told whenever the signed-in state changes (used by notes to forget everything on sign-out). */
+export function onAccountChange(fn: () => void): () => void {
+  listeners.add(fn);
+  return () => listeners.delete(fn);
 }
 
 function setFlag(on: boolean) {

@@ -42,6 +42,9 @@ interface Props {
   before?: ReactNode;
   /** shown below the text (e.g. the translation's copyright notice) */
   after?: ReactNode;
+  /** verses that start one of your notes (a small ✎ beside the verse number) */
+  noteMarks?: Set<number>;
+  onOpenNotes?: (verse: number) => void;
 }
 
 const escapeRe = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -119,6 +122,8 @@ export default function Reader({
   onOpenPeriod,
   before,
   after,
+  noteMarks,
+  onOpenNotes,
 }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   // the open list item's word to mark inside its verse (e.g. "joy" in Galatians 5:22)
@@ -214,6 +219,19 @@ export default function Reader({
                   }}
                 >
                   <sup className="vnum">{v.verse}</sup>
+                  {noteMarks?.has(v.verse) && (
+                    <button
+                      className="note-mark"
+                      title="Your note"
+                      aria-label={`Your note on verse ${v.verse}`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onOpenNotes?.(v.verse);
+                      }}
+                    >
+                      ✎
+                    </button>
+                  )}
                   {highlightNames(v.text, places, chapterPeople.get(v.verse) ?? []).map((part, i, all) => {
                     const mark = listItem?.ref === `${book}.${chapter}.${v.verse}` ? findMark(v.text, listItem.words) : null;
                     const start = all.slice(0, i).reduce((n, p) => n + (typeof p === 'string' ? p.length : p.name.length), 0);

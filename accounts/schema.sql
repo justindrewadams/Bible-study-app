@@ -6,7 +6,9 @@
    users.pw = one-way password check value; sessions.id_hash = SHA-256 of the sign-in cookie;
    tokens.token_hash = SHA-256 of an emailed link's code (kind: verify, reset, email);
    passkeys.public_key = public half only; bookmarks.ref = a reference such as "John.3.16";
-   rate.key = keyed fingerprint of an action and address/account, expiring within a day. */
+   rate.key = keyed fingerprint of an action and address/account, expiring within a day;
+   notebooks.data = notebook or folder name, encrypted (a folder has a parent_id: its notebook);
+   notes.data = a verse note or notebook page (title, date, passages, writing), encrypted. */
 
 CREATE TABLE IF NOT EXISTS users (
   id TEXT PRIMARY KEY,
@@ -71,3 +73,26 @@ CREATE TABLE IF NOT EXISTS rate (
   n INTEGER NOT NULL,
   expires_at INTEGER NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS notebooks (
+  id TEXT PRIMARY KEY,
+  user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  parent_id TEXT,
+  data TEXT NOT NULL,
+  position INTEGER NOT NULL DEFAULT 0,
+  created_at INTEGER NOT NULL
+);
+CREATE INDEX IF NOT EXISTS notebooks_user ON notebooks(user_id);
+
+CREATE TABLE IF NOT EXISTS notes (
+  id TEXT PRIMARY KEY,
+  user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  kind TEXT NOT NULL,
+  notebook_id TEXT,
+  data TEXT NOT NULL,
+  size INTEGER NOT NULL,
+  version INTEGER NOT NULL DEFAULT 1,
+  created_at INTEGER NOT NULL,
+  updated_at INTEGER NOT NULL
+);
+CREATE INDEX IF NOT EXISTS notes_user ON notes(user_id, id);

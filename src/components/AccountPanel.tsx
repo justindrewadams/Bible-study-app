@@ -16,6 +16,8 @@ import {
   type AccountUser,
 } from '../lib/account';
 import Turnstile from './Turnstile';
+import { getNotes, loadNotes, placeName } from '../lib/notes';
+import { NOTES_ENABLED } from '../config';
 
 export type AccountStart =
   | { view: 'signin' | 'signup' | 'account' }
@@ -678,7 +680,19 @@ function Disclosure({ label, open, onToggle, children }: { label: string; open: 
 
 async function downloadData() {
   try {
-    const data = await api('/export');
+    const data = (await api('/export')) as Record<string, unknown>;
+    // notes and notebooks are unlocked in batches, so the app adds them here
+    if (NOTES_ENABLED) await loadNotes(true);
+    const s = getNotes();
+    data.notebooks = s.notebooks.map((b) => ({ name: b.name, folderOf: b.parentId ? placeName(b.parentId, s) : null }));
+    data.notes = s.notes.map((n) => ({
+      kind: n.kind === 'page' ? 'notebook page' : 'verse note',
+      notebook: placeName(n.notebookId, s) || null,
+      ...(n.kind === 'verse' ? { verse: n.ref, to: n.end ?? null } : { title: n.title, date: n.date ?? null, passages: n.passages ?? [] }),
+      text: n.body,
+      created: new Date(n.createdAt * 1000).toISOString(),
+      changed: new Date(n.updatedAt * 1000).toISOString(),
+    }));
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);

@@ -1,4 +1,4 @@
-import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { BOOKS, getBook } from './data/books';
 import {
   APIBIBLE_TRANSLATIONS,
@@ -42,14 +42,19 @@ import { loadChapterPeople, type PersonEntry } from './lib/people';
 import ListPanel from './components/ListPanel';
 import { LISTS, LIST_GROUPS, type StudyList } from './lib/lists';
 import { periodFor } from './data/periods';
-import { ACCOUNTS_ENABLED } from './config';
+import { ACCOUNTS_ENABLED, NOTES_ENABLED } from './config';
 import { addBookmark, api, getAccount, initAccount, removeBookmark, useAccount, type SyncedPrefs } from './lib/account';
 import { useTextPrefs } from './components/TextSizeControl';
 import type { AccountStart } from './components/AccountPanel';
 import PrivacyPage from './components/PrivacyPage';
+import { lazyPart, PartBoundary } from './lib/lazyPart';
+import { loadNotes, noteMarks as noteMarksIn, pagesMentioning, useNotes, verseNotesAt } from './lib/notes';
+import type { Span } from './lib/refs';
 
 // the sign-in screens load only when someone opens them
-const AccountPanel = lazy(() => import('./components/AccountPanel'));
+const AccountPanel = lazyPart(() => import('./components/AccountPanel'));
+const NotesPage = lazyPart(() => import('./components/NotesPage'));
+const VerseNotes = lazyPart(() => import('./components/VerseNotes'));
 
 interface Location {
   book: string;
@@ -156,6 +161,13 @@ export default function App() {
     setAccountStart(m[1] ? { view: m[1] as 'verify' | 'reset' | 'email', token: m[2] } : { view: 'account' });
   }, [hash]);
   const { prefs: textPrefs, setPrefs: setTextPrefs } = useTextPrefs();
+  // ---- Notes: loaded once signed in; hidden while presenting unless "Show my notes" is on
+  const notesStore = useNotes();
+  useEffect(() => {
+    if (NOTES_ENABLED && account.status === 'signed-in') loadNotes();
+  }, [account.status]);
+  const [verseNotesAtVerse, setVerseNotesAtVerse] = useState<number | null>(null);
+  const [presentNotes, setPresentNotes] = useState(false);
   // Synced preferences. On signing in, the account's saved ones are used (a new account gets this
   // device's); after that, changes are saved to the account a moment later.
   const prefsSynced = useRef<string | null>(null);
@@ -208,7 +220,8 @@ export default function App() {
   const nationsOpen = hash.startsWith('#nations');
   const jerusalemOpen = hash.startsWith('#jerusalem');
   const privacyOpen = hash.startsWith('#privacy');
-  const pageOpen = periodsOpen || peopleOpen || nationsOpen || jerusalemOpen || privacyOpen;
+  const notesOpen = NOTES_ENABLED && hash.startsWith('#notes');
+  const pageOpen = periodsOpen || peopleOpen || nationsOpen || jerusalemOpen || privacyOpen || notesOpen;
   const spotFocus = jerusalemOpen ? (hash.split('/')[1] ?? null) : null;
   /** the Jerusalem page, at a place on its plans */
   const openSpot = (id?: string) => {
@@ -437,7 +450,27 @@ export default function App() {
   };
   const presentStepRef = useRef(presentStep);
   presentStepRef.current = presentStep;
-  const anyCardOpen = !!(compareSet || personSlug || nationId || cardPlace || wordStudyOpen || settingsOpen || accountStart);
+  const anyCardOpen = !!(
+    compareSet ||
+    personSlug ||
+    nationId ||
+    cardPlace ||
+    wordStudyOpen ||
+    settingsOpen ||
+    accountStart ||
+    verseNotesAtVerse != null
+  );
+  const showNotes = NOTES_ENABLED && account.status === 'signed-in' && (!presenting || presentNotes);
+  const chapterNoteMarks = useMemo(
+    () => (showNotes ? noteMarksIn(loc.book, loc.chapter, notesStore) : undefined),
+    [showNotes, loc.book, loc.chapter, notesStore],
+  );
+  /** a verse link in a note: back to reading there */
+  const openSpan = (s: Span) => {
+    setVerseNotesAtVerse(null);
+    if (pageOpen) closePeriods();
+    goTo(s.osis, s.chapter, s.verse);
+  };
   const anyCardOpenRef = useRef(anyCardOpen);
   anyCardOpenRef.current = anyCardOpen;
   const compareOpenRef = useRef(false);
@@ -662,6 +695,19 @@ export default function App() {
           />
         </label>
         <div className="topbar-actions">
+          {NOTES_ENABLED && (
+            <button
+              className={`btn${notesOpen ? ' active' : ''}`}
+              onClick={() => {
+                setMenuOpen(false);
+                if (notesOpen) closePeriods();
+                else window.location.hash = 'notes';
+              }}
+              aria-pressed={notesOpen}
+            >
+              Notes
+            </button>
+          )}
           <button
             className={`btn${periodsOpen ? ' active' : ''}`}
             onClick={() => {
@@ -750,6 +796,16 @@ export default function App() {
             ›
           </button>
           <span className="present-hint">← → or a clicker to step · Esc to finish</span>
+          {NOTES_ENABLED && account.status === 'signed-in' && (
+            <button
+              className={`btn present-notes${presentNotes ? ' on' : ''}`}
+              onClick={() => setPresentNotes(!presentNotes)}
+              aria-pressed={presentNotes}
+              title="Your notes are hidden while presenting unless you show them"
+            >
+              {presentNotes ? 'Hide my notes' : 'Show my notes'}
+            </button>
+          )}
           <button className="btn present-exit" onClick={stopPresenting}>
             Finish presenting
           </button>
@@ -795,7 +851,41 @@ export default function App() {
 
       {privacyOpen && <PrivacyPage onClose={closePeriods} />}
 
+      {notesOpen && (
+        <PartBoundary onClose={closePeriods}>
+        <Suspense fallback={null}>
+          <NotesPage
+            route={hash}
+            onClose={closePeriods}
+            onOpenRef={openSpan}
+            signedIn={account.status === 'signed-in'}
+            onSignIn={() => setAccountStart({ view: 'signin' })}
+          />
+        </Suspense>
+        </PartBoundary>
+      )}
+
+      {verseNotesAtVerse != null && showNotes && (
+        <PartBoundary onClose={() => setVerseNotesAtVerse(null)}>
+        <Suspense fallback={null}>
+          <VerseNotes
+            osis={loc.book}
+            chapter={loc.chapter}
+            verse={verseNotesAtVerse}
+            bookName={book.name}
+            onClose={() => setVerseNotesAtVerse(null)}
+            onOpenRef={openSpan}
+            onOpenPage={(id) => {
+              setVerseNotesAtVerse(null);
+              window.location.hash = `notes/page/${id}`;
+            }}
+          />
+        </Suspense>
+        </PartBoundary>
+      )}
+
       {accountStart && ACCOUNTS_ENABLED && (
+        <PartBoundary onClose={() => setAccountStart(null)}>
         <Suspense fallback={null}>
           <AccountPanel
             // a new emailed link (or a new way in) starts the pop-up afresh
@@ -810,6 +900,7 @@ export default function App() {
             onOpenPrivacy={() => window.open(`${window.location.pathname}#privacy`, '_blank', 'noopener')}
           />
         </Suspense>
+        </PartBoundary>
       )}
 
       {nationsOpen && (
@@ -856,6 +947,21 @@ export default function App() {
                         aria-pressed={saved}
                       >
                         {saved ? '★ Saved' : '☆ Save'}
+                      </button>
+                    );
+                  })()}
+                {showNotes &&
+                  (() => {
+                    const n =
+                      verseNotesAt(loc.book, loc.chapter, selectedVerse, notesStore).length +
+                      pagesMentioning(loc.book, loc.chapter, selectedVerse, notesStore).length;
+                    return (
+                      <button
+                        className={`word-study-btn bookmark-btn note-btn${n ? ' has' : ''}`}
+                        onClick={() => setVerseNotesAtVerse(selectedVerse)}
+                        title={n ? `Your notes on this verse (${n})` : 'Write a note on this verse'}
+                      >
+                        {n ? `✎ Notes ${n}` : '✎ Note'}
                       </button>
                     );
                   })()}
@@ -950,6 +1056,12 @@ export default function App() {
             onPresent={presenting ? undefined : startPresenting}
             period={currentPeriod ?? null}
             onOpenPeriod={openPeriods}
+            noteMarks={chapterNoteMarks}
+            onOpenNotes={(v) => {
+              setSelectedVerse(v);
+              setPlaceOverride(null);
+              setVerseNotesAtVerse(v);
+            }}
             before={
               <>
                 {fallbackReason && (
