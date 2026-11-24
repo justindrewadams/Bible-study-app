@@ -20,6 +20,7 @@ export interface SearchActions {
   onOpenList: (id: string, index: number) => void;
   onOpenPeriod: (id: string) => void;
   onOpenNation: (id: string) => void;
+  onOpenSpot: (id: string) => void;
 }
 
 interface Props extends SearchActions {
@@ -224,7 +225,7 @@ export default function SiteSearch(props: Props) {
 
   const r = results;
   const total = r
-    ? r.refs.length + r.people.length + r.places.length + r.journeys.length + r.lists.length + r.periods.length + r.nations.length + r.hymns.length
+    ? r.refs.length + r.people.length + r.places.length + r.journeys.length + r.lists.length + r.periods.length + r.nations.length + r.hymns.length + r.spots.length
     : 0;
   const showPanel = open && q.length >= 2;
   const verseHits = verses && verses.query === q ? verses.hits : [];
@@ -430,6 +431,20 @@ export default function SiteSearch(props: Props) {
                       title={x.name}
                       text={<Snip text={text} query={q} />}
                       onClick={pick(() => props.onOpenNation(x.id))}
+                    />
+                  ))
+                }
+              </Section>
+
+              <Section title="Jerusalem in Jesus’ day" count={r.spots.length} initial={3}>
+                {(n) =>
+                  r.spots.slice(0, n).map(({ spot }) => (
+                    <Row
+                      key={spot.id}
+                      title={spot.name}
+                      sub={spot.plan === 'temple' ? 'On the temple plan' : 'On the city plan'}
+                      text={<Snip text={spot.text} query={q} />}
+                      onClick={pick(() => props.onOpenSpot(spot.id))}
                     />
                   ))
                 }

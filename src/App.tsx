@@ -29,6 +29,9 @@ import PersonCard from './components/PersonCard';
 import WordStudy from './components/WordStudy';
 import SiteSearch from './components/SiteSearch';
 import NationCard from './components/NationCard';
+import JerusalemPage from './components/JerusalemPage';
+import CompareGospels from './components/CompareGospels';
+import type { ParallelSet } from './data/parallels';
 import { nationsInVerse } from './lib/nationMentions';
 import DistancePanel, { useRoadRoute, type Measure } from './components/DistancePanel';
 import { loadChapterPeople, type PersonEntry } from './lib/people';
@@ -91,6 +94,7 @@ export default function App() {
   // only one info card at a time (place, person, nation, or Hebrew/Greek word study)
   const [wordStudyOpen, setWordStudyOpen] = useState(false);
   const [nationId, setNationId] = useState<string | null>(null);
+  const [compareSet, setCompareSet] = useState<ParallelSet | null>(null);
   useEffect(() => {
     if (cardPlace) {
       setPersonSlug(null);
@@ -124,6 +128,8 @@ export default function App() {
   const [listPlaying, setListPlaying] = useState(false);
   const studyList = LISTS.find((l) => l.id === listId) ?? null;
   const [hash, setHash] = useState(() => window.location.hash);
+  // moving to a page (People, Nations, Jerusalem…) puts the comparison away
+  useEffect(() => setCompareSet(null), [hash]);
 
   useEffect(() => {
     const onHash = () => setHash(window.location.hash);
@@ -135,7 +141,13 @@ export default function App() {
   const periodsOpen = hash.startsWith('#periods');
   const peopleOpen = hash.startsWith('#people');
   const nationsOpen = hash.startsWith('#nations');
-  const pageOpen = periodsOpen || peopleOpen || nationsOpen;
+  const jerusalemOpen = hash.startsWith('#jerusalem');
+  const pageOpen = periodsOpen || peopleOpen || nationsOpen || jerusalemOpen;
+  const spotFocus = jerusalemOpen ? (hash.split('/')[1] ?? null) : null;
+  /** the Jerusalem page, at a place on its plans */
+  const openSpot = (id?: string) => {
+    window.location.hash = id ? `jerusalem/${id}` : 'jerusalem';
+  };
   const nationFocus = nationsOpen ? (hash.split('/')[1] ?? null) : null;
   const openNations = (id?: string) => {
     window.location.hash = id ? `nations/${id}` : 'nations';
@@ -405,6 +417,7 @@ export default function App() {
           }}
           onOpenPeriod={openPeriods}
           onOpenNation={openNations}
+          onOpenSpot={openSpot}
         />
         <button
           className={`menu-btn${menuOpen ? ' open' : ''}`}
@@ -587,6 +600,17 @@ export default function App() {
         />
       )}
 
+      {jerusalemOpen && (
+        <JerusalemPage
+          focusId={spotFocus}
+          onClose={closePeriods}
+          onRead={(b, c, v) => {
+            goTo(b, c, v);
+            closePeriods();
+          }}
+        />
+      )}
+
       {peopleOpen && <PeoplePage onClose={closePeriods} onOpenPerson={setPersonSlug} />}
 
       {nationsOpen && (
@@ -708,6 +732,7 @@ export default function App() {
             activeJourneyId={journeyId}
             activeList={studyList ? { id: studyList.id, index: listIndex } : null}
             onOpenListItem={(l, i) => openList(l.id, i)}
+            onCompare={setCompareSet}
             period={currentPeriod ?? null}
             onOpenPeriod={openPeriods}
             before={
@@ -841,6 +866,7 @@ export default function App() {
                 stopIndex={stopIndex}
                 playing={playing}
                 onPlaceInfo={openPlaceIndex}
+                onOpenSpot={openSpot}
                 legs={journeyLegs}
                 onGo={(i) => {
                   setPlaying(false);
@@ -904,6 +930,20 @@ export default function App() {
         />
       )}
 
+      {compareSet && (
+        <CompareGospels
+          set={compareSet}
+          translation={translation}
+          esvKey={esvKey}
+          fromBook={loc.book}
+          onClose={() => setCompareSet(null)}
+          onRead={(b, c, v) => {
+            setCompareSet(null);
+            goTo(b, c, v);
+          }}
+        />
+      )}
+
       {nationId && (
         <NationCard
           id={nationId}
@@ -935,6 +975,10 @@ export default function App() {
           onOpenPerson={setPersonSlug}
           onClose={() => setCardPlace(null)}
           onGoToRef={(ref) => goToRefForPlace(ref, cardPlace)}
+          onOpenSpot={(id) => {
+            setCardPlace(null);
+            openSpot(id);
+          }}
           onMeasureFrom={(p) => {
             setMeasure({ a: p, b: null });
             setMapVisible(true);
@@ -1070,7 +1114,9 @@ export default function App() {
               </p>
               <p>
                 <strong>Periods of Bible history</strong> follow the outline arranged by Bob and Sandra Waldron. Summaries
-                in this app are original. Fonts: Figtree and EB Garamond (SIL Open Font License).
+                in this app are original. The Gospel parallels (Compare the accounts), the Jerusalem and temple plans
+                and the Herod's dynasty chart were compiled and drawn for this app, after Scripture, Josephus and the
+                Mishnah. Fonts: Figtree and EB Garamond (SIL Open Font License).
               </p>
               <p className="muted">
                 Journey legs follow Roman-era roads (Itiner-e) where a road joins the stops without a long detour; sea

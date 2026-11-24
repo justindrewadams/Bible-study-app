@@ -5198,3 +5198,495 @@ button.hd-person:hover {
 .hd-person.current .hd-note {
   color: #ddd;
 }
+
+/* =====================================================================
+   Compare the accounts (parallel passages side by side)
+   ===================================================================== */
+
+.compare-chip {
+  --c: #5b3a8c;
+}
+
+.compare-modal {
+  width: min(1180px, 100%);
+  height: min(88vh, 900px);
+  max-height: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.compare-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 18px 10px;
+  border-bottom: var(--border);
+  background: color-mix(in srgb, #5b3a8c 14%, var(--paper));
+}
+
+.compare-head h2 {
+  margin: 2px 0 0;
+  font-family: var(--sans);
+  font-weight: 800;
+  font-size: 1.25rem;
+}
+
+.compare-kicker {
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+.compare-tabs {
+  display: none;
+}
+
+.compare-cols {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+}
+
+.compare-col {
+  min-height: 0;
+  overflow-y: auto;
+  padding: 10px 16px 16px;
+  border-right: 1px solid var(--hair);
+}
+
+.compare-col:last-child {
+  border-right: 0;
+}
+
+.compare-col h3 {
+  position: sticky;
+  top: -10px;
+  margin: -10px -16px 8px;
+  padding: 10px 16px 6px;
+  background: var(--paper);
+  border-bottom: 1px solid var(--hair);
+  font-size: 0.8rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.compare-col.here h3 {
+  background: var(--select);
+}
+
+.compare-passage + .compare-passage {
+  margin-top: 14px;
+}
+
+.compare-ref {
+  border: 0;
+  padding: 0;
+  background: none;
+  color: var(--place);
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.compare-ref:hover {
+  text-decoration: underline;
+}
+
+.compare-text {
+  margin: 4px 0 0;
+  font-family: var(--serif);
+  font-size: 1.02rem;
+  line-height: 1.55;
+}
+
+.compare-text .vnum {
+  margin-right: 2px;
+}
+
+.compare-foot {
+  padding: 6px 18px 8px;
+  border-top: 1px solid var(--hair);
+  font-size: 0.68rem;
+  line-height: 1.3;
+  color: var(--muted);
+}
+
+@media (max-width: 860px) {
+  .compare-backdrop {
+    padding: 0;
+    align-items: end;
+  }
+
+  .compare-modal {
+    width: 100%;
+    height: 92dvh;
+    border-left: 0;
+    border-right: 0;
+    border-bottom: 0;
+  }
+
+  .compare-head {
+    padding: 10px 14px 8px;
+  }
+
+  .compare-head h2 {
+    font-size: 1.05rem;
+  }
+
+  /* phones: one account at a time, chosen with tabs */
+  .compare-tabs {
+    display: flex;
+    border-bottom: var(--border);
+  }
+
+  .compare-tabs button {
+    flex: 1;
+    padding: 9px 4px;
+    border: 0;
+    border-right: 1px solid var(--hair);
+    background: var(--paper);
+    color: var(--ink);
+    font: inherit;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .compare-tabs button:last-child {
+    border-right: 0;
+  }
+
+  .compare-tabs button.on {
+    background: #111;
+    color: #fff;
+  }
+
+  .compare-cols {
+    display: block;
+    overflow-y: auto;
+  }
+
+  .compare-col {
+    display: none;
+    border: 0;
+    overflow: visible;
+  }
+
+  .compare-col.on {
+    display: block;
+  }
+
+  .compare-col h3 {
+    display: none;
+  }
+}
+
+/* =====================================================================
+   Jerusalem in Jesus' Day (#jerusalem): city and temple plans
+   ===================================================================== */
+
+.jerusalem-hero {
+  background: var(--sun);
+}
+
+.jsection + .jsection {
+  margin-top: 28px;
+}
+
+.jsection h2 {
+  margin: 0 0 10px;
+  font-family: var(--sans);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 1rem;
+}
+
+.jgrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(260px, 1fr);
+  gap: 18px;
+  align-items: start;
+}
+
+.jplan {
+  width: 100%;
+  height: auto;
+  border: var(--border);
+  background: #f6f1e4;
+  font-family: var(--sans);
+}
+
+.jinfo,
+.jinfo-empty {
+  position: sticky;
+  top: 12px;
+  border: var(--border);
+  padding: 12px 14px;
+  background: var(--paper);
+}
+
+.jinfo h3 {
+  margin: 0 0 6px;
+  font-family: var(--sans);
+  font-weight: 800;
+  font-size: 1.05rem;
+}
+
+.jinfo p {
+  margin: 0 0 8px;
+  line-height: 1.45;
+}
+
+/* plan drawing */
+.j-valley {
+  fill: none;
+  stroke: #b9c9b0;
+  stroke-width: 22;
+  stroke-linecap: round;
+}
+
+.j-valley.minor {
+  stroke-width: 10;
+  stroke: #d6dccd;
+}
+
+.j-hill {
+  fill: #dfe7cf;
+}
+
+.j-contour {
+  fill: none;
+  stroke: #b7c79f;
+  stroke-width: 2;
+}
+
+.j-wall {
+  fill: none;
+  stroke: #6b5a44;
+  stroke-width: 5;
+  stroke-linejoin: round;
+}
+
+.j-wall.second {
+  stroke-dasharray: 10 5;
+}
+
+.j-district {
+  fill: rgba(255, 255, 255, 0.35);
+  stroke: none;
+}
+
+.j-district-name {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  fill: #8a7a60;
+}
+
+.j-temple {
+  fill: #efe3c4;
+  stroke: #111;
+  stroke-width: 2.5;
+}
+
+.j-sanctuary {
+  fill: #c9a227;
+  stroke: #111;
+  stroke-width: 2;
+}
+
+.j-building {
+  fill: #e4d6b8;
+  stroke: #111;
+  stroke-width: 2;
+}
+
+.j-pool {
+  fill: #7fb9de;
+  stroke: #111;
+  stroke-width: 1.5;
+}
+
+.j-garden {
+  fill: #8fc97a;
+  stroke: #111;
+  stroke-width: 2;
+}
+
+.j-golgotha {
+  fill: #b03a2e;
+  stroke: #111;
+  stroke-width: 1.5;
+}
+
+.j-tomb {
+  fill: #fff;
+  stroke: #111;
+  stroke-width: 2;
+}
+
+.j-road {
+  fill: none;
+  stroke: #a08a68;
+  stroke-width: 2.5;
+  stroke-dasharray: 6 5;
+}
+
+.j-court {
+  fill: #f2e6c9;
+  stroke: #111;
+  stroke-width: 2;
+}
+
+.j-court.outer {
+  fill: #f8f0dc;
+  stroke-width: 3;
+}
+
+.j-court.priests {
+  fill: #eedbb0;
+}
+
+.j-stoa {
+  fill: #ddcba4;
+  stroke: #111;
+  stroke-width: 1.5;
+}
+
+.j-soreg {
+  fill: none;
+  stroke: #b03a2e;
+  stroke-width: 2.5;
+  stroke-dasharray: 3 4;
+}
+
+.j-chest {
+  fill: #9c7b2c;
+}
+
+.j-gate,
+.j-altar {
+  fill: #9c7b2c;
+  stroke: #111;
+  stroke-width: 1.5;
+}
+
+.j-veil {
+  stroke: #8e2443;
+  stroke-width: 3;
+}
+
+.j-pinnacle {
+  fill: #fff;
+  stroke: #111;
+  stroke-width: 2.5;
+}
+
+.j-gate-mark {
+  stroke: #111;
+  stroke-width: 3;
+}
+
+.j-label {
+  font-size: 15px;
+  font-weight: 800;
+  fill: #222;
+}
+
+.j-small {
+  font-size: 11.5px;
+  font-weight: 700;
+  fill: #222;
+}
+
+.j-small.muted {
+  fill: #7a6a52;
+  font-weight: 600;
+}
+
+.j-compass path {
+  fill: #111;
+}
+
+.j-compass text,
+.j-scale text {
+  font-size: 11px;
+  font-weight: 800;
+  fill: #111;
+}
+
+.j-scale line {
+  stroke: #111;
+  stroke-width: 2;
+}
+
+/* tappable places */
+.jh {
+  cursor: pointer;
+  outline: none;
+}
+
+.jh:hover > *:first-child,
+.jh:focus-visible > *:first-child {
+  filter: brightness(0.92);
+}
+
+.jh.on .j-valley {
+  stroke: #55b4e8;
+}
+
+.jh.on :is(.j-temple, .j-building, .j-court, .j-stoa, .j-pool, .j-garden, .j-hill, .j-district, .j-sanctuary, .j-tomb, .j-pinnacle, .j-gate, .j-altar, .j-golgotha) {
+  fill: #55b4e8;
+}
+
+.jh.on .j-soreg {
+  stroke: #1f5fbf;
+  stroke-width: 4;
+}
+
+.jh.on text {
+  fill: #0b3d6b;
+}
+
+@media (max-width: 860px) {
+  .jgrid {
+    grid-template-columns: 1fr;
+  }
+
+  .jinfo,
+  .jinfo-empty {
+    position: static;
+  }
+}
+
+@media (max-width: 860px) {
+  /* the plans shrink to about half size on phones: larger labels keep them readable */
+  .j-small {
+    font-size: 16px;
+  }
+
+  .j-label {
+    font-size: 19px;
+  }
+
+  .j-district-name {
+    font-size: 16px;
+  }
+
+  .jinfo p {
+    font-size: 0.95rem;
+  }
+
+  .jinfo h3 {
+    font-size: 1rem;
+  }
+}

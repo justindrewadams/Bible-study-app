@@ -6,6 +6,7 @@
 import { BOOKS, getBook, type Book } from '../data/books';
 import { NATIONS, type Nation } from '../data/nations';
 import { PERIODS, type Period } from '../data/periods';
+import { SPOTS, type Spot } from '../data/jerusalem';
 import type { Hymn } from '../data/hymns';
 import { loadPlaces, type Place } from './geo';
 import { JOURNEYS, type Journey } from './journeys';
@@ -130,6 +131,9 @@ export interface NationResult {
 export interface HymnResult {
   hymn: Hymn;
 }
+export interface SpotResult {
+  spot: Spot;
+}
 
 export interface SearchResults {
   query: string;
@@ -141,6 +145,8 @@ export interface SearchResults {
   periods: PeriodResult[];
   nations: NationResult[];
   hymns: HymnResult[];
+  /** places on the "Jerusalem in Jesus' Day" page */
+  spots: SpotResult[];
 }
 
 // ---------------------------------------------------------------- the index (built once)
@@ -226,7 +232,7 @@ export function parseReference(q: string): RefResult[] {
 export function search(index: Index, query: string): SearchResults {
   const nq = norm(query).trim().replace(/\s+/g, ' ');
   const toks = tokens(query);
-  const empty: SearchResults = { query, refs: [], people: [], places: [], journeys: [], lists: [], periods: [], nations: [], hymns: [] };
+  const empty: SearchResults = { query, refs: [], people: [], places: [], journeys: [], lists: [], periods: [], nations: [], hymns: [], spots: [] };
   if (nq.length < 2 || !toks.length) return empty;
   const textHit = (s: string | undefined) => !!s && hasAll(norm(s), toks);
 
@@ -352,6 +358,7 @@ export function search(index: Index, query: string): SearchResults {
     periods,
     nations,
     hymns,
+    spots: SPOTS.filter((sp) => [sp.name, ...(sp.aka ?? [])].some(textHit)).map((spot) => ({ spot })),
   };
 }
 

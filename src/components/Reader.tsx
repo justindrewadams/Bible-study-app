@@ -8,6 +8,7 @@ import { PERIODS, type Period } from '../data/periods';
 import { NO_INLINE, NO_INLINE_NAMES, type PersonEntry } from '../lib/people';
 import { usePersistentState } from '../lib/usePersistentState';
 import { nationWordsIn } from '../lib/nationMentions';
+import { parallelsAt, type ParallelSet } from '../data/parallels';
 import type { Nation } from '../data/nations';
 
 /** Bible text sizes the reader can step through (1 = the original size). */
@@ -33,6 +34,8 @@ interface Props {
   activeJourneyId: string | null;
   activeList: { id: string; index: number } | null;
   onOpenListItem: (list: StudyList, index: number) => void;
+  /** open the side-by-side accounts of an event (Compare the Gospels) */
+  onCompare: (set: ParallelSet) => void;
   period: Period | null;
   onOpenPeriod: (id: string) => void;
   /** shown above the text (e.g. which part of a chapter, or why another version is shown) */
@@ -110,6 +113,7 @@ export default function Reader({
   activeJourneyId,
   activeList,
   onOpenListItem,
+  onCompare,
   period,
   onOpenPeriod,
   before,
@@ -326,6 +330,15 @@ export default function Reader({
                     </span>
                   )}
                 </p>
+                {selected && parallelsAt(book, chapter, v.verse).length > 0 && (
+                  <div className="verse-journeys">
+                    {parallelsAt(book, chapter, v.verse).map((set) => (
+                      <button key={set.id} className="chip compare-chip" onClick={() => onCompare(set)}>
+                        ⇄ Compare the accounts: {set.title}
+                      </button>
+                    ))}
+                  </div>
+                )}
                 {selected && lists.length > 0 && (
                   <div className="verse-journeys">
                     {lists.map(({ list, index }) => {

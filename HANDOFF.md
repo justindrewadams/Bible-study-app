@@ -100,6 +100,27 @@ the decisions already made (and why), and how the owner likes to work.
 14. **Sources & licenses** pop-up (the ⚙ button): lists every source and license. The personal ESV key field was
     **removed** at the owner's request (a key saved by an older version is still used quietly as a backup).
 
+**Added for the owner's Passion Week class (November 2026):**
+- **Passion Week journey** (`passion` in `journeys.source.json`): Jericho → Bethany → … → the tomb. Spots that
+  aren't places in the data ("The temple", "The upper room", "The high priest's house", "Herod Antipas' quarters",
+  "The tomb") have approximate lat/lon, and the journey panel links them to the Jerusalem page (`SPOT_PLACES`).
+  Legs under 3 miles are drawn straight and shown in minutes on foot.
+- **Lists:** "Passion Week, Day by Day" (`meta` = the day), "Prophecies Fulfilled in Passion Week", "Christ Our
+  Passover Lamb", "Rulers in Luke 3:1–2". List items may have an **`area`** (outlines of [lat, lon]) that the map
+  shades in the list's color (`AreaLayer` in `MapView.tsx`); the rulers' territories are approximate, drawn here.
+- **Compare the accounts** (`src/data/parallels.ts`, `CompareGospels.tsx`): when a selected verse is in a parallel
+  set, a chip "⇄ Compare the accounts: …" opens the passages side by side (tabs on phones) in the reader's
+  translation, each fetched like a reader page (ESV limits hold). The table is original: John's ministry and
+  Passion Week so far (33 events); add more sets the same way (passages within one chapter each).
+- **Jerusalem in Jesus' Day** (`#jerusalem`, `#jerusalem/<spot>`; `JerusalemPage.tsx`, `src/data/jerusalem.ts`):
+  an SVG city plan and temple plan drawn for the app, with 27 tappable spots (text + verses). Reached from place
+  cards (`PLACE_TO_SPOT`), journey stops and the site search ("Jerusalem in Jesus' day" results). No header button
+  (the 1440px header is full).
+- **Herod family:** `scripts/people-corrections.json` (merged by `build-people.mjs`, and already applied to the
+  committed people data) links Agrippa I, his children and Herodias, and adds other names (Herod the Great, Herod II,
+  Philip the tetrarch, Herod Agrippa II). `HerodDynasty.tsx` draws the dynasty on those people's cards.
+- The hymn "Night, with Ebon Pinion" (L. H. Jameson) was already tied to Gethsemane.
+
 ## Stack and layout
 
 - Vite + React 18 + TypeScript, react-leaflet 4. No backend except the ESV relay. `npm run dev` / `npm run build`.
@@ -228,7 +249,7 @@ Hymns for each chapter; rivers that thin out when zoomed out; flat-style verse h
 solid place-name underlines; bolded word for list items that share a verse (and the correct "N of M" chip);
 quieter last-mentioned map marker; the Nations page with person-card links; the rename to Bible Study Companion
 with the equal-width title (then to Ancient Pathfinder with the ancientpathfinder.com domain) and a header that folds into ☰ below 1440px; Hebrew & Greek word study; removal of the
-personal ESV key field; site-wide search; the distance tool with Roman-road routes; journeys along Roman roads; nation cards from the text; always opening at Genesis 1; verse search by wording and meaning. Earlier: ESV via relay, the 17 periods, the People page with family trees, map clusters,
+personal ESV key field; site-wide search; the distance tool with Roman-road routes; journeys along Roman roads; nation cards from the text; always opening at Genesis 1; verse search by wording and meaning; Passion Week class tools (journey, lists, Compare the accounts, Jerusalem page, Herod's dynasty). Earlier: ESV via relay, the 17 periods, the People page with family trees, map clusters,
 and the phone layout.
 
 ## Ideas not yet started (only if the owner asks)

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import type { Journey } from '../lib/journeys';
 import { journeyLegs, loadRoads, type JourneyLeg } from '../lib/roads';
 import { formatDistance, walkingTime } from '../lib/distance';
+import { SPOT_PLACES } from '../data/jerusalem';
 
 const legCache = new Map<string, (JourneyLeg | null)[]>();
 
@@ -42,6 +43,8 @@ interface Props {
   onTogglePlay: () => void;
   onClose: () => void;
   onPlaceInfo: (placeIndex: number) => void;
+  /** open a place on the Jerusalem page (for stops like "The temple") */
+  onOpenSpot?: (id: string) => void;
   /** legs along roads (see useJourneyLegs), for the distance from the previous stop */
   legs?: (JourneyLeg | null)[] | null;
 }
@@ -51,7 +54,7 @@ const fmt = (ref: string) => {
   return `${b.replace(/^(\d)/, '$1 ')} ${c}:${v}`;
 };
 
-export default function JourneyPanel({ journey, stopIndex, playing, onGo, onTogglePlay, onClose, onPlaceInfo, legs }: Props) {
+export default function JourneyPanel({ journey, stopIndex, playing, onGo, onTogglePlay, onClose, onPlaceInfo, onOpenSpot, legs }: Props) {
   const leg = legs?.[stopIndex] ?? null;
   const prevStop = stopIndex > 0 ? journey.stops[stopIndex - 1] : null;
   const [expanded, setExpanded] = useState(false);
@@ -98,6 +101,11 @@ export default function JourneyPanel({ journey, stopIndex, playing, onGo, onTogg
           {stop.placeIndex != null && (
             <button className="link small" onClick={() => onPlaceInfo(stop.placeIndex!)}>
               About {stop.place} →
+            </button>
+          )}
+          {stop.placeIndex == null && SPOT_PLACES[stop.place] && onOpenSpot && (
+            <button className="link small" onClick={() => onOpenSpot(SPOT_PLACES[stop.place])}>
+              About {stop.place.replace(/^The /, 'the ')} →
             </button>
           )}
         </div>
