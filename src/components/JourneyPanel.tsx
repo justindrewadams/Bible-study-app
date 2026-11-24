@@ -47,6 +47,8 @@ interface Props {
   onOpenSpot?: (id: string) => void;
   /** legs along roads (see useJourneyLegs), for the distance from the previous stop */
   legs?: (JourneyLeg | null)[] | null;
+  /** a small button under the title ("Make my own copy" / "Edit") */
+  action?: React.ReactNode;
 }
 
 const fmt = (ref: string) => {
@@ -54,7 +56,7 @@ const fmt = (ref: string) => {
   return `${b.replace(/^(\d)/, '$1 ')} ${c}:${v}`;
 };
 
-export default function JourneyPanel({ journey, stopIndex, playing, onGo, onTogglePlay, onClose, onPlaceInfo, onOpenSpot, legs }: Props) {
+export default function JourneyPanel({ journey, stopIndex, playing, onGo, onTogglePlay, onClose, onPlaceInfo, onOpenSpot, legs, action }: Props) {
   const leg = legs?.[stopIndex] ?? null;
   const prevStop = stopIndex > 0 ? journey.stops[stopIndex - 1] : null;
   const [expanded, setExpanded] = useState(false);
@@ -71,7 +73,10 @@ export default function JourneyPanel({ journey, stopIndex, playing, onGo, onTogg
       <div className="jp-head">
         <div>
           <div className="jp-title">{journey.title}</div>
-          <div className="jp-era">{journey.era}</div>
+          <div className="jp-era">
+            {journey.era}
+            {action && <> · {action}</>}
+          </div>
         </div>
         <button className="icon-btn" onClick={onClose} aria-label="Close journey">
           ✕

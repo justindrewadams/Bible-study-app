@@ -16,9 +16,27 @@ export interface Notebook {
   createdAt: number;
 }
 
+/** A stop of your own journey, or an item of your own list (the same fields as the built-in ones). */
+export interface MyStop {
+  ref: string;
+  note: string;
+  place?: string;
+  lat?: number;
+  lon?: number;
+  placeIndex?: number | null;
+  sea?: boolean;
+  day?: string;
+  event?: string;
+  via?: [number, number][];
+  /** list items: the name, and words to bold in the verse */
+  t?: string;
+  meta?: string;
+  words?: string[];
+}
+
 export interface Note {
   id: string;
-  kind: 'verse' | 'page';
+  kind: 'verse' | 'page' | 'journey' | 'list';
   notebookId: string | null;
   version: number;
   createdAt: number;
@@ -31,6 +49,13 @@ export interface Note {
   date?: string;
   passages?: string[];
   body: string;
+  /** your own journeys and lists */
+  color?: string;
+  summary?: string;
+  /** the built-in journey or list this is a copy of */
+  from?: string;
+  stops?: MyStop[];
+  items?: MyStop[];
 }
 
 export const VERSE_NOTE_MAX = 5000;
@@ -60,6 +85,12 @@ export function useNotes(): State {
 }
 
 export const getNotes = () => state;
+
+/** Be told whenever notes change (used to keep your own journeys and lists in the menus). */
+export function onNotesChange(fn: () => void): () => void {
+  listeners.add(fn);
+  return () => listeners.delete(fn);
+}
 
 // forget everything when the person signs out
 onAccountChange(() => {
@@ -107,7 +138,16 @@ export async function saveNote(d: NoteDraft): Promise<Note> {
   const note =
     d.kind === 'verse'
       ? { ref: d.ref, end: d.end, body: d.body }
-      : { title: d.title ?? '', date: d.date, passages: d.passages ?? [], body: d.body };
+      : d.kind === 'page'
+        ? { title: d.title ?? '', date: d.date, passages: d.passages ?? [], body: d.body }
+        : {
+            title: d.title ?? '',
+            color: d.color,
+            summary: d.summary ?? '',
+            from: d.from,
+            ...(d.kind === 'journey' ? { stops: d.stops ?? [] } : { items: d.items ?? [] }),
+            body: '',
+          };
   try {
     const r = await api<{ id: string; version: number; updatedAt: number; createdAt?: number }>('/notes/save', {
       id: d.id,
@@ -242,13 +282,19 @@ export function noteMarks(osis: string, chapter: number, s: State = state): Set<
   return out;
 }
 
+export const myJourneyNotes = (s: State = state) =>
+  s.notes.filter((n) => n.kind === 'journey').sort((a, b) => (a.title ?? '').localeCompare(b.title ?? ''));
+export const myListNotes = (s: State = state) =>
+  s.notes.filter((n) => n.kind === 'list').sort((a, b) => (a.title ?? '').localeCompare(b.title ?? ''));
+
 /** Simple search over titles, writing and notebook names. */
 export function searchNotes(q: string, s: State = state): Note[] {
   const words = q.toLowerCase().split(/\s+/).filter(Boolean);
   if (!words.length) return [];
   return s.notes
     .filter((n) => {
-      const hay = `${n.title ?? ''}\n${n.body}\n${placeName(n.notebookId, s)}`.toLowerCase();
+      const stops = [...(n.stops ?? []), ...(n.items ?? [])].map((x) => `${x.t ?? ''} ${x.place ?? ''} ${x.note}`).join('\n');
+      const hay = `${n.title ?? ''}\n${n.summary ?? ''}\n${n.body}\n${stops}\n${placeName(n.notebookId, s)}`.toLowerCase();
       return words.every((w) => hay.includes(w));
     })
     .sort((a, b) => b.updatedAt - a.updatedAt);

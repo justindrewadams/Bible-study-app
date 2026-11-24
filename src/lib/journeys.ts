@@ -29,6 +29,17 @@ export interface Journey {
 
 export const JOURNEYS = raw as Journey[];
 
+/** Your own journeys (signed in): ids start with "my:". Set by the app from your notes. */
+let mine: Journey[] = [];
+export function setMyJourneys(list: Journey[]) {
+  mine = list;
+}
+/** Your own journeys first, then the built-in ones. */
+export function allJourneys(): Journey[] {
+  return mine.length ? [...mine, ...JOURNEYS] : JOURNEYS;
+}
+export const isMine = (id: string | null | undefined) => !!id && id.startsWith('my:');
+
 export function parseRef(ref: string): { book: string; chapter: number; verse: number } {
   const [book, ch, v] = ref.split('.');
   return { book, chapter: Number(ch), verse: Number(v) };
@@ -38,7 +49,7 @@ export function parseRef(ref: string): { book: string; chapter: number; verse: n
 export function journeysAtVerse(book: string, chapter: number, verse: number) {
   const key = `${book}.${chapter}.${verse}`;
   const out: { journey: Journey; stopIndex: number }[] = [];
-  for (const j of JOURNEYS) {
+  for (const j of allJourneys()) {
     const i = j.stops.findIndex((s) => s.ref === key);
     if (i >= 0) out.push({ journey: j, stopIndex: i });
   }

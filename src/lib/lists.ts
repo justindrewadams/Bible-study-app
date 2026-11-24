@@ -30,13 +30,23 @@ export interface StudyList {
 
 export const LISTS = raw as StudyList[];
 
+/** Your own study lists (signed in): ids start with "my:". Set by the app from your notes. */
+let mine: StudyList[] = [];
+export function setMyLists(list: StudyList[]) {
+  mine = list;
+}
+/** Your own lists first, then the built-in ones. */
+export function allLists(): StudyList[] {
+  return mine.length ? [...mine, ...LISTS] : LISTS;
+}
+
 export const LIST_GROUPS = ['Old Testament', 'Whole Bible', 'New Testament'] as const;
 
 /** Lists + item indexes whose reference is this verse. */
 export function listsAtVerse(book: string, chapter: number, verse: number) {
   const key = `${book}.${chapter}.${verse}`;
   const out: { list: StudyList; index: number }[] = [];
-  for (const l of LISTS) {
+  for (const l of allLists()) {
     const i = l.items.findIndex((it) => it.ref === key);
     if (i >= 0) out.push({ list: l, index: i });
   }

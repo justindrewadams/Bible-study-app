@@ -48,8 +48,9 @@ export default function PrivacyPage({ onClose }: { onClose: () => void }) {
             <strong>bookmarks</strong> (Bible references such as “John 3:16” and any short label you add).
           </li>
           <li>
-            <strong>Your notes and notebooks</strong>: notes on verses, notebook pages (title, date, passages and
-            writing) and the names of your notebooks and folders. All of it is stored locked (encrypted), and only you
+            <strong>Your notes, notebooks, journeys and lists</strong>: notes on verses, notebook pages (title, date,
+            passages and writing), the names of your notebooks and folders, and the journeys and study lists you make
+            (their stops, places, verses and notes). All of it is stored locked (encrypted), and only you
             can see it. What isn't locked is only what keeps things in order: which notebook or folder a page is in,
             how long it is, and when it was written or changed.
           </li>

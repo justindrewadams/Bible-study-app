@@ -65,7 +65,8 @@ const RESET_MINUTES = 15;
 const VERIFY_HOURS = 24;
 const EMAIL_CHANGE_MINUTES = 60;
 // a full notebook page (20,000 characters, up to 3 bytes each, plus JSON escaping) must fit
-const MAX_BODY = 128 * 1024;
+// (a journey of up to 150 stops with notes fits too)
+const MAX_BODY = 400 * 1024;
 const MAX_BOOKMARKS = 2000;
 const MAX_PASSKEYS = 10;
 

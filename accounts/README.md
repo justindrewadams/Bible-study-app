@@ -25,6 +25,7 @@ Bible text from loading. It runs on Cloudflare's free plan.
 | Warnings | Emails when the password changes, a passkey is added, or a change of email is requested. |
 | Passkeys | WebAuthn (SimpleWebAuthn), Face ID/Touch ID/screen lock required, adding one needs the password again. |
 | Your data | "Download my data" (JSON) and "Delete my account" (erases every row at once). Unconfirmed accounts are erased after 24 hours. |
+| Your journeys and lists | Stored as notes of kind "journey"/"list" (same encryption and limits): up to 150 stops or items, each checked field by field (a verse is required; journey stops need a map point; notes up to 1,500 characters). |
 | Notes and notebooks | Verse notes (5,000 characters), notebook pages (20,000) and notebook/folder names are encrypted with their own key ("notes-enc"). Readable: only which notebook a page is in, its size and dates. Edits carry a version number, so a second device can't silently overwrite newer work. Lists come back unlocked 100 at a time (unlocking costs a little computing time per item, and the free plan allows little per request). Limits: 3,000 items, 6 MB, 300 notebooks and folders. |
 | Licensing | No licensed Bible wording is stored or emailed; bookmarks store references only. The app blocks licensed wording in notes before saving (it compares with licensed text in memory, allowing wording that is also in the KJV or WEB); the service can't check, since it never holds licensed text. |
 

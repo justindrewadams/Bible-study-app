@@ -1,5 +1,6 @@
 /**
- * Notes (on a verse or a range of verses) and notebooks (notebook → folder → page).
+ * Notes (on a verse or a range of verses), notebooks (notebook → folder → page), and your own journeys and
+ * study lists (kinds "journey" and "list", kept in the same table).
  *
  * Everything the person writes, including notebook and folder names, page titles and dates, is stored
  * encrypted (AES-GCM, the "notes-enc" key). Only the structure is readable: which notebook or folder an item
@@ -30,6 +31,71 @@ interface NoteData {
   date?: string;
   passages?: string[];
   body: string;
+  // journeys and lists
+  color?: string;
+  summary?: string;
+  from?: string;
+  stops?: Record<string, unknown>[];
+  items?: Record<string, unknown>[];
+}
+
+const KINDS = new Set(['verse', 'page', 'journey', 'list']);
+const COLOR_RE = /^#[0-9a-fA-F]{6}$/;
+const ID_RE = /^[a-z0-9-]{1,40}$/;
+const MAX_STOPS = 150;
+const STOP_NOTE_MAX = 1500;
+
+const num = (v: unknown, min: number, max: number) => (typeof v === 'number' && Number.isFinite(v) && v >= min && v <= max ? v : null);
+
+/** One stop of your own journey, or one item of your own list: only known fields, each checked. */
+function readStop(raw: unknown, kind: 'journey' | 'list'): Record<string, unknown> {
+  if (typeof raw !== 'object' || raw === null || Array.isArray(raw)) throw new HttpError(400, 'Invalid stop.');
+  const r = raw as Record<string, unknown>;
+  const ref = str(r, 'ref', 20);
+  if (!VERSE_RE.test(ref)) throw new HttpError(400, 'Each stop needs a verse.');
+  const note = cleanBody(typeof r.note === 'string' ? r.note : '');
+  if (note.length > STOP_NOTE_MAX) throw new HttpError(400, `A stop's note can be up to ${STOP_NOTE_MAX.toLocaleString()} characters.`);
+  const lat = num(r.lat, -90, 90);
+  const lon = num(r.lon, -180, 180);
+  const out: Record<string, unknown> = { ref, note };
+  const place = cleanText(str(r, 'place', 200), 80);
+  if (place) out.place = place;
+  if (lat != null && lon != null) {
+    out.lat = Math.round(lat * 1e5) / 1e5;
+    out.lon = Math.round(lon * 1e5) / 1e5;
+  }
+  const pi = num(r.placeIndex, 0, 100000);
+  if (pi != null) out.placeIndex = Math.floor(pi);
+  if (kind === 'journey') {
+    if (out.lat == null) throw new HttpError(400, 'Each stop needs a place on the map.');
+    if (r.sea === true) out.sea = true;
+    const day = cleanText(str(r, 'day', 100), 40);
+    const event = cleanText(str(r, 'event', 200), 80);
+    if (day) out.day = day;
+    if (event) out.event = event;
+    if (Array.isArray(r.via)) {
+      const via = r.via
+        .slice(0, 300)
+        .filter((p): p is [number, number] => Array.isArray(p) && num(p[0], -90, 90) != null && num(p[1], -180, 180) != null)
+        .map((p) => [Math.round(p[0] * 1e5) / 1e5, Math.round(p[1] * 1e5) / 1e5]);
+      if (via.length) out.via = via;
+    }
+  } else {
+    const t = cleanText(str(r, 't', 300), 120);
+    if (!t) throw new HttpError(400, 'Each item needs a name.');
+    out.t = t;
+    const meta = cleanText(str(r, 'meta', 200), 60);
+    if (meta) out.meta = meta;
+    if (Array.isArray(r.words)) {
+      const words = r.words
+        .filter((w): w is string => typeof w === 'string')
+        .slice(0, 6)
+        .map((w) => cleanText(w, 40))
+        .filter(Boolean);
+      if (words.length) out.words = words;
+    }
+  }
+  return out;
 }
 
 /** Writing keeps its line breaks; only invisible control characters are removed. */
@@ -41,6 +107,24 @@ function cleanBody(s: string) {
 function readNote(kind: string, raw: unknown): NoteData {
   if (typeof raw !== 'object' || raw === null || Array.isArray(raw)) throw new HttpError(400, 'Invalid note.');
   const n = raw as Record<string, unknown>;
+  if (kind === 'journey' || kind === 'list') {
+    const title = cleanText(str(n, 'title', 400), 120) || (kind === 'journey' ? 'My journey' : 'My list');
+    const color = str(n, 'color', 7);
+    const summary = cleanBody(typeof n.summary === 'string' ? n.summary : '').slice(0, 1000);
+    const from = str(n, 'from', 40);
+    const rawStops = kind === 'journey' ? n.stops : n.items;
+    const list = Array.isArray(rawStops) ? rawStops : [];
+    if (list.length > MAX_STOPS) throw new HttpError(400, `Up to ${MAX_STOPS} stops.`);
+    const stops = list.map((x) => readStop(x, kind));
+    return {
+      title,
+      color: COLOR_RE.test(color) ? color : '#1971c2',
+      summary,
+      ...(from && ID_RE.test(from) ? { from } : {}),
+      ...(kind === 'journey' ? { stops } : { items: stops }),
+      body: '',
+    };
+  }
   const body = cleanBody(typeof n.body === 'string' ? n.body : '');
   if (kind === 'verse') {
     const ref = str(n, 'ref', 20);
@@ -192,7 +276,7 @@ export const NOTE_ROUTES: Record<string, Route> = {
     const s = await requireUser(ctx);
     await limit(ctx, 'notes-save', s.user.id, 1200, 3600);
     const kind = str(body, 'kind', 10);
-    if (kind !== 'verse' && kind !== 'page') throw new HttpError(400, 'Invalid note.');
+    if (!KINDS.has(kind)) throw new HttpError(400, 'Invalid note.');
     const note = readNote(kind, body.note);
     const notebookId = str(body, 'notebookId', 40) || null;
     if (notebookId && !(await ownNotebook(ctx, s.user.id, notebookId)))

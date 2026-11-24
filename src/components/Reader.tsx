@@ -3,7 +3,7 @@ import HymnsPanel from './HymnsPanel';
 import type { Verse } from '../lib/bible';
 import type { ChapterGeo, Place } from '../lib/geo';
 import { journeysAtVerse, type Journey } from '../lib/journeys';
-import { LISTS, listsAtVerse, type StudyList } from '../lib/lists';
+import { allLists, listsAtVerse, type StudyList } from '../lib/lists';
 import { PERIODS, type Period } from '../data/periods';
 import { NO_INLINE, NO_INLINE_NAMES, type PersonEntry } from '../lib/people';
 import TextSizeControl, { useTextPrefs } from './TextSizeControl';
@@ -127,7 +127,7 @@ export default function Reader({
 }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   // the open list item's word to mark inside its verse (e.g. "joy" in Galatians 5:22)
-  const listItem = activeList ? LISTS.find((l) => l.id === activeList.id)?.items[activeList.index] : undefined;
+  const listItem = activeList ? allLists().find((l) => l.id === activeList.id)?.items[activeList.index] : undefined;
   const [hymnsOpen, setHymnsOpen] = useState(false);
 
   useEffect(() => setHymnsOpen(false), [book, chapter]);

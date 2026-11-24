@@ -9,9 +9,11 @@ interface Props {
   onGo: (i: number) => void;
   onTogglePlay: () => void;
   onClose: () => void;
+  /** a small button beside the title ("Make my own copy" / "Edit") */
+  action?: React.ReactNode;
 }
 
-export default function ListPanel({ list, index, playing, onGo, onTogglePlay, onClose }: Props) {
+export default function ListPanel({ list, index, playing, onGo, onTogglePlay, onClose, action }: Props) {
   const [expanded, setExpanded] = useState(false);
   const listRef = useRef<HTMLOListElement>(null);
   const item = list.items[index];
@@ -26,6 +28,7 @@ export default function ListPanel({ list, index, playing, onGo, onTogglePlay, on
       <div className="lp-head">
         <div className="lp-title">
           <span className="lp-kicker">List</span> {list.title}
+          {action && <span className="lp-action"> · {action}</span>}
         </div>
         <button className="icon-btn" onClick={onClose} aria-label="Close list">
           ✕

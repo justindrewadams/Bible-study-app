@@ -17,7 +17,7 @@ import {
   type Verse,
 } from './lib/bible';
 import { loadChapterGeo, placesForVerse, type ChapterGeo, type Place } from './lib/geo';
-import { JOURNEYS, parseRef, type Journey } from './lib/journeys';
+import { allJourneys, isMine, JOURNEYS, parseRef, type Journey } from './lib/journeys';
 import { usePersistentState } from './lib/usePersistentState';
 import MapView, { DEFAULT_MAP_SETTINGS, MapErrorBoundary, type MapFocus, type MapSettings } from './components/MapView';
 import MapControls from './components/MapControls';
@@ -40,9 +40,10 @@ import { nationsInVerse } from './lib/nationMentions';
 import DistancePanel, { useRoadRoute, type Measure } from './components/DistancePanel';
 import { loadChapterPeople, type PersonEntry } from './lib/people';
 import ListPanel from './components/ListPanel';
-import { LISTS, LIST_GROUPS, type StudyList } from './lib/lists';
+import { allLists, LISTS, LIST_GROUPS, type StudyList } from './lib/lists';
+import { copyBuiltIn, myId, noteIdOf } from './lib/mine';
 import { periodFor } from './data/periods';
-import { ACCOUNTS_ENABLED, NOTES_ENABLED } from './config';
+import { ACCOUNTS_ENABLED, MINE_ENABLED, NOTES_ENABLED } from './config';
 import { addBookmark, api, getAccount, initAccount, removeBookmark, useAccount, type SyncedPrefs } from './lib/account';
 import { useTextPrefs } from './components/TextSizeControl';
 import type { AccountStart } from './components/AccountPanel';
@@ -143,7 +144,7 @@ export default function App() {
   const [listId, setListId] = useState<string | null>(null);
   const [listIndex, setListIndex] = useState(0);
   const [listPlaying, setListPlaying] = useState(false);
-  const studyList = LISTS.find((l) => l.id === listId) ?? null;
+  const studyList = allLists().find((l) => l.id === listId) ?? null;
   const [hash, setHash] = useState(() => window.location.hash);
   // ---- Accounts (off until set up; see accounts/README.md)
   const account = useAccount();
@@ -247,7 +248,7 @@ export default function App() {
   const currentPeriod = periodFor(loc.book, loc.chapter);
   const chosenTranslation = findTranslation(translationId);
   const translation = fallbackReason ? findTranslation(FALLBACK_TRANSLATION) : chosenTranslation;
-  const journey = JOURNEYS.find((j) => j.id === journeyId) ?? null;
+  const journey = allJourneys().find((j) => j.id === journeyId) ?? null;
   // API.Bible's terms: printing of its translations stops after 100 verses (see .print-limit in styles.css)
   useEffect(() => {
     document.body.classList.toggle('print-limit', translation.provider === 'apibible');
@@ -370,7 +371,7 @@ export default function App() {
   }, [listPlaying, studyList, listIndex, goToListItem]);
 
   const openList = (id: string, i = 0) => {
-    const l = LISTS.find((x) => x.id === id);
+    const l = allLists().find((x) => x.id === id);
     setListPlaying(false);
     if (l) goToListItem(l, i);
     else setListId(null);
@@ -461,6 +462,33 @@ export default function App() {
     verseNotesAtVerse != null
   );
   const showNotes = NOTES_ENABLED && account.status === 'signed-in' && (!presenting || presentNotes);
+  // your own journeys and lists (kept in step with your notes by lib/mine.ts)
+  const showMine = MINE_ENABLED && account.status === 'signed-in';
+  const myJourneys = useMemo(() => (showMine ? allJourneys().filter((j) => isMine(j.id)) : []), [showMine, notesStore]); // eslint-disable-line react-hooks/exhaustive-deps
+  const myLists = useMemo(() => (showMine ? allLists().filter((l) => isMine(l.id)) : []), [showMine, notesStore]); // eslint-disable-line react-hooks/exhaustive-deps
+  /** the small button on a journey or list panel: copy a built-in one, or edit your own */
+  const panelAction = (kind: 'journey' | 'list', id: string) =>
+    !showMine ? undefined : isMine(id) ? (
+      <button className="link-button panel-mine" onClick={() => (window.location.hash = `notes/${kind}/${noteIdOf(id)}`)}>
+        Edit
+      </button>
+    ) : (
+      <button
+        className="link-button panel-mine"
+        onClick={async () => {
+          try {
+            const n = await copyBuiltIn(kind, id);
+            if (kind === 'journey') setJourneyId(myId(n.id));
+            else setListId(myId(n.id));
+            window.location.hash = `notes/${kind}/${n.id}`;
+          } catch (e) {
+            alert(e instanceof Error ? e.message : 'Couldn’t make a copy.');
+          }
+        }}
+      >
+        Make my own copy
+      </button>
+    );
   const chapterNoteMarks = useMemo(
     () => (showNotes ? noteMarksIn(loc.book, loc.chapter, notesStore) : undefined),
     [showNotes, loc.book, loc.chapter, notesStore],
@@ -583,7 +611,7 @@ export default function App() {
             });
           }}
           onFollowJourney={(id, i) => {
-            const j = JOURNEYS.find((x) => x.id === id);
+            const j = allJourneys().find((x) => x.id === id);
             if (!j) return;
             if (pageOpen) closePeriods();
             setPlaying(false);
@@ -656,7 +684,7 @@ export default function App() {
           className="journey-select"
           value={journeyId ?? ''}
           onChange={(v) => {
-            const j = JOURNEYS.find((x) => x.id === v);
+            const j = allJourneys().find((x) => x.id === v);
             setPlaying(false);
             setMenuOpen(false);
             if (j) {
@@ -667,13 +695,17 @@ export default function App() {
           ariaLabel="Follow a journey"
           placeholder="Follow a journey…"
           clearLabel="Stop following the journey"
-          groups={(['OT', 'NT'] as const).map((t) => ({
-            label: t === 'OT' ? 'Old Testament' : 'New Testament',
-            options: JOURNEYS.filter((j) => getBook(parseRef(j.stops[0].ref).book).testament === t).map((j) => ({
-              value: j.id,
-              label: j.title,
+          groups={[
+            // your own journeys first (signed in), then the built-in ones
+            ...(showMine && myJourneys.length ? [{ label: 'My journeys', options: myJourneys.map((j) => ({ value: j.id, label: j.title })) }] : []),
+            ...(['OT', 'NT'] as const).map((t) => ({
+              label: t === 'OT' ? 'Old Testament' : 'New Testament',
+              options: JOURNEYS.filter((j) => getBook(parseRef(j.stops[0].ref).book).testament === t).map((j) => ({
+                value: j.id,
+                label: j.title,
+              })),
             })),
-          }))}
+          ]}
         />
         </label>
         <label className="menu-field">
@@ -688,10 +720,13 @@ export default function App() {
             ariaLabel="Study a list"
             placeholder="Study a list…"
             clearLabel="Close the list"
-            groups={LIST_GROUPS.map((g) => ({
-              label: g,
-              options: LISTS.filter((l) => l.group === g).map((l) => ({ value: l.id, label: l.title })),
-            }))}
+            groups={[
+              ...(showMine && myLists.length ? [{ label: 'My lists', options: myLists.map((l) => ({ value: l.id, label: l.title })) }] : []),
+              ...LIST_GROUPS.map((g) => ({
+                label: g,
+                options: LISTS.filter((l) => l.group === g).map((l) => ({ value: l.id, label: l.title })),
+              })),
+            ]}
           />
         </label>
         <div className="topbar-actions">
@@ -826,7 +861,7 @@ export default function App() {
             closePeriods();
           }}
           onFollowJourney={(id) => {
-            const j = JOURNEYS.find((x) => x.id === id);
+            const j = allJourneys().find((x) => x.id === id);
             if (!j) return;
             setPlaying(false);
             goToStop(j, 0);
@@ -860,6 +895,17 @@ export default function App() {
             onOpenRef={openSpan}
             signedIn={account.status === 'signed-in'}
             onSignIn={() => setAccountStart({ view: 'signin' })}
+            onFollowMine={(kind, nid) => {
+              closePeriods();
+              setMapVisible(true);
+              if (kind === 'journey') {
+                const j = allJourneys().find((x) => x.id === myId(nid));
+                if (j) {
+                  setPlaying(false);
+                  goToStop(j, 0);
+                }
+              } else openList(myId(nid));
+            }}
           />
         </Suspense>
         </PartBoundary>
@@ -1141,6 +1187,7 @@ export default function App() {
           {studyList && (
             <ListPanel
               list={studyList}
+              action={panelAction('list', studyList.id)}
               index={listIndex}
               playing={listPlaying}
               onGo={(i) => {
@@ -1208,6 +1255,7 @@ export default function App() {
                 onPlaceInfo={openPlaceIndex}
                 onOpenSpot={openSpot}
                 legs={journeyLegs}
+                action={panelAction('journey', journey.id)}
                 onGo={(i) => {
                   setPlaying(false);
                   goToStop(journey, i);

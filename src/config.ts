@@ -39,3 +39,10 @@ export const PRIVACY_CONTACT = '';
  */
 const NOTES_LIVE = true;
 export const NOTES_ENABLED: boolean = ACCOUNTS_ENABLED && (NOTES_LIVE || !!import.meta.env.VITE_ACCOUNTS_URL);
+
+/**
+ * Your own journeys and lists (accounts Stage 3). Turn on once the account service has been re-pasted with
+ * the "journey"/"list" kinds (no new tables). Testing on a computer turns it on.
+ */
+const MINE_LIVE = false;
+export const MINE_ENABLED: boolean = NOTES_ENABLED && (MINE_LIVE || !!import.meta.env.VITE_ACCOUNTS_URL);

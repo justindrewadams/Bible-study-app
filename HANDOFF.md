@@ -216,8 +216,22 @@ possible version": keep it that way.
     one part shows "Something went wrong" instead of blanking the app.
   - Testing the guard locally: override `window.fetch` for `/abible?` with placeholder wording (the relay refuses
     localhost), as for Stage 1.
-- **Next stages (each needs the owner's go-ahead):** 3 custom journeys and lists; 4 class lessons and share links
-  (references only in links).
+- **Stage 3, your own journeys and lists (built 24 Nov 2026):** owner's choices: made and edited on the Notes page
+  ("My journeys" / "My lists" beside the notebooks) **and** shown at the top of the journey and list menus under
+  "My journeys" / "My lists"; a stop is a Bible place **or any spot tapped on a small map**; routes follow **Roman
+  roads, with a "by boat" option** per stop; **"Make my own copy"** of any built-in journey or list.
+  - Stored as notes (`kind: "journey" | "list"`, `stops` / `items`, `color`, `summary`, `from`); the service checks
+    each field (`readStop` in `accounts/src/notes.ts`). Request size limit raised to 400 KB.
+  - `lib/mine.ts` turns them into ordinary `Journey` / `StudyList` objects (ids `my:<noteId>`) and registers them
+    (`setMyJourneys` / `setMyLists`; `allJourneys()` / `allLists()` replace `JOURNEYS` / `LISTS` where the app looks
+    one up), so the map, panels, Roman-road legs and presenting work unchanged. Built-in lists only (`LISTS`) still
+    feed the Periods page and site search.
+  - `components/MineEditor.tsx`: title, colour, description, stops with ▲▼, place search over the ~1,300 places,
+    a small Leaflet map to tap a spot (terrain + faint modern labels, for finding places), day/event, "reached by
+    boat", word to bold (lists). Incomplete stops (no place or verse) aren't saved until complete. Licensed wording
+    is blocked per field. The journey and list panels show "Make my own copy" (built-in) or "Edit" (yours).
+  - Switch: `MINE_LIVE` in `config.ts` (needs the re-pasted Worker; no new tables).
+- **Next stage (needs the owner's go-ahead):** 4 class lessons and share links (references only in links).
 
 ## Stack and layout
 

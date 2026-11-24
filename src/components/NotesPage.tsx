@@ -24,6 +24,10 @@ import {
 } from '../lib/notes';
 import { bookIndex, spanFromOsis, spanLabel, type Span } from '../lib/refs';
 import NoteEditor from './NoteEditor';
+import MineEditor from './MineEditor';
+import { myListNotes, myJourneyNotes, saveNote as saveMine } from '../lib/notes';
+import { PALETTE } from '../lib/mine';
+import { MINE_ENABLED } from '../config';
 
 interface Props {
   route: string;
@@ -31,6 +35,8 @@ interface Props {
   onOpenRef: (s: Span) => void;
   signedIn: boolean;
   onSignIn: () => void;
+  /** follow your own journey / study your own list in the reader */
+  onFollowMine: (kind: 'journey' | 'list', noteId: string) => void;
 }
 
 const go = (h: string) => {
@@ -48,7 +54,7 @@ const snippet = (body: string) =>
     .trim()
     .slice(0, 120);
 
-export default function NotesPage({ route, onClose, onOpenRef, signedIn, onSignIn }: Props) {
+export default function NotesPage({ route, onClose, onOpenRef, signedIn, onSignIn, onFollowMine }: Props) {
   const store = useNotes();
   const [query, setQuery] = useState('');
   const [creating, setCreating] = useState<NoteDraft | null>(null);
@@ -64,6 +70,23 @@ export default function NotesPage({ route, onClose, onOpenRef, signedIn, onSignI
 
   const notebook = view === 'nb' ? store.notebooks.find((b) => b.id === id) : undefined;
   const page = view === 'page' ? store.notes.find((n) => n.id === id) : undefined;
+  const mine = view === 'journey' || view === 'list' ? store.notes.find((n) => n.id === id && n.kind === view) : undefined;
+  const newMine = async (kind: 'journey' | 'list') => {
+    try {
+      const n = await saveMine({
+        kind,
+        notebookId: null,
+        title: kind === 'journey' ? 'My journey' : 'My list',
+        color: PALETTE[(myJourneyNotes(store).length + myListNotes(store).length) % PALETTE.length],
+        summary: '',
+        ...(kind === 'journey' ? { stops: [] } : { items: [] }),
+        body: '',
+      });
+      go(`notes/${kind}/${n.id}`);
+    } catch (e) {
+      alert(e instanceof Error ? e.message : 'Couldn’t create it.');
+    }
+  };
   const results = useMemo(() => (query.trim() ? searchNotes(query, store) : []), [query, store]);
   const verseNotes = useMemo(
     () =>
@@ -163,6 +186,38 @@ export default function NotesPage({ route, onClose, onOpenRef, signedIn, onSignI
           </div>
         );
       })}
+      {(MINE_ENABLED ? (['journey', 'list'] as const) : []).map((kind) => {
+        const items = kind === 'journey' ? myJourneyNotes(store) : myListNotes(store);
+        return (
+          <div key={kind} className="notes-mine">
+            <div className="notes-side-head">
+              <span>{kind === 'journey' ? 'My journeys' : 'My lists'}</span>
+              <button className="link-button" onClick={() => newMine(kind)}>
+                + New
+              </button>
+            </div>
+            {items.length === 0 && store.status === 'ready' && (
+              <p className="muted small notes-empty-side">
+                {kind === 'journey' ? 'None yet. Or open a journey and choose “Make my own copy”.' : 'None yet.'}
+              </p>
+            )}
+            {items.map((n) => (
+              <button
+                key={n.id}
+                className={`notes-nav${mine?.id === n.id ? ' on' : ''}`}
+                onClick={() => go(`notes/${kind}/${n.id}`)}
+                style={{ '--c': n.color } as React.CSSProperties}
+              >
+                <span>
+                  <span className="mine-dot" aria-hidden />
+                  {n.title || (kind === 'journey' ? 'My journey' : 'My list')}
+                </span>
+                <span className="notes-count">{(kind === 'journey' ? n.stops : n.items)?.length ?? 0}</span>
+              </button>
+            ))}
+          </div>
+        );
+      })}
     </nav>
   );
 
@@ -230,20 +285,38 @@ export default function NotesPage({ route, onClose, onOpenRef, signedIn, onSignI
                   onClick={() => {
                     setQuery('');
                     if (n.kind === 'page') go(`notes/page/${n.id}`);
+                    else if (n.kind === 'journey' || n.kind === 'list') go(`notes/${n.kind}/${n.id}`);
                     else {
                       setOpenVerseNote(n.id);
                       go('notes/verse');
                     }
                   }}
                 >
-                  <span className="notes-row-title">{n.kind === 'page' ? n.title || 'Untitled page' : sp ? spanLabel(sp) : 'Verse note'}</span>
-                  <span className="notes-row-meta muted small">{placeName(n.notebookId, store) || (n.kind === 'verse' ? 'Verse note' : '')}</span>
-                  <span className="notes-row-snip muted small">{snippet(n.body)}</span>
+                  <span className="notes-row-title">
+                    {n.kind === 'verse' ? (sp ? spanLabel(sp) : 'Verse note') : n.title || 'Untitled'}
+                  </span>
+                  <span className="notes-row-meta muted small">
+                    {n.kind === 'journey' ? 'My journey' : n.kind === 'list' ? 'My list' : placeName(n.notebookId, store) || (n.kind === 'verse' ? 'Verse note' : '')}
+                  </span>
+                  <span className="notes-row-snip muted small">{snippet(n.kind === 'journey' || n.kind === 'list' ? n.summary ?? '' : n.body)}</span>
                 </button>
               </li>
             );
           })}
         </ul>
+      </div>
+    );
+  } else if (mine) {
+    main = (
+      <div className="notes-pageview">
+        <p className="notes-crumbs muted small">{mine.kind === 'journey' ? 'My journeys' : 'My lists'}</p>
+        <MineEditor
+          key={mine.id}
+          note={mine}
+          onOpenRef={onOpenRef}
+          onFollow={(nid) => onFollowMine(mine.kind as 'journey' | 'list', nid)}
+          onDeleted={() => go('notes')}
+        />
       </div>
     );
   } else if (view === 'page' && page) {
