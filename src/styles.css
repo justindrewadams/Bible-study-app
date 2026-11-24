@@ -5118,3 +5118,83 @@ mark.list-word {
   line-height: 1.3;
   color: var(--muted);
 }
+
+/* Herod's dynasty (on the Herod family's person cards) */
+.hd-tree,
+.hd-tree ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.hd-tree ul {
+  margin-left: 10px;
+  padding-left: 12px;
+  border-left: 2px solid var(--line);
+}
+
+.hd-tree li {
+  position: relative;
+  padding: 3px 0;
+}
+
+.hd-tree ul > li::before {
+  content: '';
+  position: absolute;
+  left: -12px;
+  top: 16px;
+  width: 10px;
+  border-top: 2px solid var(--line);
+}
+
+.hd-person {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1px;
+  padding: 4px 8px;
+  border: 1.5px solid var(--line);
+  border-radius: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+button.hd-person:hover {
+  background: var(--select);
+}
+
+.hd-person.current {
+  background: #111;
+  color: #fff;
+  cursor: default;
+  opacity: 1;
+}
+
+.hd-person.plain {
+  border-style: dashed;
+  color: var(--muted);
+  cursor: default;
+}
+
+.hd-wife > .hd-person {
+  border: 0;
+  padding: 2px 0;
+  background: none;
+}
+
+.hd-name {
+  font-weight: 700;
+  font-size: 0.88rem;
+}
+
+.hd-note {
+  font-size: 0.74rem;
+  color: var(--muted);
+}
+
+.hd-person.current .hd-note {
+  color: #ddd;
+}

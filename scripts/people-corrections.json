@@ -1,0 +1,11 @@
+{
+  "_about": "Corrections and additions to Theographic's people data (CC BY-SA 4.0), applied by build-people.mjs. Arrays are merged into the person's existing values. Relationships follow Scripture and Josephus.",
+  "herod_1504": { "aka": ["Herod the Great"] },
+  "philip_2345": { "aka": ["Herod II", "Herod Philip"] },
+  "philip_2346": { "aka": ["Philip the tetrarch"] },
+  "herod_1506": { "children": ["agrippa_111", "bernice_482", "drusilla_1024"], "siblings": ["herodias_1507"] },
+  "agrippa_111": { "aka": ["Herod Agrippa II"], "father": ["herod_1506"], "siblings": ["bernice_482", "drusilla_1024"] },
+  "bernice_482": { "father": ["herod_1506"], "siblings": ["agrippa_111", "drusilla_1024"] },
+  "drusilla_1024": { "father": ["herod_1506"], "siblings": ["agrippa_111", "bernice_482"] },
+  "herodias_1507": { "siblings": ["herod_1506"] }
+}

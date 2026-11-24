@@ -236,6 +236,8 @@ export function journeyLegs(g: RoadGraph, journey: Journey): (JourneyLeg | null)
     const drawn = legPath(journey, i);
     const direct: JourneyLeg = { path: drawn, miles: pathMiles(drawn), how: b.sea ? 'sea' : b.via ? 'traced' : 'direct' };
     if (b.sea || b.via || journey.roads === false || (a.lat === b.lat && a.lon === b.lon)) return direct;
+    // a short walk (across Jerusalem, out to Bethany) is drawn straight: the road map is too coarse for it
+    if (direct.miles < 3) return direct;
     const r = routeBetween(g, a, b);
     // a road that wanders far out of the way probably isn't the way they went
     if ('none' in r || r.miles > direct.miles * 1.6 + 5) return direct;

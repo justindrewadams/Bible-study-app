@@ -14,6 +14,8 @@ export interface ListItem {
   lat?: number;
   lon?: number;
   placeIndex?: number | null;
+  /** an approximate territory to shade on the map: one or more outlines of [lat, lon] points */
+  area?: [number, number][][];
 }
 
 export interface StudyList {

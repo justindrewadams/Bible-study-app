@@ -25,7 +25,11 @@ export function formatDistance(miles: number): { miles: string; km: string; shor
 export const MILES_PER_DAY = 20;
 
 export function walkingTime(miles: number): string {
-  if (miles < 1) return 'a few minutes on foot';
+  // short walks in minutes, at about 3 miles an hour
+  if (miles < 2.5) {
+    const minutes = Math.max(5, Math.round((miles / 3) * 12) * 5);
+    return minutes >= 60 ? `about ${Math.round(minutes / 60)} hour on foot` : `about ${minutes} minutes on foot`;
+  }
   if (miles < MILES_PER_DAY * 0.75) {
     const hours = Math.max(1, Math.round(miles / 3));
     return `about ${hours} ${hours === 1 ? 'hour' : 'hours'} on foot`;

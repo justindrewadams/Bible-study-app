@@ -122,6 +122,16 @@ for (const [i, f] of recs.entries()) {
   }
 }
 
+// corrections and additions kept in the repo (e.g. the Herod family's links), merged into the details
+const corrections = JSON.parse(fs.readFileSync(path.join(root, 'scripts', 'people-corrections.json'), 'utf8'));
+for (const [slug, fix] of Object.entries(corrections)) {
+  if (slug.startsWith('_')) continue;
+  const letter = slug[0].toLowerCase().replace(/[^a-z]/, '_');
+  const d = shards[letter]?.[slug];
+  if (!d) throw new Error(`people-corrections.json: no person ${slug}`);
+  for (const [k, v] of Object.entries(fix)) d[k] = Array.isArray(v) ? [...new Set([...(d[k] ?? []), ...v])] : v;
+}
+
 const out = path.join(root, 'public', 'data');
 fs.writeFileSync(path.join(out, 'people.json'), JSON.stringify(index));
 fs.writeFileSync(path.join(out, 'place-people.json'), JSON.stringify(placePeople));

@@ -127,6 +127,8 @@ interface Props {
   roadMiles?: number | null;
   /** journey legs along roads where possible (index = arriving stop); falls back to the drawn legs */
   journeyLegs?: ({ path: [number, number][] } | null)[] | null;
+  /** a territory to shade (a study list item's area), with its color */
+  area?: { outlines: [number, number][][]; color: string } | null;
 }
 
 function arrowIcon(angle: number, color: string) {
@@ -541,6 +543,7 @@ export default function MapView({
   roadPath,
   roadMiles,
   journeyLegs,
+  area,
 }: Props) {
   const base = BASE_LAYERS[settings.base];
   const modern = settings.modern !== 'off' ? MODERN_LAYERS[settings.modern] : null;
@@ -608,7 +611,31 @@ export default function MapView({
       )}
 
       <CameraController focus={focus} journey={journey} stopIndex={stopIndex} chapterPlaces={chapterPlaces} />
+      {/* after the camera controller, so a territory's view wins over the pin's */}
+      {area && <AreaLayer outlines={area.outlines} color={area.color} />}
     </MapContainer>
+  );
+}
+
+/** A shaded territory (e.g. a ruler's lands in Luke 3:1); the map moves to show all of it. */
+function AreaLayer({ outlines, color }: { outlines: [number, number][][]; color: string }) {
+  const map = useMap();
+  const key = JSON.stringify(outlines);
+  useEffect(() => {
+    const b = L.latLngBounds(outlines.flat());
+    map.flyToBounds(b, { padding: [40, 40], maxZoom: 8, duration: 0.9 });
+  }, [key, map]); // eslint-disable-line react-hooks/exhaustive-deps
+  return (
+    <>
+      {outlines.map((o, i) => (
+        <Polygon
+          key={i}
+          positions={o}
+          interactive={false}
+          pathOptions={{ color, weight: 2.5, opacity: 0.9, fillColor: color, fillOpacity: 0.18, dashArray: '6 5' }}
+        />
+      ))}
+    </>
   );
 }
 

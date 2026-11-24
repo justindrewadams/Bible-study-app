@@ -90,7 +90,9 @@ export default function JourneyPanel({ journey, stopIndex, playing, onGo, onTogg
                   ? 'by sea'
                   : leg.how === 'traced'
                     ? 'along the usual route'
-                    : 'as the crow flies'}
+                    : leg.miles < 3
+                      ? `· ${walkingTime(leg.miles)}`
+                      : 'as the crow flies'}
             </div>
           )}
           {stop.placeIndex != null && (

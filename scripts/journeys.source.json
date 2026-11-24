@@ -1531,5 +1531,128 @@
         "note": "Two years under house arrest, proclaiming the kingdom of God."
       }
     ]
+  },
+  {
+    "id": "passion",
+    "title": "Passion Week",
+    "era": "c. AD 30",
+    "color": "#8e2443",
+    "summary": "From Jericho up to Jerusalem, and the last week of Jesus’ life day by day: the entry, the temple, the Upper Room, Gethsemane, the trials, the cross and the empty tomb.",
+    "stops": [
+      {
+        "place": "Jericho",
+        "lookup": "Mark.10.46",
+        "ref": "Mark.10.46",
+        "note": "Leaves Jericho with the Passover crowds; blind Bartimaeus is healed on the way out."
+      },
+      {
+        "place": "Bethany",
+        "lookup": "Mark.11.1",
+        "ref": "John.12.1",
+        "note": "Six days before the Passover: supper with Lazarus, Martha and Mary."
+      },
+      {
+        "place": "Bethphage",
+        "ref": "Matt.21.1",
+        "note": "Sunday: two disciples are sent ahead for the colt."
+      },
+      {
+        "place": "Mount of Olives",
+        "ref": "Luke.19.37",
+        "note": "Coming down the Mount of Olives, the crowd praises God; Jesus weeps over the city (Luke 19:41)."
+      },
+      {
+        "place": "The temple",
+        "lat": 31.7781,
+        "lon": 35.2354,
+        "ref": "Mark.11.11",
+        "note": "He enters Jerusalem and the temple and looks around at everything."
+      },
+      {
+        "place": "Bethany",
+        "lookup": "Mark.11.1",
+        "ref": "Mark.11.11",
+        "note": "It is late, so he goes back out to Bethany with the Twelve."
+      },
+      {
+        "place": "The temple",
+        "lat": 31.7781,
+        "lon": 35.2354,
+        "ref": "Mark.11.15",
+        "note": "Monday: the fig tree is cursed on the way; he drives out the sellers and money-changers."
+      },
+      {
+        "place": "Bethany",
+        "lookup": "Mark.11.1",
+        "ref": "Mark.11.19",
+        "note": "Each evening he leaves the city (Luke 21:37)."
+      },
+      {
+        "place": "The temple",
+        "lat": 31.7781,
+        "lon": 35.2354,
+        "ref": "Mark.11.27",
+        "note": "Tuesday: his authority is questioned; parables, the tax question, the widow’s offering."
+      },
+      {
+        "place": "Mount of Olives",
+        "ref": "Mark.13.3",
+        "note": "Sitting opposite the temple, he answers the disciples about its destruction."
+      },
+      {
+        "place": "Bethany",
+        "lookup": "Mark.11.1",
+        "ref": "Mark.14.3",
+        "note": "At Simon the leper’s house a woman anoints him; Judas goes to the chief priests."
+      },
+      {
+        "place": "The upper room",
+        "lat": 31.7717,
+        "lon": 35.229,
+        "ref": "Mark.14.15",
+        "note": "Thursday evening: the Passover, the washing of feet and the Lord’s Supper."
+      },
+      {
+        "place": "Gethsemane",
+        "ref": "John.18.1",
+        "note": "Across the Kidron to the garden: he prays, and Judas arrives with the crowd."
+      },
+      {
+        "place": "The high priest's house",
+        "lat": 31.7703,
+        "lon": 35.2317,
+        "ref": "John.18.13",
+        "note": "Questioned by Annas, then Caiaphas and the council; Peter denies him three times."
+      },
+      {
+        "place": "Gabbatha",
+        "ref": "John.18.28",
+        "note": "Friday at dawn: led to Pilate’s headquarters."
+      },
+      {
+        "place": "Herod Antipas' quarters",
+        "lat": 31.7765,
+        "lon": 35.2318,
+        "ref": "Luke.23.7",
+        "note": "Pilate sends him to Herod, who is in Jerusalem for the feast."
+      },
+      {
+        "place": "Gabbatha",
+        "ref": "John.19.13",
+        "note": "Back before Pilate, who sits on the judgment seat at the Stone Pavement."
+      },
+      {
+        "place": "Golgotha",
+        "ref": "John.19.17",
+        "note": "Carrying his cross, he goes out to the Place of a Skull and is crucified."
+      },
+      {
+        "place": "The tomb",
+        "lat": 31.7787,
+        "lon": 35.2295,
+        "ref": "John.19.41",
+        "note": "Buried in a new tomb in a nearby garden; on Sunday the tomb is empty (John 20:1)."
+      }
+    ]
   }
 ]

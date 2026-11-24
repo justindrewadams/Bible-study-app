@@ -3151,5 +3151,745 @@
     "placeIndex": 194
    }
   ]
+ },
+ {
+  "id": "passion-week",
+  "title": "Passion Week, Day by Day",
+  "group": "New Testament",
+  "color": "#8e2443",
+  "summary": "The last week of Jesus’ life in order, from the supper at Bethany to the empty tomb. Several days are arranged by their usual order; the Gospels don’t date every event.",
+  "items": [
+   {
+    "t": "Supper at Bethany",
+    "ref": "John.12.2",
+    "note": "Six days before the Passover, with Lazarus, Martha and Mary.",
+    "meta": "Saturday",
+    "place": "Bethany",
+    "lat": 31.7717,
+    "lon": 35.2559,
+    "placeIndex": 194
+   },
+   {
+    "t": "The triumphal entry",
+    "ref": "Matt.21.9",
+    "note": "Riding a colt, as Zechariah 9:9 foretold; the crowds cry “Hosanna” from Psalm 118.",
+    "meta": "Sunday",
+    "place": "Mount of Olives",
+    "lat": 31.7779,
+    "lon": 35.2457,
+    "placeIndex": 875
+   },
+   {
+    "t": "Weeping over Jerusalem",
+    "ref": "Luke.19.41",
+    "note": "He grieves over the city that did not know the time of its visitation.",
+    "meta": "Sunday",
+    "place": "Mount of Olives",
+    "lat": 31.7779,
+    "lon": 35.2457,
+    "placeIndex": 875
+   },
+   {
+    "t": "A look around the temple",
+    "ref": "Mark.11.11",
+    "note": "He looks at everything, then goes back to Bethany for the night.",
+    "meta": "Sunday",
+    "place": "The temple",
+    "lat": 31.7781,
+    "lon": 35.2354,
+    "placeIndex": null
+   },
+   {
+    "t": "The fig tree cursed",
+    "ref": "Mark.11.14",
+    "note": "Leaves but no fruit: a picture of the nation’s leaders.",
+    "meta": "Monday",
+    "place": "Bethany",
+    "lat": 31.7717,
+    "lon": 35.2559,
+    "placeIndex": 194
+   },
+   {
+    "t": "The temple cleansed",
+    "ref": "Mark.11.17",
+    "note": "“A house of prayer for all the nations,” made a den of robbers.",
+    "meta": "Monday",
+    "place": "The temple",
+    "lat": 31.7781,
+    "lon": 35.2354,
+    "placeIndex": null
+   },
+   {
+    "t": "Healing in the temple",
+    "ref": "Matt.21.14",
+    "note": "The blind and lame come to him there; children shout “Hosanna to the Son of David.”",
+    "meta": "Monday",
+    "place": "The temple",
+    "lat": 31.7781,
+    "lon": 35.2354,
+    "placeIndex": null
+   },
+   {
+    "t": "The fig tree withered",
+    "ref": "Mark.11.20",
+    "note": "A lesson on faith and prayer.",
+    "meta": "Tuesday",
+    "place": "Bethany",
+    "lat": 31.7717,
+    "lon": 35.2559,
+    "placeIndex": 194
+   },
+   {
+    "t": "By what authority?",
+    "ref": "Matt.21.23",
+    "note": "The leaders question him; he answers with a question about John.",
+    "meta": "Tuesday",
+    "place": "The temple",
+    "lat": 31.7781,
+    "lon": 35.2354,
+    "placeIndex": null
+   },
+   {
+    "t": "Three parables",
+    "ref": "Matt.21.28",
+    "note": "The two sons, the tenants and the wedding feast: the leaders see the stories are about them (21:45).",
+    "meta": "Tuesday",
+    "place": "The temple",
+    "lat": 31.7781,
+    "lon": 35.2354,
+    "placeIndex": null
+   },
+   {
+    "t": "Taxes to Caesar",
+    "ref": "Matt.22.21",
+    "note": "Render to Caesar what is Caesar’s, and to God what is God’s.",
+    "meta": "Tuesday",
+    "place": "The temple",
+    "lat": 31.7781,
+    "lon": 35.2354,
+    "placeIndex": null
+   },
+   {
+    "t": "The greatest commandment",
+    "ref": "Mark.12.29",
+    "note": "Love God with all you are, and your neighbor as yourself (Deut 6:4–5; Lev 19:18).",
+    "meta": "Tuesday",
+    "place": "The temple",
+    "lat": 31.7781,
+    "lon": 35.2354,
+    "placeIndex": null
+   },
+   {
+    "t": "Woes on the scribes and Pharisees",
+    "ref": "Matt.23.13",
+    "note": "His last public words to the leaders.",
+    "meta": "Tuesday",
+    "place": "The temple",
+    "lat": 31.7781,
+    "lon": 35.2354,
+    "placeIndex": null
+   },
+   {
+    "t": "The widow’s offering",
+    "ref": "Mark.12.43",
+    "note": "Two small coins, all she had.",
+    "meta": "Tuesday",
+    "place": "The temple",
+    "lat": 31.7781,
+    "lon": 35.2354,
+    "placeIndex": null
+   },
+   {
+    "t": "The Olivet Discourse",
+    "ref": "Matt.24.2",
+    "note": "Not one stone left on another: the temple’s destruction, fulfilled in AD 70.",
+    "meta": "Tuesday",
+    "place": "Mount of Olives",
+    "lat": 31.7779,
+    "lon": 35.2457,
+    "placeIndex": 875
+   },
+   {
+    "t": "The plot and the anointing",
+    "ref": "Mark.14.1",
+    "note": "Two days before the Passover the leaders plot; at Bethany a woman anoints him.",
+    "meta": "Wednesday",
+    "place": "Bethany",
+    "lat": 31.7717,
+    "lon": 35.2559,
+    "placeIndex": 194
+   },
+   {
+    "t": "Judas agrees to betray him",
+    "ref": "Matt.26.15",
+    "note": "Thirty pieces of silver (Zech 11:12).",
+    "meta": "Wednesday",
+    "place": "Jerusalem",
+    "lat": 31.7767,
+    "lon": 35.2342,
+    "placeIndex": 662
+   },
+   {
+    "t": "Preparing the Passover",
+    "ref": "Luke.22.8",
+    "note": "Peter and John prepare the meal in a large upper room.",
+    "meta": "Thursday",
+    "place": "The upper room",
+    "lat": 31.7717,
+    "lon": 35.229,
+    "placeIndex": null
+   },
+   {
+    "t": "Washing the disciples’ feet",
+    "ref": "John.13.5",
+    "note": "The Teacher takes the servant’s towel and basin.",
+    "meta": "Thursday",
+    "place": "The upper room",
+    "lat": 31.7717,
+    "lon": 35.229,
+    "placeIndex": null
+   },
+   {
+    "t": "The betrayer revealed",
+    "ref": "John.13.26",
+    "note": "The morsel given to Judas; “what you are going to do, do quickly.”",
+    "meta": "Thursday",
+    "place": "The upper room",
+    "lat": 31.7717,
+    "lon": 35.229,
+    "placeIndex": null
+   },
+   {
+    "t": "The Lord’s Supper",
+    "ref": "Luke.22.19",
+    "note": "The bread and the cup of the new covenant.",
+    "meta": "Thursday",
+    "place": "The upper room",
+    "lat": 31.7717,
+    "lon": 35.229,
+    "placeIndex": null
+   },
+   {
+    "t": "Peter warned",
+    "ref": "Matt.26.34",
+    "note": "Before the rooster crows, three denials.",
+    "meta": "Thursday",
+    "place": "Mount of Olives",
+    "lat": 31.7779,
+    "lon": 35.2457,
+    "placeIndex": 875
+   },
+   {
+    "t": "Gethsemane",
+    "ref": "Matt.26.39",
+    "note": "“Not as I will, but as you will.”",
+    "meta": "Thursday",
+    "place": "Gethsemane",
+    "lat": 31.7794,
+    "lon": 35.2394,
+    "placeIndex": 485
+   },
+   {
+    "t": "The arrest",
+    "ref": "Matt.26.49",
+    "note": "Judas’ kiss; Peter’s sword; Malchus healed (Luke 22:51).",
+    "meta": "Thursday night",
+    "place": "Gethsemane",
+    "lat": 31.7794,
+    "lon": 35.2394,
+    "placeIndex": 485
+   },
+   {
+    "t": "Before Annas",
+    "ref": "John.18.13",
+    "note": "Father-in-law of Caiaphas, questioned first.",
+    "meta": "Thursday night",
+    "place": "The high priest's house",
+    "lat": 31.7703,
+    "lon": 35.2317,
+    "placeIndex": null
+   },
+   {
+    "t": "Before Caiaphas and the council",
+    "ref": "Matt.26.57",
+    "note": "False witnesses; condemned for blasphemy.",
+    "meta": "Thursday night",
+    "place": "The high priest's house",
+    "lat": 31.7703,
+    "lon": 35.2317,
+    "placeIndex": null
+   },
+   {
+    "t": "Peter’s denials",
+    "ref": "Luke.22.61",
+    "note": "The rooster crows; the Lord turns and looks at Peter.",
+    "meta": "Thursday night",
+    "place": "The high priest's house",
+    "lat": 31.7703,
+    "lon": 35.2317,
+    "placeIndex": null
+   },
+   {
+    "t": "Before Pilate",
+    "ref": "John.18.28",
+    "note": "Early morning at the governor’s headquarters.",
+    "meta": "Friday",
+    "place": "Gabbatha",
+    "lat": 31.7761,
+    "lon": 35.228,
+    "placeIndex": 441
+   },
+   {
+    "t": "Before Herod Antipas",
+    "ref": "Luke.23.8",
+    "note": "Herod hopes for a sign; Jesus says nothing.",
+    "meta": "Friday",
+    "place": "Herod Antipas' quarters",
+    "lat": 31.7765,
+    "lon": 35.2318,
+    "placeIndex": null
+   },
+   {
+    "t": "Sentenced",
+    "ref": "John.19.16",
+    "note": "Barabbas released; Jesus handed over to be crucified.",
+    "meta": "Friday",
+    "place": "Gabbatha",
+    "lat": 31.7761,
+    "lon": 35.228,
+    "placeIndex": 441
+   },
+   {
+    "t": "The crucifixion",
+    "ref": "Luke.23.33",
+    "note": "At the place called The Skull, between two criminals.",
+    "meta": "Friday",
+    "place": "Golgotha",
+    "lat": 31.7784,
+    "lon": 35.2298,
+    "placeIndex": 513
+   },
+   {
+    "t": "His death",
+    "ref": "Matt.27.50",
+    "note": "The temple curtain is torn from top to bottom.",
+    "meta": "Friday",
+    "place": "Golgotha",
+    "lat": 31.7784,
+    "lon": 35.2298,
+    "placeIndex": 513
+   },
+   {
+    "t": "The burial",
+    "ref": "John.19.42",
+    "note": "In a new tomb, because the Sabbath was near.",
+    "meta": "Friday",
+    "place": "The tomb",
+    "lat": 31.7787,
+    "lon": 35.2295,
+    "placeIndex": null
+   },
+   {
+    "t": "He is risen",
+    "ref": "Matt.28.6",
+    "note": "The tomb is empty, just as he said.",
+    "meta": "Sunday",
+    "place": "The tomb",
+    "lat": 31.7787,
+    "lon": 35.2295,
+    "placeIndex": null
+   }
+  ]
+ },
+ {
+  "id": "passion-prophecy",
+  "title": "Prophecies Fulfilled in Passion Week",
+  "group": "Whole Bible",
+  "color": "#5b3a8c",
+  "summary": "Old Testament words fulfilled in Jesus’ last week, each at the verse that points back to them.",
+  "items": [
+   {
+    "t": "The king on a donkey",
+    "ref": "Matt.21.5",
+    "note": "Zechariah 9:9; Isaiah 62:11."
+   },
+   {
+    "t": "“Hosanna! Blessed is he who comes”",
+    "ref": "Matt.21.9",
+    "note": "Psalm 118:25–26."
+   },
+   {
+    "t": "Praise from children",
+    "ref": "Matt.21.16",
+    "note": "Psalm 8:2."
+   },
+   {
+    "t": "A house of prayer for all nations",
+    "ref": "Mark.11.17",
+    "note": "Isaiah 56:7; Jeremiah 7:11."
+   },
+   {
+    "t": "The rejected stone",
+    "ref": "Matt.21.42",
+    "note": "Psalm 118:22–23."
+   },
+   {
+    "t": "Betrayed by a friend at his table",
+    "ref": "John.13.18",
+    "note": "Psalm 41:9."
+   },
+   {
+    "t": "The shepherd struck, the sheep scattered",
+    "ref": "Matt.26.31",
+    "note": "Zechariah 13:7."
+   },
+   {
+    "t": "Numbered with the transgressors",
+    "ref": "Luke.22.37",
+    "note": "Isaiah 53:12."
+   },
+   {
+    "t": "Thirty pieces of silver",
+    "ref": "Matt.27.9",
+    "note": "Zechariah 11:12–13 (with Jeremiah)."
+   },
+   {
+    "t": "Silent before his accusers",
+    "ref": "Matt.27.14",
+    "note": "Isaiah 53:7."
+   },
+   {
+    "t": "His garments divided by lot",
+    "ref": "John.19.24",
+    "note": "Psalm 22:18."
+   },
+   {
+    "t": "“My God, my God, why have you forsaken me?”",
+    "ref": "Matt.27.46",
+    "note": "Psalm 22:1."
+   },
+   {
+    "t": "Given sour wine for his thirst",
+    "ref": "John.19.28",
+    "note": "Psalm 69:21."
+   },
+   {
+    "t": "Not one bone broken",
+    "ref": "John.19.36",
+    "note": "Exodus 12:46; Numbers 9:12; Psalm 34:20."
+   },
+   {
+    "t": "They will look on him whom they pierced",
+    "ref": "John.19.37",
+    "note": "Zechariah 12:10."
+   },
+   {
+    "t": "With a rich man in his death",
+    "ref": "Matt.27.57",
+    "note": "Isaiah 53:9."
+   }
+  ]
+ },
+ {
+  "id": "passover-lamb",
+  "title": "Christ Our Passover Lamb",
+  "group": "Whole Bible",
+  "color": "#a0522d",
+  "summary": "The first Passover in Exodus 12, set beside its fulfillment in Christ (1 Corinthians 5:7).",
+  "items": [
+   {
+    "t": "A new beginning",
+    "ref": "Exod.12.2",
+    "note": "The Passover month becomes the first month. In Christ: a new creation (2 Cor 5:17)."
+   },
+   {
+    "t": "A lamb without blemish",
+    "ref": "Exod.12.5",
+    "note": "Christ, a lamb without blemish or spot (1 Pet 1:19)."
+   },
+   {
+    "t": "Kept and examined",
+    "ref": "Exod.12.6",
+    "note": "Jesus was examined by Annas, Caiaphas, Herod and Pilate, who found no guilt in him (John 19:4–6)."
+   },
+   {
+    "t": "The blood on the doorposts",
+    "ref": "Exod.12.7",
+    "note": "Justified by his blood, saved from wrath (Rom 5:9); the Lamb of God (John 1:29)."
+   },
+   {
+    "t": "Unleavened bread",
+    "ref": "Exod.12.8",
+    "note": "Leaven pictures sin; keep the feast with sincerity and truth (1 Cor 5:8)."
+   },
+   {
+    "t": "“When I see the blood, I will pass over you”",
+    "ref": "Exod.12.13",
+    "note": "Covered by his blood and spared (Rom 3:25)."
+   },
+   {
+    "t": "The firstborn struck at midnight",
+    "ref": "Exod.12.29",
+    "note": "The judgment the Passover blood turned aside."
+   },
+   {
+    "t": "Not one bone broken",
+    "ref": "Exod.12.46",
+    "note": "Fulfilled at the cross (John 19:32–36)."
+   },
+   {
+    "t": "Christ our Passover lamb",
+    "ref": "1Cor.5.7",
+    "note": "Christ, our Passover lamb, has been sacrificed."
+   },
+   {
+    "t": "This do in remembrance",
+    "ref": "Luke.22.19",
+    "note": "Jesus gives the Passover meal new meaning in the Lord’s Supper."
+   }
+  ]
+ },
+ {
+  "id": "luke3-rulers",
+  "title": "Rulers in Luke 3:1–2",
+  "group": "New Testament",
+  "color": "#3d5a80",
+  "summary": "Luke dates John’s ministry by every ruler of the day, from the emperor down to the high priests. Shaded areas are approximate territories.",
+  "items": [
+   {
+    "t": "Tiberius Caesar",
+    "ref": "Luke.3.1",
+    "note": "Emperor of Rome. His fifteenth year was about AD 28–29.",
+    "meta": "Emperor, AD 14–37",
+    "place": "Rome",
+    "lat": 41.8922,
+    "lon": 12.4852,
+    "placeIndex": 1034,
+    "words": [
+     "Tiberius"
+    ]
+   },
+   {
+    "t": "Pontius Pilate",
+    "ref": "Luke.3.1",
+    "note": "Roman governor of Judea (with Samaria and Idumea). He would sentence Jesus.",
+    "meta": "Governor, AD 26–36",
+    "place": "Judea",
+    "lat": 31.7767,
+    "lon": 35.2342,
+    "placeIndex": 681,
+    "words": [
+     "Pontius Pilate",
+     "Pilate"
+    ],
+    "area": [
+     [
+      [
+       32.55,
+       34.88
+      ],
+      [
+       32.47,
+       35.55
+      ],
+      [
+       31.78,
+       35.55
+      ],
+      [
+       31.48,
+       35.45
+      ],
+      [
+       31.05,
+       35.42
+      ],
+      [
+       31.0,
+       34.85
+      ],
+      [
+       31.45,
+       34.42
+      ],
+      [
+       31.95,
+       34.68
+      ]
+     ]
+    ]
+   },
+   {
+    "t": "Herod Antipas",
+    "ref": "Luke.3.1",
+    "note": "Son of Herod the Great; tetrarch (“ruler of a fourth”) of Galilee and Perea. He beheaded John the Baptist.",
+    "meta": "Tetrarch, 4 BC – AD 39",
+    "place": "Galilee",
+    "lat": 32.76,
+    "lon": 35.527,
+    "placeIndex": 444,
+    "words": [
+     "Herod"
+    ],
+    "area": [
+     [
+      [
+       33.1,
+       35.18
+      ],
+      [
+       33.07,
+       35.6
+      ],
+      [
+       32.7,
+       35.66
+      ],
+      [
+       32.55,
+       35.33
+      ],
+      [
+       32.72,
+       35.08
+      ]
+     ],
+     [
+      [
+       32.48,
+       35.58
+      ],
+      [
+       32.42,
+       35.9
+      ],
+      [
+       31.75,
+       35.86
+      ],
+      [
+       31.53,
+       35.62
+      ],
+      [
+       31.82,
+       35.55
+      ]
+     ]
+    ]
+   },
+   {
+    "t": "Philip the tetrarch",
+    "ref": "Luke.3.1",
+    "note": "Another son of Herod the Great, ruling the lands northeast of the Sea of Galilee.",
+    "meta": "Tetrarch, 4 BC – AD 34",
+    "place": "Trachonitis",
+    "lat": 32.9695,
+    "lon": 36.4554,
+    "placeIndex": 1204,
+    "words": [
+     "Philip"
+    ],
+    "area": [
+     [
+      [
+       33.35,
+       35.65
+      ],
+      [
+       33.28,
+       36.15
+      ],
+      [
+       33.0,
+       36.75
+      ],
+      [
+       32.55,
+       36.68
+      ],
+      [
+       32.62,
+       35.95
+      ],
+      [
+       32.78,
+       35.66
+      ]
+     ]
+    ]
+   },
+   {
+    "t": "Lysanias",
+    "ref": "Luke.3.1",
+    "note": "Tetrarch of Abilene, northwest of Damascus.",
+    "meta": "Tetrarch",
+    "place": "Abilene",
+    "lat": 33.6267,
+    "lon": 36.1058,
+    "placeIndex": 11,
+    "words": [
+     "Lysanias"
+    ],
+    "area": [
+     [
+      [
+       33.76,
+       35.95
+      ],
+      [
+       33.76,
+       36.32
+      ],
+      [
+       33.5,
+       36.32
+      ],
+      [
+       33.5,
+       35.95
+      ]
+     ]
+    ]
+   },
+   {
+    "t": "Annas",
+    "ref": "Luke.3.2",
+    "note": "High priest AD 6–15 and still the power behind the office; father-in-law of Caiaphas (John 18:13).",
+    "meta": "High priest, AD 6–15",
+    "place": "Jerusalem",
+    "lat": 31.7767,
+    "lon": 35.2342,
+    "placeIndex": 662,
+    "words": [
+     "Annas"
+    ]
+   },
+   {
+    "t": "Caiaphas",
+    "ref": "Luke.3.2",
+    "note": "High priest who would say one man should die for the nation (John 11:49–50).",
+    "meta": "High priest, AD 18–36",
+    "place": "Jerusalem",
+    "lat": 31.7767,
+    "lon": 35.2342,
+    "placeIndex": 662,
+    "words": [
+     "Caiaphas"
+    ]
+   },
+   {
+    "t": "John the Baptist",
+    "ref": "Luke.3.2",
+    "note": "In the middle of all these rulers, the word of God comes to John in the wilderness.",
+    "place": "Bethany",
+    "lat": 31.8371,
+    "lon": 35.5503,
+    "placeIndex": 195,
+    "words": [
+     "John"
+    ]
+   }
+  ]
  }
 ]

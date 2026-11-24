@@ -4,6 +4,7 @@ import { PERIODS, periodFor } from '../data/periods';
 import { nationsFoundedBy } from '../data/nations';
 import { formatOsis } from '../lib/placeInfo';
 import FamilyTree from './FamilyTree';
+import HerodDynasty, { HEROD_FAMILY } from './HerodDynasty';
 import {
   bioParts,
   formatYear,
@@ -235,6 +236,8 @@ export default function PersonCard({ slug, onClose, onOpenPerson, onGoToRef, onO
             )}
           </section>
         )}
+
+        {HEROD_FAMILY.has(slug) && <HerodDynasty current={slug} onOpenPerson={onOpenPerson} />}
 
         {bio && (
           <section className="pc-section">

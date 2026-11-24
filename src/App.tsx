@@ -818,6 +818,11 @@ export default function App() {
               roadPath={road?.state === 'found' ? road.route.path : null}
               roadMiles={road?.state === 'found' ? road.route.miles : null}
               journeyLegs={journeyLegs}
+              area={
+                studyList?.items[listIndex]?.area
+                  ? { outlines: studyList.items[listIndex].area!, color: studyList.color }
+                  : null
+              }
               onStopClick={(i) => journey && (setPlaying(false), goToStop(journey, i))}
             />
             </MapErrorBoundary>
