@@ -223,8 +223,24 @@ Checks (Node 22.6+): `npm run check:hymns` and `npm run check:nations` validate 
   search (eBible.org; "World English Bible" is their trademark for the unchanged text, so keep it unchanged).
 - **NASB 1995, CSB, NKJV via API.Bible** (free Starter plan, non-commercial; terms read November 2026 at
   api.bible/terms-and-conditions and care.api.bible articles 401 and 405). `APIBIBLE_TRANSLATIONS` in `bible.ts`,
-  offered only while `APIBIBLE_ENABLED` in `config.ts` is true (turn it on once the relay has its key and KV store);
-  relay route `/abible` in `scripts/build-relay.mjs`. What the terms require and how we meet them:
+  offered only while `APIBIBLE_ENABLED` in `config.ts` is true; relay route `/abible` in `scripts/build-relay.mjs`.
+  **Status (24 Nov 2026): live.** The owner's API.Bible Starter account has NASB1995, CSB and NKJV; the Worker has the
+  `API_BIBLE_KEY` secret and the `ABIBLE_STORE` binding to the KV namespace `abible-chapters`; checked on the live site.
+  The owner chose *not* to email API.Bible about re-reporting cached FUMS tokens for now.
+  **Text format:** the relay asks for API.Bible's **HTML**, not plain text: plain text turns the small-capitals
+  divine name into "Lord". `abibleVerses()` (a real function in `build-relay.mjs`, inserted with `toString()` so its
+  regexes need no template escaping) turns verse spans (`class="v"`) into verse breaks and prints small-caps spans
+  in capitals: the CSB marks LORD `nd`, the NASB 1995 and NKJV `L<span class="sc">ord</span>` (the NASB's Old
+  Testament quotations are also `sc`, so they appear in capitals, as in print). Other tags (italics `it`, words of
+  Jesus `wj`, poetry `q1`…) are dropped, paragraphs become spaces. Each response also lists the chapter's class
+  names as `marks` (no text), for checking new formatting. Stored chapters use keys `ch3:<code>:<osis>.<chapter>`;
+  changing the parsing means bumping that prefix (old keys simply expire). After any relay change the owner must
+  re-paste `relay/esv-relay.js` into the Worker editor.
+  **Checking from the Mac:** the relay checks only the `Origin` header, so
+  `curl -H "Origin: https://ancientpathfinder.com" "https://bible-atlas-esv.justindrewadams.workers.dev/abible?bible=CSB&book=Ps&chapter=117"`
+  works (each new chapter spends one of the monthly calls; Ps 117 and Matt 4 are already stored). Print verse
+  numbers, `marks` and whether "LORD" appears; don't paste whole chapters of licensed text into the conversation.
+  What the terms require and how we meet them:
   - **5,000 calls a month, 3 copyrighted Bibles** (all three slots used; no room for a fourth on this plan).
     The relay keeps each chapter in Cloudflare KV (`ABIBLE_STORE`), refetches after **25 days**, never serves
     one **30+ days** old (KV expires it then). The terms' rule is *refresh at least every 30 days*, not delete.
@@ -235,8 +251,9 @@ Checks (Node 22.6+): `npm run check:hymns` and `npm run check:nations` validate 
     `fums("trackView", token)` every time it is shown (`reportView()` in `bible.ts`, loads
     `pkg.api.bible/fumsV3.min.js` on first use). Whether a cached token may be re-reported isn't stated in their
     docs; the owner may confirm with support@api.bible.
-  - **Credit**: the copyright notice API.Bible sends (fallback: the publisher's standard notice in
-    `APIBIBLE_TRANSLATIONS`), "Text provided by API.Bible" with a link (required on Starter), and "Copyright details"
+  - **Credit**: the copyright notice API.Bible sends when it is a full one (80+ characters: the NASB's), otherwise
+    the publisher's standard notice in `APIBIBLE_TRANSLATIONS` (API.Bible sends only "© 2017 Holman Bible
+    Publishers" for the CSB, which lacks the required trademark line, and a short line for the NKJV); "Text provided by API.Bible" with a link (required on Starter), and "Copyright details"
     opening Sources & licenses, which lists every notice and explains the caching and tracking. No logos.
   - **Unchanged text** (no footnotes or headings, which their API offers as options); kept **in memory only** on the
     device (≤ 500 verses); **printing stops at 100 verses** (`body.print-limit`, their DRM rule).
@@ -285,8 +302,16 @@ Checks (Node 22.6+): `npm run check:hymns` and `npm run check:nations` validate 
   `PATH` for each command, then `npm ci`. Nothing gets installed system-wide.
 - Preview with the app's built-in browser: a `.claude/launch.json` **in the session folder root** that runs
   `node <repo>/node_modules/vite/bin/vite.js preview <repo> --port 4173 --strictPort`.
-- The network is open there: public-domain translations (WEB etc.) load for real. **The ESV relay refuses
-  localhost**, so ESV can only be checked by the owner on the live site; say so plainly.
+- The network is open there: public-domain translations (WEB etc.) load for real. **The relay refuses
+  localhost**, so the ESV, NASB 1995, CSB and NKJV don't load in a local preview (the ESV shows "Couldn't load this
+  chapter"; the API.Bible ones fall back to the WEB). To test their screens locally, override `window.fetch` in the
+  page for `/abible?` with placeholder wording. To see them for real, open https://ancientpathfinder.com/ in the
+  built-in browser (it works there) or use the curl check above.
+- **`gh` (GitHub CLI) is not installed.** Check the deploy with the public API instead:
+  `curl -s "https://api.github.com/repos/justindrewadams/Bible-study-app/actions/runs?branch=main&per_page=1"`
+  and read `status`, `conclusion` and `head_sha` of the first run.
+- The shell's working folder can change between commands; use absolute paths (a small `env.sh` in the scratchpad
+  that sets `PATH` and `cd`s into the repo worked well).
 - When the browser pane is hidden, smooth scrolling doesn't run, so scroll-position tests give false failures.
   Screenshots can also lag a render; re-take before concluding something is broken.
 - A big push (e.g. data files) may fail with "remote end hung up": run `git config http.postBuffer 524288000`
