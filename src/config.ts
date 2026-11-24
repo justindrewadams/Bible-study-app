@@ -51,5 +51,5 @@ export const MINE_ENABLED: boolean = NOTES_ENABLED && (MINE_LIVE || !!import.met
  * Class lessons and share links (accounts Stage 4). Turn on once the account service has been re-pasted and
  * the `shares` table exists (accounts/schema.sql). Testing on a computer turns it on.
  */
-const LESSONS_LIVE = false;
+const LESSONS_LIVE = true;
 export const LESSONS_ENABLED: boolean = MINE_ENABLED && (LESSONS_LIVE || !!import.meta.env.VITE_ACCOUNTS_URL);

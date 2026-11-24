@@ -237,7 +237,7 @@ possible version": keep it that way.
   translation, map style, modern map on top, ancient region names, all chapter places. Same settings as the AA
   button, translation menu and map layers; synced to the account. At 1440–1599px the header's page buttons are
   tighter (7px padding, no letter-spacing) and the menus a little narrower so "My Content" still fits one row.
-- **Stage 4, class lessons (built 24 Nov 2026):** owner's choices: **anyone with an account can share** by link,
+- **Stage 4, class lessons (built and live 24 Nov 2026):** owner's choices: **anyone with an account can share** by link,
   links are **live** (always the latest), six kinds of step (passage, notes, map stop, journey/list from a chosen
   stop, page: person/nation/period/Jerusalem spot, web link), "follow along" (phones following the presenter)
   **later**. The owner asked for a **disclaimer** when a shared lesson opens (`DISCLAIMER` in
