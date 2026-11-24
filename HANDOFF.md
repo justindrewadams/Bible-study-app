@@ -216,7 +216,7 @@ possible version": keep it that way.
     one part shows "Something went wrong" instead of blanking the app.
   - Testing the guard locally: override `window.fetch` for `/abible?` with placeholder wording (the relay refuses
     localhost), as for Stage 1.
-- **Stage 3, your own journeys and lists (built 24 Nov 2026):** owner's choices: made and edited on the Notes page
+- **Stage 3, your own journeys and lists (built and live 24 Nov 2026):** owner's choices: made and edited on the Notes page
   ("My journeys" / "My lists" beside the notebooks) **and** shown at the top of the journey and list menus under
   "My journeys" / "My lists"; a stop is a Bible place **or any spot tapped on a small map**; routes follow **Roman
   roads, with a "by boat" option** per stop; **"Make my own copy"** of any built-in journey or list.

@@ -44,5 +44,5 @@ export const NOTES_ENABLED: boolean = ACCOUNTS_ENABLED && (NOTES_LIVE || !!impor
  * Your own journeys and lists (accounts Stage 3). Turn on once the account service has been re-pasted with
  * the "journey"/"list" kinds (no new tables). Testing on a computer turns it on.
  */
-const MINE_LIVE = false;
+const MINE_LIVE = true;
 export const MINE_ENABLED: boolean = NOTES_ENABLED && (MINE_LIVE || !!import.meta.env.VITE_ACCOUNTS_URL);
