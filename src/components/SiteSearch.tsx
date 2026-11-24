@@ -1,5 +1,9 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { formatOsis } from '../lib/placeInfo';
+import { ESV_COPYRIGHT, fetchVerses, type Translation } from '../lib/bible';
+import { getBook } from '../data/books';
+import { findCandidates, loadVerseIndex, matchedWords, rankInTranslation, wantsVerses, type MatchKind, type VerseHit } from '../lib/verseSearch';
+import { fold, words } from '../lib/stem';
 import {
   formatShortRef,
   loadSearchIndex,
@@ -17,6 +21,48 @@ export interface SearchActions {
   onOpenPeriod: (id: string) => void;
   onOpenNation: (id: string) => void;
 }
+
+interface Props extends SearchActions {
+  /** the translation being read: verse results are shown (and judged) in it */
+  translation: Translation;
+  esvKey?: string;
+}
+
+const KIND_LABEL: Record<MatchKind, string> = {
+  phrase: 'Exact phrase',
+  all: 'All your words',
+  most: 'Most of your words',
+  meaning: 'Same Hebrew/Greek words',
+};
+
+/** Verse text with the searched phrase, or failing that the searched words, in bold. */
+function VerseText({ text, query }: { text: string; query: string }) {
+  // the whole phrase, when it's there ("all have sinned"); "Yahweh" stands in for "LORD" at the same length
+  const qw = words(query);
+  if (qw.length >= 2) {
+    const re = new RegExp(`\\b${qw.map((w) => w.replace(/[^a-z0-9]/g, '')).join('[^A-Za-z0-9]+')}\\b`, 'i');
+    const m = re.exec(fold(text).replace(/\byahweh\b|\bjehovah\b/g, (x) => 'lord'.padEnd(x.length, '\u0000')));
+    if (m) {
+      return (
+        <>
+          {text.slice(0, m.index)}
+          <strong>{text.slice(m.index, m.index + m[0].length)}</strong>
+          {text.slice(m.index + m[0].length)}
+        </>
+      );
+    }
+  }
+  const bold = matchedWords(query, text);
+  return (
+    <>
+      {text.split(/([A-Za-z\u00C0-\u024F’']+)/).map((part, i) =>
+        i % 2 && bold.has(fold(part).replace(/'s$/, '')) ? <strong key={i}>{part}</strong> : part,
+      )}
+    </>
+  );
+}
+
+type VerseState = { query: string; translation: string; loading: boolean; hits: (VerseHit & { web: boolean })[] };
 
 const MagnifierIcon = () => (
   <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="2.6">
@@ -80,9 +126,11 @@ function Row({ title, sub, text, onClick }: { title: ReactNode; sub?: ReactNode;
 
 /**
  * Search box for the header: a text box when the header has room, otherwise a magnifying glass that opens one.
- * Results come from the app's own data only (never the Bible text, so no licensed text is searched or copied).
+ * Results come from the app's own data, plus verses whose wording matches (lib/verseSearch.ts): found with the
+ * public-domain WEB and the Hebrew/Greek word index, then shown in the reader's translation (the 3 best).
  */
-export default function SiteSearch(props: SearchActions) {
+export default function SiteSearch(props: Props) {
+  const { translation, esvKey } = props;
   const [query, setQuery] = useState('');
   const [open, setOpen] = useState(false);
   /** the magnifying-glass version: the box is showing */
@@ -111,6 +159,44 @@ export default function SiteSearch(props: SearchActions) {
       clearTimeout(t);
     };
   }, [q]);
+
+  // verses whose wording matches: slower (data loads on first use, and the reader's translation is fetched)
+  const [verses, setVerses] = useState<VerseState | null>(null);
+  useEffect(() => {
+    if (!wantsVerses(q)) {
+      setVerses(null);
+      return;
+    }
+    let live = true;
+    setVerses((v) => ({ query: q, translation: translation.id, loading: true, hits: v?.query === q ? v.hits : [] }));
+    const t = setTimeout(async () => {
+      try {
+        const idx = await loadVerseIndex();
+        const cands = findCandidates(idx, q, 6);
+        const ref = (c: { book: string; chapter: number; verse: number }) => `${c.book}.${c.chapter}.${c.verse}`;
+        let texts = new Map<string, string>();
+        // the WEB is already on the device; other translations are fetched (one request for the ESV)
+        if (translation.id !== 'bibleapi:web' && cands.length)
+          texts = await fetchVerses(translation, cands.map(ref), { esvKey }).catch(() => new Map<string, string>());
+        const byId = new Map<number, string>();
+        for (const c of cands) {
+          const tx = translation.id === 'bibleapi:web' ? c.web : texts.get(ref(c));
+          if (tx) byId.set(c.id, tx);
+        }
+        const hits = rankInTranslation(idx, q, cands, byId, 3).map((h) => ({
+          ...h,
+          web: translation.id !== 'bibleapi:web' && !texts.has(ref(h)),
+        }));
+        if (live) setVerses({ query: q, translation: translation.id, loading: false, hits });
+      } catch {
+        if (live) setVerses({ query: q, translation: translation.id, loading: false, hits: [] });
+      }
+    }, 450);
+    return () => {
+      live = false;
+      clearTimeout(t);
+    };
+  }, [q, translation, esvKey]);
 
   // a new search starts at the top of the results
   useEffect(() => {
@@ -141,6 +227,9 @@ export default function SiteSearch(props: SearchActions) {
     ? r.refs.length + r.people.length + r.places.length + r.journeys.length + r.lists.length + r.periods.length + r.nations.length + r.hymns.length
     : 0;
   const showPanel = open && q.length >= 2;
+  const verseHits = verses && verses.query === q ? verses.hits : [];
+  const versesLoading = !!verses && verses.query === q && verses.loading;
+  const anyEsv = verseHits.some((h) => !h.web) && translation.provider === 'esv';
   const sameName = new Set(
     (r?.places ?? []).map((x) => x.place.name).filter((name, i, all) => all.indexOf(name) !== i),
   );
@@ -172,7 +261,7 @@ export default function SiteSearch(props: SearchActions) {
           ref={inputRef}
           type="search"
           value={query}
-          placeholder="Search people, places, journeys…"
+          placeholder="Search people, places, verses…"
           aria-label="Search the app"
           enterKeyHint="search"
           autoComplete="off"
@@ -216,7 +305,7 @@ export default function SiteSearch(props: SearchActions) {
         >
           {!r || r.query.trim() !== q ? (
             <p className="search-empty">{loading ? 'Searching…' : ''}</p>
-          ) : total === 0 ? (
+          ) : total === 0 && !verseHits.length && !versesLoading ? (
             <p className="search-empty">
               Nothing found for “{q}”. Try a name, a place, or a reference like <em>John 3:16</em>.
             </p>
@@ -234,6 +323,30 @@ export default function SiteSearch(props: SearchActions) {
                   ))
                 }
               </Section>
+
+              {(verseHits.length > 0 || versesLoading) && (
+                <section className="search-section verse-results">
+                  <h3>
+                    Verses {verseHits.length > 0 && <span className="search-count">{verseHits.length}</span>}
+                  </h3>
+                  {versesLoading && !verseHits.length ? (
+                    <p className="search-empty">Searching the Bible…</p>
+                  ) : (
+                    <ul>
+                      {verseHits.map((h) => (
+                        <Row
+                          key={`${h.book}.${h.chapter}.${h.verse}`}
+                          title={`${h.book === 'Ps' ? 'Psalm' : getBook(h.book).name} ${h.chapter}:${h.verse}`}
+                          sub={`${KIND_LABEL[h.kind]} · ${h.web ? 'WEB' : translation.code.toUpperCase()}`}
+                          text={<VerseText text={h.text} query={q} />}
+                          onClick={pick(() => props.onGoTo(h.book, h.chapter, h.verse))}
+                        />
+                      ))}
+                    </ul>
+                  )}
+                  {anyEsv && <p className="verse-results-notice">{ESV_COPYRIGHT}</p>}
+                </section>
+              )}
 
               <Section title="People" count={r.people.length}>
                 {(n) =>

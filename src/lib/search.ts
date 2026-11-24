@@ -1,6 +1,7 @@
 /**
  * Site-wide search over the app's own data: people, places, journeys, study lists, periods, nations,
- * hymns (titles and writers only) and Bible references. It never searches the Bible text itself.
+ * hymns (titles and writers only) and Bible references. Bible wording is searched separately, in
+ * lib/verseSearch.ts.
  */
 import { BOOKS, getBook, type Book } from '../data/books';
 import { NATIONS, type Nation } from '../data/nations';

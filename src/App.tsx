@@ -375,6 +375,8 @@ export default function App() {
           </button>
         </div>
         <SiteSearch
+          translation={translation}
+          esvKey={esvKey}
           onGoTo={(b, c, v) => {
             if (pageOpen) closePeriods();
             goTo(b, c, v);
@@ -965,7 +967,11 @@ export default function App() {
                 <a href="https://bible-api.com/" target="_blank" rel="noreferrer">
                   bible-api.com
                 </a>
-                .
+                . Verse search finds verses with the{' '}
+                <a href="https://ebible.org/find/details.php?id=eng-web" target="_blank" rel="noreferrer">
+                  World English Bible
+                </a>{' '}
+                (public domain, from eBible.org, unchanged) and then shows them in the translation you are reading.
               </p>
               <p>
                 <strong>Hebrew & Greek word study:</strong> words, transliterations, glosses, grammar and brief
@@ -982,7 +988,9 @@ export default function App() {
                   CC BY 4.0
                 </a>
                 . Lexicon entries are based on Brown-Driver-Briggs and Abbott-Smith (public domain). The Greek follows
-                the editions used by most modern translations; words found only in the KJV's Greek are marked.
+                the editions used by most modern translations; words found only in the KJV's Greek are marked. Verse search
+                also uses an index of the Hebrew and Greek words in each verse, built from the same STEPBible data, to
+                find verses by meaning.
               </p>
               <p>
                 <strong>Places & verse links:</strong>{' '}

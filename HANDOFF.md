@@ -71,8 +71,18 @@ the decisions already made (and why), and how the owner likes to work.
     (names, other spellings, key stories, birth/death places of the person searched, stops of journeys named after
     them), journeys, study lists and their items, periods, nations, hymns (titles and writers only) and Bible
     references ("John 3:16", "1 cor 13", "Psalm 23"). The searched word is bolded in each excerpt; Enter opens the first
-    result. It searches **only the app's own data, never Bible text** (searching the ESV would need Crossway's search
-    API: ask the owner first). Code: `src/lib/search.ts` (index, matching, ranking) and `components/SiteSearch.tsx`. Its styles use `ss-`/`search-` names
+    result. **Verses** (owner-approved November 2026): a phrase of 2+ words also searches
+    Bible wording and shows the **3 best** verses, in the translation being read, labelled "Exact phrase", "All your
+    words", "Most of your words" or "Same Hebrew/Greek words", with the match in bold. How it works, so it suits any
+    future translation (licensed texts can't be stored on the device): (1) find ~6 candidates on the device from the
+    public-domain **WEB** text (`public/data/search/web.json`: loose matching via `lib/stem.ts`, word forms, small
+    typos, missing/reordered words; "Yahweh/Jehovah" = "LORD") and the **Hebrew/Greek index**
+    (`orig.json`: Strong's numbers per verse + English words that usually render them, from STEPBible data);
+    (2) fetch just those verses in the reader's translation with `fetchVerses()` in `bible.ts` (ESV: one request to
+    the relay's `/verses`, max 6, through the memory-only ESV cache; bible-api: one request per book), score again,
+    keep results within 60% of the best. If the translation can't be fetched, snippets fall back to WEB and say "WEB".
+    ESV snippets carry the Crossway notice under the section. Data (~1.9 MB gzipped) loads on the first phrase
+    search; rebuild with `npm run build:verse-search`. Code: `lib/verseSearch.ts`. Code: `src/lib/search.ts` (index, matching, ranking) and `components/SiteSearch.tsx`. Its styles use `ss-`/`search-` names
     (`.ss-box`), **not** `.search-box`, which belongs to the People/Nations/Periods page search boxes.
 12. **Distance tool:** a "↔ Distance" button on the map (beside "Modern") or "↔ Distance from <place> to…" on a place
     card. Choose two places by typing (suggestions from all ~1,300 places) or by tapping them on the map; while it is
@@ -123,6 +133,7 @@ Generated files are committed. Raw downloads are cached in `scripts/.cache/` (gi
 | (same) → `build-people.mjs` | Theographic Bible Metadata (CC BY-SA 4.0), Easton's (public domain) | `public/data/people.json`, `people/<letter>.json`, `people-verses/`, `place-people.json`, `people-aka.json` (other names, for search), `verseCounts.json` |
 | (same) → `build-water.mjs` | Natural Earth (public domain) | `public/data/water.json` |
 | `npm run build:relay` | app book data | `relay/esv-relay.js` |
+| `npm run build:verse-search` → `build-verse-search.mjs` | World English Bible (eBible.org 2020 stable text, public domain, unchanged) + the STEPBible word data above | `public/data/search/web.json`, `orig.json` |
 | `npm run build:roads` → `build-roads.mjs` | Itiner-e static version 2024 (CC BY 4.0, zenodo.org/records/17122148) | `public/data/roads.json` (Bible lands + Mediterranean, simplified, road ends joined into a network) |
 | `npm run build:words` | STEPBible TAHOT, TAGNT, TBESH, TBESG, TEHMC, TEGMC (CC BY 4.0) | `public/data/words/<Book>/<chapter>.json`, `lexicon/<H\|G><n>.json`, `grammar-H.json`, `grammar-G.json` |
 
@@ -145,12 +156,14 @@ Checks (Node 22.6+): `npm run check:hymns` and `npm run check:nations` validate 
   - The key is a Cloudflare secret, `ESV_API_KEY`. It is never in the repo or the site. Do **not** build keys
     into the site.
   - The relay (`relay/esv-relay.js`, generated) only answers the app's origin, allows at most 500 verses or half a
-    book per request, validates ranges, and sends `no-store`. To change it, edit `scripts/build-relay.mjs`, run
+    book per request (`/passage`) or 6 single verses (`/verses`, for verse search), validates ranges, and sends
+    `no-store`. To change it, edit `scripts/build-relay.mjs`, run
     `npm run build:relay`, and the owner re-pastes it into the Cloudflare dashboard.
   - If the ESV is unavailable, the app shows the WEB with a notice ("try again in a little while").
   - The app enforces the terms: `chapterPages()` splits long chapters; ESV is cached in memory only (≤ 500
     verses); the Crossway copyright notice and ESV.org link appear under ESV text.
-- **Public domain** (bible-api.com): WEB, KJV, ASV, BBE, Darby, YLT, OEB.
+- **Public domain** (bible-api.com): WEB, KJV, ASV, BBE, Darby, YLT, OEB. The WEB text is also bundled for verse
+  search (eBible.org; "World English Bible" is their trademark for the unchanged text, so keep it unchanged).
 - NASB, LSB, NKJV and HCSB are **not** allowed until the owner gets permission or uses API.Bible's free
   non-commercial plan through a relay. `OPEN_TRANSLATIONS` in `bible.ts` is the hook for freely licensed texts.
 - **Hymns:** titles, writers and years only (facts, not copyrightable). **Never add lyrics.** No link-outs.
@@ -215,7 +228,7 @@ Hymns for each chapter; rivers that thin out when zoomed out; flat-style verse h
 solid place-name underlines; bolded word for list items that share a verse (and the correct "N of M" chip);
 quieter last-mentioned map marker; the Nations page with person-card links; the rename to Bible Study Companion
 with the equal-width title (then to Ancient Pathfinder with the ancientpathfinder.com domain) and a header that folds into ☰ below 1440px; Hebrew & Greek word study; removal of the
-personal ESV key field; site-wide search; the distance tool with Roman-road routes; journeys along Roman roads; nation cards from the text; always opening at Genesis 1. Earlier: ESV via relay, the 17 periods, the People page with family trees, map clusters,
+personal ESV key field; site-wide search; the distance tool with Roman-road routes; journeys along Roman roads; nation cards from the text; always opening at Genesis 1; verse search by wording and meaning. Earlier: ESV via relay, the 17 periods, the People page with family trees, map clusters,
 and the phone layout.
 
 ## Ideas not yet started (only if the owner asks)

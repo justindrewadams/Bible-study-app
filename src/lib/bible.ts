@@ -255,3 +255,105 @@ export async function fetchPassage(
   pdSet(key, verses);
   return verses;
 }
+
+// --- a few scattered verses (for verse search) ---------------------------------------------
+
+/** "Rom.3.23" */
+export type VerseRef = string;
+
+/** Matches Crossway's canonical reference for one verse (e.g. "Psalm 23:1") against our OSIS reference. */
+const canonicalOf = (osis: VerseRef) => {
+  const [b, c, v] = osis.split('.');
+  return `${b === 'Ps' ? 'Psalm' : getBook(b).name} ${c}:${v}`;
+};
+
+async function fetchEsvVerses(refs: VerseRef[], apiKey: string): Promise<Map<VerseRef, string>> {
+  let data: { passages?: string[]; canonical?: string[]; passage_meta?: { canonical: string }[]; error?: string };
+  if (!apiKey && ESV_RELAY_ENABLED) {
+    const res = await fetch(`${ESV_RELAY_URL.replace(/\/$/, '')}/verses?refs=${refs.join(',')}`);
+    data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.error ?? `The ESV relay returned ${res.status}.`);
+  } else if (apiKey) {
+    const params = new URLSearchParams({
+      q: refs.map(canonicalOf).join('; '),
+      'include-headings': 'false',
+      'include-footnotes': 'false',
+      'include-verse-numbers': 'false',
+      'include-first-verse-numbers': 'false',
+      'include-short-copyright': 'false',
+      'include-copyright': 'false',
+      'include-passage-references': 'false',
+    });
+    const res = await fetch(`https://api.esv.org/v3/passage/text/?${params}`, { headers: { Authorization: `Token ${apiKey}` } });
+    if (!res.ok) throw new Error(`ESV API returned ${res.status}`);
+    data = await res.json();
+  } else throw new EsvKeyMissing('No ESV API key is set up yet.');
+  const passages = data.passages ?? [];
+  const names = data.canonical ?? data.passage_meta?.map((m) => m.canonical) ?? [];
+  const out = new Map<VerseRef, string>();
+  refs.forEach((r, i) => {
+    // by name when Crossway says which passage is which, otherwise by order (only when the counts agree)
+    const at = names.length ? names.findIndex((n) => n.replace(/^Psalms /, 'Psalm ') === canonicalOf(r)) : passages.length === refs.length ? i : -1;
+    const text = at >= 0 ? clean(passages[at] ?? '') : '';
+    if (text) out.set(r, text);
+  });
+  return out;
+}
+
+async function fetchBibleApiVerses(t: Translation, refs: VerseRef[]): Promise<Map<VerseRef, string>> {
+  // bible-api.com takes several verses of one book per request ("Romans 3:23,5:8")
+  const byBook = new Map<string, VerseRef[]>();
+  for (const r of refs) {
+    const b = r.split('.')[0];
+    byBook.set(b, [...(byBook.get(b) ?? []), r]);
+  }
+  const out = new Map<VerseRef, string>();
+  await Promise.all(
+    [...byBook].map(async ([b, rs]) => {
+      const q = encodeURIComponent(`${getBook(b).name} ${rs.map((r) => r.split('.').slice(1).join(':')).join(',')}`);
+      const res = await fetch(`https://bible-api.com/${q}?translation=${t.code}`);
+      if (!res.ok) throw new Error(`bible-api.com returned ${res.status}`);
+      const data = (await res.json()) as { verses: { chapter: number; verse: number; text: string }[] };
+      for (const v of data.verses ?? []) out.set(`${b}.${v.chapter}.${v.verse}`, clean(v.text));
+    }),
+  );
+  return out;
+}
+
+/**
+ * The text of a few single verses in a translation (at most 6: what verse search shows). ESV verses go
+ * through the same memory-only cache as chapters, so the 500-verse limit on the device still holds.
+ */
+export async function fetchVerses(t: Translation, refs: VerseRef[], opts: { esvKey?: string } = {}): Promise<Map<VerseRef, string>> {
+  const out = new Map<VerseRef, string>();
+  const key = (r: VerseRef) => {
+    const [b, c, v] = r.split('.');
+    return t.provider === 'esv' ? `${b}.${c}:${v}-${v}` : `${t.id}:${b}.${c}:${v}`;
+  };
+  const missing: VerseRef[] = [];
+  for (const r of refs.slice(0, 6)) {
+    const hit = t.provider === 'esv' ? esvGet(key(r)) : pdGet(key(r));
+    if (hit?.[0]) out.set(r, hit[0].text);
+    else missing.push(r);
+  }
+  if (!missing.length) return out;
+  let got: Map<VerseRef, string>;
+  if (t.provider === 'esv') got = await fetchEsvVerses(missing, opts.esvKey ?? '');
+  else if (t.provider === 'bibleapi') got = await fetchBibleApiVerses(t, missing);
+  else {
+    got = new Map();
+    for (const r of missing) {
+      const [b, c, v] = r.split('.');
+      const ch = await fetchPassage(t, b, Number(c), { from: 1, to: 999 }, opts);
+      const text = ch.find((x) => x.verse === Number(v))?.text;
+      if (text) got.set(r, text);
+    }
+  }
+  for (const [r, text] of got) {
+    const v = [{ verse: Number(r.split('.')[2]), text }];
+    if (t.provider === 'esv') esvSet(key(r), v);
+    else pdSet(key(r), v);
+    out.set(r, text);
+  }
+  return out;
+}
