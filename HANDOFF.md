@@ -97,7 +97,9 @@ the decisions already made (and why), and how the owner likes to work.
 13. **Text size:** a quiet "AA" button beside Hymns opens a small pop-up: A−/A+ through five sizes of the Bible
     text (×1 to ×1.6, `TEXT_SIZES` in `Reader.tsx`, via `--text-scale` on `.verses`) and a "Bolder text" box (EB
     Garamond 500; place names and list words 700). Saved on the device as `textPrefs`.
-14. **Sources & licenses** pop-up (the ⚙ button): lists every source and license. The personal ESV key field was
+14. **NASB 1995, CSB and NKJV** (owner-approved November 2026) from **API.Bible's free Starter plan**, through the
+    same relay (`/abible?bible=CSB&book=John&chapter=3`). See the licensing section below.
+15. **Sources & licenses** pop-up (the ⚙ button): lists every source and license. The personal ESV key field was
     **removed** at the owner's request (a key saved by an older version is still used quietly as a backup).
 
 **Added for the owner's Passion Week class (November 2026):**
@@ -219,8 +221,34 @@ Checks (Node 22.6+): `npm run check:hymns` and `npm run check:nations` validate 
     verses); the Crossway copyright notice and ESV.org link appear under ESV text.
 - **Public domain** (bible-api.com): WEB, KJV, ASV, BBE, Darby, YLT, OEB. The WEB text is also bundled for verse
   search (eBible.org; "World English Bible" is their trademark for the unchanged text, so keep it unchanged).
-- NASB, LSB, NKJV and HCSB are **not** allowed until the owner gets permission or uses API.Bible's free
-  non-commercial plan through a relay. `OPEN_TRANSLATIONS` in `bible.ts` is the hook for freely licensed texts.
+- **NASB 1995, CSB, NKJV via API.Bible** (free Starter plan, non-commercial; terms read November 2026 at
+  api.bible/terms-and-conditions and care.api.bible articles 401 and 405). `APIBIBLE_TRANSLATIONS` in `bible.ts`,
+  offered only while `APIBIBLE_ENABLED` in `config.ts` is true (turn it on once the relay has its key and KV store);
+  relay route `/abible` in `scripts/build-relay.mjs`. What the terms require and how we meet them:
+  - **5,000 calls a month, 3 copyrighted Bibles** (all three slots used; no room for a fourth on this plan).
+    The relay keeps each chapter in Cloudflare KV (`ABIBLE_STORE`), refetches after **25 days**, never serves
+    one **30+ days** old (KV expires it then). The terms' rule is *refresh at least every 30 days*, not delete.
+    3 × 1,189 chapters = 3,567, so even if every chapter were read the 25-day refresh stays under 5,000. A
+    counter (KV key `usage`, per day, summed over 31 days) stops calls at 4,500; if the counter can't be saved
+    the call is refused. Verse search reads whole chapters through the same store (no extra calls).
+  - **FUMS usage tracking is required for web apps**: each chapter keeps its `fumsToken`, and the app calls
+    `fums("trackView", token)` every time it is shown (`reportView()` in `bible.ts`, loads
+    `pkg.api.bible/fumsV3.min.js` on first use). Whether a cached token may be re-reported isn't stated in their
+    docs; the owner may confirm with support@api.bible.
+  - **Credit**: the copyright notice API.Bible sends (fallback: the publisher's standard notice in
+    `APIBIBLE_TRANSLATIONS`), "Text provided by API.Bible" with a link (required on Starter), and "Copyright details"
+    opening Sources & licenses, which lists every notice and explains the caching and tracking. No logos.
+  - **Unchanged text** (no footnotes or headings, which their API offers as options); kept **in memory only** on the
+    device (≤ 500 verses); **printing stops at 100 verses** (`body.print-limit`, their DRM rule).
+  - **NKJV**: only while the app has under 5,000 users a month (the range set in the API.Bible account).
+  - **Never**: ads/fees/donations (would need a paid plan), sending this text to AI tools or AI text-to-speech,
+    or putting it in emails/push messages (matters for "class lessons": share references, not wording).
+  - **Removal**: 24 hours after a request, 72 hours after the plan ends: set `API_BIBLE_OFF` and delete the KV
+    namespace (relay/README.md).
+  - The relay refuses localhost, so these translations can only be checked on the live site; locally the app
+    falls back to the WEB with a notice.
+- LSB and HCSB are **not** allowed until the owner gets permission. `OPEN_TRANSLATIONS` in `bible.ts` is the hook
+  for freely licensed texts.
 - **Hymns:** titles, writers and years only (facts, not copyrightable). **Never add lyrics.** No link-outs.
 - **Nations, period and hymn-tie summaries** are original writing for this app.
 - **Itiner-e** roads (CC BY 4.0) are credited in Sources & licenses (authors, paper, license, and that we clipped and
@@ -283,10 +311,13 @@ Hymns for each chapter; rivers that thin out when zoomed out; flat-style verse h
 solid place-name underlines; bolded word for list items that share a verse (and the correct "N of M" chip);
 quieter last-mentioned map marker; the Nations page with person-card links; the rename to Bible Study Companion
 with the equal-width title (then to Ancient Pathfinder with the ancientpathfinder.com domain) and a header that folds into ☰ below 1440px; Hebrew & Greek word study; removal of the
-personal ESV key field; site-wide search; the distance tool with Roman-road routes; journeys along Roman roads; nation cards from the text; always opening at Genesis 1; verse search by wording and meaning; Passion Week class tools (journey, lists, Compare the accounts, Jerusalem page, Herod's dynasty). Earlier: ESV via relay, the 17 periods, the People page with family trees, map clusters,
+personal ESV key field; site-wide search; the distance tool with Roman-road routes; journeys along Roman roads; nation cards from the text; always opening at Genesis 1; verse search by wording and meaning; Passion Week class tools (journey, lists, Compare the accounts, Jerusalem page, Herod's dynasty); NASB 1995, CSB and NKJV through API.Bible. Earlier: ESV via relay, the 17 periods, the People page with family trees, map clusters,
 and the phone layout.
 
 ## Ideas not yet started (only if the owner asks)
+
+- From the Passion Week class brainstorm: a **"Road to AD 70" timeline**, and **class lessons** (verses, notes, map
+  stops and links bundled into one shareable link; licensed wording must not be put in the link or sent by email)
 
 - Hymn songbook numbers (e.g. *Songs of Faith and Praise*, *Praise for the Lord*) once the owner confirms them;
   owner may also add or remove hymns
@@ -294,5 +325,5 @@ and the phone layout.
 - Waldron's exact scripture boundaries, once the owner provides them
 - Linking place cards to their nation; a word-study search by Strong's number or English word (could join the
   site search)
-- More translations through licensed channels
+- More translations through licensed channels (API.Bible's free plan is full at three)
 - Notes and highlights; offline use; more journeys and lists

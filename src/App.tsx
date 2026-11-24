@@ -1,16 +1,19 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { BOOKS, getBook } from './data/books';
 import {
+  APIBIBLE_TRANSLATIONS,
   BIBLE_API_TRANSLATIONS,
   chapterPages,
   DEFAULT_TRANSLATION,
   ESV_COPYRIGHT,
   ESV_TRANSLATION,
-  EsvKeyMissing,
   FALLBACK_TRANSLATION,
   fetchPassage,
   findTranslation,
+  isLicensed,
+  LicensedUnavailable,
   OPEN_TRANSLATIONS,
+  translationNotice,
   type Verse,
 } from './lib/bible';
 import { loadChapterGeo, placesForVerse, type ChapterGeo, type Place } from './lib/geo';
@@ -170,6 +173,10 @@ export default function App() {
   const chosenTranslation = findTranslation(translationId);
   const translation = fallbackReason ? findTranslation(FALLBACK_TRANSLATION) : chosenTranslation;
   const journey = JOURNEYS.find((j) => j.id === journeyId) ?? null;
+  // API.Bible's terms: printing of its translations stops after 100 verses (see .print-limit in styles.css)
+  useEffect(() => {
+    document.body.classList.toggle('print-limit', translation.provider === 'apibible');
+  }, [translation.provider]);
   const [presenting, setPresenting] = useState(false);
   const journeyLegs = useJourneyLegs(journey);
 
@@ -194,8 +201,8 @@ export default function App() {
     setError(null);
     fetchPassage(chosenTranslation, loc.book, loc.chapter, page, { esvKey })
       .catch((e: Error) => {
-        // the ESV isn't available: show the public-domain WEB instead, and say why
-        if (e instanceof EsvKeyMissing && chosenTranslation.provider === 'esv') {
+        // a licensed translation isn't available: show the public-domain WEB instead, and say why
+        if (e instanceof LicensedUnavailable && isLicensed(chosenTranslation)) {
           if (!cancelled) setFallbackReason(e.message);
           const web = findTranslation(FALLBACK_TRANSLATION);
           return fetchPassage(web, loc.book, loc.chapter, chapterPages(web, loc.book, loc.chapter)[0]);
@@ -502,7 +509,7 @@ export default function App() {
           aria-expanded={menuOpen}
           aria-label="Menu"
         >
-          <span className="menu-btn-code">{translation.code.toUpperCase()}</span>
+          <span className="menu-btn-code">{translation.label ?? translation.code.toUpperCase()}</span>
           <span aria-hidden>{menuOpen ? '✕' : '☰'}</span>
         </button>
         {/* On wide screens these sit in the header; on phones they fold into the ☰ menu. */}
@@ -521,6 +528,15 @@ export default function App() {
           <optgroup label="Licensed (Crossway's official ESV API)">
             <option value={ESV_TRANSLATION.id}>ESV — {ESV_TRANSLATION.name}</option>
           </optgroup>
+          {APIBIBLE_TRANSLATIONS.length > 0 && (
+            <optgroup label="Licensed (through API.Bible)">
+              {APIBIBLE_TRANSLATIONS.map((t) => (
+                <option key={t.id} value={t.id}>
+                  {t.code === 'NASB1995' ? 'NASB 1995' : t.code} — {t.name}
+                </option>
+              ))}
+            </optgroup>
+          )}
           {OPEN_TRANSLATIONS.length > 0 && (
             <optgroup label="Freely licensed">
               {OPEN_TRANSLATIONS.map((t) => (
@@ -826,7 +842,8 @@ export default function App() {
                 {fallbackReason && (
                   <div className="text-notice">
                     <strong>Showing the World English Bible.</strong>{' '}
-                    The ESV service isn't available right now ({fallbackReason}). Please try again in a little while.
+                    The {chosenTranslation.provider === 'esv' ? 'ESV' : chosenTranslation.code} service isn't available
+                    right now ({fallbackReason}). Please try again in a little while.
                   </div>
                 )}
                 {!fallbackReason && pages.length > 1 && (
@@ -873,6 +890,17 @@ export default function App() {
                   <a href="https://www.esv.org/" target="_blank" rel="noreferrer">
                     ESV.org
                   </a>
+                </p>
+              ) : translation.provider === 'apibible' ? (
+                <p className="copyright-notice">
+                  <strong>{translation.label ?? translation.code}</strong> · {translationNotice(translation)} Text provided by{' '}
+                  <a href="https://api.bible" target="_blank" rel="noreferrer">
+                    API.Bible
+                  </a>{' '}
+                  ·{' '}
+                  <button type="button" className="link-button" onClick={() => setSettingsOpen(true)}>
+                    Copyright details
+                  </button>
                 </p>
               ) : translation.notice ? (
                 <p className="copyright-notice">
@@ -1102,6 +1130,25 @@ export default function App() {
                 </a>
                 .
               </p>
+              {APIBIBLE_TRANSLATIONS.length > 0 && (
+              <p>
+                <strong>NASB 1995, CSB and NKJV.</strong> Provided through{' '}
+                <a href="https://api.bible" target="_blank" rel="noreferrer">
+                  API.Bible
+                </a>{' '}
+                (American Bible Society) under its free plan for non-commercial use. This app has no ads, charges nothing
+                and asks for no donations. The text is shown as published, without footnotes or section headings. To keep
+                within the plan, each chapter is kept for at most 30 days on the app's server so it doesn't have to be
+                fetched again for every reader, only in memory on your device, and printing stops after 100 verses.
+                When you read these translations, API.Bible's usage tracking (FUMS) records an anonymous view so the
+                publishers can count how often their text is read; it doesn't include your name or anything you type.
+              </p>
+              )}
+              {APIBIBLE_TRANSLATIONS.map((t) => (
+                <p key={t.id}>
+                  <strong>{t.code === 'NASB1995' ? 'NASB 1995' : t.code}.</strong> {translationNotice(t)}
+                </p>
+              ))}
               <p>
                 <strong>Public-domain translations</strong> (WEB, KJV, ASV, BBE, Darby, YLT, OEB) are free to use
                 without restriction, served by{' '}

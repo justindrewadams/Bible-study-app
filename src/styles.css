@@ -5966,3 +5966,22 @@ button.hd-person:hover {
   color: var(--muted);
   border-bottom: 1px solid var(--hair);
 }
+
+/* API.Bible translations: "Copyright details" opens Sources & licenses */
+.link-button {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* API.Bible's terms: printing of its translations stops after 100 verses */
+@media print {
+  body.print-limit .verses .verse:nth-of-type(n + 101),
+  body.print-limit .verses .verse:nth-of-type(n + 101) ~ * {
+    display: none !important;
+  }
+}

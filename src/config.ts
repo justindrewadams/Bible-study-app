@@ -9,3 +9,9 @@
  * until then readers can add their own key in Settings, or see the WEB.
  */
 export const ESV_RELAY_URL = 'https://bible-atlas-esv.justindrewadams.workers.dev';
+
+/**
+ * Offer the NASB 1995, CSB and NKJV (API.Bible, through the relay above). Turn on once the relay has
+ * its API_BIBLE_KEY secret and ABIBLE_STORE KV binding (see relay/README.md).
+ */
+export const APIBIBLE_ENABLED = false;

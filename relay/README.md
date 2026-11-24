@@ -41,8 +41,47 @@ To check it, open the Worker's address with `/passage?book=John&chapter=3&from=1
 Opened directly in a browser tab, it should answer *"This relay only serves the Ancient Pathfinder app"*.
 That refusal is expected: it means the relay is running and only talks to the app.
 
+## NASB 1995, CSB and NKJV (API.Bible), one-time setup
+
+The same relay also serves three translations from [API.Bible](https://api.bible) under its free,
+non-commercial **Starter** plan (5,000 requests a month, up to 3 copyrighted Bibles). To stay inside
+that limit, the relay keeps each chapter in a Cloudflare **KV** store, so a chapter is fetched from
+API.Bible at most once every 25 days however many people read it. API.Bible's terms say stored text
+must be refreshed at least every 30 days, so a stored chapter is never shown once it is 30 days old,
+and KV deletes it by itself then. The relay also counts its calls and stops at 4,500 in any 31 days;
+stored chapters keep working, and the app shows the WEB for the rest until the count drops.
+
+**1. API.Bible account**
+1. Sign up at <https://api.bible/sign-up> and choose the free **Starter** plan.
+2. Describe the app as a free, **non-commercial** Bible study website (no ads, fees or donations),
+   at `https://ancientpathfinder.com/`. Set the expected users **under 5,000 a month** (the NKJV
+   requires this on the free plan).
+3. Choose the three Bibles: **New American Standard Bible 1995 (NASB1995)**, **Christian Standard
+   Bible (CSB)** and **New King James Version (NKJV)**.
+4. Copy the API key.
+
+**2. A KV store for the chapters**
+1. In Cloudflare, open **Storage & Databases → KV** (older dashboards: *Workers & Pages → KV*) and
+   click **Create**. Name it `abible-chapters`.
+2. Open the `bible-atlas-esv` Worker → **Settings → Bindings → Add → KV namespace**.
+   Variable name: `ABIBLE_STORE`. Namespace: `abible-chapters`. Save.
+
+**3. The key**
+1. In the Worker: **Settings → Variables and Secrets → Add**. Type **Secret**, name `API_BIBLE_KEY`,
+   value: the key from API.Bible. Save.
+2. Paste the newest [`esv-relay.js`](./esv-relay.js) into the Worker editor and **Deploy**.
+
+**Removing the text (if API.Bible or a publisher asks, or the plan ends).** Their terms give 24 hours
+after a request, or 72 hours after the plan ends. Add a text variable `API_BIBLE_OFF` = `ALL` (or e.g.
+`NKJV`) so nothing more is served, then delete the `abible-chapters` KV namespace (and create a new,
+empty one bound as `ABIBLE_STORE` if the translations should come back later).
+
 ## Optional settings
 
+- `API_BIBLE_OFF` (text variable): `ALL`, or translations to stop serving, e.g. `NKJV`.
+- `API_BIBLE_IDS` (text variable): API.Bible's ids for the three Bibles (`NASB1995=…,CSB=…,NKJV=…`),
+  only if the automatic lookup by abbreviation ever picks the wrong one.
+- `API_BIBLE_MONTHLY_CAP` (text variable): calls allowed per 31 days (default 4500).
 - `ALLOWED_ORIGINS` (text variable): sites allowed to use the relay, comma-separated.
   The default is `https://ancientpathfinder.com,https://www.ancientpathfinder.com,https://justindrewadams.github.io`. Add `http://localhost:5173` to test locally.
 

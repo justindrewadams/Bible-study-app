@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { formatOsis } from '../lib/placeInfo';
-import { ESV_COPYRIGHT, fetchVerses, type Translation } from '../lib/bible';
+import { fetchVerses, isLicensed, translationNotice, type Translation } from '../lib/bible';
 import { getBook } from '../data/books';
 import { findCandidates, loadVerseIndex, matchedWords, rankInTranslation, wantsVerses, type MatchKind, type VerseHit } from '../lib/verseSearch';
 import { fold, words } from '../lib/stem';
@@ -230,7 +230,7 @@ export default function SiteSearch(props: Props) {
   const showPanel = open && q.length >= 2;
   const verseHits = verses && verses.query === q ? verses.hits : [];
   const versesLoading = !!verses && verses.query === q && verses.loading;
-  const anyEsv = verseHits.some((h) => !h.web) && translation.provider === 'esv';
+  const anyLicensed = verseHits.some((h) => !h.web) && isLicensed(translation);
   const sameName = new Set(
     (r?.places ?? []).map((x) => x.place.name).filter((name, i, all) => all.indexOf(name) !== i),
   );
@@ -345,7 +345,20 @@ export default function SiteSearch(props: Props) {
                       ))}
                     </ul>
                   )}
-                  {anyEsv && <p className="verse-results-notice">{ESV_COPYRIGHT}</p>}
+                  {anyLicensed && (
+                    <p className="verse-results-notice">
+                      {translationNotice(translation)}
+                      {translation.provider === 'apibible' && (
+                        <>
+                          {' '}Text provided by{' '}
+                          <a href="https://api.bible" target="_blank" rel="noreferrer">
+                            API.Bible
+                          </a>
+                          .
+                        </>
+                      )}
+                    </p>
+                  )}
                 </section>
               )}
 

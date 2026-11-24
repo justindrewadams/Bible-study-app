@@ -1,6 +1,6 @@
 import { bookNumber, getBook } from '../data/books';
 import verseCounts from '../data/verseCounts.json';
-import { ESV_RELAY_URL } from '../config';
+import { APIBIBLE_ENABLED, ESV_RELAY_URL } from '../config';
 
 export interface Verse {
   verse: number;
@@ -10,11 +10,13 @@ export interface Verse {
 export interface Translation {
   /** unique id: "<provider>:<code>" */
   id: string;
-  provider: 'bibleapi' | 'bolls' | 'esv';
+  provider: 'bibleapi' | 'bolls' | 'esv' | 'apibible';
   code: string;
   name: string;
   /** required credit, shown under the text */
   notice?: string;
+  /** a shorter abbreviation for tight spaces (the phone header) */
+  label?: string;
 }
 
 /**
@@ -31,12 +33,57 @@ export const BIBLE_API_TRANSLATIONS: Translation[] = [
   ['oeb-us', 'Open English Bible'],
 ].map(([code, name]) => ({ id: `bibleapi:${code}`, provider: 'bibleapi', code, name }));
 
-/**
- * Copyrighted translations other than the ESV (e.g. NASB, LSB, NKJV, HCSB) are not offered:
- * their publishers allow only limited quotation without permission, so showing whole
- * chapters needs a license or an official licensed source (for example API.Bible).
- */
+/** Freely licensed (e.g. CC BY) translations; none at the moment. */
 export const OPEN_TRANSLATIONS: Translation[] = [];
+
+/**
+ * Copyrighted translations served by API.Bible under its free, non-commercial Starter plan
+ * (https://api.bible/terms-and-conditions), through the app's relay, which holds the key and keeps
+ * each chapter in Cloudflare for at most 30 days (refreshed after 25). On this side: text is kept
+ * in memory only, every view is reported to API.Bible's usage tracking (FUMS), the copyright
+ * notice and a link to API.Bible appear under the text, and printing stops at 100 verses.
+ * `notice` is the publisher's standard notice, replaced by the one API.Bible sends when it does.
+ */
+const ALL_APIBIBLE_TRANSLATIONS: Translation[] = [
+  {
+    id: 'apibible:NASB1995',
+    provider: 'apibible',
+    code: 'NASB1995',
+    label: 'NASB95',
+    name: 'New American Standard Bible (1995)',
+    notice:
+      'Scripture quotations taken from the (NASB®) New American Standard Bible®, Copyright © 1960, 1971, 1977, 1995 by The Lockman Foundation. Used by permission. All rights reserved. lockman.org',
+  },
+  {
+    id: 'apibible:CSB',
+    provider: 'apibible',
+    code: 'CSB',
+    name: 'Christian Standard Bible',
+    notice:
+      'Scripture quotations marked CSB have been taken from the Christian Standard Bible®, Copyright © 2017 by Holman Bible Publishers. Used by permission. Christian Standard Bible® and CSB® are federally registered trademarks of Holman Bible Publishers.',
+  },
+  {
+    id: 'apibible:NKJV',
+    provider: 'apibible',
+    code: 'NKJV',
+    name: 'New King James Version',
+    notice: 'Scripture taken from the New King James Version®. Copyright © 1982 by Thomas Nelson. Used by permission. All rights reserved.',
+  },
+];
+
+/** Offered once the relay is set up for API.Bible (APIBIBLE_ENABLED in config.ts). */
+export const APIBIBLE_TRANSLATIONS = APIBIBLE_ENABLED ? ALL_APIBIBLE_TRANSLATIONS : [];
+
+/** The ESV and the API.Bible translations: copyrighted, shown under their publishers' terms. */
+export const isLicensed = (t: Translation) => t.provider === 'esv' || t.provider === 'apibible';
+
+/** The copyright notice API.Bible sent for each translation (kept for the session). */
+const apiBibleNotices = new Map<string, string>();
+/** The notice to show under a translation's text. */
+export function translationNotice(t: Translation): string {
+  if (t.provider === 'esv') return ESV_COPYRIGHT;
+  return apiBibleNotices.get(t.code) || t.notice || `${t.name}, public domain.`;
+}
 
 /**
  * The ESV, only through Crossway's official ESV API (api.esv.org), under its free
@@ -69,7 +116,7 @@ export const ESV_TERMS = {
 };
 
 export function findTranslation(id: string): Translation {
-  return [...BIBLE_API_TRANSLATIONS, ...OPEN_TRANSLATIONS, ESV_TRANSLATION].find((t) => t.id === id) ?? ESV_TRANSLATION;
+  return [...BIBLE_API_TRANSLATIONS, ...OPEN_TRANSLATIONS, ...APIBIBLE_TRANSLATIONS, ESV_TRANSLATION].find((t) => t.id === id) ?? ESV_TRANSLATION;
 }
 
 const counts = verseCounts as Record<string, number[]>;
@@ -183,7 +230,66 @@ async function fetchBolls(t: Translation, osis: string, chapter: number): Promis
   return data.map((v) => ({ verse: v.verse, text: clean(v.text) }));
 }
 
-export class EsvKeyMissing extends Error {}
+/** A licensed translation can't be fetched right now (the app shows the WEB instead). */
+export class LicensedUnavailable extends Error {}
+export class EsvKeyMissing extends LicensedUnavailable {}
+
+// --- API.Bible (NASB 1995, CSB, NKJV) --------------------------------------------------------
+
+/**
+ * Chapters are kept in memory only (never in browser storage), at most 500 verses, like the ESV.
+ * Each keeps API.Bible's FUMS token, reported every time the chapter is shown.
+ */
+const apiBibleCache = new Map<string, { verses: Verse[]; fums: string }>();
+function apiBibleSet(key: string, v: { verses: Verse[]; fums: string }) {
+  apiBibleCache.set(key, v);
+  let total = [...apiBibleCache.values()].reduce((n, x) => n + x.verses.length, 0);
+  for (const k of apiBibleCache.keys()) {
+    if (total <= 500 || k === key) break;
+    total -= apiBibleCache.get(k)!.verses.length;
+    apiBibleCache.delete(k);
+  }
+}
+
+type FumsWindow = Window & { fums?: (...args: unknown[]) => void; fumsData?: unknown[] };
+/** Reports one view to API.Bible's Fair Use Management System, loading its script the first time. */
+function reportView(token: string) {
+  if (!token || typeof window === 'undefined') return;
+  const w = window as FumsWindow;
+  if (!w.fums) {
+    w.fumsData = w.fumsData || [];
+    w.fums = function (...args: unknown[]) {
+      w.fumsData!.push(args);
+    };
+    const s = document.createElement('script');
+    s.src = 'https://pkg.api.bible/fumsV3.min.js';
+    s.async = true;
+    document.head.appendChild(s);
+  }
+  w.fums('trackView', token);
+}
+
+async function fetchApiBible(t: Translation, osis: string, chapter: number): Promise<Verse[]> {
+  const key = `${t.code}:${osis}.${chapter}`;
+  let hit = apiBibleCache.get(key);
+  if (!hit) {
+    if (!ESV_RELAY_ENABLED) throw new LicensedUnavailable('the relay is not set up');
+    const params = new URLSearchParams({ bible: t.code, book: osis, chapter: String(chapter) });
+    let res: Response;
+    try {
+      res = await fetch(`${ESV_RELAY_URL.replace(/\/$/, '')}/abible?${params}`);
+    } catch {
+      throw new LicensedUnavailable('no connection');
+    }
+    const data = (await res.json().catch(() => ({}))) as { verses?: Verse[]; copyright?: string; fums?: string; error?: string };
+    if (!res.ok || !data.verses?.length) throw new LicensedUnavailable(data.error ?? `the relay returned ${res.status}`);
+    if (data.copyright) apiBibleNotices.set(t.code, data.copyright.replace(/\s+/g, ' ').trim());
+    hit = { verses: data.verses.map((v) => ({ verse: v.verse, text: clean(v.text) })), fums: data.fums ?? '' };
+    apiBibleSet(key, hit);
+  }
+  reportView(hit.fums);
+  return hit.verses;
+}
 
 /** True when the app can read the ESV for everyone, through the relay. */
 export const ESV_RELAY_ENABLED = ESV_RELAY_URL.trim() !== '';
@@ -248,6 +354,7 @@ export async function fetchPassage(
     esvSet(key, verses);
     return verses;
   }
+  if (t.provider === 'apibible') return fetchApiBible(t, osis, chapter);
   const key = `${t.id}:${osis}.${chapter}`;
   const hit = pdGet(key);
   if (hit) return hit;
@@ -331,6 +438,15 @@ export async function fetchVerses(t: Translation, refs: VerseRef[], opts: { esvK
     return t.provider === 'esv' ? `${b}.${c}:${v}-${v}` : `${t.id}:${b}.${c}:${v}`;
   };
   const missing: VerseRef[] = [];
+  if (t.provider === 'apibible') {
+    // whole chapters through the relay's store, so verse search costs no extra API.Bible calls
+    for (const r of refs.slice(0, 6)) {
+      const [b, c, v] = r.split('.');
+      const text = (await fetchApiBible(t, b, Number(c))).find((x) => x.verse === Number(v))?.text;
+      if (text) out.set(r, text);
+    }
+    return out;
+  }
   for (const r of refs.slice(0, 6)) {
     const hit = t.provider === 'esv' ? esvGet(key(r)) : pdGet(key(r));
     if (hit?.[0]) out.set(r, hit[0].text);

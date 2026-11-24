@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { getBook } from '../data/books';
 import { PARALLELS, parsePassage, type ParallelSet, type Passage } from '../data/parallels';
 import TextSizeControl, { useTextPrefs } from './TextSizeControl';
-import { ESV_COPYRIGHT, fetchPassage, type Translation, type Verse } from '../lib/bible';
+import { fetchPassage, translationNotice, type Translation, type Verse } from '../lib/bible';
 
 interface Props {
   set: ParallelSet;
@@ -219,7 +219,16 @@ export default function CompareGospels({ set, translation, esvKey, fromBook, onC
         </div>
 
         <footer className="compare-foot">
-          {translation.provider === 'esv' ? ESV_COPYRIGHT : translation.notice ?? `${code} · ${translation.name}, public domain.`}
+          {translation.provider === 'bibleapi' ? `${code} · ${translation.name}, public domain.` : translationNotice(translation)}
+          {translation.provider === 'apibible' && (
+            <>
+              {' '}Text provided by{' '}
+              <a href="https://api.bible" target="_blank" rel="noreferrer">
+                API.Bible
+              </a>
+              .
+            </>
+          )}
         </footer>
       </div>
     </div>
