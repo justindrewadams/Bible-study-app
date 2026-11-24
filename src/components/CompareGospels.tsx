@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { getBook } from '../data/books';
 import { parsePassage, type ParallelSet, type Passage } from '../data/parallels';
+import TextSizeControl, { useTextPrefs } from './TextSizeControl';
 import { ESV_COPYRIGHT, fetchPassage, type Translation, type Verse } from '../lib/bible';
 
 interface Props {
@@ -63,6 +64,7 @@ export default function CompareGospels({ set, translation, esvKey, fromBook, onC
   }, [onClose]);
 
   const code = translation.code.toUpperCase();
+  const { prefs: textPrefs, scale: textScale } = useTextPrefs();
 
   return (
     <div className="modal-backdrop compare-backdrop" onClick={onClose}>
@@ -72,9 +74,12 @@ export default function CompareGospels({ set, translation, esvKey, fromBook, onC
             <div className="compare-kicker">Compare the accounts · {code}</div>
             <h2>{set.title}</h2>
           </div>
-          <button className="icon-btn" onClick={onClose} aria-label="Close">
-            ✕
-          </button>
+          <div className="compare-tools">
+            <TextSizeControl />
+            <button className="icon-btn" onClick={onClose} aria-label="Close">
+              ✕
+            </button>
+          </div>
         </header>
 
         <div className="compare-tabs" role="tablist">
@@ -85,7 +90,10 @@ export default function CompareGospels({ set, translation, esvKey, fromBook, onC
           ))}
         </div>
 
-        <div className="compare-cols" style={{ '--cols': columns.length } as React.CSSProperties}>
+        <div
+          className={`compare-cols${textPrefs.bold ? ' bolder' : ''}`}
+          style={{ '--cols': columns.length, '--text-scale': textScale } as React.CSSProperties}
+        >
           {columns.map(([b, passages], i) => (
             <section key={b} className={`compare-col${tab === i ? ' on' : ''}${b === fromBook ? ' here' : ''}`}>
               <h3>{bookName(b)}</h3>

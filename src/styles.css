@@ -5303,7 +5303,7 @@ button.hd-person:hover {
 .compare-text {
   margin: 4px 0 0;
   font-family: var(--serif);
-  font-size: 1.02rem;
+  font-size: calc(1.02rem * var(--text-scale, 1));
   line-height: 1.55;
 }
 
@@ -5369,19 +5369,22 @@ button.hd-person:hover {
     color: #fff;
   }
 
+  /* one account at a time; each keeps its own place when switching tabs */
   .compare-cols {
-    display: block;
-    overflow-y: auto;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr);
   }
 
   .compare-col {
-    display: none;
+    display: block;
+    visibility: hidden;
+    grid-area: 1 / 1;
     border: 0;
-    overflow: visible;
   }
 
   .compare-col.on {
-    display: block;
+    visibility: visible;
   }
 
   .compare-col h3 {
@@ -5845,4 +5848,20 @@ button.hd-person:hover {
   .present-hint {
     display: none;
   }
+}
+
+/* Compare the accounts: the text size button beside the close button; columns scroll on their own */
+.compare-tools {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: none;
+}
+
+.compare-cols.bolder .compare-text {
+  font-weight: 500;
+}
+
+.compare-col {
+  overscroll-behavior: contain;
 }

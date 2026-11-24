@@ -123,6 +123,9 @@ the decisions already made (and why), and how the owner likes to work.
   set, a chip "⇄ Compare the accounts: …" opens the passages side by side (tabs on phones) in the reader's
   translation, each fetched like a reader page (ESV limits hold). The table is original: John's ministry and
   Passion Week so far (33 events); add more sets the same way (passages within one chapter each).
+  It has the same "AA" text size / Bolder text control as the reader (`TextSizeControl.tsx`, one shared setting,
+  `useTextPrefs`, saved as `textPrefs`), and each account scrolls on its own (side by side on computers; on phones
+  each tab keeps its own place).
 - **Jerusalem in Jesus' Day** (`#jerusalem`, `#jerusalem/<spot>`; `JerusalemPage.tsx`, `src/data/jerusalem.ts`):
   an SVG city plan and temple plan drawn for the app, with 27 tappable spots (text + verses). Reached from place
   cards (`PLACE_TO_SPOT`), journey stops and the site search ("Jerusalem in Jesus' day" results). No header button
