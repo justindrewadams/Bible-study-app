@@ -14,4 +14,4 @@ export const ESV_RELAY_URL = 'https://bible-atlas-esv.justindrewadams.workers.de
  * Offer the NASB 1995, CSB and NKJV (API.Bible, through the relay above). Turn on once the relay has
  * its API_BIBLE_KEY secret and ABIBLE_STORE KV binding (see relay/README.md).
  */
-export const APIBIBLE_ENABLED = false;
+export const APIBIBLE_ENABLED = true;
