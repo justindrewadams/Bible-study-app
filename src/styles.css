@@ -7609,3 +7609,8 @@ button.hd-person:hover {
     width: 110px;
   }
 }
+
+/* Periods page: a text-only banner like the other pages (the owner asked to drop the illustration) */
+.periods-hero .hero-text {
+  background: var(--sky);
+}

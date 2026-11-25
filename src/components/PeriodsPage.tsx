@@ -80,7 +80,7 @@ export default function PeriodsPage({ focusId, currentId, onRead, onFollowJourne
         </button>
         <span className="bar-title">Periods of Bible History</span>
       </div>
-      <section className="hero">
+      <section className="hero people-hero periods-hero">
         <div className="hero-text">
           <h1>Periods of Bible History</h1>
           <p>
@@ -91,9 +91,6 @@ export default function PeriodsPage({ focusId, currentId, onRead, onFollowJourne
               journeys to follow on the map.
             </span>
           </p>
-        </div>
-        <div className="hero-art" aria-hidden>
-          <HeroArt />
         </div>
       </section>
 
@@ -286,45 +283,3 @@ function PeriodSection({
   );
 }
 
-/** Flat illustration: an open scroll over a stylised map of the Bible lands with a journey route. */
-function HeroArt() {
-  return (
-    <svg viewBox="0 0 520 360" preserveAspectRatio="xMidYMid slice" className="hero-svg">
-      <rect width="520" height="360" fill="#e9c2b8" />
-      <circle cx="270" cy="185" r="150" fill="#2f6fd6" stroke="#111" strokeWidth="3" />
-      {/* lands */}
-      <path d="M150 120c30-30 80-38 110-22 20 10 10 34-12 40-30 8-36 30-62 30-26 0-52-24-36-48z" fill="#8fe07a" stroke="#111" strokeWidth="3" />
-      <path d="M300 70c40 0 90 20 100 60 6 24-22 28-40 22-24-8-36 12-60 4-26-8-34-40-22-62 6-14 10-24 22-24z" fill="#8fe07a" stroke="#111" strokeWidth="3" />
-      <path d="M318 190c22-8 52 4 58 30 6 30-14 64-40 78-20 10-30-10-26-34 3-22-18-28-14-50 2-12 10-20 22-24z" fill="#8fe07a" stroke="#111" strokeWidth="3" />
-      <path d="M180 220c20-8 50-2 60 18 10 22-6 46-30 50-22 4-46-8-50-30-3-16 6-32 20-38z" fill="#8fe07a" stroke="#111" strokeWidth="3" />
-      {/* route */}
-      <path d="M196 150 C240 140 270 120 330 118 S360 200 340 240 S250 250 214 250" fill="none" stroke="#fff" strokeWidth="4" strokeDasharray="10 9" strokeLinecap="round" />
-      {[
-        [196, 150, '#f7c33d'],
-        [330, 118, '#f05a28'],
-        [348, 210, '#55b4e8'],
-        [214, 250, '#f7c33d'],
-      ].map(([x, y, c], i) => (
-        <g key={i} transform={`translate(${x} ${y})`}>
-          <path d="M0 0c-12-14-14-20-14-26a14 14 0 0 1 28 0c0 6-2 12-14 26z" fill={c as string} stroke="#111" strokeWidth="3" />
-          <circle cx="0" cy="-26" r="5" fill="#fff" stroke="#111" strokeWidth="2" />
-        </g>
-      ))}
-      {/* scroll */}
-      <g transform="translate(36 248) rotate(-8)">
-        <rect x="14" y="0" width="150" height="74" fill="#fff6dc" stroke="#111" strokeWidth="3" />
-        <rect x="0" y="-8" width="18" height="90" rx="9" fill="#f05a28" stroke="#111" strokeWidth="3" />
-        <rect x="160" y="-8" width="18" height="90" rx="9" fill="#f05a28" stroke="#111" strokeWidth="3" />
-        {[16, 30, 44, 58].map((y) => (
-          <line key={y} x1="34" x2={y === 58 ? 110 : 146} y1={y} y2={y} stroke="#111" strokeWidth="3" strokeLinecap="round" />
-        ))}
-      </g>
-      {/* timeline blocks */}
-      <g transform="translate(372 300)">
-        {['#6b8e23', '#a0522d', '#9b2226', '#6a4c93', '#3d405b', '#1d4e89', '#e76f51'].map((c, i) => (
-          <rect key={c} x={i * 18} y={-i * 6} width="16" height={22 + i * 6} fill={c} stroke="#111" strokeWidth="2.5" />
-        ))}
-      </g>
-    </svg>
-  );
-}
