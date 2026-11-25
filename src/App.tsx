@@ -42,7 +42,7 @@ import { loadChapterPeople, type PersonEntry } from './lib/people';
 import ListPanel from './components/ListPanel';
 import { allLists, LISTS, LIST_GROUPS, type StudyList } from './lib/lists';
 import { copyBuiltIn, myId, noteIdOf } from './lib/mine';
-import { closeSharedLesson, loadShares, loadSharedLesson, saveSharedCopy, stepTargetId, type OpenLesson } from './lib/lessons';
+import { closeSharedLesson, loadShares, loadSharedLesson, saveSharedCopy, type OpenLesson } from './lib/lessons';
 import type { LessonStep } from './lib/notes';
 import { spanFromOsis } from './lib/refs';
 import { periodFor } from './data/periods';
@@ -180,8 +180,8 @@ export default function App() {
   const [lessonIndex, setLessonIndex] = useState(0);
   /** false while you've stepped out of the lesson (to read, follow a journey or use the big map) */
   const [lessonShown, setLessonShown] = useState(true);
-  /** presenting: the step to bring into view (n changes on each request) */
-  const [lessonJump, setLessonJump] = useState({ i: 0, n: 0 });
+  /** presenting: one step forward or back in the lesson (n changes on each press) */
+  const [lessonJump, setLessonJump] = useState({ d: 0, n: 0 });
   const [lessonIntro, setLessonIntro] = useState<OpenLesson | null>(null);
   const [lessonMsg, setLessonMsg] = useState<string | null>(null);
   // a shared lesson's link: "#lesson/<code>"
@@ -414,29 +414,10 @@ export default function App() {
       setPlaceOverride({ index: s.placeIndex ?? -1, name: s.place ?? 'A spot on the map', lat: s.lat, lon: s.lon, type: 'region', confidence: 50 });
     }
   };
-  const lessonFollowJourney = (s: LessonStep) => {
-    const j = lesson && allJourneys().find((x) => x.id === stepTargetId(s, lesson));
-    if (!j) return;
-    leavePages();
-    setListPlaying(false);
-    setListId(null);
-    setPlaying(false);
-    setMapVisible(true);
-    goToStop(j, Math.min(s.index ?? 0, j.stops.length - 1));
-  };
-  const lessonOpenList = (s: LessonStep) => {
-    const li = lesson && allLists().find((x) => x.id === stepTargetId(s, lesson));
-    if (!li) return;
-    leavePages();
-    setPlaying(false);
-    setJourneyId(null);
-    setListPlaying(false);
-    goToListItem(li, Math.min(s.index ?? 0, li.items.length - 1));
-  };
   const startLesson = (l: OpenLesson) => {
     setLesson(l);
     setLessonIndex(0);
-    setLessonJump({ i: 0, n: 0 });
+    setLessonJump({ d: 0, n: 0 });
     setLessonShown(true);
   };
   const closeLesson = () => {
@@ -519,9 +500,7 @@ export default function App() {
   /** One step forward or back: through the journey, else the study list, else the chapter's verses. */
   const presentStep = (d: number) => {
     if (lessonView && lesson) {
-      const i = Math.max(0, Math.min(lesson.steps.length - 1, lessonIndex + d));
-      setLessonIndex(i);
-      setLessonJump((j) => ({ i, n: j.n + 1 }));
+      setLessonJump((j) => ({ d, n: j.n + 1 }));
     } else if (journey) {
       setPlaying(false);
       goToStop(journey, Math.max(0, Math.min(journey.stops.length - 1, stopIndex + d)));
@@ -1136,8 +1115,6 @@ export default function App() {
                 onClose={closeLesson}
                 onOpenRef={openSpan}
                 onShowPlace={lessonShowPlace}
-                onFollowJourney={lessonFollowJourney}
-                onOpenList={lessonOpenList}
                 onOpenPage={lessonAction}
                 presenting={presenting}
                 onPresent={startPresenting}

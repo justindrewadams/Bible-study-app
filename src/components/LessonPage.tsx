@@ -26,7 +26,7 @@ import {
   type Translation,
 } from '../lib/bible';
 import { spanParts, spanVerseCount, type PassageVerse } from '../lib/exportDoc';
-import { allJourneys, legPath } from '../lib/journeys';
+import { allJourneys, legPath, type Journey } from '../lib/journeys';
 import { stepTargetId, type OpenLesson } from '../lib/lessons';
 import { allLists } from '../lib/lists';
 import type { LessonStep } from '../lib/notes';
@@ -40,8 +40,8 @@ interface Props {
   lesson: OpenLesson;
   translation: Translation;
   esvKey: string;
-  /** a request (from presenting) to bring a step into view; n changes on each request */
-  jump: { i: number; n: number };
+  /** presenting: one step forward (d 1) or back (d -1), through a journey's stops first; n changes each time */
+  jump: { d: number; n: number };
   /** the step now in view */
   onIndex: (i: number) => void;
   current: number;
@@ -50,8 +50,6 @@ interface Props {
   onClose: () => void;
   onOpenRef: (s: Span) => void;
   onShowPlace: (s: LessonStep) => void;
-  onFollowJourney: (s: LessonStep) => void;
-  onOpenList: (s: LessonStep) => void;
   onOpenPage: (s: LessonStep) => void;
   presenting: boolean;
   onPresent: () => void;
@@ -77,68 +75,91 @@ const bookTotal = (osis: string) => {
   return n;
 };
 
-/** Fetches every passage step, in order, within the translation's limits for one page. */
-function usePassages(steps: LessonStep[], t: Translation, esvKey: string) {
-  const [state, setState] = useState<Record<number, PassageState>>({});
-  const key = steps.map((s) => (s.type === 'passage' ? s.ref : '')).join('|');
-  useEffect(() => {
-    let cancelled = false;
-    const spans = steps.map((s) => (s.type === 'passage' && s.ref ? spanFromOsis(s.ref) : null));
-    setState(Object.fromEntries(spans.flatMap((sp, i) => (sp ? [[i, { s: 'loading' } as PassageState]] : []))));
-    const licensed = isLicensed(t);
-    const total = licensed ? ESV_TERMS.maxVersesPerPage : Infinity;
-    const halfBook = t.provider === 'esv';
-    let used = 0;
-    const perBook = new Map<string, number>();
-    (async () => {
-      for (let i = 0; i < spans.length; i++) {
-        const sp = spans[i];
-        if (!sp) continue;
-        const count = spanVerseCount(sp);
-        const inBook = (perBook.get(sp.osis) ?? 0) + count;
-        const bookMax = halfBook ? Math.floor(bookTotal(sp.osis) * ESV_TERMS.maxBookFraction) : Infinity;
-        let next: PassageState;
-        if (!count || used + count > total || inBook > bookMax) next = { s: 'limit' };
-        else {
-          const get = async (tr: Translation) => {
-            const verses: PassageVerse[] = [];
-            for (const p of spanParts(sp)) {
-              const got = await fetchPassage(tr, sp.osis, p.chapter, { from: p.from, to: p.to }, { esvKey });
-              for (const v of got) if (v.verse >= p.from && v.verse <= p.to) verses.push({ chapter: p.chapter, verse: v.verse, text: v.text });
-            }
-            if (!verses.length) throw new Error('no verses');
-            return verses;
-          };
-          try {
-            next = { s: 'ok', verses: await get(t), code: nice(t) };
-            used += count;
-            perBook.set(sp.osis, inBook);
-          } catch (e) {
-            // a licensed translation that can't be reached right now: the public-domain WEB, labelled
-            if (e instanceof LicensedUnavailable && licensed) {
-              const web = findTranslation(FALLBACK_TRANSLATION);
-              next = await get(web).then(
-                (verses): PassageState => ({ s: 'ok', verses, code: nice(web) }),
-                (): PassageState => ({ s: 'error' }),
-              );
-            } else next = { s: 'error' };
-          }
-        }
-        if (cancelled) return;
-        setState((m) => ({ ...m, [i]: next }));
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, [key, t.id, esvKey]); // eslint-disable-line react-hooks/exhaustive-deps
-  return state;
+/**
+ * The verses on a lesson page: passages, journey stops and list items, fetched one after another and kept
+ * within the translation's limit for one page (shared by everything on it). `gen` changes when the
+ * translation does, and everything is asked for again.
+ */
+interface VerseStore {
+  gen: number;
+  /** the translations actually shown on the page */
+  codes: Set<string>;
+  get: (key: string) => PassageState | undefined;
+  request: (key: string, span: Span) => void;
 }
 
-function Passage({ span, st, onRead }: { span: Span; st: PassageState | undefined; onRead: () => void }) {
+function useVerseStore(t: Translation, esvKey: string): VerseStore {
+  const [state, setState] = useState<Record<string, PassageState>>({});
+  const fresh = (gen: number) => ({ gen, id: `${t.id}|${esvKey}`, chain: Promise.resolve(), asked: new Set<string>(), used: 0, perBook: new Map<string, number>() });
+  const run = useRef(fresh(0));
+  if (run.current.id !== `${t.id}|${esvKey}`) run.current = fresh(run.current.gen + 1);
+  const r = run.current;
+
+  const fetchOne = async (sp: Span): Promise<PassageState> => {
+    const licensed = isLicensed(t);
+    const total = licensed ? ESV_TERMS.maxVersesPerPage : Infinity;
+    const count = spanVerseCount(sp);
+    const inBook = (r.perBook.get(sp.osis) ?? 0) + count;
+    const bookMax = t.provider === 'esv' ? Math.floor(bookTotal(sp.osis) * ESV_TERMS.maxBookFraction) : Infinity;
+    if (!count || r.used + count > total || inBook > bookMax) return { s: 'limit' };
+    const get = async (tr: Translation) => {
+      const verses: PassageVerse[] = [];
+      for (const p of spanParts(sp)) {
+        const got = await fetchPassage(tr, sp.osis, p.chapter, { from: p.from, to: p.to }, { esvKey });
+        for (const v of got) if (v.verse >= p.from && v.verse <= p.to) verses.push({ chapter: p.chapter, verse: v.verse, text: v.text });
+      }
+      if (!verses.length) throw new Error('no verses');
+      return verses;
+    };
+    try {
+      const verses = await get(t);
+      r.used += count;
+      r.perBook.set(sp.osis, inBook);
+      return { s: 'ok', verses, code: nice(t) };
+    } catch (e) {
+      // a licensed translation that can't be reached right now: the public-domain WEB, labelled
+      if (e instanceof LicensedUnavailable && licensed) {
+        const web = findTranslation(FALLBACK_TRANSLATION);
+        return get(web).then(
+          (verses): PassageState => ({ s: 'ok', verses, code: nice(web) }),
+          (): PassageState => ({ s: 'error' }),
+        );
+      }
+      return { s: 'error' };
+    }
+  };
+
+  const codes = new Set(
+    Object.entries(state).flatMap(([k, v]) => (k.startsWith(`${r.gen}:`) && v.s === 'ok' ? [v.code] : [])),
+  );
+  return {
+    gen: r.gen,
+    codes,
+    get: (key) => state[`${r.gen}:${key}`],
+    request: (key, sp) => {
+      const k = `${r.gen}:${key}`;
+      if (r.asked.has(k)) return;
+      r.asked.add(k);
+      setState((m) => ({ ...m, [k]: { s: 'loading' } }));
+      r.chain = r.chain.then(async () => {
+        const next = await fetchOne(sp);
+        if (run.current === r) setState((m) => ({ ...m, [k]: next }));
+      });
+    },
+  };
+}
+
+function Passage({ span, st, onRead, compact }: { span: Span; st: PassageState | undefined; onRead: () => void; compact?: boolean }) {
   if (!st || st.s === 'loading') return <p className="muted small ls-loading">Getting the verses…</p>;
   if (st.s !== 'ok')
-    return (
+    return compact ? (
+      <p className="muted small ls-omitted">
+        <button className="link-button" onClick={onRead}>
+          Read {spanLabel(span)}
+        </button>{' '}
+        {st.s === 'limit' ? '(past the publisher’s limit for one page)' : '(couldn’t be fetched right now)'}
+      </p>
+    ) : (
       <p className="muted small ls-omitted">
         {st.s === 'limit'
           ? 'Shown as a reference only: the publisher allows only so many verses on one page.'
@@ -149,14 +170,15 @@ function Passage({ span, st, onRead }: { span: Span; st: PassageState | undefine
       </p>
     );
   let last = span.chapter;
+  const one = st.verses.length === 1;
   return (
-    <p className="ls-verses">
+    <p className={`ls-verses${compact ? ' compact' : ''}`}>
       {st.verses.map((v, i) => {
         const num = v.chapter !== last ? `${v.chapter}:${v.verse}` : `${v.verse}`;
         last = v.chapter;
         return (
           <Fragment key={i}>
-            <sup>{num}</sup> {v.text}{' '}
+            {!one && <sup>{num}</sup>} {v.text}{' '}
           </Fragment>
         );
       })}
@@ -324,9 +346,170 @@ function PageSummary({ step }: { step: LessonStep }) {
   return null;
 }
 
+// ------------------------------------------------------------------------------------ a journey, in the lesson
+
+const coarse = () => typeof window !== 'undefined' && window.matchMedia?.('(pointer: coarse)').matches;
+
+/** The route from the first stop to stop `at` (the part travelled so far). */
+function routeTo(j: Journey, at: number): [number, number][] {
+  const out: [number, number][] = [[j.stops[0].lat, j.stops[0].lon]];
+  for (let k = 1; k <= at; k++) out.push(...legPath(j, k).slice(1));
+  return out;
+}
+
+/** Moves the map to the leg just travelled when the stop changes, and keeps it filling its box. */
+function FollowStop({ j, at }: { j: Journey; at: number }) {
+  const map = useMap();
+  const first = useRef(true);
+  const show = (animate: boolean) => {
+    const st = j.stops[at];
+    const pts = at > 0 ? legPath(j, at) : [[st.lat, st.lon] as [number, number]];
+    if (pts.length > 1) map.fitBounds(pts, { padding: [50, 50], maxZoom: 11, animate });
+    else map.setView([st.lat, st.lon], Math.max(map.getZoom(), 8), { animate });
+  };
+  useEffect(() => {
+    // the first view shows the whole journey
+    if (first.current) {
+      first.current = false;
+      return;
+    }
+    show(true);
+  }, [at]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (!('ResizeObserver' in window)) return;
+    let w = 0;
+    let h = 0;
+    const ro = new ResizeObserver(([e]) => {
+      const { width, height } = e.contentRect;
+      if (Math.abs(width - w) < 2 && Math.abs(height - h) < 2) return;
+      const firstSize = !w;
+      w = width;
+      h = height;
+      if (firstSize) return;
+      map.invalidateSize();
+      show(false);
+    });
+    ro.observe(map.getContainer());
+    return () => ro.disconnect();
+  }, [map]); // eslint-disable-line react-hooks/exhaustive-deps
+  return null;
+}
+
+function JourneyMap({ j, at, onPick }: { j: Journey; at: number; onPick: (k: number) => void }) {
+  const whole = useMemo(() => routeTo(j, j.stops.length - 1), [j]);
+  const travelled = useMemo(() => routeTo(j, at), [j, at]);
+  const touch = coarse();
+  return (
+    <WhenNear className="ls-map ls-journey-map">
+      <MapContainer
+        bounds={whole.length > 1 ? whole : undefined}
+        center={whole.length > 1 ? undefined : whole[0]}
+        zoom={whole.length > 1 ? undefined : 8}
+        boundsOptions={{ padding: [28, 28], maxZoom: 10 }}
+        className="ls-map-inner"
+        scrollWheelZoom={false}
+        dragging={!touch}
+        touchZoom
+        keyboard={false}
+        attributionControl
+      >
+        <FollowStop j={j} at={at} />
+        <TileLayer url={TERRAIN} maxNativeZoom={9} maxZoom={11} className="tiles-parchment" attribution="Powered by Esri &mdash; Source: USGS, Esri, TANA, DeLorme, NPS" />
+        {whole.length > 1 && <Polyline positions={whole} pathOptions={{ color: j.color, weight: 2, opacity: 0.4, dashArray: '4 6' }} />}
+        {travelled.length > 1 && <Polyline positions={travelled} pathOptions={{ color: j.color, weight: 4, opacity: 0.9 }} />}
+        {j.stops.map((st, k) => (
+          <CircleMarker
+            // a new marker when it becomes (or stops being) the current stop, so its label follows
+            key={k === at ? `${k}-at` : k}
+            center={[st.lat, st.lon]}
+            radius={k === at ? 9 : 5}
+            eventHandlers={{ click: () => onPick(k) }}
+            pathOptions={{ color: k === at ? '#111' : j.color, weight: k === at ? 2.5 : 1.5, fillColor: k === at ? j.color : '#fff', fillOpacity: 1 }}
+          >
+            <Tooltip permanent={k === at} direction="top" offset={[0, -8]} className="ls-map-label">
+              {st.place}
+            </Tooltip>
+          </CircleMarker>
+        ))}
+      </MapContainer>
+    </WhenNear>
+  );
+}
+
+function JourneyStep({ step, i, lesson, at, setAt, store, props, notes }: BodyProps & { notes: React.ReactNode }) {
+  const j = journeyFor(step, lesson);
+  const stop = j?.stops[at];
+  const sp = stop ? spanFromOsis(stop.ref) : null;
+  // the stop's verses, and the next stop's ready for Next
+  useEffect(() => {
+    if (!j) return;
+    for (const k of [at, at + 1]) {
+      const s2 = j.stops[k] && spanFromOsis(j.stops[k].ref);
+      if (s2) store.request(`j${i}:${k}`, s2);
+    }
+  }, [j?.id, at, store.gen]); // eslint-disable-line react-hooks/exhaustive-deps
+  if (!j || !stop) return <p className="muted small">This journey is no longer available.</p>;
+  const last = j.stops.length - 1;
+  return (
+    <>
+      {j.summary && !step.title && <p className="muted small ls-list-summary">{j.summary}</p>}
+      <div className="ls-jgrid" style={{ '--c': j.color } as React.CSSProperties}>
+        <JourneyMap j={j} at={at} onPick={setAt} />
+        <div className="ls-stop" aria-live="polite">
+          <p className="ls-stop-where">
+            Stop {at + 1} of {j.stops.length}
+            {stop.day ? ` · ${stop.day}` : ''}
+          </p>
+          <h3>{stop.place}</h3>
+          {stop.event && <p className="ls-stop-event">{stop.event}</p>}
+          {sp && <Passage compact span={sp} st={store.get(`j${i}:${at}`)} onRead={() => props.onOpenRef(sp)} />}
+          {stop.note && stop.note !== stop.event && <p className="ls-item-note">{stop.note}</p>}
+          <div className="ls-stop-nav">
+            <button className="btn" onClick={() => setAt(at - 1)} disabled={at === 0} aria-label="Previous stop">
+              ‹ Prev
+            </button>
+            <button className="btn primary" onClick={() => setAt(at + 1)} disabled={at === last} aria-label="Next stop">
+              Next ›
+            </button>
+            {sp && (
+              <button className="link-button ls-read small" onClick={() => props.onOpenRef(sp)}>
+                Read {spanLabel(sp)} in context
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+      {notes}
+    </>
+  );
+}
+
 // ------------------------------------------------------------------------------------ one step
 
-function StepBody({ step, lesson, passage, props }: { step: LessonStep; lesson: OpenLesson; passage: PassageState | undefined; props: Props }) {
+const journeyFor = (s: LessonStep, l: OpenLesson) => (s.type === 'journey' ? allJourneys().find((x) => x.id === stepTargetId(s, l)) : undefined);
+const listFor = (s: LessonStep, l: OpenLesson) => (s.type === 'list' ? allLists().find((x) => x.id === stepTargetId(s, l)) : undefined);
+
+/** A step's heading: its own title, else what it shows. */
+function heading(s: LessonStep, l: OpenLesson): string {
+  if (s.title) return s.title;
+  if (s.type === 'journey') return journeyFor(s, l)?.title ?? stepSummary(s);
+  if (s.type === 'list') return listFor(s, l)?.title ?? stepSummary(s);
+  return stepSummary(s);
+}
+
+interface BodyProps {
+  step: LessonStep;
+  i: number;
+  lesson: OpenLesson;
+  store: VerseStore;
+  /** journeys: the stop shown */
+  at: number;
+  setAt: (k: number) => void;
+  props: Props;
+}
+
+function StepBody({ step, i, lesson, store, at, setAt, props }: BodyProps) {
+  const passage = store.get(`p${i}`);
   const sp = step.ref ? spanFromOsis(step.ref) : null;
   const readLink = sp && step.type !== 'passage' && (
     <button className="link-button ls-read" onClick={() => props.onOpenRef(sp)}>
@@ -367,64 +550,41 @@ function StepBody({ step, lesson, passage, props }: { step: LessonStep; lesson: 
           </p>
         </>
       );
-    case 'journey': {
-      const j = allJourneys().find((x) => x.id === stepTargetId(step, lesson));
-      if (!j || !j.stops.length) return <p className="muted small">This journey is no longer available.</p>;
-      const at = Math.min(step.index ?? 0, j.stops.length - 1);
-      const stop = j.stops[at];
-      const line: [number, number][] = j.stops.length > 1 ? j.stops.slice(1).flatMap((_, k) => legPath(j, k + 1).slice(k === 0 ? 0 : 1)) : [];
-      const stopSpan = spanFromOsis(stop.ref);
-      return (
-        <>
-          <p className="ls-card-title">{j.title}</p>
-          <p className="muted small">
-            Stop {at + 1} of {j.stops.length}: {stop.place}
-            {stop.day ? ` · ${stop.day}` : ''}
-          </p>
-          <MiniMap points={j.stops.map((s) => ({ lat: s.lat, lon: s.lon, name: s.place }))} line={line} focus={at} color={j.color} />
-          {(stop.event || stop.note) && <p className="ls-card-text">{stop.event || stop.note}</p>}
-          {notes}
-          <p className="ls-actions">
-            <button className="btn" onClick={() => props.onFollowJourney(step)}>
-              Follow the journey from here
-            </button>
-            {stopSpan && !sp && (
-              <button className="link-button ls-read" onClick={() => props.onOpenRef(stopSpan)}>
-                Read {spanLabel(stopSpan)}
-              </button>
-            )}
-            {readLink}
-          </p>
-        </>
-      );
-    }
+    case 'journey':
+      return <JourneyStep step={step} i={i} lesson={lesson} at={at} setAt={setAt} store={store} props={props} notes={notes} />;
     case 'list': {
-      const l = allLists().find((x) => x.id === stepTargetId(step, lesson));
+      const l = listFor(step, lesson);
       if (!l || !l.items.length) return <p className="muted small">This list is no longer available.</p>;
-      const at = Math.min(step.index ?? 0, l.items.length - 1);
-      const it = l.items[at];
-      const itSpan = spanFromOsis(it.ref);
+      const picked = Math.min(step.index ?? 0, l.items.length - 1);
       return (
         <>
-          <p className="ls-card-title">{it.t}</p>
-          <p className="muted small">
-            {l.title}, {at + 1} of {l.items.length}
-            {it.meta ? ` · ${it.meta}` : ''}
-          </p>
-          {it.lat != null && it.lon != null && <MiniMap points={[{ lat: it.lat, lon: it.lon, name: it.place || it.t }]} focus={0} color={l.color} />}
-          {it.note && <p className="ls-card-text">{it.note}</p>}
+          {l.summary && <p className="muted small ls-list-summary">{l.summary}</p>}
           {notes}
-          <p className="ls-actions">
-            <button className="btn" onClick={() => props.onOpenList(step)}>
-              Open the list
-            </button>
-            {itSpan && !sp && (
-              <button className="link-button ls-read" onClick={() => props.onOpenRef(itSpan)}>
-                Read {spanLabel(itSpan)}
-              </button>
-            )}
-            {readLink}
-          </p>
+          <ol className="ls-items">
+            {l.items.map((it, k) => {
+              const isp = spanFromOsis(it.ref);
+              const st = store.get(`l${i}:${k}`);
+              // a note that only quotes the verse isn't needed once the verse is printed
+              const quoteOnly = !!it.note && /^["“]/.test(it.note.trim()) && st?.s === 'ok';
+              return (
+                <li key={k} className={[k === picked ? 'picked' : '', /^\d/.test(it.t) ? 'own-num' : ''].join(' ').trim() || undefined}>
+                  {!/^\d/.test(it.t) && <span className="ls-item-num">{k + 1}</span>}
+                  <p className="ls-item-head">
+                    <strong>{it.t}</strong>
+                    {it.meta && <span className="muted small"> · {it.meta}</span>}
+                    {it.tag && <span className={`ls-tag ${it.tag}`}>{it.tag === 'good' ? 'Good' : 'Evil'}</span>}
+                  </p>
+                  {isp && <Passage compact span={isp} st={st} onRead={() => props.onOpenRef(isp)} />}
+                  {it.note && !quoteOnly && <p className="ls-item-note">{it.note}</p>}
+                  {isp && (
+                    <button className="link-button ls-read small" onClick={() => props.onOpenRef(isp)}>
+                      Read {spanLabel(isp)} in context
+                    </button>
+                  )}
+                </li>
+              );
+            })}
+          </ol>
         </>
       );
     }
@@ -479,9 +639,34 @@ export default function LessonPage(props: Props) {
   const lastTop = useRef(0);
   const [reporting, setReporting] = useState(false);
   const [msg, setMsg] = useState<string | null>(null);
-  const passages = usePassages(lesson.steps, translation, esvKey);
+  const store = useVerseStore(translation, esvKey);
   const shared = lesson.kind === 'shared';
-  const codes = useMemo(() => new Set(Object.values(passages).flatMap((p) => (p.s === 'ok' ? [p.code] : []))), [passages]);
+  const codes = store.codes;
+  // passages and every list item, in lesson order (journey stops load as you reach them)
+  useEffect(() => {
+    lesson.steps.forEach((s, i) => {
+      if (s.type === 'passage' && s.ref) {
+        const sp = spanFromOsis(s.ref);
+        if (sp) store.request(`p${i}`, sp);
+      } else if (s.type === 'list') {
+        listFor(s, lesson)?.items.forEach((it, k) => {
+          const sp = spanFromOsis(it.ref);
+          if (sp) store.request(`l${i}:${k}`, sp);
+        });
+      }
+    });
+  }, [lesson, store.gen]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // each journey step's stop (starting where the lesson's author chose)
+  const [stops, setStops] = useState<Record<number, number>>({});
+  const stopAt = (i: number) => {
+    const j = journeyFor(lesson.steps[i], lesson);
+    const n = j?.stops.length ?? 1;
+    return Math.max(0, Math.min(n - 1, stops[i] ?? lesson.steps[i].index ?? 0));
+  };
+  const setStop = (i: number, k: number) => setStops((m) => ({ ...m, [i]: k }));
+  /** while a presenting step scrolls into view, the step in view isn't recomputed */
+  const settling = useRef(0);
   const usedLicensed = codes.has(nice(translation)) && isLicensed(translation);
 
   const goStep = (i: number, smooth = true) => {
@@ -489,9 +674,23 @@ export default function LessonPage(props: Props) {
     el?.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto', block: 'start' });
   };
 
-  // presenting: the arrow keys or a clicker bring the next step into view
+  // presenting: the arrow keys or a clicker move through a journey's stops, then on to the next step
   useEffect(() => {
-    if (jump.n) goStep(jump.i);
+    if (!jump.n) return;
+    const s = lesson.steps[current];
+    const j = s && journeyFor(s, lesson);
+    if (j) {
+      const next = stopAt(current) + jump.d;
+      if (next >= 0 && next < j.stops.length) {
+        setStop(current, next);
+        return;
+      }
+    }
+    const i = Math.max(0, Math.min(lesson.steps.length - 1, current + jump.d));
+    if (i === current) return;
+    settling.current = Date.now() + 900;
+    onIndex(i);
+    goStep(i);
   }, [jump.n]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // coming back to the lesson: where you were
@@ -507,6 +706,7 @@ export default function LessonPage(props: Props) {
     const onScroll = () => {
       if (page.clientHeight) lastTop.current = page.scrollTop;
       cancelAnimationFrame(raf);
+      if (Date.now() < settling.current) return;
       raf = requestAnimationFrame(() => {
         const top = page.getBoundingClientRect().top + 110;
         const secs = [...page.querySelectorAll<HTMLElement>('.ls-step')];
@@ -565,7 +765,7 @@ export default function LessonPage(props: Props) {
               <li key={i} className={i === current ? 'current' : undefined}>
                 <button onClick={() => goStep(i)}>
                   <span className="ls-outline-num">{i + 1}</span>
-                  <span>{s.title || stepSummary(s)}</span>
+                  <span>{heading(s, lesson)}</span>
                 </button>
               </li>
             ))}
@@ -578,7 +778,7 @@ export default function LessonPage(props: Props) {
               <header className="ls-step-head">
                 <span className="ls-num">{i + 1}</span>
                 <div>
-                  <h2>{s.title || stepSummary(s)}</h2>
+                  <h2>{heading(s, lesson)}</h2>
                   <span className="ls-kind">
                     {STEP_KINDS.find((k) => k.type === s.type)?.label}
                     {s.title && s.type === 'passage' && s.ref ? ` · ${stepSummary(s)}` : ''}
@@ -586,7 +786,7 @@ export default function LessonPage(props: Props) {
                 </div>
               </header>
               <div className="ls-step-body">
-                <StepBody step={s} lesson={lesson} passage={passages[i]} props={props} />
+                <StepBody step={s} i={i} lesson={lesson} store={store} at={stopAt(i)} setAt={(k) => setStop(i, k)} props={props} />
               </div>
             </section>
           ))}

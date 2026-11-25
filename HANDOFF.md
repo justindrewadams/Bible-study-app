@@ -255,13 +255,17 @@ possible version": keep it that way.
   - Switch: `LESSONS_LIVE` in `config.ts`.
   - **Lesson page (25 Nov 2026, owner's request):** a lesson plays as one scrolling page, every step a section,
     all loaded at once: passages print their verses (translation being read), map stops and journeys show a
-    small non-draggable map (loads as you scroll near it), person/nation/period/Jerusalem steps show a summary
+    small non-draggable map (loads as you scroll near it), journey steps play *in the page* (owner's follow-up,
+    25 Nov: a working map with the route, travelled part solid, beside the stop's Scripture and notes, Prev /
+    Next, the map moving to each leg; stop verses load as you reach them), list steps show every item with its
+    verse printed and the chosen item highlighted (no map), person/nation/period/Jerusalem steps show a summary
     card with "Open the full page", web links stay link cards opening in a new tab (owner chose no embedded
     video players, for visitors' privacy). Side list of steps on computer; one column on phones. Presenting:
-    arrow keys / clicker scroll to the next step (`lessonJump`). Buttons such as "Read in context" or "Follow
-    the journey from here" step *out* of the lesson (`lessonShown` false) and the slim bar brings you back to
+    arrow keys / clicker go through a journey's stops first, then scroll to the next step (`lessonJump`).
+    Buttons such as "Read in context" or "Show on the big map" step *out* of the lesson (`lessonShown` false) and the slim bar brings you back to
     the same scroll spot. Licensing (owner approved): for licensed translations at most 500 verses on the page
-    and, for the ESV, never half of a book; past that a passage shows as a reference with "Read"; the
+    and, for the ESV, never half of a book, counting passages, journey stops and list items together
+    (`useVerseStore` in LessonPage.tsx); past that a passage shows as a reference with "Read"; the
     notice sits at the foot; API.Bible views are reported as in the reader. If a licensed text can't be
     reached, that passage falls back to the WEB, labelled.
 - **Downloads (built and live 24 Nov 2026):** "⤓ Download" in My Content on each lesson, page, notebook/folder,
