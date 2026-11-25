@@ -7614,3 +7614,305 @@ button.hd-person:hover {
 .periods-hero .hero-text {
   background: var(--sky);
 }
+
+/* =========================================================================================
+   The lesson page: one scrolling page, a section per step (components/LessonPage.tsx)
+   ========================================================================================= */
+.lesson-page-wrap {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+.lesson-page-wrap[hidden] {
+  display: none !important;
+}
+.lesson-page {
+  scroll-behavior: smooth;
+}
+.lesson-page .periods-bar .bar-title {
+  flex: 1;
+  min-width: 0;
+}
+.ls-present {
+  flex: none;
+}
+.lesson-hero .hero-text {
+  background: var(--sky);
+}
+.ls-kicker {
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+.lesson-hero .hero-text h1 {
+  margin-bottom: 12px;
+}
+.ls-made-by {
+  margin-top: 14px !important;
+  font-size: 0.9rem !important;
+}
+
+.ls-layout {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 28px 16px 64px;
+  display: grid;
+  grid-template-columns: 230px minmax(0, 1fr);
+  gap: 40px;
+  align-items: start;
+}
+.ls-outline {
+  position: sticky;
+  top: calc(var(--bar-h) + 20px);
+  max-height: calc(100vh - var(--bar-h) - 140px);
+  overflow-y: auto;
+  font-size: 0.86rem;
+}
+.ls-outline-head {
+  margin: 0 0 8px;
+  font-weight: 800;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+.ls-outline ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-left: 2px solid var(--hair);
+}
+.ls-outline li button {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: 0;
+  margin-left: -2px;
+  border-left: 2px solid transparent;
+  padding: 6px 8px 6px 10px;
+  color: var(--muted);
+  font: inherit;
+  line-height: 1.3;
+  cursor: pointer;
+}
+.ls-outline li button:hover {
+  color: var(--ink);
+}
+.ls-outline li.current button {
+  border-left-color: #1971c2;
+  color: var(--ink);
+  font-weight: 700;
+}
+.ls-outline-num {
+  flex: none;
+  min-width: 1.4em;
+  font-variant-numeric: tabular-nums;
+}
+
+.ls-steps {
+  min-width: 0;
+  max-width: 720px;
+}
+.ls-step {
+  scroll-margin-top: calc(var(--bar-h) + 16px);
+  padding: 0 0 34px;
+  margin: 0 0 34px;
+  border-bottom: 1px solid var(--hair);
+}
+.ls-step-head {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  margin-bottom: 14px;
+}
+.ls-num {
+  flex: none;
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border: 2px solid #1971c2;
+  border-radius: 50%;
+  font-weight: 800;
+  color: #1971c2;
+}
+.ls-step.current .ls-num {
+  background: #1971c2;
+  color: #fff;
+}
+.ls-step-head h2 {
+  margin: 2px 0 2px;
+  font-size: 1.35rem;
+  line-height: 1.2;
+}
+.ls-kind {
+  font-size: 0.78rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 700;
+}
+.ls-step-body {
+  padding-left: 48px;
+}
+.ls-verses {
+  font-family: var(--serif);
+  font-size: calc(1.18rem * var(--text-scale, 1));
+  line-height: 1.65;
+  margin: 0 0 14px;
+}
+.ls-verses sup {
+  font-family: var(--sans);
+  font-size: 0.62em;
+  font-weight: 700;
+  color: var(--muted);
+  margin-right: 1px;
+}
+.ls-code {
+  font-family: var(--sans);
+  font-size: 0.75em;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.ls-note {
+  margin: 0 0 14px;
+}
+.ls-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 16px;
+  margin: 12px 0 0;
+}
+.ls-actions a.btn {
+  text-decoration: none;
+}
+.ls-card {
+  border: var(--border);
+  padding: 14px 16px;
+  margin: 0 0 14px;
+  background: var(--paper);
+}
+.ls-card > p {
+  margin: 0 0 6px;
+}
+.ls-card > p:last-child {
+  margin-bottom: 0;
+}
+.ls-card-title {
+  font-weight: 800;
+  font-size: 1.05rem;
+  margin: 0 0 4px;
+}
+.ls-step-body > .ls-card-title {
+  margin-bottom: 2px;
+}
+.ls-step-body > .muted.small {
+  margin: 0 0 12px;
+}
+.ls-card-text {
+  line-height: 1.55;
+  margin: 8px 0 12px;
+}
+.ls-map {
+  height: 260px;
+  margin: 0 0 14px;
+  border: var(--border);
+  background: color-mix(in srgb, var(--sky) 18%, var(--paper));
+}
+.ls-map-inner {
+  height: 100%;
+  width: 100%;
+}
+.ls-map .leaflet-control-attribution {
+  font-size: 9px;
+}
+.ls-map-label {
+  font-weight: 700;
+  font-family: var(--sans);
+}
+.ls-loading,
+.ls-omitted {
+  margin: 0 0 14px;
+}
+.ls-foot {
+  padding-top: 4px;
+}
+.ls-foot .copyright-notice {
+  border-top: 0;
+  margin-top: 0;
+  padding-top: 0;
+}
+
+/* tablet and phone: one calm column, no side list */
+@media (max-width: 860px) {
+  .ls-layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+    padding: 20px 14px 48px;
+  }
+  .ls-outline {
+    display: none;
+  }
+  .ls-step-body {
+    padding-left: 0;
+  }
+  .ls-step {
+    padding-bottom: 26px;
+    margin-bottom: 26px;
+  }
+  .ls-step-head h2 {
+    font-size: 1.2rem;
+  }
+  .ls-num {
+    width: 30px;
+    height: 30px;
+  }
+  .ls-map {
+    height: 210px;
+  }
+}
+
+/* presenting: bigger text for the room */
+.presenting .ls-steps {
+  max-width: 900px;
+}
+.presenting .ls-verses {
+  font-size: calc(1.22rem * var(--text-scale, 1) * 1.45);
+}
+.presenting .ls-step-head h2 {
+  font-size: 2rem;
+}
+.presenting .ls-step-body,
+.presenting .ls-note {
+  font-size: 1.25rem;
+}
+.presenting .ls-map {
+  height: 380px;
+}
+
+/* the slim bar shown while you've stepped out of a lesson */
+.lesson-return .lp-head {
+  flex-wrap: wrap;
+}
+.lesson-return-tools {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.ls-actions a.btn {
+  color: inherit;
+}
+.ls-note {
+  font-family: var(--sans);
+}
+@media (max-width: 860px) {
+  .ls-present {
+    display: none;
+  }
+}

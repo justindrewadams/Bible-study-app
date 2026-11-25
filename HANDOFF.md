@@ -248,10 +248,22 @@ possible version": keep it that way.
     table `shares`, plain variable `ADMIN_USERNAMES` on the Worker (the owner's username). Tests: `lesson-test.mjs`.
   - App: `lib/lessons.ts` (shares store, opening a shared lesson and registering its journeys/lists as `shared:<id>`,
     "Save a copy"), `components/LessonEditor.tsx` (in My Content: "My lessons"; steps with ▲▼; Share box),
-    `components/LessonPanel.tsx` (player, intro/disclaimer, report form), `goLessonStep` / `lessonAction` in
-    `App.tsx` (each step moves the reader/map; presenting steps the lesson first). Links: `#lesson/<22-char code>`;
+    `components/LessonPage.tsx` (the player, see below), `components/LessonPanel.tsx` (the slim "Back to the
+    lesson" bar, intro/disclaimer, report form), `lessonShowPlace` / `lessonFollowJourney` / `lessonOpenList` /
+    `lessonAction` in `App.tsx`. Links: `#lesson/<22-char code>`;
     the app takes the code out of the address bar once opened.
   - Switch: `LESSONS_LIVE` in `config.ts`.
+  - **Lesson page (25 Nov 2026, owner's request):** a lesson plays as one scrolling page, every step a section,
+    all loaded at once: passages print their verses (translation being read), map stops and journeys show a
+    small non-draggable map (loads as you scroll near it), person/nation/period/Jerusalem steps show a summary
+    card with "Open the full page", web links stay link cards opening in a new tab (owner chose no embedded
+    video players, for visitors' privacy). Side list of steps on computer; one column on phones. Presenting:
+    arrow keys / clicker scroll to the next step (`lessonJump`). Buttons such as "Read in context" or "Follow
+    the journey from here" step *out* of the lesson (`lessonShown` false) and the slim bar brings you back to
+    the same scroll spot. Licensing (owner approved): for licensed translations at most 500 verses on the page
+    and, for the ESV, never half of a book; past that a passage shows as a reference with "Read"; the
+    notice sits at the foot; API.Bible views are reported as in the reader. If a licensed text can't be
+    reached, that passage falls back to the WEB, labelled.
 - **Downloads (built and live 24 Nov 2026):** "⤓ Download" in My Content on each lesson, page, notebook/folder,
   verse notes (all, or one book), your journeys and lists, and "Download all my content" under the sidebar. Two
   formats, made on the device (nothing sent or stored):

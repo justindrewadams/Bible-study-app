@@ -60,7 +60,8 @@ import type { Span } from './lib/refs';
 const AccountPanel = lazyPart(() => import('./components/AccountPanel'));
 const NotesPage = lazyPart(() => import('./components/NotesPage'));
 const VerseNotes = lazyPart(() => import('./components/VerseNotes'));
-const LessonPanel = lazyPart(() => import('./components/LessonPanel'));
+const LessonReturn = lazyPart(() => import('./components/LessonPanel'));
+const LessonPage = lazyPart(() => import('./components/LessonPage'));
 const LessonIntro = lazyPart(() => import('./components/LessonPanel').then((m) => ({ default: m.LessonIntro })));
 
 interface Location {
@@ -177,6 +178,10 @@ export default function App() {
   // ---- Class lessons: playing one (yours, or shared with you by link)
   const [lesson, setLesson] = useState<OpenLesson | null>(null);
   const [lessonIndex, setLessonIndex] = useState(0);
+  /** false while you've stepped out of the lesson (to read, follow a journey or use the big map) */
+  const [lessonShown, setLessonShown] = useState(true);
+  /** presenting: the step to bring into view (n changes on each request) */
+  const [lessonJump, setLessonJump] = useState({ i: 0, n: 0 });
   const [lessonIntro, setLessonIntro] = useState<OpenLesson | null>(null);
   const [lessonMsg, setLessonMsg] = useState<string | null>(null);
   // a shared lesson's link: "#lesson/<code>"
@@ -264,6 +269,14 @@ export default function App() {
   const closePeriods = () => {
     history.pushState(null, '', window.location.pathname + window.location.search);
     setHash('');
+  };
+  /** the lesson page, when a lesson is open and you haven't stepped out of it */
+  const lessonView = !!lesson && lessonShown && !pageOpen;
+  const anyPage = pageOpen || lessonView;
+  /** back to reading: closes any page, and steps out of the lesson (it stays open to come back to) */
+  const leavePages = () => {
+    if (pageOpen) closePeriods();
+    setLessonShown(false);
   };
 
   const book = getBook(loc.book);
@@ -391,45 +404,45 @@ export default function App() {
     else if (s.pageType === 'period') openPeriods(s.id);
     else if (s.pageType === 'jerusalem') openSpot(s.id);
   };
-  const goLessonStep = (l: OpenLesson, i: number) => {
-    const s = l.steps[i];
-    if (!s) return;
-    setLessonIndex(i);
-    if (window.location.hash) closePeriods();
-    setPersonSlug(null);
-    setNationId(null);
-    setCardPlace(null);
-    if (s.type !== 'journey') {
-      setPlaying(false);
-      setJourneyId(null);
-    }
-    if (s.type !== 'list') {
-      setListPlaying(false);
-      setListId(null);
-    }
+  /** the lesson page's buttons: each steps out of the lesson to the reader or the big map */
+  const lessonShowPlace = (s: LessonStep) => {
+    leavePages();
     const sp = s.ref ? spanFromOsis(s.ref) : null;
     if (sp) goTo(sp.osis, sp.chapter, sp.verse ?? null);
-    if (s.type === 'place' && s.lat != null && s.lon != null) {
+    if (s.lat != null && s.lon != null) {
       setMapVisible(true);
       setPlaceOverride({ index: s.placeIndex ?? -1, name: s.place ?? 'A spot on the map', lat: s.lat, lon: s.lon, type: 'region', confidence: 50 });
-    } else if (s.type === 'journey') {
-      const j = allJourneys().find((x) => x.id === stepTargetId(s, l));
-      if (j) {
-        setMapVisible(true);
-        goToStop(j, Math.min(s.index ?? 0, j.stops.length - 1));
-      }
-    } else if (s.type === 'list') {
-      const li = allLists().find((x) => x.id === stepTargetId(s, l));
-      if (li) goToListItem(li, Math.min(s.index ?? 0, li.items.length - 1));
-    } else if (s.type === 'page') lessonAction(s);
+    }
+  };
+  const lessonFollowJourney = (s: LessonStep) => {
+    const j = lesson && allJourneys().find((x) => x.id === stepTargetId(s, lesson));
+    if (!j) return;
+    leavePages();
+    setListPlaying(false);
+    setListId(null);
+    setPlaying(false);
+    setMapVisible(true);
+    goToStop(j, Math.min(s.index ?? 0, j.stops.length - 1));
+  };
+  const lessonOpenList = (s: LessonStep) => {
+    const li = lesson && allLists().find((x) => x.id === stepTargetId(s, lesson));
+    if (!li) return;
+    leavePages();
+    setPlaying(false);
+    setJourneyId(null);
+    setListPlaying(false);
+    goToListItem(li, Math.min(s.index ?? 0, li.items.length - 1));
   };
   const startLesson = (l: OpenLesson) => {
     setLesson(l);
-    goLessonStep(l, 0);
+    setLessonIndex(0);
+    setLessonJump({ i: 0, n: 0 });
+    setLessonShown(true);
   };
   const closeLesson = () => {
     if (lesson?.kind === 'shared') closeSharedLesson();
     setLesson(null);
+    setLessonShown(true);
   };
 
   // List autoplay
@@ -505,8 +518,10 @@ export default function App() {
   // ---- Presenting mode: full screen, large text, stepping with the arrow keys or a clicker
   /** One step forward or back: through the journey, else the study list, else the chapter's verses. */
   const presentStep = (d: number) => {
-    if (lesson) {
-      goLessonStep(lesson, Math.max(0, Math.min(lesson.steps.length - 1, lessonIndex + d)));
+    if (lessonView && lesson) {
+      const i = Math.max(0, Math.min(lesson.steps.length - 1, lessonIndex + d));
+      setLessonIndex(i);
+      setLessonJump((j) => ({ i, n: j.n + 1 }));
     } else if (journey) {
       setPlaying(false);
       goToStop(journey, Math.max(0, Math.min(journey.stops.length - 1, stopIndex + d)));
@@ -571,7 +586,7 @@ export default function App() {
   /** a verse link in a note: back to reading there */
   const openSpan = (s: Span) => {
     setVerseNotesAtVerse(null);
-    if (pageOpen) closePeriods();
+    leavePages();
     goTo(s.osis, s.chapter, s.verse);
   };
   // links in downloaded files: "#read/John.3.16-John.3.21" opens the reader there
@@ -592,7 +607,7 @@ export default function App() {
     setPresenting(true);
     setMenuOpen(false);
     setMapVisible(true);
-    if (!journey && !studyList && selectedVerse == null && verses?.length) setSelectedVerse(verses[0].verse);
+    if (!lessonView && !journey && !studyList && selectedVerse == null && verses?.length) setSelectedVerse(verses[0].verse);
     document.documentElement.requestFullscreen?.().catch(() => {}); // not every browser allows it; the layout still changes
   };
   const stopPresenting = useCallback(() => {
@@ -629,7 +644,7 @@ export default function App() {
     };
   }, [presenting, stopPresenting]);
 
-  const presentLabel = lesson
+  const presentLabel = lessonView && lesson
     ? `${lesson.title || 'Lesson'} · step ${lessonIndex + 1} of ${lesson.steps.length}`
     : journey
     ? `${journey.title} · stop ${stopIndex + 1} of ${journey.stops.length}`
@@ -640,7 +655,7 @@ export default function App() {
   return (
     <div className={`app${presenting ? ' presenting' : ''}${mapVisible ? '' : ' map-hidden'}${journey ? ' journey-active' : ''}${measure ? ' measuring' : ''}`}>
       <header className="topbar">
-        <button className="brand" title="Ancient Pathfinder: back to reading" onClick={() => pageOpen && closePeriods()}>
+        <button className="brand" title="Ancient Pathfinder: back to reading" onClick={() => anyPage && leavePages()}>
           <picture className="brand-logo">
             <source srcSet={`${import.meta.env.BASE_URL}logo-mark-dark.png`} media="(prefers-color-scheme: dark)" />
             <img src={`${import.meta.env.BASE_URL}logo-mark.png`} alt="" width={36} height={34} />
@@ -689,12 +704,12 @@ export default function App() {
           translation={translation}
           esvKey={esvKey}
           onGoTo={(b, c, v) => {
-            if (pageOpen) closePeriods();
+            leavePages();
             goTo(b, c, v);
           }}
           onOpenPerson={setPersonSlug}
           onOpenPlace={(i) => {
-            if (pageOpen) closePeriods();
+            leavePages();
             setMapVisible(true);
             setSelectedVerse(null);
             loadPlaces().then((ps) => {
@@ -705,13 +720,13 @@ export default function App() {
           onFollowJourney={(id, i) => {
             const j = allJourneys().find((x) => x.id === id);
             if (!j) return;
-            if (pageOpen) closePeriods();
+            leavePages();
             setPlaying(false);
             goToStop(j, i);
             setMapVisible(true);
           }}
           onOpenList={(id, i) => {
-            if (pageOpen) closePeriods();
+            leavePages();
             openList(id, i);
           }}
           onOpenPeriod={openPeriods}
@@ -873,14 +888,14 @@ export default function App() {
             onClick={() => {
               setMenuOpen(false);
               // on the People or Periods page, this takes you back to reading with the map showing
-              if (pageOpen) {
-                closePeriods();
+              if (anyPage) {
+                leavePages();
                 setMapVisible(true);
               } else setMapVisible(!mapVisible);
             }}
-            aria-pressed={mapVisible && !pageOpen}
+            aria-pressed={mapVisible && !anyPage}
           >
-            {mapVisible && !pageOpen ? 'Hide map' : 'Show map'}
+            {mapVisible && !anyPage ? 'Hide map' : 'Show map'}
           </button>
           {ACCOUNTS_ENABLED && (
             <button
@@ -1070,7 +1085,7 @@ export default function App() {
             onClose={() => setAccountStart(null)}
             onOpenRef={(b, c, v) => {
               setAccountStart(null);
-              if (pageOpen) closePeriods();
+              leavePages();
               goTo(b, c, v);
             }}
             onOpenPrivacy={() => window.open(`${window.location.pathname}#privacy`, '_blank', 'noopener')}
@@ -1106,7 +1121,42 @@ export default function App() {
         />
       )}
 
-      <main className="layout" hidden={pageOpen}>
+      {lesson && (
+        <PartBoundary onClose={closeLesson}>
+          <Suspense fallback={null}>
+            <div className="lesson-page-wrap" hidden={!lessonView}>
+              <LessonPage
+                lesson={lesson}
+                translation={translation}
+                esvKey={esvKey}
+                jump={lessonJump}
+                current={lessonIndex}
+                shown={lessonView}
+                onIndex={setLessonIndex}
+                onClose={closeLesson}
+                onOpenRef={openSpan}
+                onShowPlace={lessonShowPlace}
+                onFollowJourney={lessonFollowJourney}
+                onOpenList={lessonOpenList}
+                onOpenPage={lessonAction}
+                presenting={presenting}
+                onPresent={startPresenting}
+                signedIn={account.status === 'signed-in'}
+                isAdmin={!!account.user?.isAdmin}
+                onSaveCopy={async () => {
+                  await saveSharedCopy();
+                }}
+                onRemoved={() => {
+                  closeLesson();
+                  setLessonMsg('The shared lesson was removed; its link no longer works.');
+                }}
+              />
+            </div>
+          </Suspense>
+        </PartBoundary>
+      )}
+
+      <main className="layout" hidden={anyPage}>
         <section className="text-pane">
           {selectedInfo && selectedVerse != null && (
             <div className="verse-info" aria-live="polite">
@@ -1322,28 +1372,10 @@ export default function App() {
               )
             }
           />
-          {lesson && (
-            <PartBoundary onClose={closeLesson}>
-              <Suspense fallback={null}>
-                <LessonPanel
-                  lesson={lesson}
-                  index={lessonIndex}
-                  onGo={(i) => goLessonStep(lesson, i)}
-                  onClose={closeLesson}
-                  onOpenRef={openSpan}
-                  onAction={lessonAction}
-                  signedIn={account.status === 'signed-in'}
-                  isAdmin={!!account.user?.isAdmin}
-                  onSaveCopy={async () => {
-                    await saveSharedCopy();
-                  }}
-                  onRemoved={() => {
-                    closeLesson();
-                    setLessonMsg('The shared lesson was removed; its link no longer works.');
-                  }}
-                />
-              </Suspense>
-            </PartBoundary>
+          {lesson && !lessonShown && (
+            <Suspense fallback={null}>
+              <LessonReturn lesson={lesson} onBack={() => setLessonShown(true)} onClose={closeLesson} />
+            </Suspense>
           )}
           {studyList && !lesson && (
             <ListPanel
@@ -1459,12 +1491,12 @@ export default function App() {
           }}
           onGoToRef={(ref) => {
             const r = parseRef(ref);
-            if (pageOpen) closePeriods();
+            leavePages();
             goTo(r.book, r.chapter, r.verse);
             if (isNarrow()) setPersonSlug(null);
           }}
           onOpenPlace={(at) => {
-            if (pageOpen) closePeriods();
+            leavePages();
             if (at.place != null) {
               loadPlaces().then((ps) => {
                 setPlaceOverride(ps[at.place!]);
@@ -1505,12 +1537,12 @@ export default function App() {
           onOpenPerson={setPersonSlug}
           onGoToRef={(ref) => {
             const r = parseRef(ref);
-            if (pageOpen) closePeriods();
+            leavePages();
             goTo(r.book, r.chapter, r.verse);
             if (isNarrow()) setNationId(null);
           }}
           onShowOnMap={(n) => {
-            if (pageOpen) closePeriods();
+            leavePages();
             setMapVisible(true);
             setSelectedVerse(null);
             setPlaceOverride({ index: -1, name: n.name, lat: n.lat, lon: n.lon, type: 'region', confidence: 50 });

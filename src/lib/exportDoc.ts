@@ -354,7 +354,7 @@ const bookTotal = (osis: string) => {
 };
 
 /** The chapters and verse ranges a span covers. */
-function spanParts(s: Span): { chapter: number; from: number; to: number }[] {
+export function spanParts(s: Span): { chapter: number; from: number; to: number }[] {
   const out = [];
   for (let c = s.chapter; c <= s.toChapter; c++) {
     const n = versesInChapter(s.osis, c);
