@@ -252,8 +252,28 @@ possible version": keep it that way.
     `App.tsx` (each step moves the reader/map; presenting steps the lesson first). Links: `#lesson/<22-char code>`;
     the app takes the code out of the address bar once opened.
   - Switch: `LESSONS_LIVE` in `config.ts`.
-- **Possible next:** "follow along" (class phones follow the presenter's steps live), and the "Road to AD 70"
-  timeline from the class brainstorm.
+- **Downloads (built and live 24 Nov 2026):** "⤓ Download" in My Content on each lesson, page, notebook/folder,
+  verse notes (all, or one book), your journeys and lists, and "Download all my content" under the sidebar. Two
+  formats, made on the device (nothing sent or stored):
+  - **Print or save as PDF:** a print preview sheet (`PrintSheet` in `components/ExportDialog.tsx`, portalled to
+    `<body>`; `body.printing-doc` print CSS hides the app), then the browser's own print (Save as PDF).
+  - **Word document (.docx):** `lib/docx.ts` writes the XML and a stored (uncompressed) zip itself, no library.
+    Word's Heading 1–3 styles, real lists and links. Checked with `textutil` and by unzipping; element order in
+    `rPr`/`pPr` follows the schema (Word is strict about it).
+  - `lib/exportDoc.ts` builds one simple document (headings, paragraphs, lists, quotes, passages) from the notes and
+    `fillPassages()` adds verses. Lessons can leave out the notes ("class handout"). Every passage and every
+    reference in a note links back to `#read/<OSIS span>` (handled in `App.tsx`; opens the reader there).
+  - **Bible text (owner's decision after re-reading the terms, Nov 2026):** Word files carry **public-domain text
+    only** (editable, kept indefinitely; API.Bible requires in-memory, refreshed, unaltered text). Printouts may
+    carry the reader's licensed translation within the print limits: **ESV ≤ 500 verses per printout and never
+    half a book** (Crossway lists Bible studies/classroom use; "(ESV)" after each passage plus the full notice);
+    **NASB/CSB/NKJV ≤ 100 verses** (API.Bible's DRM printing rule; notice + "Text provided by API.Bible" link;
+    their terms don't mention PDF, and the browser can't tell paper from PDF, same as printing the reader page).
+    Passages past a limit print as references with a line saying why. The owner may ask support@api.bible about
+    PDFs; until then this stays as is. Public domain is capped at 3,000 verses per download (request count only).
+- **Possible next:** "follow along" (class phones follow the presenter's steps live), the "Road to AD 70"
+  timeline from the class brainstorm, and "show the verse here" in notes (a reference that shows the verse live
+  in the reader's translation, storing only the reference).
 
 ## Stack and layout
 

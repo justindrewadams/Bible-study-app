@@ -574,6 +574,15 @@ export default function App() {
     if (pageOpen) closePeriods();
     goTo(s.osis, s.chapter, s.verse);
   };
+  // links in downloaded files: "#read/John.3.16-John.3.21" opens the reader there
+  useEffect(() => {
+    const m = hash.match(/^#read\/([1-3]?[A-Za-z]+\.\d+(?:\.\d+)?(?:-[1-3]?[A-Za-z]+\.\d+(?:\.\d+)?)?)$/);
+    if (!m) return;
+    history.replaceState(null, '', window.location.pathname + window.location.search);
+    setHash('');
+    const s = spanFromOsis(m[1]);
+    if (s && BOOKS.some((b) => b.osis === s.osis)) openSpan(s);
+  }, [hash]); // eslint-disable-line react-hooks/exhaustive-deps
   const anyCardOpenRef = useRef(anyCardOpen);
   anyCardOpenRef.current = anyCardOpen;
   const compareOpenRef = useRef(false);
@@ -968,6 +977,7 @@ export default function App() {
         <Suspense fallback={null}>
           <NotesPage
             route={hash}
+            translation={translation}
             onClose={closePeriods}
             onOpenRef={openSpan}
             signedIn={account.status === 'signed-in'}

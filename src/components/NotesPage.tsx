@@ -7,7 +7,7 @@
  *   #notes/verse        every verse note, in Bible order
  * Computers show the notebooks beside the page; phones show one level at a time.
  */
-import { useEffect, useMemo, useState } from 'react';
+import { Suspense, useEffect, useMemo, useState } from 'react';
 import {
   byPosition,
   deleteNotebook,
@@ -31,6 +31,11 @@ import LessonEditor from './LessonEditor';
 import { useShares } from '../lib/lessons';
 import { PALETTE } from '../lib/mine';
 import { LESSONS_ENABLED, MINE_ENABLED } from '../config';
+import type { Translation } from '../lib/bible';
+import { lazyPart } from '../lib/lazyPart';
+import type { ExportTarget } from './ExportDialog';
+
+const ExportDialog = lazyPart(() => import('./ExportDialog'));
 
 interface Props {
   route: string;
@@ -42,6 +47,8 @@ interface Props {
   onFollowMine: (kind: 'journey' | 'list', noteId: string) => void;
   /** start one of your lessons in the reader */
   onStartLesson: (noteId: string) => void;
+  /** the translation being read (offered for printing) */
+  translation: Translation;
 }
 
 const go = (h: string) => {
@@ -59,7 +66,13 @@ const snippet = (body: string) =>
     .trim()
     .slice(0, 120);
 
-export default function NotesPage({ route, onClose, onOpenRef, signedIn, onSignIn, onFollowMine, onStartLesson }: Props) {
+export default function NotesPage({ route, onClose, onOpenRef, signedIn, onSignIn, onFollowMine, onStartLesson, translation }: Props) {
+  const [exporting, setExporting] = useState<ExportTarget | null>(null);
+  const download = (t: ExportTarget, label = 'Download') => (
+    <button className="link-button notes-download small" onClick={() => setExporting(t)}>
+      ⤓ {label}
+    </button>
+  );
   const { shares } = useShares();
   const store = useNotes();
   const [query, setQuery] = useState('');
@@ -255,6 +268,7 @@ export default function NotesPage({ route, onClose, onOpenRef, signedIn, onSignI
           </div>
         );
       })}
+      {store.notes.length > 0 && <div className="notes-side-foot">{download({ kind: 'all' }, 'Download all my content')}</div>}
     </nav>
   );
 
@@ -349,14 +363,20 @@ export default function NotesPage({ route, onClose, onOpenRef, signedIn, onSignI
   } else if (lessonNote) {
     main = (
       <div className="notes-pageview">
-        <p className="notes-crumbs muted small">My lessons</p>
+        <div className="notes-crumbrow">
+          <p className="notes-crumbs muted small">My lessons</p>
+          {download({ kind: 'lesson', id: lessonNote.id })}
+        </div>
         <LessonEditor key={lessonNote.id} note={lessonNote} onStart={onStartLesson} onOpenRef={onOpenRef} onDeleted={() => go('notes')} />
       </div>
     );
   } else if (mine) {
     main = (
       <div className="notes-pageview">
-        <p className="notes-crumbs muted small">{mine.kind === 'journey' ? 'My journeys' : 'My lists'}</p>
+        <div className="notes-crumbrow">
+          <p className="notes-crumbs muted small">{mine.kind === 'journey' ? 'My journeys' : 'My lists'}</p>
+          {download({ kind: mine.kind as 'journey' | 'list', id: mine.id })}
+        </div>
         <MineEditor
           key={mine.id}
           note={mine}
@@ -370,6 +390,7 @@ export default function NotesPage({ route, onClose, onOpenRef, signedIn, onSignI
     const nb = store.notebooks.find((b) => b.id === page.notebookId);
     main = (
       <div className="notes-pageview">
+        <div className="notes-crumbrow">
         <p className="notes-crumbs small">
           {nb ? (
             <button className="link-button" onClick={() => go(`notes/nb/${nb.id}`)}>
@@ -379,6 +400,8 @@ export default function NotesPage({ route, onClose, onOpenRef, signedIn, onSignI
             <span className="muted">Not in a notebook</span>
           )}
         </p>
+          {download({ kind: 'page', id: page.id })}
+        </div>
         <NoteEditor key={page.id} note={page} onOpenRef={onOpenRef} onDeleted={() => go(nb ? `notes/nb/${nb.id}` : 'notes')} />
       </div>
     );
@@ -421,6 +444,7 @@ export default function NotesPage({ route, onClose, onOpenRef, signedIn, onSignI
           <button className="link-button notes-danger" onClick={() => remove(notebook)}>
             Delete
           </button>
+          {download({ kind: 'notebook', id: notebook.id })}
         </div>
         {folders.length > 0 && (
           <ul className="notes-list notes-folders">
@@ -442,7 +466,10 @@ export default function NotesPage({ route, onClose, onOpenRef, signedIn, onSignI
   } else if (view === 'verse') {
     main = (
       <div>
-        <h2 className="notes-h">Verse notes</h2>
+        <div className="notes-crumbrow">
+          <h2 className="notes-h">Verse notes</h2>
+          {verseNotes.length > 0 && download({ kind: 'verses' })}
+        </div>
         {verseNotes.length === 0 ? (
           <p className="muted">Select a verse while reading and tap “✎ Note” to write one.</p>
         ) : (
@@ -532,6 +559,11 @@ export default function NotesPage({ route, onClose, onOpenRef, signedIn, onSignI
         {signedIn && sidebar}
         <main className="notes-main">{main}</main>
       </div>
+      {exporting && signedIn && (
+        <Suspense fallback={null}>
+          <ExportDialog target={exporting} translation={translation} onClose={() => setExporting(null)} />
+        </Suspense>
+      )}
     </div>
   );
 }

@@ -7341,3 +7341,229 @@ button.hd-person:hover {
   font-size: 0.92rem;
   line-height: 1.45;
 }
+
+/* ---------- Downloads: the Download window, the print preview, and printing it ---------- */
+.export-what {
+  margin: 0 0 12px;
+}
+.export-formats {
+  display: grid;
+  gap: 8px;
+  margin: 0 0 12px;
+}
+.export-format {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 10px 12px;
+  border: 2px solid var(--hair);
+  border-radius: 10px;
+  cursor: pointer;
+}
+.export-format.on {
+  border-color: var(--line);
+  background: var(--select);
+}
+.export-format input {
+  margin-top: 3px;
+  accent-color: var(--ink);
+}
+.export-format > span {
+  display: grid;
+  gap: 2px;
+}
+.export-hint {
+  margin: 4px 0 10px;
+}
+.export-dialog .note-meta {
+  margin-bottom: 10px;
+}
+.notes-download {
+  margin-left: auto;
+}
+.notes-crumbrow {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin: 0 0 6px;
+}
+.notes-crumbrow .notes-crumbs {
+  margin: 0;
+}
+
+.print-sheet {
+  position: fixed;
+  inset: 0;
+  z-index: 3100;
+  overflow-y: auto;
+  background: #8a8a8a;
+  -webkit-overflow-scrolling: touch;
+}
+@media (prefers-color-scheme: dark) {
+  .print-sheet {
+    background: #2a2a2a;
+  }
+}
+.print-bar {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  padding-top: max(10px, env(safe-area-inset-top));
+  background: var(--paper);
+  color: var(--ink);
+  border-bottom: 2px solid var(--line);
+}
+.print-bar-title {
+  flex: 1;
+  text-align: center;
+  font-weight: 700;
+}
+.print-tip {
+  max-width: 8.5in;
+  margin: 10px auto 0;
+  padding: 0 16px;
+  color: #fff;
+}
+.print-doc {
+  background: #fff;
+  color: #1b1b1b;
+  max-width: 8.5in;
+  margin: 12px auto 40px;
+  padding: 0.8in 0.85in;
+  box-shadow: 0 2px 14px rgba(0, 0, 0, 0.35);
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 11.5pt;
+  line-height: 1.5;
+}
+.print-doc h1 {
+  font-size: 22pt;
+  margin: 0 0 4px;
+  color: #1f2a44;
+  line-height: 1.2;
+}
+.print-doc h2 {
+  font-size: 15pt;
+  margin: 22px 0 6px;
+  color: #1f2a44;
+  break-after: avoid;
+}
+.print-doc h3 {
+  font-size: 13pt;
+  margin: 16px 0 4px;
+  color: #1f2a44;
+  break-after: avoid;
+}
+.print-doc h4 {
+  font-size: 11.5pt;
+  margin: 12px 0 4px;
+  break-after: avoid;
+}
+.print-doc p {
+  margin: 0 0 8px;
+}
+.print-doc a {
+  color: #1a5fb4;
+}
+.print-doc blockquote {
+  margin: 0 0 8px;
+  padding-left: 12px;
+  border-left: 3px solid #bbb;
+  font-style: italic;
+  color: #444;
+}
+.print-doc ul,
+.print-doc ol {
+  margin: 0 0 8px;
+  padding-left: 1.4em;
+}
+.pd-sub {
+  color: #666;
+  font-size: 12pt;
+  margin: 0 0 16px !important;
+}
+.pd-meta {
+  color: #666;
+  font-size: 10pt;
+}
+.pd-passage {
+  margin: 6px 0 10px;
+}
+.pd-ref {
+  font-weight: 700;
+  margin: 0 0 2px !important;
+  break-after: avoid;
+}
+.pd-ref a {
+  text-decoration: none;
+}
+.pd-verses {
+  margin-left: 0.25in !important;
+}
+.pd-verses sup {
+  color: #777;
+  font-size: 0.7em;
+}
+.pd-code {
+  color: #555;
+}
+.pd-credits {
+  margin-top: 28px;
+  padding-top: 10px;
+  border-top: 1px solid #ccc;
+  font-size: 8.5pt;
+  color: #666;
+}
+.pd-credits p {
+  margin: 0 0 4px;
+}
+@media (max-width: 700px) {
+  .print-doc {
+    margin: 10px 8px 30px;
+    padding: 22px 18px;
+  }
+}
+
+@media print {
+  @page {
+    margin: 0.75in;
+  }
+  html,
+  body {
+    height: auto !important;
+    overflow: visible !important;
+    background: #fff !important;
+  }
+  body.printing-doc > *:not(.print-sheet) {
+    display: none !important;
+  }
+  body.printing-doc .print-sheet {
+    position: static;
+    overflow: visible;
+    background: none;
+  }
+  .print-bar,
+  .print-tip {
+    display: none !important;
+  }
+  .print-doc {
+    box-shadow: none;
+    margin: 0;
+    padding: 0;
+    max-width: none;
+  }
+  .print-doc a {
+    color: inherit;
+  }
+}
+.notes-side-foot {
+  margin-top: 16px;
+  padding-top: 10px;
+  border-top: 1px solid var(--hair);
+}
+.notes-side-foot .notes-download {
+  margin-left: 0;
+}

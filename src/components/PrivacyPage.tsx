@@ -135,6 +135,12 @@ export default function PrivacyPage({ onClose }: { onClose: () => void }) {
             you.
           </li>
           <li>
+            <strong>Take your content with you:</strong> “Download” in My Content makes a printable page or a Word
+            file of your lessons, notebooks, notes, journeys and lists. It is made on your device; nothing is sent
+            anywhere. Word files include Bible text only from public-domain translations; printouts may include your
+            translation within its publisher’s limits, with its copyright notice.
+          </li>
+          <li>
             <strong>Change it:</strong> your display name, email, password and passkeys can be changed on your account
             page.
           </li>
