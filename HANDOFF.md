@@ -450,6 +450,12 @@ blocks bible-api.com, api.esv.org, workers.dev, map tiles and Wikipedia; stub th
 
 ## Recently finished (November 2026)
 
+**Logo (24 Nov 2026):** the owner's logo (map, compass and "ANCIENT PATHFINDER", tagline "Explore • Understand •
+Grow"). The header shows its map-and-compass mark (`public/logo-mark.png`; `logo-mark-dark.png` has the black lines
+turned light for dark mode, chosen by `<picture>`) beside the live-text title; the 1440–1599px header rules make
+room for it. The same mark is the favicon (`public/favicon.png`) and the home-screen icon (`apple-touch-icon.png`).
+Phones and tablets show no title in the header (unchanged), so the mark appears there only as the icon.
+
 Hymns for each chapter; rivers that thin out when zoomed out; flat-style verse highlight (now light blue) and
 solid place-name underlines; bolded word for list items that share a verse (and the correct "N of M" chip);
 quieter last-mentioned map marker; the Nations page with person-card links; the rename to Bible Study Companion

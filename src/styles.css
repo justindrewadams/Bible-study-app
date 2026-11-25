@@ -7567,3 +7567,45 @@ button.hd-person:hover {
 .notes-side-foot .notes-download {
   margin-left: 0;
 }
+
+/* ---------- The logo's map-and-compass mark beside the title (the owner's logo, Nov 2026) ---------- */
+.brand {
+  flex-direction: row;
+  align-items: center;
+  gap: 9px;
+}
+.brand-logo,
+.brand-logo img {
+  display: block;
+  height: 34px;
+  width: auto;
+  flex: none;
+}
+.brand .brand-words {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  font-size: inherit;
+  letter-spacing: 0;
+}
+@media (min-width: 1440px) and (max-width: 1599px) {
+  /* the logo mark takes ~45px: a little less padding and slightly narrower menus keep one row at 1440px */
+  .brand {
+    padding: 6px 9px;
+    gap: 7px;
+  }
+  .brand-logo,
+  .brand-logo img {
+    height: 30px;
+  }
+  .topbar .translation {
+    width: 116px;
+  }
+  .topbar .journey-select {
+    width: 130px;
+  }
+  .topbar .list-select {
+    width: 110px;
+  }
+}

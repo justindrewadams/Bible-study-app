@@ -641,8 +641,14 @@ export default function App() {
     <div className={`app${presenting ? ' presenting' : ''}${mapVisible ? '' : ' map-hidden'}${journey ? ' journey-active' : ''}${measure ? ' measuring' : ''}`}>
       <header className="topbar">
         <button className="brand" title="Ancient Pathfinder: back to reading" onClick={() => pageOpen && closePeriods()}>
-          <span>ANCIENT</span>
-          <span>PATHFINDER</span>
+          <picture className="brand-logo">
+            <source srcSet={`${import.meta.env.BASE_URL}logo-mark-dark.png`} media="(prefers-color-scheme: dark)" />
+            <img src={`${import.meta.env.BASE_URL}logo-mark.png`} alt="" width={36} height={34} />
+          </picture>
+          <span className="brand-words">
+            <span>ANCIENT</span>
+            <span>PATHFINDER</span>
+          </span>
         </button>
         <div className="nav">
           <button className="icon-btn" onClick={prevChapter} aria-label="Previous chapter">
